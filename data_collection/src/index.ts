@@ -69,7 +69,7 @@ import type { ChangeInfo } from "@gerritcodereview/typescript-api/rest-api";
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
-const GERRIT_BASE_URL = "https://gerrit.onap.org/r" as const;
+const GERRIT_BASE_URL = "https://gerrit.libreoffice.org/" as const;
 const DEFAULT_OUTPUT = "./output/changes" as const;
 const DEFAULT_QUERY = "is:open" as const;
 const DEFAULT_CONCURRENCY = 6;
@@ -357,12 +357,12 @@ async function main(): Promise<void> {
   // Fetch the full change list once for the entire run
   console.log(`[index] Fetching change list from Gerrit…`);
   const allRawChanges = await client.fetchAllChanges(query, limit);
-  console.log(`[index] Found ${allRawChanges.length} change(s) matching query.`);
+  console.log(
+    `[index] Found ${allRawChanges.length} change(s) matching query.`,
+  );
 
   const modesToRun: ("metadata" | "patchsets" | "diffs" | "comments")[] =
-    mode === "all"
-      ? ["metadata", "patchsets", "diffs", "comments"]
-      : [mode];
+    mode === "all" ? ["metadata", "patchsets", "diffs", "comments"] : [mode];
 
   const writer = new ChangeWriter(output);
 
