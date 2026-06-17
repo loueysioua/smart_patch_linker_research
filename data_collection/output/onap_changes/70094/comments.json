@@ -1,0 +1,110 @@
+{
+  "id": "oom~master~I57a76100cd2dc7a9c0f617f84a463db93d9a254a",
+  "change_id": "I57a76100cd2dc7a9c0f617f84a463db93d9a254a",
+  "_number": 70094,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bada0100_12a148f8",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "don't need .{{.Release.Namespace}}?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-10-09 21:19:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_7295343f",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "I think you should put back the {{.Release.Namespace}}, that's the usual way to refer to the service",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-10-09 22:27:26.000000000",
+      "in_reply_to": "bada0100_12a148f8",
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_bb7cd773",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "Yes - please do that Mike",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-10-10 11:58:49.000000000",
+      "in_reply_to": "bada0100_7295343f",
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_db9e7b56",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "According to Sunder the URL is only https://portal-app:8443/ONAPPORTAL/auxapi",
+      "author": {
+        "account_id": 805,
+        "name": "Michael Mokry",
+        "display_name": null,
+        "email": "michael.mokry@att.com",
+        "username": "mmokry"
+      },
+      "updated": "2018-10-10 13:04:11.000000000",
+      "in_reply_to": "bada0100_bb7cd773",
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_e61406f7",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "portal-app and portal-app.onap are equivalent, both work.   Nevertheless, it seems to be the preferred way in general to append the namespace.   See below that both are resolve to the same IP:\n\npolicy@dev-policy-drools-0:/tmp/policy-install$ ping -c 1 portal-app\nPING portal-app.onap.svc.cluster.local (10.43.62.48) 56(84) bytes of data.\n\n--- portal-app.onap.svc.cluster.local ping statistics ---\n1 packets transmitted, 0 received, 100% packet loss, time 0ms\n\npolicy@dev-policy-drools-0:/tmp/policy-install$ ping -c 1 portal-app.onap\nPING portal-app.onap.svc.cluster.local (10.43.62.48) 56(84) bytes of data.\n\n--- portal-app.onap.svc.cluster.local ping statistics ---\n1 packets transmitted, 0 received, 100% packet loss, time 0ms\n\npolicy@dev-policy-drools-0:/tmp/policy-install$ \n\nBut I guess, it would be up to Sunder if there is an specific reason why on the portal side that wouldn't work, I guess will have to keep the addressing of the service inconsistent.   You may get same comment from OOM team though.\n\nNote that the 3 occurrences in this file that refer to portal-app, previous to this review, had the namespace appended, this has now changed.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-10-10 15:12:17.000000000",
+      "in_reply_to": "bada0100_db9e7b56",
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_c6b0e2df",
+      "file_path": "kubernetes/policy/resources/config/pe/console.conf",
+      "patchset_number": 2,
+      "line": 139,
+      "message": "if I may chime in. Namespace or no namespace appended doesn't really matter as the whole ONAP meant to be deployed in a single namespace. It boils down to how service resolution works in K8S.\nBasically, within the same namespace, all services are accessible by their name.\nWithin different namespace, services are accessible through the combinaison of their name dot the namespace.\n\nExample:\n\nnamespace1:\n  pap\n  pdp\n\nnamespace2:\n  aai\n\nFor pap to reach pdp, the following can be used:\n  pdp\n  pdp.namespace1\n\nFor pap to reach aai, the following should be used:\n  aai.namespace2\n\nIf the second example, if you don't append the namespace, K8S will lookup the aai service within namespace1, and that would fail.\n\nBasically, it is good practice to append the release name, as that's what is being use to define the namespace. That will allow one to deploy component as they intend, if they don't want to follow the recommandation of deploying in a single namespace.\n\nHope it helps understanding.",
+      "author": {
+        "account_id": 137,
+        "name": "Alexis de Talhouet",
+        "display_name": null,
+        "email": "adetalhouet89@gmail.com",
+        "username": "adetalhouet"
+      },
+      "updated": "2018-10-10 15:53:04.000000000",
+      "in_reply_to": "bada0100_e61406f7",
+      "unresolved": false
+    }
+  ]
+}

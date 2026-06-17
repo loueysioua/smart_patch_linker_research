@@ -1,0 +1,93 @@
+{
+  "id": "oom%2Foffline-installer~master~I9683a2a764e8c6696a39625a6ddc40cda20f9333",
+  "change_id": "I9683a2a764e8c6696a39625a6ddc40cda20f9333",
+  "_number": 101813,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7b43ad18_c57c89af",
+      "file_path": "tools/cicdansible/roles/install/tasks/install.yml",
+      "patchset_number": 4,
+      "line": 22,
+      "message": "could you try with \"ansible_distribution in {\"Debian\",\"Ubuntu\"}\"?",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2020-02-18 12:05:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c16ab2e5_49c9d186",
+      "file_path": "tools/cicdansible/roles/install/tasks/install.yml",
+      "patchset_number": 4,
+      "line": 26,
+      "message": "you can also change name here inventory_redhat.yml.j2",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2020-02-18 12:05:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "585191e9_f58ce67c",
+      "file_path": "tools/cicdansible/roles/install/tasks/install.yml",
+      "patchset_number": 7,
+      "line": 22,
+      "message": "this can be done with: ansible_distribution in [\"Debian\",\"Ubuntu\"] but that is not even the point. Please consider single template (see template comment)",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2020-02-26 15:51:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "62c8a567_41f8a0b2",
+      "file_path": "tools/cicdansible/roles/install/templates/inventory_redhat.yml.j2",
+      "patchset_number": 7,
+      "line": 4,
+      "message": "instead of copy-paste you could easily do dynamically distinguish platform installer is working on. For example:\n\nall:\n  vars:\n    ansible_ssh_private_key_file: /root/.ssh/id_rsa\n    ansible_ssh_common_args: \"-o StrictHostKeyChecking=no\"\n{% if hostvars['infra'].ansible_distributionin [\"Debian\",\"Ubuntu\"] %}\n    ansible_python_interpreter: \"/usr/bin/python3\"\n{% endif %}\n\n\nThat should remove the need to have two templates and two tasks with \"when\"",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2020-02-26 15:51:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b6b73978_6535d72c",
+      "file_path": "tools/cicdansible/roles/install/templates/inventory.yml.j2",
+      "patchset_number": 9,
+      "line": 3,
+      "message": "I am confused, why do you leave it here as default, does centos7 have python3 installed by default?\n\nthis {%if ...} statement should be here not bellow...\n\n\nNow how it works: set interpreter on all nodes to python3, then if distribution ON INFRA is Ubuntu then you set ON RESOURCE interpreter also to python3. (if it would not be Ubuntu on infra, then most probably interpreter on resources still would be python3 inherited from all settings).\n\nTest it and pay attention to indentations, yaml is sensitive to it, and from what I see they look wrong",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2020-02-28 07:58:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

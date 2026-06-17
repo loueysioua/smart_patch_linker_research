@@ -1,0 +1,178 @@
+{
+  "id": "sdc~master~Ic91242d6cbc24e2ce0f60b84c63e104575bef8a9",
+  "change_id": "Ic91242d6cbc24e2ce0f60b84c63e104575bef8a9",
+  "_number": 130822,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ead05f1e_a06ffc73",
+      "file_path": "integration-tests/environments/plugins-configuration.yaml",
+      "patchset_number": 3,
+      "line": 1,
+      "message": "do you want to add this to gerrit, or this is from your debug session?\nif you want to add it, I'd suggest to replace 'your' IP with 'localhost' or <IP>",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2022-09-12 20:38:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f172f6f6_ab8088fd",
+      "file_path": "integration-tests/environments/plugins-configuration.yaml",
+      "patchset_number": 3,
+      "line": 1,
+      "message": "No, it was a mistake, I will remove it.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-13 09:11:51.000000000",
+      "in_reply_to": "ead05f1e_a06ffc73",
+      "unresolved": true
+    },
+    {
+      "id": "1481d67a_6cf2361c",
+      "file_path": "integration-tests/environments/plugins-configuration.yaml",
+      "patchset_number": 3,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-13 09:17:56.000000000",
+      "in_reply_to": "f172f6f6_ab8088fd",
+      "unresolved": false
+    },
+    {
+      "id": "56dea9ee_1bcc3e3b",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/validation/NodeFilterValidator.java",
+      "patchset_number": 6,
+      "line": 303,
+      "message": "do we need to check for null on next line",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-16 08:17:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5ce6aa18_91f78423",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/jsonjanusgraph/operations/NodeFilterOperation.java",
+      "patchset_number": 6,
+      "line": 150,
+      "message": "what is the rational here?",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-16 08:17:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "94fdb46d_1d469aa5",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/validation/NodeFilterValidator.java",
+      "patchset_number": 6,
+      "line": 303,
+      "message": "For sure, I will work on that, thanks for catching",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-16 10:54:15.000000000",
+      "in_reply_to": "56dea9ee_1bcc3e3b",
+      "unresolved": true
+    },
+    {
+      "id": "f16c0ab0_56985b0c",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/jsonjanusgraph/operations/NodeFilterOperation.java",
+      "patchset_number": 6,
+      "line": 150,
+      "message": "The capabilities filters are grouped by the capability name.\nWe need to delete a specific filter, not the group of filters (as it was broken before).\nThe index we a referring is the index of the filter, not the group.\nSo I'm iterating through the capabilities groups and counting how many filters it has. \nIf a group has less or equal filters than the actual index, it means that the filter I want to delete is not inside the group, so I'm just decreasing the index count and going to the next group.\nWhen the index is inside the group, I'm removing the filter from that group. E.g.:\nGiven a index 4 (0 is included), I have to delete the 5th filter.\nHaving two groups, one with 3 filters and the second with 4, total 7 filters.\nI will start with the index at 4. 4 <= 3 is false, so I'm decreasing it from 3, index is now 1.\nNext group: 1 <= 4 is true, the filter I want to delete belongs to this group, so I'm just removing the filter from the position 1 (which is the 5th filter in overall).\n\nLet me know if it is clear.\n\nNot sure if there is a better way to do that. The order is aligned with how the system shows the filters in the UI and how they are persisted in the database, so the indexes will not be different, unless, of course, some other call or procedure removed a filter.\n\nI'm sure using list index to remove an item is a naive way to delete from an API, but that is the way it is implemented, I'm just fixing something that was broken as it was deleting the group before, instead of the filters inside it.\n\nTo not use indexes we need to provide some sort of unique id to the filters.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-16 10:54:15.000000000",
+      "in_reply_to": "5ce6aa18_91f78423",
+      "unresolved": true
+    },
+    {
+      "id": "9cee982d_c557a7c6",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/jsonjanusgraph/operations/NodeFilterOperation.java",
+      "patchset_number": 6,
+      "line": 150,
+      "message": "ok, I think it would be good to use some methods here to help people understand maybe something like:\n\n\nif (propertyInThisCapabilityFilter(...){\n    capabilityFilterProperties.remove(propertyIndex1);\n    break;\n} else {\n    propertyIndex1 = adjustIndexForNextCapabilityFilter(...)\n}",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-16 11:19:25.000000000",
+      "in_reply_to": "f16c0ab0_56985b0c",
+      "unresolved": true
+    },
+    {
+      "id": "92a55fea_458f2bd6",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/validation/NodeFilterValidator.java",
+      "patchset_number": 6,
+      "line": 303,
+      "message": "Done",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-16 16:28:10.000000000",
+      "in_reply_to": "94fdb46d_1d469aa5",
+      "unresolved": false
+    },
+    {
+      "id": "dda41727_e354866c",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/jsonjanusgraph/operations/NodeFilterOperation.java",
+      "patchset_number": 6,
+      "line": 150,
+      "message": "Done",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-09-16 16:28:10.000000000",
+      "in_reply_to": "9cee982d_c557a7c6",
+      "unresolved": false
+    }
+  ]
+}

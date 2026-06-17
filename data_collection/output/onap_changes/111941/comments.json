@@ -1,0 +1,212 @@
+{
+  "id": "policy%2Fapex-pdp~master~I57006d0f86db013defa35753510db6320b94ebd4",
+  "change_id": "I57006d0f86db013defa35753510db6320b94ebd4",
+  "_number": 111941,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b7c87a83_b1a3f29e",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "looks like we're essentially doing two decodes here: once into a String, stringValue, and then from there into a JsonObject.  Why not just invoke decode() for both steps, bypassing the need for the replace() calls?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-01 13:08:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3888fe58_17f54b67",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "the coder has a convert() method that can be used here to convert valueObject to a JsonObject",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-01 13:08:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "38c8040f_9b277d10",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "Yes, the logic is truly a little bit wired, \nThe valueObject should be like this \"{\\r\\n \\\"example\\\" : example}\", The symbol \\r\\n should be deleted or it can not be decoded properly.\nThere is a function  \"StringEscapeUtils.unescapeJava(valueObject.toString().substring(1, length - 1))\" from package \"org.apache.commons.text.StringEscapeUtils\" which could solve this problem. \nShould we apply this package?",
+      "author": {
+        "account_id": 5307,
+        "name": "Bowen Sun",
+        "display_name": null,
+        "email": "henry.a.sun@est.tech",
+        "username": "Henry.Sun"
+      },
+      "updated": "2020-09-02 04:59:21.000000000",
+      "in_reply_to": "b7c87a83_b1a3f29e",
+      "unresolved": true
+    },
+    {
+      "id": "8d66cd6c_a95371b0",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "Ack",
+      "author": {
+        "account_id": 5307,
+        "name": "Bowen Sun",
+        "display_name": null,
+        "email": "henry.a.sun@est.tech",
+        "username": "Henry.Sun"
+      },
+      "updated": "2020-09-02 04:59:21.000000000",
+      "in_reply_to": "3888fe58_17f54b67",
+      "unresolved": false
+    },
+    {
+      "id": "46ea5378_47015e6d",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "right, but why bother using String operations to make it parseable?  The original value is basically created by double encoding, from object to json, and then from json to json again, so why not do the reverse?  Then you don't have to worry about making the string parseable, as it's already parseable by json (i.e., it's already a valid json string):\n\n  return coder.decode(coder.decode(valueObject.toString(), String.class), JsonObject.class)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-02 12:50:45.000000000",
+      "in_reply_to": "38c8040f_9b277d10",
+      "unresolved": true
+    },
+    {
+      "id": "5503873b_84068707",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "Yes, you are right. This is where the bug is. The valueObject is defined as a string in the system. But the system simply force to add a double quatation mark on valueObject no matter what it is. Often, the valueObject is a JsonObject, after the adding, it become a JsonPrimitive. So we have to delete it and return the string back. So now, it is a not a valid json and the decode do not work.\n\nExample: JsonPrimitive: \"\"{\\r\\n \\\"example\\\": example}\"\"",
+      "author": {
+        "account_id": 5307,
+        "name": "Bowen Sun",
+        "display_name": null,
+        "email": "henry.a.sun@est.tech",
+        "username": "Henry.Sun"
+      },
+      "updated": "2020-09-03 01:33:50.000000000",
+      "in_reply_to": "46ea5378_47015e6d",
+      "unresolved": true
+    },
+    {
+      "id": "d8541857_be7482a1",
+      "file_path": "pom.xml",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "1.9 is the latest version - please check for outstanding cve/sonatype issues.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-09-03 12:48:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ce5de556_f89416fe",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "right, so don't remove the enclosing quotes first - just replace all of lines 94-97 with the code I showed above.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-03 12:57:02.000000000",
+      "in_reply_to": "5503873b_84068707",
+      "unresolved": true
+    },
+    {
+      "id": "ee74a50e_0b4f00af",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 1,
+      "line": 96,
+      "message": "the string is, itself, json, thus we should use the proper tools to parse it; we shouldn't be trying to parse it manually by stripping enclosing quotes and removing/replacing escape sequences.  One concern that I have in particular is that, because this is json, it may contain other json related stuff besides just escape sequences and hence the manual parsing might fail in those cases.  It may work right now, but who knows.  Since it's json, just use a json parser (i.e., coder) to decode it and then it should work regardless of what json related stuff it might contain.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-04 13:02:53.000000000",
+      "in_reply_to": "ce5de556_f89416fe",
+      "unresolved": true
+    },
+    {
+      "id": "d7103d0e_89f975e7",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 97,
+      "message": "never mind the previous comments.  After discussion with Ram, it appears that the value will be a String, not a JsonPrimitive.  Furthermore, it will not be enclosed with quotes, nor will it contain escape sequences.  With that in mind, this whole method can be deleted and line 113 changed to:\n\n  JsonObject body = standardCoder.convert(property.getValue(), JsonObject.class);",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-04 16:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "75480e21_201c6974",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 113,
+      "message": "I believe this has more issues. When policy is deployed by CLAMP, it has some additional fields, say \"abatement\": false for example. So trying to covert this property to JsonObject might give JsonSyntaxException",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-09-07 07:53:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f998ac4d_6d6d2dbc",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 117,
+      "message": "Also, now that I am almost done with fixing the standalone TOSCA support issue in APEX, it seems this code will change as well. Here the ToscaPolicy will just be passed to the APEX main engine. The parsing has to be moved to a different class. Sorry about that.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-09-07 07:53:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

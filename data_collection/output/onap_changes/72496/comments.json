@@ -1,0 +1,93 @@
+{
+  "id": "oom~master~I3fd0b7ba0eb3909e5f37ba233df3f8eee64b191a",
+  "change_id": "I3fd0b7ba0eb3909e5f37ba233df3f8eee64b191a",
+  "_number": 72496,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_2dc5085b",
+      "file_path": "kubernetes/policy/resources/config/pe/push-policies.sh",
+      "patchset_number": 1,
+      "line": 323,
+      "message": "Should it be onapName ?? And what does this field mean exactly??",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-11-13 14:23:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_ad9ed854",
+      "file_path": "kubernetes/policy/resources/config/pe/push-policies.sh",
+      "patchset_number": 1,
+      "line": 323,
+      "message": "As far as I know, this field is suppose to be an onap component (i.e DCAE) associated with the policy but I have seen clients use a lot of different values here.  For Decision policies specifically they are used in target matching fields to find the policy on the PDP when calling getDecision.  All the curl commands in this script use ecompName, not sure why, but I can change if necessary.  The code handles either ecompName or onapName the same. Short answer: your correct it should be onapName :)",
+      "author": {
+        "account_id": 805,
+        "name": "Michael Mokry",
+        "display_name": null,
+        "email": "michael.mokry@att.com",
+        "username": "mmokry"
+      },
+      "updated": "2018-11-13 14:40:49.000000000",
+      "in_reply_to": "9adffdf1_2dc5085b",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_2862d6d8",
+      "file_path": "kubernetes/policy/resources/config/pe/push-policies.sh",
+      "patchset_number": 2,
+      "line": 323,
+      "message": "So this makes no sense to me - its mainly for auditing purposes. Why does this break again?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-11-13 16:38:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_684bfe2b",
+      "file_path": "kubernetes/policy/resources/config/pe/push-policies.sh",
+      "patchset_number": 2,
+      "line": 323,
+      "message": "All these policies use the same target attribute values used for matching the getDecision request with the policy. We need to change the onapName to distinguish min/max policies from the AllPermit and Frequency limiter because min/max policies use the vfCount in the getDecsion request to evaluate the condition rather that the db table that the other guard policies use. This is a limitation for this release in my opinion and should be revisited in Dublin.",
+      "author": {
+        "account_id": 805,
+        "name": "Michael Mokry",
+        "display_name": null,
+        "email": "michael.mokry@att.com",
+        "username": "mmokry"
+      },
+      "updated": "2018-11-13 17:41:29.000000000",
+      "in_reply_to": "9adffdf1_2862d6d8",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e8d36e36",
+      "file_path": "kubernetes/policy/resources/config/pe/push-policies.sh",
+      "patchset_number": 2,
+      "line": 323,
+      "message": "Yes it will have to be re-done in Dublin. XACML never cares (or should never care) about differences in the policies whether ones uses an attribute while another doesn't. Nor whether one uses a database or not.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-11-13 18:00:47.000000000",
+      "in_reply_to": "9adffdf1_684bfe2b",
+      "unresolved": false
+    }
+  ]
+}

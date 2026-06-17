@@ -1,0 +1,93 @@
+{
+  "id": "oom~master~I484cbcafb83a6bec93ba1445769d6f9394c94713",
+  "change_id": "I484cbcafb83a6bec93ba1445769d6f9394c94713",
+  "_number": 26655,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_9b548755",
+      "file_path": "kubernetes/oneclick/deleteAll.bash",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "This change breaks backward compatibility. It is problematic in light of other scripts / processes calling this script.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2017-12-21 07:00:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_363d4a90",
+      "file_path": "kubernetes/oneclick/deleteAll.bash",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "How is it breaking backward compatibility? At this point I don't see any other scripts calling this. Without safety nets like this we can not consider OOM carrier grade. Telco's would not accept oops I just deleted entire onap deployment in production",
+      "author": {
+        "account_id": 153,
+        "name": "Munir Ahmad",
+        "display_name": null,
+        "email": "munir.ahmad@bell.ca",
+        "username": "mahmad"
+      },
+      "updated": "2017-12-21 13:14:27.000000000",
+      "in_reply_to": "5a93c517_9b548755",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_360b0ad8",
+      "file_path": "kubernetes/oneclick/deleteAll.bash",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "I understand that the intention is to make sure that the current content of .kube/config file is correct?\nI can suggest to do the same similarly to other utilities (e.g. apt-get or yum):\n1. Print the current context in which containers will be deleted and prompt user to enter yes/no.\n2. Add optional command line argument '-y' for silent execution.\n\nWDYT?",
+      "author": {
+        "account_id": 345,
+        "name": "Yury Novitsky",
+        "display_name": null,
+        "email": "yury.novitsky@amdocs.com",
+        "username": "yuryn"
+      },
+      "updated": "2017-12-21 13:42:27.000000000",
+      "in_reply_to": "5a93c517_363d4a90",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b66aba18",
+      "file_path": "kubernetes/oneclick/deleteAll.bash",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "Ok fair enough I will implement the silent option as parameter :)",
+      "author": {
+        "account_id": 153,
+        "name": "Munir Ahmad",
+        "display_name": null,
+        "email": "munir.ahmad@bell.ca",
+        "username": "mahmad"
+      },
+      "updated": "2017-12-21 16:11:52.000000000",
+      "in_reply_to": "5a93c517_360b0ad8",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cd46d023",
+      "file_path": "kubernetes/oneclick/deleteAll.bash",
+      "patchset_number": 3,
+      "line": 46,
+      "message": "Hi Munir, could you please kindly change this to be -y (no need for a value, if there is -y no need to ask for confirmation of anything across this script.\nThis would be similar to how it works in many linux applications.\nAlso, let's have the -c option that would provide the option to supply the context as argument. Instead of asking for context, would compare it to the actual and either return an error or do the delete.\nThis would eliminate the need to provide an input interactively, after all we are trying to reach automation and are probably not the final link in the chain of execution (e.g. CI/CD, automatic system creation scripts etc.).",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2017-12-24 07:56:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

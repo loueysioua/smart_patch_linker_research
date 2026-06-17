@@ -1,0 +1,202 @@
+{
+  "id": "integration~master~I3e98dfa8582322d5b3bbbbf377d748faea0da57b",
+  "change_id": "I3e98dfa8582322d5b3bbbbf377d748faea0da57b",
+  "_number": 99826,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-12-19 16:25:03.000000000",
+    "updated": "2020-01-07 15:33:31.000000000",
+    "submitted": "2020-01-07 15:33:31.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 5047,
+      "name": "Pawe? Wieczorek",
+      "display_name": "Pawel Wieczorek",
+      "email": "pawel-wieczorek@outlook.com",
+      "username": "pwieczorek"
+    },
+    "submitter": {
+      "account_id": 1215,
+      "name": "Morgan Richomme",
+      "display_name": null,
+      "email": "morgan.richomme@orange.com",
+      "username": "mrichomme"
+    }
+  },
+  "subject": "Add support for using SSH",
+  "commit_message": "Add support for using SSH\n\nThis patch changes \"create_config.py\" script interface and its\nbehaviour:\n\n* by default anonymous Gerrit is used for repository cloning and code\n  URLS,\n* external git mirror for code URLs might be provided but there is no\n  default one,\n* SSH credentials might be provided for repository cloning.\n\nCloning repository using SSH is required due to current ONAP\ninfrastructure HTTPS bandwidth constraints.\n\nUser wishing to use this setup should provide two environmental\nvariables:\n\n1) API_USER - Gerrit username for cloning repositories via SSH\n2) API_KEY - Gerrit API key (User menu -> Settings -> HTTP Credentials)\n\nBe aware that a new RSA key will be generated and added to the user's\nGerrit account for purposes of Hound code search operation inside a VM.\nDo remember to delete it (User menu -> Settings -> SSH keys) after\nevaluating this environment.\n\nIssue-ID: ONAPARC-540\nChange-Id: I3e98dfa8582322d5b3bbbbf377d748faea0da57b\nSigned-off-by: Pawel Wieczorek <p.wieczorek2@samsung.com>\n",
+  "change_log": {
+    "entry_count": 12,
+    "entries": [
+      {
+        "id": "9d7c6f3373445681e87dcf041504a463de5a3de3",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-19 16:25:03.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b0f8060019a9f3c280f2324c76b9f544545543b3",
+        "author": {
+          "account_id": 1603,
+          "name": "Eric Multanen",
+          "display_name": null,
+          "email": "eric.w.multanen@intel.com",
+          "username": "ewmulta"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-19 19:52:38.000000000",
+        "message": "Patch Set 1:\n\nquestion(s) - is it feasible/possible to automate the removal of the new ssh key that gets added?\nAny downside if the user forgets to delete the new key?",
+        "patchset_number": 1
+      },
+      {
+        "id": "18fb9bb82263b907060c0a14bebcd4c2e8704009",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-20 07:32:54.000000000",
+        "message": "Patch Set 1: Code-Review+2\n\nI am OK with the patch, regarding the unity of the set of associated patches\nwould it have made sense to create a dedicated repository under integration group?",
+        "patchset_number": 1
+      },
+      {
+        "id": "a04e83aee3f37910e68b63021d3030c7a62b1d52",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-20 08:25:58.000000000",
+        "message": "Patch Set 1:\n\nCould you please add a topic name for all commits in this relation chain? Would ease searching in future.",
+        "patchset_number": 1
+      },
+      {
+        "id": "32414fcdd5f7784b7d562bb624733f23f9d1eb8e",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-20 09:07:49.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "e8b2637ef5d3fd6538505baff2117273721f7eb0",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-27 15:39:25.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> question(s) - is it feasible/possible to automate the removal of the new ssh key that gets added?\n\nID of the new key is returned on key addition (\"seq\" field of response [1]). If it were stored somewhere during provisioning, a trigger [2] for VM destroy procedure [3] could be provided which would use the ID to delete [4] said key.\n\nI will provide a patch if you'd like me to. Let me know what you think\n\n> Any downside if the user forgets to delete the new key?\n\nThere is no issue if the VM gets destroyed - the key would be removed too and only \"SSH Keys\" [5] section of evaluator's account would get messy. If the VM stays, it has the same privileges as the evaluators' account - hence the warning.\n\nCode search on ONAP repositories could be made completely anonymous (with no need for user credentials), but current limitations of ONAP infra require using SSH for frequent fetches from origin repositories.\n\n[1] https://gerrit-review.googlesource.com/Documentation/rest-api-accounts.html#add-ssh-key\n[2] https://www.vagrantup.com/docs/triggers/\n[3] https://www.vagrantup.com/docs/cli/destroy.html\n[4] https://gerrit-review.googlesource.com/Documentation/rest-api-accounts.html#delete-ssh-key\n[5] https://gerrit.onap.org/r/settings/#SSHKeys",
+        "patchset_number": 1
+      },
+      {
+        "id": "c510e3a19e8d3cb5a102522761236c5bc8b148bd",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-27 15:42:16.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1: Code-Review+2\n> \n> I am OK with the patch, regarding the unity of the set of associated patches\n> would it have made sense to create a dedicated repository under integration group?\n\nI am not sure. Currently components for bootstrapping ONAP environment are in fact decoupled. Having them in separate repositories might later bring some complexity (during testing or integration), though, if they become more dependent one on another.\n\nJust to be clear: I am not an opponent of having separate repos (I would love to have e.g. granular Ansible roles for ONAP deployment available in Galaxy) but I am afraid that it might be too soon for splitting bootstrapping tools.",
+        "patchset_number": 1
+      },
+      {
+        "id": "04fabf2c15d1f7c86fe86b18a989d0fce7ef2aa5",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-27 15:42:43.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> Could you please add a topic name for all commits in this relation chain? Would ease searching in future.\n\nPushing to refs/for/master%topic=code_search",
+        "patchset_number": 1
+      },
+      {
+        "id": "f0917f999baebe5538b149fa1e187bde58d28da3",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-27 15:44:16.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "e474a65ccbae8861785b3d5ab816db0420684fb1",
+        "author": {
+          "account_id": 5047,
+          "name": "Pawe? Wieczorek",
+          "display_name": "Pawel Wieczorek",
+          "email": "pawel-wieczorek@outlook.com",
+          "username": "pwieczorek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-07 14:32:11.000000000",
+        "message": "Uploaded patch set 3: Patch Set 2 was rebased.",
+        "patchset_number": 3
+      },
+      {
+        "id": "6018235d65730cceb3312446d47baf91b9f0eaca",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-07 15:00:00.000000000",
+        "message": "Patch Set 3: Verified+1 Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "4e9e3bc88b51b38a263e1466ed4d69261cabb232",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-07 15:33:31.000000000",
+        "message": "Change has been successfully merged by Morgan Richomme",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

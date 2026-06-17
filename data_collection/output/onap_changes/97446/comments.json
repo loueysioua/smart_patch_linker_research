@@ -1,0 +1,144 @@
+{
+  "id": "policy%2Fdistribution~master~Ie2ebfa16bc6b08dc54d60ef276f52e9ea2c91b1f",
+  "change_id": "Ie2ebfa16bc6b08dc54d60ef276f52e9ea2c91b1f",
+  "_number": 97446,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5e3dc83c_d42f7cf8",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/decoding/pdpx/PolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 2,
+      "line": 72,
+      "message": "I don't think you need these fields. They were associated with the old API call, not the policy model. Why are you bringing these forward? My understanding is that all you need to do is create a ToscaPolicy based on the ToscaPolicyType onap.policies.optimization.HpaPolicy.\n\nFor example:\n\ntosca_definitions_version: tosca_simple_yaml_1_0_0\ntopology_template:\n  policies:\n    -\n        OSDF_CASABLANCA.hpa_policy_vG_1:\n            type: onap.policies.optimization.HpaPolicy\n            version: 1.0.0\n            type_version: 1.0.0\n            metadata:\n                policy-id: OSDF_CASABLANCA.hpa_policy_vG_1\n            properties:\n                scope: []\n                services: [vCPE]\n                resources: [vG]\n                geography: []\n                identity: hpa-vG\n                flavorFeatures:\n                    -\n                         id: vg_1\n                         type: vnfc\n                         directives:\n...etc.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-10-23 11:42:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b56b1862_8cc29572",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 4,
+      "line": 56,
+      "message": "if this works with a StandardCoder, then I'd use that instead",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-25 12:56:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c6c500e2_0d7ab284",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 4,
+      "line": 93,
+      "message": "typo: \"featrues\" => \"features\"\n\nsame comment through-out this file",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-25 12:56:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9d70b375_b9d8c97e",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 4,
+      "line": 56,
+      "message": "Liang may not be familiar with the StandardCode that is located in policy/common - can you give him pointers Jim?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-10-25 15:01:29.000000000",
+      "in_reply_to": "b56b1862_8cc29572",
+      "unresolved": false
+    },
+    {
+      "id": "c5d279d9_e79a8d48",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 4,
+      "line": 56,
+      "message": "Hi, Pam and Jim\nI tried StandardCoder, but I found that, the method \"encode\" could ignore redundant same string and keep just one. For example, there are actually multiple strings of \"operator\" in some parsed testing csar files, but the StandardCoder.encode() method gives only one \"operator\" string in the encoded output, and this made tests failed. So I still use gson.toJson().",
+      "author": {
+        "account_id": 2737,
+        "name": "Liang Ding",
+        "display_name": null,
+        "email": "liang.ding@intel.com",
+        "username": "lding7"
+      },
+      "updated": "2019-10-28 05:58:06.000000000",
+      "in_reply_to": "9d70b375_b9d8c97e",
+      "unresolved": false
+    },
+    {
+      "id": "c214bbf4_fe6b2434",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 5,
+      "line": 140,
+      "message": "FYI: this only matches the first occurrence.\n\nsame comment applies to the other test cases",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-28 13:23:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bbb21390_5126e2de",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 9,
+      "line": 26,
+      "message": "I don't think these are needed now",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-30 13:37:41.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fe78bc4f_36ee607f",
+      "file_path": "plugins/reception-plugins/src/test/java/org/onap/policy/distribution/reception/decoding/pdpx/TestPolicyDecoderCsarPdpxLifecycleApi.java",
+      "patchset_number": 9,
+      "line": 26,
+      "message": "Done",
+      "author": {
+        "account_id": 2737,
+        "name": "Liang Ding",
+        "display_name": null,
+        "email": "liang.ding@intel.com",
+        "username": "lding7"
+      },
+      "updated": "2019-10-30 15:44:21.000000000",
+      "in_reply_to": "bbb21390_5126e2de",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "id": "logging-analytics~master~I8f94b066e1841322199c95f7de82c1a4e76fcd2f",
+  "change_id": "I8f94b066e1841322199c95f7de82c1a4e76fcd2f",
+  "_number": 96525,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-10-02 19:05:43.000000000",
+    "updated": "2019-10-11 14:35:02.000000000",
+    "submitted": "2019-10-11 14:24:13.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 3371,
+      "name": "Brittany Plummer",
+      "display_name": null,
+      "email": "bp896r@att.com",
+      "username": "bp896r"
+    },
+    "submitter": {
+      "account_id": 2965,
+      "name": "Pierre Rioux",
+      "display_name": null,
+      "email": "pierre.rioux@amdocs.com",
+      "username": "prioux"
+    }
+  },
+  "subject": "Added catching error when calculating elapsedTime.",
+  "commit_message": "Added catching error when calculating elapsedTime.\n\nIssue-ID: LOG-1148\nChange-Id: I8f94b066e1841322199c95f7de82c1a4e76fcd2f\nSigned-off-by: Brittany Plummer (bp896r) <bp896r@att.com>\n",
+  "change_log": {
+    "entry_count": 16,
+    "entries": [
+      {
+        "id": "1ad1d4be9b9fdaaa018da1f34ce3951f3dead8ae",
+        "author": {
+          "account_id": 3371,
+          "name": "Brittany Plummer",
+          "display_name": null,
+          "email": "bp896r@att.com",
+          "username": "bp896r"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-02 19:05:43.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "0be52fabb371c0eafcbd3363e66033abbf05e7b7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-02 19:14:53.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/logging-analytics-master-verify-java/280/",
+        "patchset_number": 1
+      },
+      {
+        "id": "45e011c19440659bcf01edbb3f28d12f76021bb8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-02 19:15:38.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/logging-analytics-master-verify-java/280/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/logging-analytics-master-verify-java/280",
+        "patchset_number": 1
+      },
+      {
+        "id": "2c8dbcea6d2575be1cd2f7f60c82021696ad940d",
+        "author": {
+          "account_id": 1219,
+          "name": "Kevin Smokowski",
+          "display_name": null,
+          "email": "kevin.smokowski@att.com",
+          "username": "nullop"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-04 13:24:15.000000000",
+        "message": "Patch Set 1:\n\nIf we can not determine the elapsed time, setting a default time feels misleading to me. Is anyone opposed to not setting this value in instances in which the value cannot be determined?\n\nAlso is this currently happening during testing? Do we have any root cause?",
+        "patchset_number": 1
+      },
+      {
+        "id": "686d6f93ddf1fb54f8fe6f6264bb4e3c3571de45",
+        "author": {
+          "account_id": 3371,
+          "name": "Brittany Plummer",
+          "display_name": null,
+          "email": "bp896r@att.com",
+          "username": "bp896r"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-07 21:28:34.000000000",
+        "message": "Patch Set 1:\n\nI understand that setting a default elapsed time can be confusing. The initial logic behind this was to keep it so that the log line would still be valid if elapsedTime could not be calculated. I am seeing it where entryTimestamp is null so a NullPointerException is thrown. However, since the entry or invoke timestamps will also be null in that case, that would make the log lines invalid anyway. I can remove setting the default elapsedTime, but I think that we should still catch exceptions and print a warning to identify that we weren't able to set elapsedTime",
+        "patchset_number": 1
+      },
+      {
+        "id": "05d663dffdb9212bf71b231b2d17a15e368f0339",
+        "author": {
+          "account_id": 1219,
+          "name": "Kevin Smokowski",
+          "display_name": null,
+          "email": "kevin.smokowski@att.com",
+          "username": "nullop"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 13:15:38.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> I understand that setting a default elapsed time can be confusing. The initial logic behind this was to keep it so that the log line would still be valid if elapsedTime could not be calculated. I am seeing it where entryTimestamp is null so a NullPointerException is thrown. However, since the entry or invoke timestamps will also be null in that case, that would make the log lines invalid anyway. I can remove setting the default elapsedTime, but I think that we should still catch exceptions and print a warning to identify that we weren't able to set elapsedTime\n\nI agree that it should be a \"best effort\" service meaning log as best as possible instead of crashing out. If we log the exception or error message will someone be able to debug and fix it?",
+        "patchset_number": 1
+      },
+      {
+        "id": "07b7e0c74f3c61715632759e6fd4c0142d2586c1",
+        "author": {
+          "account_id": 3371,
+          "name": "Brittany Plummer",
+          "display_name": null,
+          "email": "bp896r@att.com",
+          "username": "bp896r"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-08 18:21:41.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > I understand that setting a default elapsed time can be confusing. The initial logic behind this was to keep it so that the log line would still be valid if elapsedTime could not be calculated. I am seeing it where entryTimestamp is null so a NullPointerException is thrown. However, since the entry or invoke timestamps will also be null in that case, that would make the log lines invalid anyway. I can remove setting the default elapsedTime, but I think that we should still catch exceptions and print a warning to identify that we weren't able to set elapsedTime\n> \n> I agree that it should be a \"best effort\" service meaning log as best as possible instead of crashing out. If we log the exception or error message will someone be able to debug and fix it?\n\nI think it should be okay. With the way it is printing now with the NPE and the whole stack trace from AbstractAuditLogFilter, it is being confused for an execution stopping error. I think logging the warning and exception message will prevent some confusion here, while also providing some insight into the issue.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8c2745b86ddf8cf557559b3d421c4978fec691da",
+        "author": {
+          "account_id": 3371,
+          "name": "Brittany Plummer",
+          "display_name": null,
+          "email": "bp896r@att.com",
+          "username": "bp896r"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-08 19:06:51.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "e3a2f90cea787c8c417033e7e19483a51a99be30",
+        "author": {
+          "account_id": 3371,
+          "name": "Brittany Plummer",
+          "display_name": null,
+          "email": "bp896r@att.com",
+          "username": "bp896r"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-08 19:08:11.000000000",
+        "message": "Patch Set 3: Commit message was updated.",
+        "patchset_number": 3
+      },
+      {
+        "id": "c1203ee6e6ff3074bd5bf553046ac16e126a7461",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 19:08:15.000000000",
+        "message": "Patch Set 2:\n\nNo Builds Executed",
+        "patchset_number": 2
+      },
+      {
+        "id": "bf96c6308d70abfd83abb1b560d84aaeb3d4d551",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 19:08:23.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/logging-analytics-master-verify-java/304/",
+        "patchset_number": 3
+      },
+      {
+        "id": "c399343768bb58c00c668cc16a801438bc09fc26",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 19:10:46.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/logging-analytics-master-verify-java/304/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/logging-analytics-master-verify-java/304",
+        "patchset_number": 3
+      },
+      {
+        "id": "b97350f1c0f199fb3887fae44fbd341152df0823",
+        "author": {
+          "account_id": 1219,
+          "name": "Kevin Smokowski",
+          "display_name": null,
+          "email": "kevin.smokowski@att.com",
+          "username": "nullop"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-10 15:12:44.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "168d27e0e1bc4354b33df4a6d534c90036561821",
+        "author": {
+          "account_id": 2965,
+          "name": "Pierre Rioux",
+          "display_name": null,
+          "email": "pierre.rioux@amdocs.com",
+          "username": "prioux"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 14:24:08.000000000",
+        "message": "Patch Set 3: Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "ebf301aa6300671d251cd2fc4ebf71a7fa44e092",
+        "author": {
+          "account_id": 2965,
+          "name": "Pierre Rioux",
+          "display_name": null,
+          "email": "pierre.rioux@amdocs.com",
+          "username": "prioux"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 14:24:13.000000000",
+        "message": "Change has been successfully merged by Pierre Rioux",
+        "patchset_number": 3
+      },
+      {
+        "id": "4284110d3f62aab1d438f6421b7f493277f9e8fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 14:35:02.000000000",
+        "message": "Patch Set 3:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/logging-analytics-pylog-pylog-python-staging-master/131/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/logging-analytics-pylog-pylog-python-staging-master/131/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/logging-analytics-pylog-pylog-python-staging-master/131\n\nhttps://jenkins.onap.org/job/logging-analytics-master-merge-java/141/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/logging-analytics-master-merge-java/141/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/logging-analytics-master-merge-java/141",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

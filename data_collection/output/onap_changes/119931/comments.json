@@ -1,0 +1,382 @@
+{
+  "id": "oom~master~I393fb98ef6ac9cc6f4bf9d476cd682531d15011e",
+  "change_id": "I393fb98ef6ac9cc6f4bf9d476cd682531d15011e",
+  "_number": 119931,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7382255d_f1b5c5b1",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Hmmm does it mean that you have a full keycloak instance running inside your container?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-27 14:39:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4a0d5fc4_fff9eeaf",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Yes, the Keycloak instance is optional and configured via a profile in \"traversal\" when enabled, the container is expected at the said address and port.",
+      "author": {
+        "account_id": 6932,
+        "name": "Sam Huang",
+        "display_name": null,
+        "email": "sam.huang@yoppworks.com",
+        "username": "sam.huang"
+      },
+      "updated": "2021-03-31 14:49:14.000000000",
+      "in_reply_to": "7382255d_f1b5c5b1",
+      "unresolved": false
+    },
+    {
+      "id": "ae086401_d8329d64",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "but this config points to the localhost so does it mean that if configured your container will have a keycloak instance embedded inside or it will just use an address which is provided here?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-01 08:45:11.000000000",
+      "in_reply_to": "4a0d5fc4_fff9eeaf",
+      "unresolved": false
+    },
+    {
+      "id": "9475a7da_b8273b9a",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "It will just use the address defined here. No instance is embedded as it is optional. Thanks.",
+      "author": {
+        "account_id": 6932,
+        "name": "Sam Huang",
+        "display_name": null,
+        "email": "sam.huang@yoppworks.com",
+        "username": "sam.huang"
+      },
+      "updated": "2021-04-01 15:35:39.000000000",
+      "in_reply_to": "ae086401_d8329d64",
+      "unresolved": false
+    },
+    {
+      "id": "112b429c_a1baee51",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Ok. Thank you for the clarification. Maybe to be super clear it would be better to replace this localhost with sth like: keycloak.your.doman?\n\nAdditionally what are the expectations to that link? Should it be just host or it should point to a particular realm? How you provide credentials to this keycloak instance and what are your expectations to it? Do you expect it to be configured in a certain way?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-02 06:24:39.000000000",
+      "in_reply_to": "9475a7da_b8273b9a",
+      "unresolved": false
+    },
+    {
+      "id": "013b97fe_5db8b8d9",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Hi, while the \"keycloak.your.domain\" may provide an example, the \"localhost\" actually matches with the development config in the \"traversal\" repo as well. One can argue that, it would be easier to maintain automation script to update and replace these config values. This is also the default for the \"aai-resources\" component so no surprise for user. 😊\n\nWith regards to Keycloak's realm and roles settings, there is no expectations whatsoever. It is up to the application's configuration requirement to setup the realm, client-app and access roles.\n\nThanks",
+      "author": {
+        "account_id": 6932,
+        "name": "Sam Huang",
+        "display_name": null,
+        "email": "sam.huang@yoppworks.com",
+        "username": "sam.huang"
+      },
+      "updated": "2021-04-07 04:48:20.000000000",
+      "in_reply_to": "112b429c_a1baee51",
+      "unresolved": false
+    },
+    {
+      "id": "28cee74b_83520fe2",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "well here it's kubernetes that it's not possible to have keycloak as localhost as long it's not in the POD so please change to something different as proposed by Krzysztof.\n\nFor Keycloak configuration, I'm not sure to get: aai-traversal doesn't need a specific configuration for keycloak on realm and rest?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 11:59:48.000000000",
+      "in_reply_to": "013b97fe_5db8b8d9",
+      "unresolved": true
+    },
+    {
+      "id": "52d66c78_4789c1c0",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "whitespace",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-08 18:42:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cade97b6_1a306e7b",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "enabled by default? How do we test that? Where is the keycloak instance that aai-traversal is going to communicate with?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-08 18:44:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1913dcf_813ca431",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "By default it will be disabled. The \"keycloak\" profile is not active by default so this file will not have been populated.",
+      "author": {
+        "account_id": 6932,
+        "name": "Sam Huang",
+        "display_name": null,
+        "email": "sam.huang@yoppworks.com",
+        "username": "sam.huang"
+      },
+      "updated": "2021-04-08 20:58:28.000000000",
+      "in_reply_to": "cade97b6_1a306e7b",
+      "unresolved": false
+    },
+    {
+      "id": "45d9366e_0d1ce285",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "then how do I enable it? Would be great to have such option in values.yaml",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-09 08:16:01.000000000",
+      "in_reply_to": "b1913dcf_813ca431",
+      "unresolved": false
+    },
+    {
+      "id": "a7430fab_6927dd2f",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "It can be enabled by activating the \"keycloak\" spring profile for the traversal component.",
+      "author": {
+        "account_id": 6932,
+        "name": "Sam Huang",
+        "display_name": null,
+        "email": "sam.huang@yoppworks.com",
+        "username": "sam.huang"
+      },
+      "updated": "2021-04-12 14:38:50.000000000",
+      "in_reply_to": "45d9366e_0d1ce285",
+      "unresolved": false
+    },
+    {
+      "id": "9a835465_9937b23e",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "well, to be honest, it's not clear at all from this side of the project.\ndo you have any documentation to point out in order to make it clearer?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-13 06:22:42.000000000",
+      "in_reply_to": "a7430fab_6927dd2f",
+      "unresolved": true
+    },
+    {
+      "id": "73cc8998_11306e2c",
+      "file_path": "kubernetes/aai/components/aai-traversal/resources/config/application-keycloak.properties",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "Hi Team, Pushed a new patchset, please take a look. \nJust for clarification, In order to integrate keycloak, 'keycloak' needs to be added to 'profiles.active' in https://gerrit.onap.org/r/c/oom/+/119931/5/kubernetes/aai/components/aai-traversal/values.yaml#62. When added, keycloak's properties file will be loaded and will be used to support multiTenancy. The properties file contains all keycloak configurations, plus, 'multi.tenancy.enabled'. \nWhen enabled, an extra criteria will be added into traversal query. So, by default 'multi.tenancy.enabled' needs to be true, if not, why keycloak is added to active profiles?\nBut, there might be some use-cases which needs to run traversal without multiTenancy, while keycloak has been integrated. In that case we should set 'multi.tenancy.enabled' to false.",
+      "author": {
+        "account_id": 7355,
+        "name": "Mohammad Hosnidokht",
+        "display_name": null,
+        "email": "mohammad.hosnidokht@yoppworks.com",
+        "username": "MHosnidokht"
+      },
+      "updated": "2021-04-13 18:03:12.000000000",
+      "in_reply_to": "9a835465_9937b23e",
+      "unresolved": true
+    },
+    {
+      "id": "3f20e3b1_183be20e",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 5,
+      "line": 171,
+      "message": "# configure keycloak according to your environment.\n# don't forget to add keycloak in active profiles (L62) also",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-14 13:17:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3f0e925c_19d0d212",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 5,
+      "line": 177,
+      "message": "pointer and or explanation for that would be good",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-14 13:17:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "421893ec_165c190d",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 5,
+      "line": 171,
+      "message": "Done",
+      "author": {
+        "account_id": 7355,
+        "name": "Mohammad Hosnidokht",
+        "display_name": null,
+        "email": "mohammad.hosnidokht@yoppworks.com",
+        "username": "MHosnidokht"
+      },
+      "updated": "2021-04-14 15:51:16.000000000",
+      "in_reply_to": "3f20e3b1_183be20e",
+      "unresolved": false
+    },
+    {
+      "id": "d5281a26_df99085d",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 5,
+      "line": 177,
+      "message": "Done",
+      "author": {
+        "account_id": 7355,
+        "name": "Mohammad Hosnidokht",
+        "display_name": null,
+        "email": "mohammad.hosnidokht@yoppworks.com",
+        "username": "MHosnidokht"
+      },
+      "updated": "2021-04-14 15:51:16.000000000",
+      "in_reply_to": "3f0e925c_19d0d212",
+      "unresolved": false
+    },
+    {
+      "id": "3df6633b_8e54fc3f",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 7,
+      "line": 172,
+      "message": "referencing line in the doc comment is a pure evil;)\nas soon as someone even adds a copyright line this will become outdated. Instead I'd suggest to reference the value: \n.Values.global.config.profiles\n\nand BTW you should remove all that component specific stuff from the global section in the nearest future. Pleeeeeeeeeeease...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-15 09:50:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "71cbf9f8_4be0c05d",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 7,
+      "line": 172,
+      "message": "well Krzysztof, as far as I see, this is in .Values.config part, not .Values.global.config part no?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-15 13:46:54.000000000",
+      "in_reply_to": "3df6633b_8e54fc3f",
+      "unresolved": true
+    },
+    {
+      "id": "ba2bba57_6a5bd690",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 7,
+      "line": 172,
+      "message": "Removed line referencing!",
+      "author": {
+        "account_id": 7355,
+        "name": "Mohammad Hosnidokht",
+        "display_name": null,
+        "email": "mohammad.hosnidokht@yoppworks.com",
+        "username": "MHosnidokht"
+      },
+      "updated": "2021-04-15 20:44:15.000000000",
+      "in_reply_to": "71cbf9f8_4be0c05d",
+      "unresolved": true
+    },
+    {
+      "id": "690ff10d_732c0a6e",
+      "file_path": "kubernetes/aai/components/aai-traversal/values.yaml",
+      "patchset_number": 7,
+      "line": 172,
+      "message": "@Sylvain\nThis one yes but checkout lines 30 down to  107. To me it looks all application specific not ONAP global;)\n\nThey actually have both .Values.config where this keycloak config is added and also .Values.global.config where a lot of dragons live;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-16 07:49:29.000000000",
+      "in_reply_to": "ba2bba57_6a5bd690",
+      "unresolved": true
+    }
+  ]
+}

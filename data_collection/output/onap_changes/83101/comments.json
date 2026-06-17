@@ -1,0 +1,263 @@
+{
+  "id": "oom%2Foffline-installer~master~Ib93e9d2a9cf49003d04dd5f890294eda1eb966ff",
+  "change_id": "Ib93e9d2a9cf49003d04dd5f890294eda1eb966ff",
+  "_number": 83101,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a0c564b7_f228380b",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "Not sure but shouldn't this stay in here? We don't mount the nfs share on the nfs server, or do we?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-28 12:10:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3d31999b_d0a0c177",
+      "file_path": "ansible/roles/nfs/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "just thinking if it wouldn't be safer to use lineinfile to keep exports that might have been there before for some reason (but probably different commit if yes)",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-28 13:48:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "52dd10ba_8585f3f2",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "yes that should stay in there",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-28 13:48:38.000000000",
+      "in_reply_to": "a0c564b7_f228380b",
+      "unresolved": true
+    },
+    {
+      "id": "f846cc2c_ca44d2eb",
+      "file_path": "ansible/roles/nfs/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "sounds right to me.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-28 13:52:31.000000000",
+      "in_reply_to": "3d31999b_d0a0c177",
+      "unresolved": false
+    },
+    {
+      "id": "a6081332_1f6c157c",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "If I understood correctly this file defines which hosts can connect to mount. And I hope it does not matter if nfs server itself is also on the list?\n\nThe problem was that this was dependent on the inventory generation order, and if inventory was generated in the order where nfs-server was not the first one on the list then the client server did not get into list and failed to mount directory.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-28 13:52:31.000000000",
+      "in_reply_to": "52dd10ba_8585f3f2",
+      "unresolved": true
+    },
+    {
+      "id": "bca7d49d_be9d04d5",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "So you mean the case where nodeX is nfs-server where x!=0, right? If yes then it would be sufficient to:\n\n{% for host in ( groups.kubernetes | difference(groups.nfs-server) ) -%}\n\nor smthing like that, didn't test it.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-28 14:14:36.000000000",
+      "in_reply_to": "a6081332_1f6c157c",
+      "unresolved": true
+    },
+    {
+      "id": "2bd8de95_dd3634a3",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "yes something like that.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-28 16:16:18.000000000",
+      "in_reply_to": "bca7d49d_be9d04d5",
+      "unresolved": true
+    },
+    {
+      "id": "687cc808_abedd292",
+      "file_path": "ansible/roles/nfs/tasks/main.yml",
+      "patchset_number": 3,
+      "line": 26,
+      "message": "Not sure if you are aware of this, but I saw that you can have export dropins in /etc/exports.d instead of modifying the main one, far better way. However not sure if it is always supported, and how new this feature is.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-03 11:48:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f114f780_c186424f",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 3,
+      "line": 2,
+      "message": "Actually shouldn't this use cluster_ip? nfs communication between nodes probably uses cluster network.\nOr, using \"*\" instead of a whitelist, probably possible. Maybe less secure though.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-03 11:48:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "14cf030f_1f33d6a2",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "It's fixed in 83102.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-04-03 12:36:06.000000000",
+      "in_reply_to": "2bd8de95_dd3634a3",
+      "unresolved": false
+    },
+    {
+      "id": "c1b72ac0_e1ea2eed",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "well still there is a separate nfs servers group, so even if that is fixed, it is better to also make this template not to depend on such a hidden thing like order of nodes in group. :)",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-03 12:46:20.000000000",
+      "in_reply_to": "14cf030f_1f33d6a2",
+      "unresolved": false
+    },
+    {
+      "id": "e3901a38_71a840dd",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "But it doesn't depend (after fix in 83102) on any kind of order but only on the particular host's presence in nfs-server group or not.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-04-03 12:50:26.000000000",
+      "in_reply_to": "c1b72ac0_e1ea2eed",
+      "unresolved": false
+    },
+    {
+      "id": "532b4ae9_1ba7bb04",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "ah, ok.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-03 12:53:51.000000000",
+      "in_reply_to": "e3901a38_71a840dd",
+      "unresolved": false
+    },
+    {
+      "id": "44f96260_f0381c14",
+      "file_path": "ansible/roles/nfs/tasks/main.yml",
+      "patchset_number": 3,
+      "line": 26,
+      "message": "will be covered in OOM-1770",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-05 10:26:14.000000000",
+      "in_reply_to": "687cc808_abedd292",
+      "unresolved": false
+    },
+    {
+      "id": "77919bb9_e03ec34b",
+      "file_path": "ansible/roles/nfs/templates/exports.j2",
+      "patchset_number": 3,
+      "line": 2,
+      "message": "can be covered later in OOM-1770",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-05 10:26:14.000000000",
+      "in_reply_to": "f114f780_c186424f",
+      "unresolved": false
+    }
+  ]
+}

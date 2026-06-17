@@ -1,0 +1,42 @@
+{
+  "id": "oom~master~I537ba3a6ff9c14fd43e14536eb89b4716bdb4a86",
+  "change_id": "I537ba3a6ff9c14fd43e14536eb89b4716bdb4a86",
+  "_number": 129137,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "db7c74c7_f508a7e4",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "Does istio insist on a label called \"app\"?  Couldn't it use app.kubernetes.io/name?",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2022-05-06 15:11:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a4fe4b1_16bdd312",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "in my patch (https://gerrit.onap.org/r/c/oom/+/128371)\nI tried it in the \"matchLabels\" to use something different than \"app\" without success:\n\napiVersion: security.istio.io/v1beta1\nkind: PeerAuthentication\nmetadata:\n  name: {{ include \"common.servicename\" . }}\n  namespace: {{ include \"common.namespace\" . }}\nspec:\n  selector:\n    matchLabels:\n      app: {{ include \"common.servicename\" . }}\n  portLevelMtls:\n    {{ .Values.service.internalPort }}:\n      mode: DISABLE\n\nBut I will have to check, if the label \"app\" could only be used for \"service\" and not generally, as currently for some reason CPS has a problem.\nIt seems \"deployment\" definition has a problem with the label \"app\":\nroot@control01-istio:/opt/oom/kubernetes# helm upgrade -i onap-cps local/cps --namespace onap --version 10.0.0 --values /opt/oom/kubernetes/onap/resources/overrides/onap-all.yaml --values /opt/oom/kubernetes/onap/resources/overrides/environment.yaml --values /home/ubuntu/oom/master/onap-overrides.yaml --values /home/ubuntu/oom/master/onap-components.yaml --set config.useStrimziKafka=\"true\" --timeout '900s'\nRelease \"onap-cps\" does not exist. Installing it now.\nError: Deployment.apps \"onap-ncmp-dmi-plugin\" is invalid: spec.template.metadata.labels: Invalid value: map[string]string{\"app.kubernetes.io/instance\":\"onap\", \"app.kubernetes.io/name\":\"ncmp-dmi-plugin\"}: `selector` does not match template `labels`",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2022-05-09 10:24:32.000000000",
+      "in_reply_to": "db7c74c7_f508a7e4",
+      "unresolved": true
+    }
+  ]
+}

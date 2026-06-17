@@ -1,0 +1,1448 @@
+{
+  "id": "ci-management~master~Ibd00d24bb70ef51f761005016b7baea4ef66a0a5",
+  "change_id": "Ibd00d24bb70ef51f761005016b7baea4ef66a0a5",
+  "_number": 92707,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-08-05 15:48:53.000000000",
+    "updated": "2019-09-09 06:51:43.000000000",
+    "submitted": "2019-09-06 17:20:41.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 3621,
+      "name": "Paul-Ionut Vaduva",
+      "display_name": null,
+      "email": "paul.vaduva@enea.com",
+      "username": "pvaduva"
+    },
+    "submitter": {
+      "account_id": 481,
+      "name": "Jessica Wagantall",
+      "display_name": null,
+      "email": "jwagantall@linuxfoundation.org",
+      "username": "jwagantall"
+    }
+  },
+  "subject": "Add multiplatform jobs for policy docker images",
+  "commit_message": "Add multiplatform jobs for policy docker images\n\nAdd three global templates needed to build multiarch images:\n   - {project-name}-docker-manifest-{stream}: creates a docker\n     manifest list with images for multiple architectures by calling\n     docker_push_manifest.sh\n\n   - {project-name}-multiarch-docker-stage-{stream}: multijob that\n     uses the global-jjb template\n     {project-name}-maven-docker-stage-{stream} to produce staging\n     images for each supported arch and a manifest list for them\n\n   - {project-name}-multiarch-{stream}-merge-java: multijob that uses\n     the existing {project-name}-{stream}-merge-java template to\n     produce snapshot images for each suppported arch and a manifest\n     list for them\n\nThe policy/docker project jobs are modified to use the new multiarch\ntemplates.\nAll images are now pushed to DockerHub instead of Nexus (as Nexus lacks\nsupport for docker manifest list).\n\nCancel the triggers for child jobs, as they will be triggered by the\nparent multiarch job.\n\nFor the jobs that build images, use registry registry-1.docker.io\nas a workaround for [1].\n\nEnable the multiarch jobs only for the master branch for now.\n\n[1] https://github.com/fabric8io/docker-maven-plugin/issues/838\n\nIssue-ID: CIMAN-217\nChange-Id: Ibd00d24bb70ef51f761005016b7baea4ef66a0a5\nSigned-off-by: Paul Vaduva <Paul.Vaduva@enea.com>\nSigned-off-by: Cristina Pauna <cristina.pauna@enea.com>\nSigned-off-by: Alexandru Avadanii <Alexandru.Avadanii@enea.com>\n",
+  "change_log": {
+    "entry_count": 101,
+    "entries": [
+      {
+        "id": "502b64e7a2172f9015fada7a0f29ec7828af3aba",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-05 15:48:53.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "aaf633ad5ba186cc019d5817a1e552d0744fb966",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-05 15:50:07.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3491/",
+        "patchset_number": 1
+      },
+      {
+        "id": "9321adf5d2d41fa92ff943855a0801601786db43",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-05 15:53:45.000000000",
+        "message": "Patch Set 1:\n\nHi Jess. As agreed I created the review with the original jjb jobs. I understand you can review and convert them to global-jjb ones.\nBest Regards.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5dc73a4a42ec539581fc0cd29ff04f55ae676a71",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-05 16:04:11.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3491/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3491",
+        "patchset_number": 1
+      },
+      {
+        "id": "1e4c028bb80959230e0244e1d667e1370555fd4a",
+        "author": {
+          "account_id": 481,
+          "name": "Jessica Wagantall",
+          "display_name": null,
+          "email": "jwagantall@linuxfoundation.org",
+          "username": "jwagantall"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-05 20:56:11.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "580e82ba738e58a3e4e9cdd96ac46a8957852753",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-06 11:05:16.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "1ccd87c82d6d8f6de0db8ad4c828acd291462fbc",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-06 14:19:35.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "914ff97ff81b33e44c195a03719b8420d5d6d1c1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-06 14:21:01.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3502/",
+        "patchset_number": 2
+      },
+      {
+        "id": "32dccd30da2a52984bab829afa54b6608a10e32b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-06 14:25:05.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3502/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3502/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3502",
+        "patchset_number": 2
+      },
+      {
+        "id": "93aac4ef606bf1ff1bee2dcd628635b7543e670a",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-06 14:31:08.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "f43ed57e3ddec65970312c04ece4ef8c78fec2f1",
+        "author": {
+          "account_id": 4677,
+          "name": "Bengt Thuree",
+          "display_name": null,
+          "email": "bthuree@linuxfoundation.org",
+          "username": "bthuree"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-08 04:11:23.000000000",
+        "message": "Patch Set 2:\n\nLooking good to me, but we need to verify it in the sandbox first.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0acf39123b2c95f9d1714978b03794c7f3fcdb31",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-08 11:45:38.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> Looking good to me, but we need to verify it in the sandbox first.\n\nIt doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\nI tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses soem default ubuntu1604-builder-4c-4g to run both jobs.",
+        "patchset_number": 2
+      },
+      {
+        "id": "6939887af0b2fedc6882abd6cf261c748e3fd232",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-08 11:46:40.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > Looking good to me, but we need to verify it in the sandbox first.\n> \n> It doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\n> I tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses some default ubuntu1604-builder-4c-4g to run both jobs.",
+        "patchset_number": 2
+      },
+      {
+        "id": "8d4429ca293763df31b9b19aa8cc0e8f215ca821",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-08 12:08:17.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > Looking good to me, but we need to verify it in the sandbox first.\n> > \n> > It doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\n> > I tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses some default ubuntu1604-builder-4c-4g to run both jobs.\n\nDo anybody know why node-label and node-label-name from here \nhttps://docs.openstack.org/infra/jenkins-job-builder/builders.html\nsay from the multijob or trigger-build builders do not behave the way their definition describes ?",
+        "patchset_number": 2
+      },
+      {
+        "id": "77559b4395143619bcbcdaf0b4badd6a59f2a89e",
+        "author": {
+          "account_id": 4677,
+          "name": "Bengt Thuree",
+          "display_name": null,
+          "email": "bthuree@linuxfoundation.org",
+          "username": "bthuree"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-13 02:08:46.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > Looking good to me, but we need to verify it in the sandbox first.\n> > > \n> > > It doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\n> > > I tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses some default ubuntu1604-builder-4c-4g to run both jobs.\n> \n> Do anybody know why node-label and node-label-name from here \n> https://docs.openstack.org/infra/jenkins-job-builder/builders.html\n> say from the multijob or trigger-build builders do not behave the way their definition describes ?\n\nSorry, I need to investigate this and see if I can find something",
+        "patchset_number": 2
+      },
+      {
+        "id": "8cf4119be6f3b286aa15ddfb1075d16ad3693066",
+        "author": {
+          "account_id": 4677,
+          "name": "Bengt Thuree",
+          "display_name": null,
+          "email": "bthuree@linuxfoundation.org",
+          "username": "bthuree"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 09:32:29.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > > Patch Set 2:\n> > > > > \n> > > > > Looking good to me, but we need to verify it in the sandbox first.\n> > > > \n> > > > It doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\n> > > > I tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses some default ubuntu1604-builder-4c-4g to run both jobs.\n> > \n> > Do anybody know why node-label and node-label-name from here \n> > https://docs.openstack.org/infra/jenkins-job-builder/builders.html\n> > say from the multijob or trigger-build builders do not behave the way their definition describes ?\n> \n> Sorry, I need to investigate this and see if I can find something\n\nDo we have this plugin installed I wonder...\n Requires NodeLabel Parameter Plugin (optional)",
+        "patchset_number": 2
+      },
+      {
+        "id": "71befd7fd8b6409697c13bbb705eb4143e07ba72",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-14 09:39:55.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > > Patch Set 2:\n> > > > > \n> > > > > > Patch Set 2:\n> > > > > > \n> > > > > > Looking good to me, but we need to verify it in the sandbox first.\n> > > > > \n> > > > > It doesn't work (the job is not called on the wanted node (ex ubuntu1604-docker-8c-8g for arm64 arch and ubuntu1604-docker-arm64-4c-2g)\n> > > > > I tried a few variants like using node-label and node-label-name to force the execution on the desired jobs but it still uses some default ubuntu1604-builder-4c-4g to run both jobs.\n> > > \n> > > Do anybody know why node-label and node-label-name from here \n> > > https://docs.openstack.org/infra/jenkins-job-builder/builders.html\n> > > say from the multijob or trigger-build builders do not behave the way their definition describes ?\n> > \n> > Sorry, I need to investigate this and see if I can find something\n> \n> Do we have this plugin installed I wonder...\n>  Requires NodeLabel Parameter Plugin (optional)\n\nHi Bengt, I have found that a workaround suggested by Jess is working, bu overwriting the project name, however the CLA enforcement kicked in I cannot make new reviews right now.",
+        "patchset_number": 2
+      },
+      {
+        "id": "231cf48446a54307491a9512f87f5e5b934e3b50",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-14 14:33:04.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "df841581deaaa4fd201be7206cd2cc7c68d6f844",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 14:34:36.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3542/",
+        "patchset_number": 3
+      },
+      {
+        "id": "7f37a27c00ac674c9a9473428995ef5e22ddd8c4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 14:36:44.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3542/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3542/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3542",
+        "patchset_number": 3
+      },
+      {
+        "id": "46ebbefbbbe117e989f552b4490f3673ccd1784f",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-14 14:47:14.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "bae44c7d8286901b5727ce2491ba43d1b30c2106",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 14:48:23.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3543/",
+        "patchset_number": 4
+      },
+      {
+        "id": "3b5611669dbd8eeefb6466468540319de793a4b5",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-14 14:53:54.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "90f6c395b536c99f26522e653af75f954d6dbdd0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 14:54:07.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3543/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3543/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3543",
+        "patchset_number": 4
+      },
+      {
+        "id": "802f1dfd0ae64a8a7d629b71bff5a388fd38bd7c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 14:55:08.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3544/",
+        "patchset_number": 5
+      },
+      {
+        "id": "18782390ed641e89f4dbea11187b6e48d0f1e6bc",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-14 14:58:59.000000000",
+        "message": "Patch Set 5: Code-Review-1\n\n(2 comments)\n\nThe final Merge will come in conjunction with commit's in the policy git repos, so please do not merge yet.",
+        "patchset_number": 5
+      },
+      {
+        "id": "8dcdd498248e591188bc3da440a6f3dfba13760b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-14 15:11:13.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3544/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3544",
+        "patchset_number": 5
+      },
+      {
+        "id": "adc8b694ea5f7e5042635b6ec7569b5dbcc34c43",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-19 13:59:23.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "53690f7e7d4f20a7ec7e84273aa553c45a44d930",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-19 13:59:34.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3561/",
+        "patchset_number": 6
+      },
+      {
+        "id": "968c6c0ef334f491a311cf5aa83201cb015d088c",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-19 14:08:36.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "f46718ac2d7a4208e7578b81fecbc89229b3a3b5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-19 14:08:53.000000000",
+        "message": "Patch Set 6: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3561/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3561/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3561",
+        "patchset_number": 6
+      },
+      {
+        "id": "a6596df4698b041ef116ee398cfef10dba299a06",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-19 14:11:10.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3562/",
+        "patchset_number": 7
+      },
+      {
+        "id": "1be5afd4abf8cf06e8cc83a00ef8afa1f4c4937f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-19 14:27:42.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3562/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3562",
+        "patchset_number": 7
+      },
+      {
+        "id": "0ef248133ad37365c0f05e378b7502e3125f71a9",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-19 14:41:04.000000000",
+        "message": "Patch Set 7: Code-Review-1\n\nWill update when changes are reviewed on policy git repos",
+        "patchset_number": 7
+      },
+      {
+        "id": "2bf9d7847e704baff30500f19bf10e566197bff2",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-20 13:22:16.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "de418578bbdeab8c44a1c02836a47668f3cadf19",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-20 13:22:37.000000000",
+        "message": "Patch Set 8: Code-Review-1\n\nNo ready for merge yet.",
+        "patchset_number": 8
+      },
+      {
+        "id": "92349f3f635d9ec9e8b7536d0ef4d0d898a9370e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 13:23:33.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3566/",
+        "patchset_number": 8
+      },
+      {
+        "id": "93dd98bc9b18bd49fbd4e9a32ea232ff70d29608",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 13:25:30.000000000",
+        "message": "Patch Set 8: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3566/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3566/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3566",
+        "patchset_number": 8
+      },
+      {
+        "id": "35cc505ecfb21daadd810ee049003488440d9a08",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-20 13:45:32.000000000",
+        "message": "Patch Set 8: -Code-Review\n\nrecheck",
+        "patchset_number": 8
+      },
+      {
+        "id": "f4b00c52265e4cb50511e6b87704bfb8163bc65e",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-20 15:14:04.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "28c2ec5cf71636765ea014c666808aa32ae55460",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 15:15:40.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3568/",
+        "patchset_number": 9
+      },
+      {
+        "id": "f41c3fccc16c1357ca970def1b85ab639e868d90",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 15:32:19.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3568/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3568",
+        "patchset_number": 9
+      },
+      {
+        "id": "158ecb42a44761d5a5eba4afebc273b3cd53dddc",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-23 08:54:23.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "27cfd5e0cd4d9de98b7f1bcfe6d64d3d93dc5024",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-23 08:55:48.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3575/",
+        "patchset_number": 10
+      },
+      {
+        "id": "4fb243071aea9427269e702bdee3f8d21ebd5ef3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-23 09:09:30.000000000",
+        "message": "Patch Set 10: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3575/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3575",
+        "patchset_number": 10
+      },
+      {
+        "id": "ab0972cee234d5a2fa55093fac82d6078f8ecd4a",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-27 13:32:28.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "262899983cebb123fc1c5f3633d2a0198804dd38",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 13:36:23.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3586/",
+        "patchset_number": 11
+      },
+      {
+        "id": "a08f9132719748df8dda2ca9b5fc17bcc6a1cb96",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 13:50:20.000000000",
+        "message": "Patch Set 11: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3586/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3586",
+        "patchset_number": 11
+      },
+      {
+        "id": "5d593f6e57190cba5cb7e9c33646e26861023257",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-27 14:26:13.000000000",
+        "message": "Uploaded patch set 12.",
+        "patchset_number": 12
+      },
+      {
+        "id": "63771d34df05a841f33eeed6f207619a234939ce",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 14:27:27.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3587/",
+        "patchset_number": 12
+      },
+      {
+        "id": "dc73507bbcf4e0f4a4c05ccccd26e79ea6305601",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 14:52:03.000000000",
+        "message": "Patch Set 12:\n\n(2 comments)",
+        "patchset_number": 12
+      },
+      {
+        "id": "2268f2520c33de1a22d4f4258029688e2045bb2b",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 13:09:45.000000000",
+        "message": "Uploaded patch set 13.",
+        "patchset_number": 13
+      },
+      {
+        "id": "72b9048f769aaf2550b79007102e182717fa8aea",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:11:01.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3612/",
+        "patchset_number": 13
+      },
+      {
+        "id": "9388ad3f715e19e49f5ab19204c2d484a5610227",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:12:48.000000000",
+        "message": "Patch Set 13: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3612/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3612/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3612",
+        "patchset_number": 13
+      },
+      {
+        "id": "24ba83a024b6cf3a6ea677c538e1dc52006626e8",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 13:15:21.000000000",
+        "message": "Uploaded patch set 14.",
+        "patchset_number": 14
+      },
+      {
+        "id": "516e7bd5b49e2c51f1d09f2d2430c0c12f92f6a4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:16:31.000000000",
+        "message": "Patch Set 14:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3613/",
+        "patchset_number": 14
+      },
+      {
+        "id": "8b2a4c632d06e587795be86e927a9e25fd9bc8b3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:18:33.000000000",
+        "message": "Patch Set 14: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3613/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3613/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3613",
+        "patchset_number": 14
+      },
+      {
+        "id": "6da129c3e13fc26d35f33ab2261fea6067d5d88a",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 13:25:03.000000000",
+        "message": "Uploaded patch set 15.",
+        "patchset_number": 15
+      },
+      {
+        "id": "f578b2a0051e093b0b72dd2058645253d53a94dd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:26:25.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3614/",
+        "patchset_number": 15
+      },
+      {
+        "id": "cb252f38c00accc4191fde125a5f497c92f420c9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:28:42.000000000",
+        "message": "Patch Set 15: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3614/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ci-management-jjb-verify/3614/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3614",
+        "patchset_number": 15
+      },
+      {
+        "id": "af2955ed65a60628b1ba780a59f7448c6b5a208a",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 13:54:42.000000000",
+        "message": "Uploaded patch set 16.",
+        "patchset_number": 16
+      },
+      {
+        "id": "ffe852d17b2e3b432c3f0872a683a9ff5515798c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 13:56:02.000000000",
+        "message": "Patch Set 16:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3615/",
+        "patchset_number": 16
+      },
+      {
+        "id": "ff37e2603ac5ee08b1e6a44711e245c056fe9254",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 14:10:41.000000000",
+        "message": "Patch Set 16: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3615/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3615",
+        "patchset_number": 16
+      },
+      {
+        "id": "798a477a188f04c2cf7db7f0daaf6f4309c3d761",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 16:57:02.000000000",
+        "message": "Uploaded patch set 17.",
+        "patchset_number": 17
+      },
+      {
+        "id": "96b91af07bd5a7f3c26879c690923a3c0397f6dc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 16:58:19.000000000",
+        "message": "Patch Set 17:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3620/",
+        "patchset_number": 17
+      },
+      {
+        "id": "a762ef821ddd32868f7f566d2331dfb8bfee8fa5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 17:13:44.000000000",
+        "message": "Patch Set 17: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3620/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3620",
+        "patchset_number": 17
+      },
+      {
+        "id": "048e7ca440efdfd094d3cf0c50f626af720afac7",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 19:31:35.000000000",
+        "message": "Uploaded patch set 18.",
+        "patchset_number": 18
+      },
+      {
+        "id": "a844e1eb41cf7a783c2dc829de5d662b215e525a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 19:32:52.000000000",
+        "message": "Patch Set 18:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3621/",
+        "patchset_number": 18
+      },
+      {
+        "id": "41cf7f0e2d9ce2b96d36c09d47939a2cebc0b73d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 19:48:53.000000000",
+        "message": "Patch Set 18: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3621/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3621",
+        "patchset_number": 18
+      },
+      {
+        "id": "4b942086c332b2dfec61037673cbc2a2b34b1ecd",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 21:59:15.000000000",
+        "message": "Uploaded patch set 19.",
+        "patchset_number": 19
+      },
+      {
+        "id": "d033594c591ecd375c0813bcc31bc4d75455d5dc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 22:00:33.000000000",
+        "message": "Patch Set 19:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3622/",
+        "patchset_number": 19
+      },
+      {
+        "id": "83b27f0af8c4f0cffa2fe79e10cb4a70d525fc0a",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 22:03:58.000000000",
+        "message": "Patch Set 19: Code-Review+1",
+        "patchset_number": 19
+      },
+      {
+        "id": "4323c138c3d7078b1d4202ad0d2b8fa1f6617326",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 22:16:39.000000000",
+        "message": "Patch Set 19: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3622/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3622",
+        "patchset_number": 19
+      },
+      {
+        "id": "0ac87e90a75cfcd16d8b8a83011340eb81560700",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-03 15:49:50.000000000",
+        "message": "Uploaded patch set 20.",
+        "patchset_number": 20
+      },
+      {
+        "id": "84ed6329091c153128fbae120ebc3056b3643c7d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 15:51:08.000000000",
+        "message": "Patch Set 20:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3627/",
+        "patchset_number": 20
+      },
+      {
+        "id": "34bfb46e28d3d91136cd44c609cd21b9d8ad4b95",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 16:05:54.000000000",
+        "message": "Patch Set 20: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3627/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3627",
+        "patchset_number": 20
+      },
+      {
+        "id": "feffdcebd89e95fb52749365d894d22f10c15856",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 16:30:05.000000000",
+        "message": "Patch Set 20: Code-Review+1",
+        "patchset_number": 20
+      },
+      {
+        "id": "1a5243256ed7f4e51242fbea8f983e7598c35b98",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 17:15:12.000000000",
+        "message": "Patch Set 20: Code-Review-1\n\nBefore this one goes in, we need to get the El Alto branch job working. This will need to be re-based to get those changes in. Then create a copy of the \"current\" set of jobs and remove the master branch from it. Then add in the new multiarch jobs. I can help patch if folks don't understand.",
+        "patchset_number": 20
+      },
+      {
+        "id": "c7ee158432e29a0619a21976ef1d29019e45876b",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-04 06:53:57.000000000",
+        "message": "Uploaded patch set 21: Patch Set 20 was rebased.",
+        "patchset_number": 21
+      },
+      {
+        "id": "85d930ddf531584c22df28f81c3e3368eb031708",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 06:55:14.000000000",
+        "message": "Patch Set 21:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3634/",
+        "patchset_number": 21
+      },
+      {
+        "id": "3fd1db5e43d3d5073475377429862bf989675458",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 07:09:46.000000000",
+        "message": "Patch Set 21: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3634/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3634",
+        "patchset_number": 21
+      },
+      {
+        "id": "d9eb4dbd1dff7655465f1f3580ee9a8bd94519e2",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-04 07:30:41.000000000",
+        "message": "Uploaded patch set 22.",
+        "patchset_number": 22
+      },
+      {
+        "id": "28ab31a7b0a1d70b75a000a0cb89ba76edc85410",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 07:31:53.000000000",
+        "message": "Patch Set 22:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3635/",
+        "patchset_number": 22
+      },
+      {
+        "id": "f1cfb23271ea9e092059a963ab8ef2b78befc346",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 07:34:29.000000000",
+        "message": "Patch Set 22:\n\n> Patch Set 20: Code-Review-1\n> \n> Before this one goes in, we need to get the El Alto branch job working. This will need to be re-based to get those changes in. Then create a copy of the \"current\" set of jobs and remove the master branch from it. Then add in the new multiarch jobs. I can help patch if folks don't understand.\n\nI've updated the patch to run the current jobs for elalto and the multiarch jobs for master. Not sure if you want a the current jobs for master too.",
+        "patchset_number": 22
+      },
+      {
+        "id": "6a3a031391be6ce31e99d6def88112cdbf70d859",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 07:48:46.000000000",
+        "message": "Patch Set 22: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3635/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3635",
+        "patchset_number": 22
+      },
+      {
+        "id": "4febe8b598292d5b3189c66642961b8794ad8668",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 11:46:06.000000000",
+        "message": "Patch Set 22: Code-Review+1\n\nGreat!! Jorge/Ram/Jim/Liam - can you please review also?",
+        "patchset_number": 22
+      },
+      {
+        "id": "7abed3a26ee61172ef416d7b31fc21e1017b38c2",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 12:04:54.000000000",
+        "message": "Patch Set 22: Code-Review+1",
+        "patchset_number": 22
+      },
+      {
+        "id": "198de64c80514fb9e787cb5605e564f10e30f824",
+        "author": {
+          "account_id": 3239,
+          "name": "Ram Krishna Verma",
+          "display_name": null,
+          "email": "ramkrishna.verma@gmail.com",
+          "username": "ramverma"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 12:12:13.000000000",
+        "message": "Patch Set 22: Code-Review+1",
+        "patchset_number": 22
+      },
+      {
+        "id": "f1405624902ca27733f40238973a19995c854fc7",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 13:27:23.000000000",
+        "message": "Patch Set 22: Code-Review+1",
+        "patchset_number": 22
+      },
+      {
+        "id": "fc7642358ebb36b2f423af3b33fbb4d095de4fc2",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-04 14:16:21.000000000",
+        "message": "Patch Set 22: Code-Review+1",
+        "patchset_number": 22
+      },
+      {
+        "id": "5263e5e09bc5fb9755b82508bb8065b814b5d104",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:51:13.000000000",
+        "message": "Patch Set 22: Code-Review+1",
+        "patchset_number": 22
+      },
+      {
+        "id": "5a12c62b99da292f85bf58668e401ea9da24ea86",
+        "author": {
+          "account_id": 4711,
+          "name": "Eric Ball",
+          "display_name": null,
+          "email": "eball@linuxfoundation.org",
+          "username": "eball"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 22:59:18.000000000",
+        "message": "Patch Set 22: Code-Review-1\n\nCommit message header should be in the imperative mood (\"Add multiplatform jobs...\")",
+        "patchset_number": 22
+      },
+      {
+        "id": "19c4d249576d830c0cf9174b633bf09b10311d48",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-05 23:10:07.000000000",
+        "message": "Uploaded patch set 23: Commit message was updated.",
+        "patchset_number": 23
+      },
+      {
+        "id": "c90b30cec01457fe8e4df95eaa4adbbc1d603c85",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 23:13:17.000000000",
+        "message": "Patch Set 23:\n\nBuild Started https://jenkins.onap.org/job/ci-management-jjb-verify/3646/",
+        "patchset_number": 23
+      },
+      {
+        "id": "46392807773b1930fcadc1c4a15cb64e61b5f8e0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 23:30:58.000000000",
+        "message": "Patch Set 23: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ci-management-jjb-verify/3646/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-verify/3646",
+        "patchset_number": 23
+      },
+      {
+        "id": "4d5745f40537a91bc4c183cffa35fa386192062a",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 09:02:49.000000000",
+        "message": "Patch Set 23: Code-Review+1\n\nWe are ready",
+        "patchset_number": 23
+      },
+      {
+        "id": "c91991d443e47920a7716792821f362d88ddd243",
+        "author": {
+          "account_id": 481,
+          "name": "Jessica Wagantall",
+          "display_name": null,
+          "email": "jwagantall@linuxfoundation.org",
+          "username": "jwagantall"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 17:20:39.000000000",
+        "message": "Patch Set 23: Code-Review+2",
+        "patchset_number": 23
+      },
+      {
+        "id": "5ce299e2cf99775dafa14277994fe2e31baae814",
+        "author": {
+          "account_id": 481,
+          "name": "Jessica Wagantall",
+          "display_name": null,
+          "email": "jwagantall@linuxfoundation.org",
+          "username": "jwagantall"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-06 17:20:41.000000000",
+        "message": "Change has been successfully merged by Jessica Wagantall",
+        "patchset_number": 23
+      },
+      {
+        "id": "08f48521abbf87ba0d7488f2bc58456986a5ffa2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 18:53:07.000000000",
+        "message": "Patch Set 23:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ci-management-jjb-merge/1753/ : FAILURE\n\nCSIT script not able to run due to a failed connection with the server. Please re-run again.  ( https://jenkins.onap.org/job/ci-management-jjb-merge/1753/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ci-management-jjb-merge/1753",
+        "patchset_number": 23
+      },
+      {
+        "id": "272d334782e8dee84fea681f0d0d352ea9fa3aa6",
+        "author": {
+          "account_id": 481,
+          "name": "Jessica Wagantall",
+          "display_name": null,
+          "email": "jwagantall@linuxfoundation.org",
+          "username": "jwagantall"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 21:06:29.000000000",
+        "message": "Patch Set 23:\n\nThis change had to be reverted, \n\nCan you guys please take a look at these issues?\nhttps://jenkins.onap.org/view/ci-management/job/ci-management-jjb-merge/1753/console\n11:49:43 Caused: java.io.IOException: Unable to read /var/lib/jenkins/jobs/policy-docker-multiarch-master-merge-java/config.xml\n11:52:47 Caused: java.io.IOException: Unable to read /var/lib/jenkins/jobs/policy-docker-multiarch-docker-stage-master/config.xml",
+        "patchset_number": 23
+      },
+      {
+        "id": "1c6b677ca28d8a35f42a93e22a4d50509e5b8c21",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-09 06:51:43.000000000",
+        "message": "Patch Set 23:\n\n> Patch Set 23:\n> \n> This change had to be reverted, \n> \n> Can you guys please take a look at these issues?\n> https://jenkins.onap.org/view/ci-management/job/ci-management-jjb-merge/1753/console\n> 11:49:43 Caused: java.io.IOException: Unable to read /var/lib/jenkins/jobs/policy-docker-multiarch-master-merge-java/config.xml\n> 11:52:47 Caused: java.io.IOException: Unable to read /var/lib/jenkins/jobs/policy-docker-multiarch-docker-stage-master/config.xml\n\nIs the tikal.jenkins.plugins.multijob.MultiJobProject plugin installed on the production Jenkins? I think we had some plugins installed on Sandbox to make this work, can you make sure they're in sync?",
+        "patchset_number": 23
+      }
+    ]
+  }
+}

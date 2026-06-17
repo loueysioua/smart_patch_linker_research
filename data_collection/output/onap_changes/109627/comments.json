@@ -1,0 +1,93 @@
+{
+  "id": "oom~master~Ifd3bbc0f63e95b1c8797ecd09a891195faafc8c2",
+  "change_id": "Ifd3bbc0f63e95b1c8797ecd09a891195faafc8c2",
+  "_number": 109627,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1008b648_442380fe",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "do we need to delete it \"by hand\" as next line should kill it?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-29 06:41:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b360833d_e24fe961",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "probably not.\nIt just had similar logic in there but to delete pod {{ include \"common.fullname\" . }}-0 not sure why it was there though.",
+      "author": {
+        "account_id": 6601,
+        "name": "Marat Salakhutdinov",
+        "display_name": null,
+        "email": "marat.salakhutdinov@bell.ca",
+        "username": "maratsal"
+      },
+      "updated": "2020-06-29 12:23:41.000000000",
+      "in_reply_to": "1008b648_442380fe",
+      "unresolved": true
+    },
+    {
+      "id": "1c3bc074_c1fc49b2",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "I want to delete the pod {{ include \"common.fullname\" . }}-0 for the reason to restart this pod so that the env variable of password is updated after the kubectl patch on line 23 and 26.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-30 03:24:07.000000000",
+      "in_reply_to": "b360833d_e24fe961",
+      "unresolved": true
+    },
+    {
+      "id": "2044d120_719f66cb",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "then, we probably can remove that patching or it should be refactored.\n1. Do patching only if secret is changed.\n2. And if password is changed, reboot each pod of cluster one by one not only pod with index -0\n\nPersonally I would just remove that password changing/patching logic, because anyway password is not changed at the end (even if new secret is pushed by chart) and gets patched by old password. And mostly I don't like an idea pushing new secrets during upgrade and changing of passwords over charts during upgrade.",
+      "author": {
+        "account_id": 6601,
+        "name": "Marat Salakhutdinov",
+        "display_name": null,
+        "email": "marat.salakhutdinov@bell.ca",
+        "username": "maratsal"
+      },
+      "updated": "2020-06-30 13:02:52.000000000",
+      "in_reply_to": "1c3bc074_c1fc49b2",
+      "unresolved": true
+    },
+    {
+      "id": "b2c872f7_b90f3405",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "I agree with Marat",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-30 13:08:48.000000000",
+      "in_reply_to": "2044d120_719f66cb",
+      "unresolved": true
+    }
+  ]
+}

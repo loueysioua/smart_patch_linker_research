@@ -1,0 +1,76 @@
+{
+  "id": "aai%2Faai-common~master~I1ba6fd929992699477502c46c1a5595a162d3209",
+  "change_id": "I1ba6fd929992699477502c46c1a5595a162d3209",
+  "_number": 107393,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "e8a79db6_d586ce07",
+      "file_path": "aai-core/src/main/java/org/onap/aai/dbgen/SchemaGenerator.java",
+      "patchset_number": 2,
+      "line": 156,
+      "message": "This is central to the schema creation, for simplicity and readability the collection utils class could be replaced with the following\ners -> ers.values().stream().map(EdgeRule::getLabel).collect(Collectors.toSet())\nand some supporting comments.",
+      "author": {
+        "account_id": 1043,
+        "name": "Robby Maharajh",
+        "display_name": null,
+        "email": "rx2202@us.att.com",
+        "username": "rx2202"
+      },
+      "updated": "2020-07-09 14:14:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88a59dd4_ca824214",
+      "file_path": "aai-core/src/main/java/org/onap/aai/dbgen/SchemaGenerator.java",
+      "patchset_number": 2,
+      "line": 156,
+      "message": "To be honest, `ers -> ers.values().stream().map(EdgeRule::getLabel).collect(Collectors.toSet())` is less readable to me.\n\nThis is why I isolated this piece of code in CollectionUtils. This enables us to only mention what has to be done (EdgeRule::getLabel) instead of telling how it should be done (which is actually a best practice referred to as Local Reasoning).\n\nWhat is the exact problem here? The passing of a function to a higher order function? Could you please elaborate a bit?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-07-09 14:27:43.000000000",
+      "in_reply_to": "e8a79db6_d586ce07",
+      "unresolved": true
+    },
+    {
+      "id": "98380783_da20d167",
+      "file_path": "aai-core/src/main/java/org/onap/aai/dbgen/SchemaGenerator.java",
+      "patchset_number": 2,
+      "line": 156,
+      "message": "First statement it seems that is matter of opinion so no issue there.\nCompletely agree with the 2nd statement.\nThe need for an entire separate class for one method that is only used in 1 place seems a bit much.\nIf there are other use cases you are aware of for that method then its perfectly fine as is but some comments would be helpful otherwise can it be moved to the SchemaGenerator class with comments.",
+      "author": {
+        "account_id": 1043,
+        "name": "Robby Maharajh",
+        "display_name": null,
+        "email": "rx2202@us.att.com",
+        "username": "rx2202"
+      },
+      "updated": "2020-07-10 16:16:58.000000000",
+      "in_reply_to": "88a59dd4_ca824214",
+      "unresolved": true
+    },
+    {
+      "id": "fa983a36_da3b3e00",
+      "file_path": "aai-core/src/main/java/org/onap/aai/dbgen/SchemaGenerator.java",
+      "patchset_number": 2,
+      "line": 156,
+      "message": "I have isolated the function in SchemaGenerator and set it as private. I've also added some javadoc (even though it's a private function). Initially I thought about putting in its own class, as collecting values is a pretty common need, but I agree that for this change, this may not be required. Let's wait for future cases to show up.\n\nThank you for your help.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-07-10 18:19:16.000000000",
+      "in_reply_to": "98380783_da20d167",
+      "unresolved": false
+    }
+  ]
+}

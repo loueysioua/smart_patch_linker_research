@@ -1,0 +1,93 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Iad22a581a6bd98e7e210162d30ec7741972669d2",
+  "change_id": "Iad22a581a6bd98e7e210162d30ec7741972669d2",
+  "_number": 121937,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "02484160_ee6fa07e",
+      "file_path": "policy-utils/src/main/java/org/onap/policy/drools/utils/logging/LoggerUtil.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "what does this actually accomplish?  Looks like it's doing setLevel(getLevel()), which is typically a NO-OP",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-15 23:49:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dcc86114_638732fc",
+      "file_path": "policy-utils/src/main/java/org/onap/policy/drools/utils/logging/LoggerUtil.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "Wrt the previous version of the code that used toLevel(x), the way that worked is that when it couldn't convert it to an actual level, it will set the level to debug (this is the actual logback library implementation).  \nThere is this other method available in the same class:\npublic static Level toLevel(String x, Level defaultLevel)\nwhere if it cannot convert the xto an actual Level, it will take a \"defaultLevel\", so effectively, this would try to set it to the \"loggerLevel\" parameter and if it can't, it will set it to the existing one (rather than defaulting to debug as before), so it is no-op as you say but just for the case where the \"loggerLevel\" does not correspond to a logback level.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-06-16 00:40:57.000000000",
+      "in_reply_to": "02484160_ee6fa07e",
+      "unresolved": true
+    },
+    {
+      "id": "10c5c442_7a6de33e",
+      "file_path": "policy-utils/src/main/java/org/onap/policy/drools/utils/logging/LoggerUtil.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "thx for the explanation. No way to do this using only slf4j (instead of logback)?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-16 12:46:36.000000000",
+      "in_reply_to": "dcc86114_638732fc",
+      "unresolved": true
+    },
+    {
+      "id": "377bed45_ee4b9ddb",
+      "file_path": "policy-utils/src/main/java/org/onap/policy/drools/utils/logging/LoggerUtil.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "as far as I know it is not possible to do it programmatically with slf4j (it is just a facade to several logging frameworks) but was possible to do it to logback, the underlying logback framework all of our components use.  I think that was also working for eelf as it was also using logback under the hood.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-06-16 13:28:22.000000000",
+      "in_reply_to": "10c5c442_7a6de33e",
+      "unresolved": true
+    },
+    {
+      "id": "b5d19a51_9db8aeee",
+      "file_path": "policy-utils/src/main/java/org/onap/policy/drools/utils/logging/LoggerUtil.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-16 14:21:30.000000000",
+      "in_reply_to": "377bed45_ee4b9ddb",
+      "unresolved": false
+    }
+  ]
+}

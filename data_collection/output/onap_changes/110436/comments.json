@@ -1,0 +1,246 @@
+{
+  "id": "oom~master~I18196b56bb4f8732d42271d7c93c1a0f71bfac58",
+  "change_id": "I18196b56bb4f8732d42271d7c93c1a0f71bfac58",
+  "_number": 110436,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "dcff72c3_7703682d",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "We should have also .Values.logLevel as we have for other cases",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 10:48:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c7cc8332_f4f639ed",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "why commented out?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 10:48:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d4fc89ed_c941b985",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "this said in L19 no?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-22 11:50:05.000000000",
+      "in_reply_to": "dcff72c3_7703682d",
+      "unresolved": true
+    },
+    {
+      "id": "e8bb2674_47e808eb",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "because by default it's set in the template",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-22 11:50:05.000000000",
+      "in_reply_to": "c7cc8332_f4f639ed",
+      "unresolved": true
+    },
+    {
+      "id": "9e002974_dd681eb6",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "sh*t... yes exactly this one:D",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 12:10:06.000000000",
+      "in_reply_to": "d4fc89ed_c941b985",
+      "unresolved": true
+    },
+    {
+      "id": "4f9e783b_70b6a748",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 35,
+      "message": "hmm I'm not sure if you should use this trick in this case.\n\npersonally I think I'd prefer every component to have this log level in its own values instead of in this helper chart values",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 12:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6dfb28b5_b275f3d6",
+      "file_path": "kubernetes/common/logConfiguration/values.yaml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "if it's the global default then shouldn't this be in the global section?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 12:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9cfbcef4_97b7565c",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 35,
+      "message": "Today, in all our common templates we have this pattern:\nvalue: lowest priority, set per chart\nglobal.value: medium priority, set globally\nvalueOverride: highest priority, set per chart\n\nHere, I've decided (but it's subject to discussion ;) ) to replicate the pattern but inside the template. So, let's say I want to change the default pattern for SDNC, I'll put in its values:\n\nlogConfiguration:\n  logLevel: TRACE\n\nthen only SDNC would have per default TRACE (if nothing is set globally) and the rest would stick INFO\nBut It would still be able to force global and also overrides.\n\nIs it OK for you?\n\nThis is also why I've put \"INFO\" as default \"local\" (and not global) value",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-22 12:23:33.000000000",
+      "in_reply_to": "4f9e783b_70b6a748",
+      "unresolved": true
+    },
+    {
+      "id": "21c26728_3af533ce",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 35,
+      "message": "Well I don't have any technical arguments against it so not going to complain too much about it. I've just mixed feelings about it but we are not here to discuss about feeling but technical stuff so you want to keep it this way it's not an issue for me;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 13:01:26.000000000",
+      "in_reply_to": "9cfbcef4_97b7565c",
+      "unresolved": true
+    },
+    {
+      "id": "9fb60434_ff71f1c6",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 39,
+      "message": "BTW.\nAre you sure that all services uses the same log levels names?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 13:01:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "22824367_0f2db3cc",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 35,
+      "message": "I'm not 100% proud and I thought about taking the value from the component values. But it means we have to set it on all components using it so I'm not sure it would be very clean",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-22 13:06:03.000000000",
+      "in_reply_to": "21c26728_3af533ce",
+      "unresolved": true
+    },
+    {
+      "id": "29571043_8b659a19",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 39,
+      "message": "if they don't, we'll have standard + override file ;)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-22 13:06:03.000000000",
+      "in_reply_to": "9fb60434_ff71f1c6",
+      "unresolved": true
+    },
+    {
+      "id": "aa827a4a_8207bd96",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 35,
+      "message": "Yeah makes sense. Let's go as it is currently and we can always change it in future if we find some issues",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 13:42:03.000000000",
+      "in_reply_to": "22824367_0f2db3cc",
+      "unresolved": true
+    },
+    {
+      "id": "ae2a871a_d30dc384",
+      "file_path": "kubernetes/common/logConfiguration/templates/_log.tpl",
+      "patchset_number": 1,
+      "line": 39,
+      "message": "I'm just a little bit affraid of bug reports where people say \"I change the log level and half of the services didn't came up\" but we will be worrying about those when they come;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-22 13:42:03.000000000",
+      "in_reply_to": "29571043_8b659a19",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "id": "policy%2Fxacml-pdp~master~I772404adbbe9be18001554616eb0c935317bdaba",
+  "change_id": "I772404adbbe9be18001554616eb0c935317bdaba",
+  "_number": 86662,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "12b34ccc_caa2227b",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 1,
+      "line": 79,
+      "message": "could leave this as a local variable, as it isn't needed outside of the constructor",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-30 19:02:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7adcba80_d097f99e",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 1,
+      "line": 173,
+      "message": "fyi: don't have to populate these list fields",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-30 19:02:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d54ffeb8_547dc3c2",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 4,
+      "line": 170,
+      "message": "This message must also contain the PdpGroup & PdpSubGroup name to which it is currently assigned. Otherwise a PdpStatus message without PdpGroup & PdpSubgroup name is treated as new Pdp for registration.\n\nAlso, any PdpStatus message post successful registration should always come with PdpType, PdpGroup, PdpSubGroup, Health Status, Supported Policy Types, Policies, PdpInstanceId, PdpState.\n\nAdditionally, if it response of PdpUpdate or PdpStateChange then it should also populate the PdpResponseDetails fields.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-30 20:48:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bf2b3106_2dc42bb5",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 4,
+      "line": 170,
+      "message": "Hmm. Since it's a terminate, it shouldn't need anything but the state and the name.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-30 20:51:32.000000000",
+      "in_reply_to": "d54ffeb8_547dc3c2",
+      "unresolved": false
+    },
+    {
+      "id": "3f5e31b9_13a1a7e0",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 4,
+      "line": 170,
+      "message": "PdpGroup & PdpSubgroup is needed to identify the group from which to remove the PdpInstance. And that's how the PAP heartbeat handling is designed. Also, currently there is no way in DB provider to find the PdpGroup based on PdpName.\nSo it's better if Pdp sends the current assignment information to PAP.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-30 21:00:46.000000000",
+      "in_reply_to": "bf2b3106_2dc42bb5",
+      "unresolved": false
+    },
+    {
+      "id": "680300e5_bac2ca0c",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 4,
+      "line": 170,
+      "message": "OK.  So is it still necessary to populate the policy type or policy lists?  Whether or not those match the PAP's internal data, PAP must still honor the \"TERMINATED\" request.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-30 21:10:47.000000000",
+      "in_reply_to": "3f5e31b9_13a1a7e0",
+      "unresolved": false
+    },
+    {
+      "id": "50b07a17_4140f3a6",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 4,
+      "line": 170,
+      "message": "policy type or policy lists are not needed for termination. PAP will honor the \"TERMINATED\" state.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-30 21:20:27.000000000",
+      "in_reply_to": "680300e5_bac2ca0c",
+      "unresolved": false
+    },
+    {
+      "id": "523692d6_18f10e4a",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/XacmlState.java",
+      "patchset_number": 5,
+      "line": 145,
+      "message": "Looks like we are assuming that PdpUpdate/PdpStateChange operations will always be SUCCESS. Instead it should be decided based on the operation outcome.\n\nFor PAP, if it gets SUCCESS then it will also assume that the operation went fine and no further action is needed. And then there will be conflict between PAP DB data & Pdp Heartbeat data, which will result in sending another PdpUpdate/PdpStateChange messages.\nHence, it will end up in never ending loop.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-05-01 08:52:56.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "612a00d5_3dbcd63a",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/XacmlState.java",
+      "patchset_number": 5,
+      "line": 134,
+      "message": "To ensure a new request id is generated:\n\n  return new PdpStatus(status);",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-05-01 12:56:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a41f4fcb_90039908",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/XacmlState.java",
+      "patchset_number": 5,
+      "line": 145,
+      "message": "good point: in El Alto, we should probably ensure all PDPs properly set success/fail and then the response can leave out the lists of policy types & policies - PAP won't need to check them.  We can do that when we add support for add/delete policies.  Created POLICY-1719 for this work.\n\nnote: state change IS always successful, so only the update is in question here.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-05-01 12:56:02.000000000",
+      "in_reply_to": "523692d6_18f10e4a",
+      "unresolved": false
+    },
+    {
+      "id": "d431f11a_6f6c18b1",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/startstop/XacmlPdpActivator.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "I guess all three of these could be \"final\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-05-01 12:56:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6c33cca2_a926456a",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/XacmlState.java",
+      "patchset_number": 5,
+      "line": 145,
+      "message": "It depends on Pdp, but state change can also fail. Lets say state change to PASSIVE is received by Pdp but the Pdp is busy performing some tasks or cannot move to PASSIVE and stop processing incoming events.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-05-01 13:02:54.000000000",
+      "in_reply_to": "a41f4fcb_90039908",
+      "unresolved": false
+    },
+    {
+      "id": "96e85447_96164c70",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/XacmlState.java",
+      "patchset_number": 5,
+      "line": 145,
+      "message": "All the XACML-PDP does when it gets a state change is to record the new state; this can never fail.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-05-01 13:16:13.000000000",
+      "in_reply_to": "6c33cca2_a926456a",
+      "unresolved": false
+    }
+  ]
+}

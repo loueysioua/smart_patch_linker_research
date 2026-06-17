@@ -1,0 +1,127 @@
+{
+  "id": "sdc~master~Id10b8d8d81c224e2658002b9c928e8aef7ca8e32",
+  "change_id": "Id10b8d8d81c224e2658002b9c928e8aef7ca8e32",
+  "_number": 106088,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7dfff6b9_f8bf157a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "This class is also annotated with @AllArgsConstructor. Please correct me if I am wrong, but as it seems, with a NoArgsConstructor the class will be instantiated with all of its fields set to null, resulting in getters returning nulls. Is that correct?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 12:38:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88a9ab6a_a8758071",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "The NoArgsConstructor creates a constructor with no arguments. If someone calls it, yes, the fields will not be set. But it does not overrides the AllArgsConstructor.\nThe NoArgsConstructor was the previous behavior removed by commit 8d82a514707fb0853d6a2c6d8f7408a872e727ca, Change-Id: I9be29d9c0d891039952178a3c3e1c3a2062d1382.\nWithout it the code breaks in some YAML parser required for this GAB.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2020-04-17 12:45:09.000000000",
+      "in_reply_to": "7dfff6b9_f8bf157a",
+      "unresolved": true
+    },
+    {
+      "id": "2ea61dd7_d9c07fd9",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "I see, thank you for your answer. Could you please indicate me which part of the code breaks if we remove this annotation? Ideally, we should avoid instantiating classes with what looks like an invalid state (At least that's how I see it but I might be wrong). I guess, if the change is too big, this could be addressed later.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 12:48:49.000000000",
+      "in_reply_to": "88a9ab6a_a8758071",
+      "unresolved": true
+    },
+    {
+      "id": "e79e891c_0d0a1a28",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "There's been a week that I worked on this and I did not register the exactly point of failure.\nBut you could take a look on the Jira and in the logs of recent ui sanity test runs: \n- https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-csit-uiSanity-testng/1195/\n- https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-csit-uiSanity-testng/1195/SDC_UI_Extent_Report.html.gz\nI could not find the precise place right now without retesting it, but by the message in the test addPmDictionaryDeploymentArtifactToPnfAndCheckMagnifierTest or addVesEventsDeploymentArtifactToVfAndCheckMagnifierTest you can see that something requires the default constructor to deserialize some information in that Object.\nI'm not sure if the AllArgsConstructor is also required though.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2020-04-17 13:02:53.000000000",
+      "in_reply_to": "2ea61dd7_d9c07fd9",
+      "unresolved": true
+    },
+    {
+      "id": "d94a16d9_bc041994",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "I'm sorry to bother you with this again but I cannot find any stack trace mentioning that something requires a default contructor to deserialize information in this object. I looked at different places, including the console.log.gz of the build, the links you provided, the issue, and at the failing tests mentioned in https://jenkins.onap.org/job/sdc-master-csit-uiSanity-testng/1195/. So far I only found an assertion error (https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-csit-uiSanity-testng/1195/logs/sdc-ui-tests/target/).\n\nI see that this has been reviewed several times and I am very new to the codebase. I am just trying to learn a bit about it. If this is too much of a hassle for you, then no problem we can consider this comment as closed. I hope this is ok.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 14:18:10.000000000",
+      "in_reply_to": "e79e891c_0d0a1a28",
+      "unresolved": true
+    },
+    {
+      "id": "4c94d34f_b3b6a83a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "This is the error I'm talking about:\nhttps://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-csit-uiSanity-testng/1195/screenshots/addPmDictionaryDeploymentArtifactToPnfAndCheckMagnifierTest-36b3b0448a8a.png\n\nI'm sorry, but I'm not the author of the original code, so I don't know how this class is being used. But I'm fixing an introduced bug, that was caused because the default constructor was removed.\nI reproduced the error again and it fails during a call to the endpoint \"org.openecomp.sdc.be.servlets.GenericArtifactBrowserServlet.searchFor\" which receives a payload of type GenericArtifactQueryInfo:\n\npublic Response searchFor(\n        @Parameter(description = \"Generic Artifact search model\", required = true) GenericArtifactQueryInfo query,\n        @Context final HttpServletRequest request)\n\nSo I believe the binding in that endpoint fails, giving a 400 Bad Request with message:\n\"Cannot construct instance of `org.openecomp.sdc.be.info.GenericArtifactQueryInfo` (no Creators, like default construct, exist): cannot deserialize from Object value (no delegate- or property-based Creator)\n at [Source: (org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream); line: 1, column: 2]\".",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2020-04-17 14:44:06.000000000",
+      "in_reply_to": "d94a16d9_bc041994",
+      "unresolved": true
+    },
+    {
+      "id": "4fadfe2d_4f52a131",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/info/GenericArtifactQueryInfo.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "Ok I see, thank you for this information. This makes all sense now. Sorry to bother about this but I guess we are all here to learn :)",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 15:05:02.000000000",
+      "in_reply_to": "4c94d34f_b3b6a83a",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fves~master~I9103f0efd7caa105727f4814532934881335190f",
+  "change_id": "I9103f0efd7caa105727f4814532934881335190f",
+  "_number": 114631,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d8f1f121_65624c3f",
+      "file_path": "src/main/java/org/onap/dcae/VesApplication.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Wouldn't marking methods as synchronized be enough? Is there a case where restartApplication would be called from the same thread when lock is locked?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-11-05 15:32:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "aca0fd81_e5c154fe",
+      "file_path": "src/main/java/org/onap/dcae/VesApplication.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "yes we can use only synchronized marker and no we should do not do this 😊\nI would to secure restartAplication method. When someone, in the future or by accident, will change the order of method invocation, for example: startListening... then startApplication, I want to be sure that application will still work correctly. That is why I used ReentrantLock.",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-11-06 06:22:27.000000000",
+      "in_reply_to": "d8f1f121_65624c3f",
+      "unresolved": true
+    },
+    {
+      "id": "28a57ec7_619f8dd1",
+      "file_path": "src/main/java/org/onap/dcae/VesApplication.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Main method could also be marked as synchronized, then current behaviour would be the same I think, but I guess for the main method it's easier to notice the usage of lock.\n\nBut one thing for restartApplication(). Now the lock is unlocked before the restart happens, is this intended? I think it would be possible to call restartApplication multiple times, and multiple threads reloading app would run at the same time. Shouldn't the underlying thread hold the lock?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-11-06 08:10:16.000000000",
+      "in_reply_to": "aca0fd81_e5c154fe",
+      "unresolved": true
+    },
+    {
+      "id": "d4a30bb6_9340ed27",
+      "file_path": "src/main/java/org/onap/dcae/VesApplication.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Yes, it should be inside the thread. My bad. Thank you for comment.",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-11-06 09:14:54.000000000",
+      "in_reply_to": "28a57ec7_619f8dd1",
+      "unresolved": true
+    },
+    {
+      "id": "5cae7b6c_29a30dba",
+      "file_path": "src/main/java/org/onap/dcae/VesApplication.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Done",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-11-06 10:37:02.000000000",
+      "in_reply_to": "d4a30bb6_9340ed27",
+      "unresolved": false
+    }
+  ]
+}

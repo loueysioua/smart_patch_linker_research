@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fdistribution~master~Id263435531e26dcbadfbda6f82b26ac54a72ba1a",
+  "change_id": "Id263435531e26dcbadfbda6f82b26ac54a72ba1a",
+  "_number": 84799,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9a2c138b_a56db217",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "The current implementation will also work.\nBut we could have done it better by putting ExecutorService here and starting multiple FileClientHandler to listen for files.\nIn current approach, we are creating a fileWatcherThread which then creates multiple threads using ExecutorService. So the current flow is DistributionMainThread -> fileWatcherThread -> ExecutorService(with inline run method)\n\nWith my suggestion the flow will be DistributionMainThread -> ExecutorService(FileClientHandler)",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-10 09:48:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "69a8a4a9_f1df16ad",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 151,
+      "message": "Doing this in finally clause may be better.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-10 09:48:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "07119255_9f42a471",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandlerConfigurationParameterGroup.java",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "Same comment applies to this builder as well.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-10 09:48:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "09a1311a_959ecfd7",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "@Ram, the problem to start multiple FileClientHandler to listen for files is that there might be a chance to have multiple FileClientHandler(s) respond to the same csar file. So the starting of multiple thread should be in the for loop around Line 130.",
+      "author": {
+        "account_id": 309,
+        "name": "Lianhao Lu",
+        "display_name": null,
+        "email": "llh_misc@outlook.com",
+        "username": "LianhaoLu"
+      },
+      "updated": "2019-04-10 13:17:22.000000000",
+      "in_reply_to": "9a2c138b_a56db217",
+      "unresolved": false
+    },
+    {
+      "id": "906f4577_1a4e34c7",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "The listen for csar file should be handled in the central place, and when a new csar file is detected, we then start a new thread to do the processing. \n\nIn the current implementation, we have the fileWatcherThread acting as the central place to listen for csar files changes.",
+      "author": {
+        "account_id": 309,
+        "name": "Lianhao Lu",
+        "display_name": null,
+        "email": "llh_misc@outlook.com",
+        "username": "LianhaoLu"
+      },
+      "updated": "2019-04-10 13:40:12.000000000",
+      "in_reply_to": "09a1311a_959ecfd7",
+      "unresolved": false
+    },
+    {
+      "id": "7f5a40ca_63c9d327",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "okay",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-10 16:07:52.000000000",
+      "in_reply_to": "906f4577_1a4e34c7",
+      "unresolved": false
+    },
+    {
+      "id": "cadbbbed_64cba55e",
+      "file_path": "plugins/reception-plugins/src/main/java/org/onap/policy/distribution/reception/handling/file/FileSystemReceptionHandler.java",
+      "patchset_number": 1,
+      "line": 151,
+      "message": "@Ram, yes, you're right. I'll do it in another patch.",
+      "author": {
+        "account_id": 309,
+        "name": "Lianhao Lu",
+        "display_name": null,
+        "email": "llh_misc@outlook.com",
+        "username": "LianhaoLu"
+      },
+      "updated": "2019-04-11 01:55:02.000000000",
+      "in_reply_to": "69a8a4a9_f1df16ad",
+      "unresolved": false
+    }
+  ]
+}

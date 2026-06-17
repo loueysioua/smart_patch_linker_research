@@ -1,0 +1,178 @@
+{
+  "id": "vid~master~I9416247d8d9548d1c01af070d8106b1512dee200",
+  "change_id": "I9416247d8d9548d1c01af070d8106b1512dee200",
+  "_number": 87947,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "85508b74_677e9d31",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 79,
+      "message": "It seems to me that this is a little bit over-complicated especially because of the unnecessary reliance on the never-preferred arg-captor which led to loop assertion:) On top that the any() matcher does not make the implementation safe to changes. I'd suggest you rewrite this in a more simplified manner. Few tips:\n- avoid arg capture, prefer ArgumentMatcher if no equals/hashcode contracts exists (or implement it). Arg captor does quite fit the BDD style of testing, where readability is crucial and you want to read the test step-by-step (from definition, through execution to assertion). Asserting values that are part of execution seems to break this e2e flow. \n- avoid any matchers - using them usually is a shortcut that makes the test easily breakable\n- when dealing with big pojos that are json representations consider using test resources for providing the json file (and ser/deser it)instead of constructing bloated object structures for test data inside the test class. Always have readability in mind.\n\nHere is a quick example of I'd recommend rewriting the tests:\n\n    @Test\n    public void shouldDelegateNewInstanceCreation() throws Exception {\n        RequestDetails expectedRequestDetails = new RequestDetails();\n        expectedRequestDetails.setAdditionalProperty(\"name\", \"value\");\n        String payload = objectMapper.writeValueAsString(expectedRequestDetails);\n        MsoResponseWrapper expectedResponse = new MsoResponseWrapper(200, \"test123\");\n        given(msoBusinessLogic.createSvcInstance(expectedRequestDetails)).willReturn(expectedResponse);\n\n        mockMvc.perform(post(\"/mso/mso_create_svc_instance\")\n            .content(payload)\n            .contentType(APPLICATION_JSON))\n            .andExpect(status().isOk())\n            .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));\n        verify(cloudService).enrichRequestWithCloudOwner(expectedRequestDetails);\n    }",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2019-05-17 10:55:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b8213bf6_0c4ea040",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Remove this duplicate verification - check my comment below",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2019-05-17 10:55:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "209f714f_7761af5c",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 114,
+      "message": "Remove this duplicate verification - check my comment below",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2019-05-17 10:55:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "983cbe8b_4ba8424b",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "There is no need to concatenate params in the url like this. get()/post() etc methods rely on templates. Check the signature in javadoc. All you need to do is pass the url as a complete template get(\"/mso_get_man_task/{originalRequestId}\", originalRequestId). The get method accepts varags for the params. A lot cleaner.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2019-05-17 10:55:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "954bf62b_3a8e8375",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "Do not verify invocations of methods for which you previously record expected behavior. The Given section is a verification in itself - if the given manualTasks object is not return - the test will fail.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2019-05-17 10:55:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6c147e49_9251c2e4",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 79,
+      "message": "Done",
+      "author": {
+        "account_id": 2731,
+        "name": "KK",
+        "display_name": null,
+        "email": "krzysztof.kurczewski@nokia.com",
+        "username": "kurczews"
+      },
+      "updated": "2019-05-17 12:41:52.000000000",
+      "in_reply_to": "85508b74_677e9d31",
+      "unresolved": false
+    },
+    {
+      "id": "46f49be7_c652a977",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 2731,
+        "name": "KK",
+        "display_name": null,
+        "email": "krzysztof.kurczewski@nokia.com",
+        "username": "kurczews"
+      },
+      "updated": "2019-05-17 12:41:52.000000000",
+      "in_reply_to": "b8213bf6_0c4ea040",
+      "unresolved": false
+    },
+    {
+      "id": "dac21ab1_4df67506",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 114,
+      "message": "Done",
+      "author": {
+        "account_id": 2731,
+        "name": "KK",
+        "display_name": null,
+        "email": "krzysztof.kurczewski@nokia.com",
+        "username": "kurczews"
+      },
+      "updated": "2019-05-17 12:41:52.000000000",
+      "in_reply_to": "209f714f_7761af5c",
+      "unresolved": false
+    },
+    {
+      "id": "d9d13b6b_30e50d37",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "Done",
+      "author": {
+        "account_id": 2731,
+        "name": "KK",
+        "display_name": null,
+        "email": "krzysztof.kurczewski@nokia.com",
+        "username": "kurczews"
+      },
+      "updated": "2019-05-17 12:41:52.000000000",
+      "in_reply_to": "983cbe8b_4ba8424b",
+      "unresolved": false
+    },
+    {
+      "id": "3d44efee_e63fb422",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/controller/MsoControllerTest.java",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "Done",
+      "author": {
+        "account_id": 2731,
+        "name": "KK",
+        "display_name": null,
+        "email": "krzysztof.kurczewski@nokia.com",
+        "username": "kurczews"
+      },
+      "updated": "2019-05-17 12:41:52.000000000",
+      "in_reply_to": "954bf62b_3a8e8375",
+      "unresolved": false
+    }
+  ]
+}

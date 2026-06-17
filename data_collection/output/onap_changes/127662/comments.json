@@ -1,0 +1,76 @@
+{
+  "id": "testsuite~master~I744d7c0d48f7364139ed9f7ff366a3831612913e",
+  "change_id": "I744d7c0d48f7364139ed9f7ff366a3831612913e",
+  "_number": 127662,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "784c000e_8c0e2158",
+      "file_path": "robot/resources/policy_interface.robot",
+      "patchset_number": 1,
+      "line": 275,
+      "message": "I'm trying to understand if this might fail in case undeployment takes a long time. The calls for undeploy and delete are consecutive without any breaks. There might be a situation where you get a 202 Accepted but the undeployment is still processing in the background. In the meanwhile you run the delete request, it's gonna give you a 406 error. Have you faced this situation intermittently while testing this?\n\nAlso I see your undeploy policy request is running a DELETE call and not POST.",
+      "author": {
+        "account_id": 7498,
+        "name": "Prakhar Pandey",
+        "display_name": "Prakhar Pandey",
+        "email": "prakhar.pandey@bell.ca",
+        "username": "pprakhar91"
+      },
+      "updated": "2022-03-11 15:24:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ffc13658_dd05feec",
+      "file_path": "robot/resources/policy_interface.robot",
+      "patchset_number": 1,
+      "line": 275,
+      "message": "I never faced the situation where I get 202 accepted and the process of undeploy policy is still running in the background. I think that situation has never occurred during the execution of tests because the enhanced policy test case is already running cleanup at the end in a similar way i.e consecutively undeploy and delete. \nAlso, the same keywords for cleanup are added initially which runs at the later stage of the test case.\nFor the second query as I mentioned earlier for cleanup i.e undeploy I'm reusing the undeploy step that are already running in the test case before enhancement.",
+      "author": {
+        "account_id": 7974,
+        "name": "Rommel Ravneet Singh Pawar",
+        "display_name": null,
+        "email": "rommel.pawar@bell.ca",
+        "username": "rommelsingh"
+      },
+      "updated": "2022-03-11 17:28:01.000000000",
+      "in_reply_to": "784c000e_8c0e2158",
+      "unresolved": true
+    },
+    {
+      "id": "f79a1465_1ed93360",
+      "file_path": "robot/resources/policy_interface.robot",
+      "patchset_number": 1,
+      "line": 275,
+      "message": "You're right - there's no lag during undeployment. The only situation I can think of is if the undeployment fails for some reason after giving 202 Accepted then the test suite might fail with the situation described above. However, since this test suite is considering a simple sunny day scenario it's gonna work fine.\n\nThis might be an enhancement for the future though - basically adding another GET call to really verify if the policy has been undeployed.",
+      "author": {
+        "account_id": 7498,
+        "name": "Prakhar Pandey",
+        "display_name": "Prakhar Pandey",
+        "email": "prakhar.pandey@bell.ca",
+        "username": "pprakhar91"
+      },
+      "updated": "2022-03-11 20:46:09.000000000",
+      "in_reply_to": "ffc13658_dd05feec",
+      "unresolved": false
+    },
+    {
+      "id": "d8b91281_cf107f1c",
+      "file_path": "robot/resources/policy_interface.robot",
+      "patchset_number": 1,
+      "line": 275,
+      "message": "I never faced the situation where I get 202 accepted and the process of undeploy policy is still running in the background. I think that situation has never occurred during the execution of tests because the enhanced policy test case is already running cleanup at the end in a similar way i.e consecutively undeploy and delete. \nAlso, the same keywords for cleanup are added initially which runs at the later stage of the test case.\nFor the second query as I mentioned earlier for cleanup i.e undeploy I'm reusing the undeploy step that are already running in the test case before enhancement.",
+      "author": {
+        "account_id": 7974,
+        "name": "Rommel Ravneet Singh Pawar",
+        "display_name": null,
+        "email": "rommel.pawar@bell.ca",
+        "username": "rommelsingh"
+      },
+      "updated": "2022-03-14 16:47:39.000000000",
+      "in_reply_to": "f79a1465_1ed93360",
+      "unresolved": false
+    }
+  ]
+}

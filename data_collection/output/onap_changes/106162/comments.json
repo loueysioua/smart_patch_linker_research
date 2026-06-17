@@ -1,0 +1,127 @@
+{
+  "id": "sdc~master~I648e9a4a04be3f2e7cd3e30a70c04de2257a99d3",
+  "change_id": "I648e9a4a04be3f2e7cd3e30a70c04de2257a99d3",
+  "_number": 106162,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b619363d_41d20262",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "looks good,\n\njust one suggestion, instead of surrounding big chunk of the code with \"!=null\", check for null, log the error and return immediately.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-04-17 08:51:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1c92aa09_802fded1",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 2,
+      "line": 104,
+      "message": "In order to minimize the exposure of `GraphVertex`'s internal state, we could rely on an api designed to interact with it: \n```\nif(containerV.hasPropertyEqualTo(GraphPropertyEnum.DISTRIBUTION_STATUS, \n                DistributionStatusEnum.DISTRIBUTION_APPROVED.name(),\n                DistributionStatusEnum.DISTRIBUTION_REJECTED.name())) {\n  // ...\n}\n```\nThis would also prevent a NullPointerException if there is no GraphPropertyEnum.DISTRIBUTION_STATUS is not in the `metadataProperties`\n```\npublic class GraphVertex {\n    // ... \n    // if you need this to be more performant at the cost of\n    // more cyclomatic complexity, you could desugarized the options with ifs.\n    public boolean hasPropertyEqualTo(GraphPropertyEnum metadataProperty, String...values) {\n        List<String> vs = Arrays.asList(values);\n        return Optional.of(metadataProperties)\n            .flatMap(ps -> Optional.of(ps.get(metadataProperty)))\n            .map(vs::contains)\n            .orElse(false); // We compare an object with a string. This may be a bug\n \t}\n    // ...\n```",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 16:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea09d166_47c68f16",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 2,
+      "line": 111,
+      "message": "n order to minimize the exposure of `GraphVertex`'s internal state, we could rely on an api designed to interact with it:\n```\n  containerV.replaceMetadataProperty(\n     GraphPropertyEnum.DISTRIBUTION_STATUS.name(),\n     DistributionStatusEnum.DISTRIBUTION_NOT_APPROVED.name()\n  );\n  //...\n```\n```\npublic class GraphVertex {\n    // ...\n    // if you need this to be more performant at the cost of\n    // more cyclomatic complexity, you could desugarized the options with ifs.\n    public GraphVertex replaceMetadataProperty(GraphPropertyEnum propName, Object propValue) {\n        this.metadataProperties = Optional\n            .of(metadataProperties)\n            .orElse(new HashMap<>())\n            .put(propName, propValue);\n        return this;\n    }\n    // ...\n```",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 16:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fff995ec_8551079c",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 2,
+      "line": 104,
+      "message": "Good idea but out of scope for SDC-2905. Maybe create another task for that?",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-04-17 16:14:22.000000000",
+      "in_reply_to": "1c92aa09_802fded1",
+      "unresolved": true
+    },
+    {
+      "id": "91b8fe45_d39ce2e6",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 2,
+      "line": 111,
+      "message": "As mentioned previously, this is a good idea but a bit out of scope for SDC-2905. Maybe create another task for it?",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-04-17 16:14:22.000000000",
+      "in_reply_to": "ea09d166_47c68f16",
+      "unresolved": true
+    },
+    {
+      "id": "31701cac_275a24eb",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 3,
+      "line": 95,
+      "message": "it is not clear, how this change correlate to block \ncatch (NullPointerException e) {\n\nisn't the same?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-04-20 08:20:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "aedbd3c1_a2122cfb",
+      "file_path": "asdctool/src/main/java/org/openecomp/sdc/asdctool/migration/tasks/mig2002/SdcCollapsingRolesCERTIFIEDstateMigration.java",
+      "patchset_number": 3,
+      "line": 95,
+      "message": "The initial goal of this change was to prevent a NullPointerException to be thrown if line 137 was getting called and `containerV` was null.\nThe `catch` statement related to the NPE would then not be able to catch this.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-04-20 10:15:08.000000000",
+      "in_reply_to": "31701cac_275a24eb",
+      "unresolved": true
+    }
+  ]
+}

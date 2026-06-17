@@ -1,0 +1,331 @@
+{
+  "id": "oom~master~Id91b19eec0e5d8f1ecc75b7f6042eac2fdb19609",
+  "change_id": "Id91b19eec0e5d8f1ecc75b7f6042eac2fdb19609",
+  "_number": 120213,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3e8c53c0_9711cfeb",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "for volumes and volumeMounts, add the following in values.yaml:\n\n# If path / names can be anything, with your example:\n\nin values.yaml:\nvolumes:\n  - name: dmaap\n    path: /opt/app/config/dmaap/\n  - name: dcaelocations\n    path: /opt/app/config/dcaeLocations/\n  - name: dr-nodes\n    path: /opt/app/config/dr_nodes/\n  - name: feeds\n    path: /opt/app/config/feeds/\n  - name: mr-clusters\n    path: /opt/app/config/mr_clusters/\n  - name: topics\n    path: /opt/app/config/topics/\n\nthen here:\n\n{{- define \"common.dmaap.provisioning._volumeMounts\" -}}\n{{- $dot := default . .dot -}}\n{{- range _, $volume := $dot.volumes }}\n- name: {{ $volume.name }}\n  mountPath: {{ $volume.path }}\n{{- end }}\n{{- end -}}\n\n{{- define \"common.dmaap.provisioning._volumes\" -}}\n{{- $dot := default . .dot -}}\n{{- range _, $volume := $dot.volumes }}\n- name: {{ $volume.name }}\n  configMap:\n    name: {{ include \"common.fullname\" $dot }}-{{ printf \"%s\" $volume.name }}\n{{- end }}\n{{- end -}}\n\n\n\n\n# If path / names must be from a specific list (the one given here) and always given, I would create a specific common charts (dmaapProvisionningJob) with requirements.\n\nin dmaapProvisionningJob values.yaml:\nvolumes:\n  dmaap:\n    configMapName: default\n    path: /opt/app/config/dmaap/\n  dcaelocations:\n    configMapName: default\n    path: /opt/app/config/dcaeLocations/\n  drNodes:\n    configMapName: default\n    path: /opt/app/config/dr_nodes/\n  feeds:\n    configMapName: default\n    path: /opt/app/config/feeds/\n  mrClusters:\n    configMapName: default\n    path: /opt/app/config/mr_clusters/\n  topics:\n    configMapName: default\n    path: /opt/app/config/topics/\n\nin tpl file of the chart:\n\n{{- define \"common.dmaap.provisioning._volumeMounts\" -}}\n{{-   $dot := default . .dot -}}\n{{-   range $name, $volume := $dot.volumes }}\n- name: {{ $name }}\n  mountPath: {{ $volume.path }}\n{{- end }}\n{{- end -}}\n\n{{- define \"common.dmaap.provisioning._volumes\" -}}\n{{-   $dot := default . .dot -}}\n{{-   $initRoot := default $dot.Values.dmaapProvisionningJob .initRoot -}}\n{{-   $initName := default \"dmaapProvisionningJob\" -}}\n{{-   $subchartDot := fromJson (include \"common.subChartDot\" (dict \"dot\" $dot \"initRoot\" $initRoot)) }}\n{{-   range $name, $volume := $dot.volumes }}\n- name: {{ $name }}\n  configMap:\n{{-     if eq \"default\" $volume.configMapName }}\n    name: {{ include \"common.fullname\" $subChartDot }}-{{ printf \"%s\" $volume.name }}\n{{-     else }}\n    name: {{ tpl $volume.configMapName }}\n{{-     end }}\n{{-   end }}\n{{- end -}}\n\n\nin job definition:\n\n...\n        volumeMounts: {{ include \"common.dmaap.provisioning._volumeMounts\" . | nindent 8 }}\n...\n      volumes: {{ include \"common.dmaap.provisioning._volumes\" . | nindent 6 }}\n\n\nand in values.yaml of this project:\ndmaapProvisionningJob:\n  volumes:\n    drNodes:\n      configMapName: '{{ include \"common.fullname\" . }}-dr-nodes'\n    topics:\n      configMapName: '{{ include \"common.fullname\" . }}-topics'",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1e222412_2f4cc070",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "maybe \"common.dmaap.provisioning.job\"",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "10fa46a2_d0062658",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "metadata:  {{- include \"common.resourceMetadata\" (dict \"suffix\" \"dmaap-provisioning\" \"dot\" . )| nindent 2 }}",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ee404630_1a8138eb",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "maybe less than 20 no?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2ace1051_fa8be0f8",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "{{ include \"common.name\" . }}-readiness",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c304803a_a584937b",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 64,
+      "message": "please add bc client image to \"repositoryGenerator\" like other \"global\" images",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cdaeb712_39ca047c",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "{{- if include \"common.needTLS\" . }}",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cd010235_f8809685",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "18c3e126_23235e04",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "842e0519_bdfc32e8",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 88,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6f9653bc_505a5597",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "caf6cb1c_2fe06572",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 92,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f4148fef_dcaffcf2",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 94,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f7e3407c_46db1535",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3a048176_293a5b82",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 110,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a19373e8_ef130b5d",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 113,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "09d114c9_284f3c44",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 116,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4a1839f7_1fdfbc15",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 119,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "20fa0242_45135be8",
+      "file_path": "kubernetes/common/common/templates/_dmaapProvisioning.tpl",
+      "patchset_number": 2,
+      "line": 122,
+      "message": "remove {{ include \"common.fullname\" . }} here as we don't need it and it \"costs\" compute time",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 06:45:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

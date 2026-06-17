@@ -1,0 +1,144 @@
+{
+  "id": "policy%2Fdrools-applications~master~I47ddc91e5e347d6edd0db6c12dd43c1cdcd2ac5d",
+  "change_id": "I47ddc91e5e347d6edd0db6c12dd43c1cdcd2ac5d",
+  "_number": 100356,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8744bd36_e0a5befb",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/impl/ActorImpl.java",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "The build failure that occurred with patchset 1 is apparently the result of a corrupt file on the Jenkins server.\n\nI did run the Junit tests, and although they completed successfully, I don't think they are doing what you expect:\n\n[INFO] Running org.onap.policy.m2.base.TransactionTest\n03:07:48.636 [main] INFO org.onap.policy.m2.base.Transaction - Transaction constructor\n03:07:48.649 [main] ERROR org.onap.policy.m2.base.Transaction - 'Transaction' can't find actor testActor\n03:07:48.649 [main] ERROR org.onap.policy.m2.base.Transaction - 'Transaction' received unexpected timeout\n03:07:48.649 [main] ERROR org.onap.policy.m2.base.Transaction - 'Transaction' received unexpected timeout\n03:07:48.652 [main] INFO org.onap.policy.m2.base.Transaction - Transaction constructor\n\nThe 'Actor' mechanism makes use of 'java.util.ServiceLoader' to locate Actor implementations. You need to create a file called 'controlloop/m2/base/src/test/resources/META-INF/services/org.onap.policy.m2.base.Actor', which has the following contents:\n\norg.onap.policy.m2.base.impl.ActorImpl\n\nPerhaps you did create this file, but forgot to include it in the patch set.\n\nThe end result is that 'ActorImpl' and 'OperationImpl' are never referenced -- I tried the build after removing both files, and got the same result. The fact that the tests still \"passed\" suggests that more verification is needed. It seems to me that the tests would be more useful if you could verify that 'ActorImpl' and 'OperationImpl' were actually invoked where expected, and had the expected effects.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2020-01-16 09:45:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2d7abafc_b4bdec8f",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/TransactionTest.java",
+      "patchset_number": 2,
+      "line": 66,
+      "message": "based on something I saw Ali doing, it appears that test method names should start with \"test\" instead of ending with \"Test\".",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-01-16 14:42:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7c7376d3_ff5b6ff0",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "maybe add some tests for sunny day scenarios, too",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-01-16 14:42:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5fb07194_2c18c7c2",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 3,
+      "line": 58,
+      "message": "missing a call to deliver?  and a check to see that the message was, indeed, delivered?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-01-16 15:52:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2054b060_27bf5c0a",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 3,
+      "line": 71,
+      "message": "trailing space",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-01-16 15:52:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "622112ea_d3be7efd",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 3,
+      "line": 73,
+      "message": "since this is a utility class, its constructor should be private, preventing this from compiling",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-01-16 15:52:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5e079e62_4241150f",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 4,
+      "line": 54,
+      "message": "This is an example of the old quote: \"if you can't fix it, feature it\". In this case, you try to send a message via 'Util.deliver', it fails, and you declare victory!\n\nI think it would be better to fix it -- my original comment was as follows:\n\n        // throws an exception:\n        //     java.lang.IllegalStateException: Policy Engine is stopped\n        // if policy engine is started, it still throws an exception:\n        //     java.lang.IllegalArgumentException: no reverse coder has been found\n        //assertTrue(Util.deliver(\"testTopic\", \"test\"));\n\nI now realize what is needed -- in addition to starting the Policy Engine, I believe you need to create at least one controller, which includes the following properties:\n\nnoop.sink.topics=testTopic\nnoop.sink.topics.testTopic.events=java.lang.String\n\nIt's also possible that you can just add the following 'props.put' (I'm not sure about this):\n\nprop.put(\"noop.sink.topics.testTopic.events\", \"java.lang.String\");",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2020-01-16 16:49:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d15b0c7d_b1487ab4",
+      "file_path": "controlloop/m2/base/src/test/java/org/onap/policy/m2/base/UtilTest.java",
+      "patchset_number": 4,
+      "line": 54,
+      "message": "I tried the \"prop.put\" option, as well as creating a minimal controller, and couldn't get around the \"no reverse coder has been found\" error. I may be missing something, or you may need a controller using dmaap or ueb.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2020-01-16 17:19:41.000000000",
+      "in_reply_to": "5e079e62_4241150f",
+      "unresolved": true
+    }
+  ]
+}

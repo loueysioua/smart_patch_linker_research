@@ -1,0 +1,70 @@
+{
+  "id": "oom~amsterdam~I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0",
+  "change_id": "I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0",
+  "_number": 26641,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2017-12-20 15:24:52.000000000",
+    "updated": "2018-01-03 14:22:32.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 137,
+      "name": "Alexis de Talhouet",
+      "display_name": null,
+      "email": "adetalhouet89@gmail.com",
+      "username": "adetalhouet"
+    },
+    "submitter": null
+  },
+  "subject": "Fix SDC errors 503/500",
+  "commit_message": "Fix SDC errors 503/500\n\n1. Make sure ES, CS and BE SDC services become available in k8s only\nwhen it performed all the tasks in startup scripts. This mimics the SDC\nOOB script sdc/sdc-os-chef/scripts/docker_run.sh where there is wait for\n\"DOCKER STARTED\" message after running CS and BE containers.\n\n2. Removed dependency of BE in KB container - it can start\nsimultaneously.\n\n3. Use HOST_IP variable inside CS for internal client connection (as k8s\nservice name is not available until k8s service is ready).\n\n4. Sometimes CS chef recipes 04-schemaCreation.rb and\n05-titanSchemaCreation.rb fail because of timeout in Cassandra Java\nclient used in org.openecomp.sdc.asdctool.main.DataSchemaMenu tool.\nThere is an issue opened for this on SDC project:\nhttps://jira.onap.org/browse/SDC-715. To work around the issue, the tool\nis called with retries and if it does not success after retries - the\ncontainer startup script checks now chef exit code and exits with non-0\nexit code thus leaving to k8s to recover the container.\n\nChange-Id: I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0\nIssue-ID: SDC-451\nSigned-off-by: yuryn <Yury.Novitsky@Amdocs.com>\n",
+  "change_log": {
+    "entry_count": 3,
+    "entries": [
+      {
+        "id": "9929c8166246c0d6779740fa84d809a3eccb3040",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-20 15:24:52.000000000",
+        "message": "Patch Set 1: Cherry Picked from branch release-1.1.0.",
+        "patchset_number": 1
+      },
+      {
+        "id": "91cfed054497d41053ff4186f6a5ba9b5f603472",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-20 15:43:26.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "1194f9ef579b4004bfc3746408998eb994846727",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-03 14:22:32.000000000",
+        "message": "Abandoned\n\nLet's wait for the proper solution as explained here: https://gerrit.onap.org/r/#/c/26559/",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

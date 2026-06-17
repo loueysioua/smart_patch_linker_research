@@ -1,0 +1,144 @@
+{
+  "id": "policy%2Fdrools-applications~master~I63b589bea344ad7f33e6fc0d34f0ab331411146b",
+  "change_id": "I63b589bea344ad7f33e6fc0d34f0ab331411146b",
+  "_number": 113405,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "543dad55_42013cd7",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "so if it isn't provided by the policy, then it will default to zero (GrpcOperation.java:33).  Is that the desired behavior?\n\ncould leave this property, with a value of 0 instead of 10 - that would have the same effect.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-30 21:46:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d4b6c4fc_9708ff48",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Got it, so this value is still used if the timeout is not defined in policy.\n\nI think Jorge implemented a JSON schema validation in drools-pdp which validates if all the required fields are specified in the policy before deployment.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2020-09-30 22:12:19.000000000",
+      "in_reply_to": "543dad55_42013cd7",
+      "unresolved": true
+    },
+    {
+      "id": "60bfde09_0d8d367d",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Yep, the timeout is a mandatory, 1 second or larger parameter in the policy.\n\nWould this issue apply to other operations with a timeout in the properties that may causes ambiguities with the policy ones?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-09-30 22:15:32.000000000",
+      "in_reply_to": "543dad55_42013cd7",
+      "unresolved": true
+    },
+    {
+      "id": "4ad09fe6_f7ec08d5",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "if it's defined in the policy, then it typically overrides what's defined in the properties, so I think we should be fine.  With that in mind, is this change even needed?\n\n(the one caveat: it's up to the app developer to ensure that the timeout is extracted from the policy and passed to the actor via the ControlLoopOperationParams.  In drools-apps, this happens at UsecasesEventManager.java:344.  In Honolulu, we could make this a mandatory value within the Params.  Then we could remove it altogether from the actor properties.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-01 12:36:34.000000000",
+      "in_reply_to": "60bfde09_0d8d367d",
+      "unresolved": true
+    },
+    {
+      "id": "fd303f65_bfa53c5b",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "I guess if the grcp actor code is used without drools, for example in apex, perhaps it makes sense to have it there just to  describe that it is configurable, so one other option would to add a comment and leave it there, describing that it is informational and will be overriden by the tosca policy in a typical drools environment.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-10-01 13:56:02.000000000",
+      "in_reply_to": "4ad09fe6_f7ec08d5",
+      "unresolved": true
+    },
+    {
+      "id": "2a0750e5_3bd15554",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Yes, apex is using the timeout defined in CdsServerProperties java class in cds actor code. It is not using the actor itself (operator, operation etc) but the CdsProcessorGrpcClient part of it. And there also it is set by the policy itself.\nI wanted to remove it from this controlloop.properties.environment to remove the ambiguity in drools-pdp for configuring cds operation timeout.\nBut I am okay if we want to leave it until Honolulu.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2020-10-01 15:06:51.000000000",
+      "in_reply_to": "fd303f65_bfa53c5b",
+      "unresolved": true
+    },
+    {
+      "id": "5928e91e_ec89b616",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "license date",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-01 18:39:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "55b1f1a6_57f504aa",
+      "file_path": "controlloop/common/feature-controlloop-management/src/main/feature/config/controlloop.properties.environment",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2020-10-01 22:20:40.000000000",
+      "in_reply_to": "5928e91e_ec89b616",
+      "unresolved": true
+    }
+  ]
+}

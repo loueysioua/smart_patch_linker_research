@@ -1,0 +1,1334 @@
+{
+  "id": "cps~master~Ic45d95169eb0c06cfb35c907d34380dbcbf2da11",
+  "change_id": "Ic45d95169eb0c06cfb35c907d34380dbcbf2da11",
+  "_number": 129808,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "543fd6b4_99b42742",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 26,
+      "message": "I would import static method because of readability, it looks like a private method when used in this class\ne.g. on line #74 \n\nsetCompositeStateToAdvised().accept(yangModelCmHandle.getCompositeState());\n\ni would prefer to see \n\nCompositeStateUtils.setCompositeStateToAdvised.accept(yangModelCmHandle.getCompositeState());",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2785b75d_5defd4f3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "should we create a (or refactor this) method in inventoryPersistence call saveCmHandle taht just takes a yangModelCmHanlde as input",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f0b87dc6_ae4c6afb",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "I stil don't see a reason to check the old state a this stage, we should accept any transition (this class shouldn't' care, the business logic to decide on the transition resides outside this class)\n\nI can see ADVISED need special handling but this last block can just be an else for the ADVISED if then",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d1ce23ec_f76cb23e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "to be able to use else you need oen comment method here, see comment in utils class you created)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4f3da2df_feb8b534",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "suggestion: instead of a Utils Class my preference to had this static methods to CompositeState class itself.\nBut thats is my preference I know some other developers don't like that",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "17e009a1_d2963565",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "why not one common method:\n\n    public static Consumer<CompositeState> setCompositeState(CmHandleState targetCmHandleState) {\n        return compositeState -> {\n            compositeState.setCmHandleState(targetCmHandleState);\n            compositeState.setLastUpdateTimeNow();\n        };\n    }",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3f181945_196eb820",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 48,
+      "message": "I don't see test/assert related to this you probably can remove it form tets but I do think you need  a separate test to proof lockdetails are retained when 'unlocking' a cmhandle",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "72815aa3_96db2fe9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "this 'smells' like you need a separate test for this\n\nIt always better to have separate test for 'special' scenarios so you can use the test slogan and labels effectively to desrcibe that special scenario\n\n\nAny duplication between the tests can be moved into common setup or even common assert methods...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "962b12bf_bd1980a9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": null,
+      "message": "sometimes a simple helpe class can be covered by good testing in the class that uses the helper (without mocking it)\n\nI think you have done so in NcmpEventsCmHandleStateHandlerImplSpec.groovy.\n\nBut then again it is good unit-tets practice to have such tests, I am sitting on the fence as there is a cost like these reviews and future maintenance\n\nMaybe the last test can be retained here to proof the point I asked about in that other Spec the choice is with you...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f37aba46_55e9bc33",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "see my comment above if you want to tets this here or in  NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "208753b0_587bcebf",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "add 'and: 'the lock details are retained'  to describe the most important aspect of this method!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 07:56:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "26222700_e71c3b65",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 26,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "543fd6b4_99b42742",
+      "unresolved": false
+    },
+    {
+      "id": "9e998d10_47008040",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "Yeah..this one looks an odd one out 😊\nAlso if we do this we have one less dependency to inject. I am happy to do this.\n\nThis I will handle as part of the refactoring I want to do to rename the methods and other references from Ncmp* to Lcm* . I will take care of this 😊",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "2785b75d_5defd4f3",
+      "unresolved": true
+    },
+    {
+      "id": "c51d4091_323b63ef",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "d1ce23ec_f76cb23e",
+      "unresolved": false
+    },
+    {
+      "id": "6b97d3c8_968be80b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Yeah.. I am easy here.\nFor now we have 2-3 utility methods , but I think we will have more when we unlock more details. So i think having a separate class is just fine.\nOpen for Suggestions here from other devs.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "4f3da2df_feb8b534",
+      "unresolved": true
+    },
+    {
+      "id": "4a4a29ae_e439ecc0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "17e009a1_d2963565",
+      "unresolved": false
+    },
+    {
+      "id": "7a34dae2_54e09b72",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 48,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "3f181945_196eb820",
+      "unresolved": false
+    },
+    {
+      "id": "cda48f70_281031ae",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:44:41.000000000",
+      "in_reply_to": "72815aa3_96db2fe9",
+      "unresolved": false
+    },
+    {
+      "id": "0f06f81b_ac0dc3ce",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:55:09.000000000",
+      "in_reply_to": "f0b87dc6_ae4c6afb",
+      "unresolved": false
+    },
+    {
+      "id": "88ecf641_7d8822aa",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:55:09.000000000",
+      "in_reply_to": "962b12bf_bd1980a9",
+      "unresolved": false
+    },
+    {
+      "id": "3aa4b60c_a74a49f4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 11:55:09.000000000",
+      "in_reply_to": "208753b0_587bcebf",
+      "unresolved": false
+    },
+    {
+      "id": "d84566db_002ea0e0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 26,
+      "message": "I'm not sure what this class does based on the name. Can you add some javadoc or rename?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88276589_15a99fe2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "of?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "56c69d29_4161e92d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "Not sure update is best. maybe setCmHandleToGivenState? What does th team think?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3419c55e_2cbd0b47",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "Could be extracted out to a method for readability",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c85f2dab_db3ac34c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 97,
+      "message": "This method is not required in my opinion as line 96 can be used instead at line 89.",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "17b24284_e2dc0056",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "The current name is too long and if this is used in retry scenarios I would reflect that in the name.",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b41670a0_88821b15",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 2,
+      "line": 89,
+      "message": "move bracket up to line 88",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-07 13:41:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d8c08b5b_568ec629",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "should this be more descriptive?",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2022-07-07 13:59:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7c82189_d736a721",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "i think 'update' is good but 'updateCmHandleToGivenState'",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2022-07-07 13:59:36.000000000",
+      "in_reply_to": "56c69d29_4161e92d",
+      "unresolved": true
+    },
+    {
+      "id": "49a82ccf_2c0ecb3d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "agree with priyank",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2022-07-07 13:59:36.000000000",
+      "in_reply_to": "6b97d3c8_968be80b",
+      "unresolved": true
+    },
+    {
+      "id": "d3855922_1b549272",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 26,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "d84566db_002ea0e0",
+      "unresolved": false
+    },
+    {
+      "id": "b0b73852_fecf3561",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "88276589_15a99fe2",
+      "unresolved": false
+    },
+    {
+      "id": "e0792b93_d4cdf79e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "I can think of below.\n1. handleCmHandleState\n2. updateCmHandleState\n3. updateState (current)\n4. any other ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "d8c08b5b_568ec629",
+      "unresolved": true
+    },
+    {
+      "id": "a1894293_ca93c855",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "3419c55e_2cbd0b47",
+      "unresolved": false
+    },
+    {
+      "id": "3639022a_49664134",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 2,
+      "line": 97,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "c85f2dab_db3ac34c",
+      "unresolved": false
+    },
+    {
+      "id": "a223c796_38a6c8fc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 2,
+      "line": 89,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:14:42.000000000",
+      "in_reply_to": "b41670a0_88821b15",
+      "unresolved": false
+    },
+    {
+      "id": "563f7bfd_c7cd4505",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 14:48:45.000000000",
+      "in_reply_to": "9e998d10_47008040",
+      "unresolved": false
+    },
+    {
+      "id": "0de272b6_f3f50a1b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 14:48:45.000000000",
+      "in_reply_to": "49a82ccf_2c0ecb3d",
+      "unresolved": false
+    },
+    {
+      "id": "16d026db_1db8b12b",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "add: in READY state",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 14:48:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a456c58d_47dd3a5e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 79,
+      "message": "add: in LOCKED state",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-07 14:48:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9fd6f860_039d81fa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "I dont want to pollute my patch with refactoring here but just an heads up this will be refactored to be called 'saveCmHandle(yangModelCmhandle)' and the logic will move to inventoryPersistence. This will come up along with other refactoring i want to do.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:50:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eb51454c_8d877264",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "Ack",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2022-07-07 14:52:43.000000000",
+      "in_reply_to": "9fd6f860_039d81fa",
+      "unresolved": true
+    },
+    {
+      "id": "d4ce62b8_6b6eac67",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "#2 updateCmHandleState sounds good to me\n\nwhat do others think ? :)",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2022-07-07 14:54:23.000000000",
+      "in_reply_to": "e0792b93_d4cdf79e",
+      "unresolved": true
+    },
+    {
+      "id": "1c1e6aa6_40867a6c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:55:45.000000000",
+      "in_reply_to": "16d026db_1db8b12b",
+      "unresolved": false
+    },
+    {
+      "id": "c7b5a5a7_c18eca50",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 79,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-07 14:55:45.000000000",
+      "in_reply_to": "a456c58d_47dd3a5e",
+      "unresolved": false
+    },
+    {
+      "id": "d224d869_08f39616",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 4,
+      "line": 91,
+      "message": "NB: you stil plan extracting this in this commit?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 08:21:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c8819681_401a8c5e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 4,
+      "line": 30,
+      "message": "NB: since you have a similar test in NcmpEventsCmHandleStateHandlerImplSpec.groovy covering that and this class this whole spec is not really necessary anymore...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 08:21:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fae670d3_26df0ed9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 4,
+      "line": 91,
+      "message": "ok, now saw you reply in #3",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 08:22:16.000000000",
+      "in_reply_to": "d224d869_08f39616",
+      "unresolved": false
+    },
+    {
+      "id": "0fe4e2ad_4d3ad935",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/inventory/CompositeStateUtilsSpec.groovy",
+      "patchset_number": 4,
+      "line": 30,
+      "message": "Yup.Agreed.\nI will remove this altogether.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 08:25:09.000000000",
+      "in_reply_to": "c8819681_401a8c5e",
+      "unresolved": true
+    },
+    {
+      "id": "608d6117_0f6aadc4",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "The initial data store sync state can vary depending on if data sync is enabled.\n\nI would change this code to reflect that by rebasing to the latest commit.",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-07-08 09:52:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ca57b475_df7abca3",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 61,
+      "message": "I'm confused about these scenarios. How can you send events when the state doesn't change?\n\nOr why are we testing these scenarios?",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-07-08 09:52:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3824ec7b_aff8fa4c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 65,
+      "message": "Can states go from READY to ADVISED?",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-07-08 09:52:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e9029e50_54d90153",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "Yes , I saw the last patch. Let me adapt to those changes as well.\nAt the moment all this code is not called from anywhere.\nWe have separate stories related to that and I am focusing on the handler now.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 10:02:32.000000000",
+      "in_reply_to": "608d6117_0f6aadc4",
+      "unresolved": true
+    },
+    {
+      "id": "6861bb85_a42d8a7d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 61,
+      "message": "We dont send events.\nThese scenarios are to prove that nothing happens when state doesnt change.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 10:02:32.000000000",
+      "in_reply_to": "ca57b475_df7abca3",
+      "unresolved": true
+    },
+    {
+      "id": "54731ee0_79e6cece",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 65,
+      "message": "Good point..\nThis scenario is actually not required.\nWill remove it.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 10:02:32.000000000",
+      "in_reply_to": "3824ec7b_aff8fa4c",
+      "unresolved": true
+    },
+    {
+      "id": "e7012def_0a332be9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 65,
+      "message": "Ideally I need to check for intial(not existing) to ADVISED state.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 10:56:47.000000000",
+      "in_reply_to": "54731ee0_79e6cece",
+      "unresolved": true
+    },
+    {
+      "id": "af58f96b_f170bc5c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "Is this correct or should it be Lcm?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-08 10:59:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2b8bd8a5_b568c4a7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 43,
+      "message": "same",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-08 10:59:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1eee7d6e_084909f1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 62,
+      "message": "publishLcmEvent?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-08 10:59:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7bdf6c0_99f7f998",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsService.java",
+      "patchset_number": 6,
+      "line": 50,
+      "message": "lcmEvent?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-08 10:59:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3486aa1d_a091ddad",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 6,
+      "line": 75,
+      "message": "See comment https://gerrit.onap.org/r/c/cps/+/129808/2/cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java#69",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-07-08 10:59:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f5f8b2c8_5e447ad3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "Need suggestions on the name here : \n1. setCompositeStateForRetry\n2. retryCmHandleAndRetainOldLockReasonDetails\n3. Any other ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 11:07:21.000000000",
+      "in_reply_to": "17b24284_e2dc0056",
+      "unresolved": true
+    },
+    {
+      "id": "4a6b2e7a_1262baed",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "4. Or leave the way as is because the method is related to CompositeState( ADVISED and LockReasonDetails being the attribute of it ) on the contrary \"Retry\" is a scenario where this method is used at the moment (but there can be other scenarios as well , other than retry).",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 13:59:46.000000000",
+      "in_reply_to": "f5f8b2c8_5e447ad3",
+      "unresolved": true
+    },
+    {
+      "id": "fd664cc7_ed3409e1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "I can remove this if we go with #4 😊",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 14:00:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6bf4dd1a_5581160b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "maybe remove the term 'NcmpEvents' altogether to avoid ambiguity and also becasu ethe impl. responsibilities go beyond events now!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 14:42:52.000000000",
+      "in_reply_to": "af58f96b_f170bc5c",
+      "unresolved": true
+    },
+    {
+      "id": "31f753c4_c6d18b00",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 6,
+      "line": 64,
+      "message": "sugegtsion: getInitialDataStoreSyncState",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 14:42:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b829a91a_f6bd9511",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 6,
+      "line": 75,
+      "message": "I do like Joe's suggestion: setCompositeStateForRetry",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 14:42:52.000000000",
+      "in_reply_to": "3486aa1d_a091ddad",
+      "unresolved": true
+    },
+    {
+      "id": "026f590c_56ab448f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "Yes. I will handle this as part of my next patch all related to refactoring/renaming just after this one merges.\nhttps://jira.onap.org/browse/CPS-1137",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "6bf4dd1a_5581160b",
+      "unresolved": true
+    },
+    {
+      "id": "3a538b32_d02f7a6a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 43,
+      "message": "will be handled as part of https://jira.onap.org/browse/CPS-1137",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "2b8bd8a5_b568c4a7",
+      "unresolved": true
+    },
+    {
+      "id": "3d15127d_32526e47",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 62,
+      "message": "will be handled as part of https://jira.onap.org/browse/CPS-1137",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "1eee7d6e_084909f1",
+      "unresolved": true
+    },
+    {
+      "id": "3e9faa9a_1019828b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsService.java",
+      "patchset_number": 6,
+      "line": 50,
+      "message": "will be handled when Miklos generates a new schema and then we will get rid-off the old one.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "e7bdf6c0_99f7f998",
+      "unresolved": true
+    },
+    {
+      "id": "16b7fb93_926f750f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 6,
+      "line": 64,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "31f753c4_c6d18b00",
+      "unresolved": false
+    },
+    {
+      "id": "19a509f2_b4dc5079",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/CompositeStateUtils.java",
+      "patchset_number": 6,
+      "line": 75,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-07-08 15:03:55.000000000",
+      "in_reply_to": "b829a91a_f6bd9511",
+      "unresolved": false
+    },
+    {
+      "id": "69235ba7_5f09b437",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandler.java",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 15:29:29.000000000",
+      "in_reply_to": "026f590c_56ab448f",
+      "unresolved": false
+    },
+    {
+      "id": "33852598_31ab8179",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 43,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 15:29:29.000000000",
+      "in_reply_to": "3a538b32_d02f7a6a",
+      "unresolved": false
+    },
+    {
+      "id": "3965c60f_a790c3d9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsCmHandleStateHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 62,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 15:29:29.000000000",
+      "in_reply_to": "3d15127d_32526e47",
+      "unresolved": false
+    },
+    {
+      "id": "232d1cd2_6d0ca021",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsService.java",
+      "patchset_number": 6,
+      "line": 50,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-07-08 15:29:29.000000000",
+      "in_reply_to": "3e9faa9a_1019828b",
+      "unresolved": false
+    }
+  ]
+}

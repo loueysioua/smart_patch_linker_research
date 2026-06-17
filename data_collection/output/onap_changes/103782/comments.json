@@ -1,0 +1,42 @@
+{
+  "id": "oom%2Foffline-installer~master~I4786dcd4b2de3f8d189db3b619c3d75315302506",
+  "change_id": "I4786dcd4b2de3f8d189db3b619c3d75315302506",
+  "_number": 103782,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c516a751_e8b35dd0",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 13,
+      "message": "Same remark as in other commits - use ansible_os_family. And then it will suffice to:\n\n- include_tasks: \"{{ ansible_os_family }}\".yml\n\nand\n ansible/roles/docker/tasks/RedHat.yml\n ansible/roles/docker/tasks/Debian.yml\n\nBut in fact include isn't needed at all, please see comments in tasks/ubuntu.yml",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 11:19:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "015b5a3a_1ca81b5e",
+      "file_path": "ansible/roles/docker/tasks/ubuntu.yml",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Just define a map in role's defaults similar to:\n\npackages:\n RedHat:\n  -pkg1\n Debian:\n  -pkg1\n  -pkg2\n\nAnd then directly in main.yml loop over it:\n\n- name: Install required packages\n  package:\t\n    name: \"{{ item }}\"\n  loop: \"{{ packages[ansible_os_family] }}\"\n\nNo conditional includes and separate task files needed.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 11:19:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

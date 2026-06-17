@@ -1,0 +1,790 @@
+{
+  "id": "oom~master~I8b8aa8eb61dafba75e89add1979114a0eefce243",
+  "change_id": "I8b8aa8eb61dafba75e89add1979114a0eefce243",
+  "_number": 99566,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "901515f1_a9314d62",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 9,
+      "line": 75,
+      "message": "couldn't we extract this to a separate template and reuse for both service types?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-12-20 23:58:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3fd8f3d9_012ec1f1",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 65,
+      "message": "I think I've just found a solution for your problem which forces you to use this eq construction. How about just changing the needPV definition to:\n{{- define \"common.needPV\" -}}\n{{- if or (or .Values.persistence.storageClassOverride .Values.persistence.storageClass) .Values.global.persistence.storageClass -}}\n{{- else -}}\n  True\n{{- end -}}\n{{- end -}}\n\nbecause empty string is always considered a false then you could drop the whole eq construction and just use:\n\n{{- if (include \"common.needPV\" .) -}}\n\nWhat do you think?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-12-20 23:58:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6b62c7aa_47d7ecce",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 83,
+      "message": "couldn't you omit this if, if you put --- on the top instead of the bottom?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-12-20 23:58:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ed2db1ab_6cb9b52f",
+      "file_path": "kubernetes/common/common/templates/_tplValue.tpl",
+      "patchset_number": 9,
+      "line": 22,
+      "message": "Nice one! I like it a lot:)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-12-20 23:58:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a1a1d184_21dc41fd",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 9,
+      "line": 75,
+      "message": "OK, I'll see how to do it.\nI actually want to be able to \"force\" the name of the service in the template so it'll be a good reason to refactor",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 09:26:11.000000000",
+      "in_reply_to": "901515f1_a9314d62",
+      "unresolved": true
+    },
+    {
+      "id": "6cbbb42d_a4f747f4",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 65,
+      "message": "Yes I can try :)\nJust to be sure, it shouldn't change the current behaviour so I don't have to change all of them right?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 09:26:11.000000000",
+      "in_reply_to": "3fd8f3d9_012ec1f1",
+      "unresolved": true
+    },
+    {
+      "id": "9c9232b6_6ce7947a",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 83,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 09:26:11.000000000",
+      "in_reply_to": "6b62c7aa_47d7ecce",
+      "unresolved": true
+    },
+    {
+      "id": "d29337a8_b3b22da2",
+      "file_path": "kubernetes/common/common/templates/_tplValue.tpl",
+      "patchset_number": 9,
+      "line": 22,
+      "message": "I've \"stolen\" it from bitnami ;) (https://github.com/bitnami/charts/blob/master/bitnami/mariadb-galera/templates/_helpers.tpl#L266)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 09:26:11.000000000",
+      "in_reply_to": "ed2db1ab_6cb9b52f",
+      "unresolved": false
+    },
+    {
+      "id": "dbb5fe5d_4911e347",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 9,
+      "line": 75,
+      "message": "done in patchset #10",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 12:32:13.000000000",
+      "in_reply_to": "a1a1d184_21dc41fd",
+      "unresolved": false
+    },
+    {
+      "id": "c953a1d0_d19acfbd",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 65,
+      "message": "done in patchset #10",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 12:32:13.000000000",
+      "in_reply_to": "6cbbb42d_a4f747f4",
+      "unresolved": false
+    },
+    {
+      "id": "41814c99_41948f90",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 9,
+      "line": 83,
+      "message": "done in patchset #11",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-12-24 12:32:13.000000000",
+      "in_reply_to": "9c9232b6_6ce7947a",
+      "unresolved": false
+    },
+    {
+      "id": "ebe7d84c_75c1e2ff",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 14,
+      "line": 70,
+      "message": "Why do we need to | here the value instead of just passing two arguments to the default function?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-20 17:25:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "74f387bd_903796c0",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 14,
+      "line": 70,
+      "message": "lazyness? it's just a copy paste. And as I really want to get rid of nodeports, I didn't took too much time on it",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-22 12:24:06.000000000",
+      "in_reply_to": "ebe7d84c_75c1e2ff",
+      "unresolved": true
+    },
+    {
+      "id": "2b5a4da6_9cde9626",
+      "file_path": "kubernetes/common/cassandra/templates/backup/cronjob.yaml",
+      "patchset_number": 25,
+      "line": 32,
+      "message": "I'm kind of curious why in this particular line you use the global context ($) instead of current root (.) as you do in two surrounding lines?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a7aee33_3800ecb2",
+      "file_path": "kubernetes/common/cassandra/templates/statefulset.yaml",
+      "patchset_number": 25,
+      "line": 17,
+      "message": "Metadata without s",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4f22196b_80010847",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 1,
+      "message": "whitespaces after ...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a2101d0f_716df4e9",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 17,
+      "message": "This probably belongs more to _name.tpl file",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "daa22c4c_aee6749b",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 42,
+      "message": "Metadata",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bcd3778a_aca6ad0a",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 58,
+      "message": "Metadata",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1550f6bd_6c2a8259",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 25,
+      "line": 20,
+      "message": "I'm not very convinced to this template.\nWhat happens if someone will configure both headed and headless service and then just introduce a switch to change it's type? This template will then always merge the two lists together...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "694e1477_cfcae3c9",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "why you need to introduce a special value for the postfix (BTW it should be probably called suffix;) instead of just using the fact that it may just not be present in the dictionary that you get as an argument?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3eac1e09_dea4fd59",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 81,
+      "message": "same as above",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ccf4e7ae_cdc9ec08",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 25,
+      "line": 58,
+      "message": "how about a new line?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7f4dca0c_c699f02b",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 25,
+      "line": 80,
+      "message": "same trick as in the other patch, you can place --- as a first line then you can remove this awkward if",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 19:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "769e1354_52b6f3fe",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 25,
+      "line": 20,
+      "message": "I know. Do you know a trick to merge two list with unicity?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-23 21:20:12.000000000",
+      "in_reply_to": "1550f6bd_6c2a8259",
+      "unresolved": true
+    },
+    {
+      "id": "ccc34efa_7cff0f36",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "Yeah suffix may be better. \nBecause per default headless service has « headless » as suffix. But sometimes you just don’t want « headless » then « NONE » will give you this ability.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-23 21:20:12.000000000",
+      "in_reply_to": "694e1477_cfcae3c9",
+      "unresolved": true
+    },
+    {
+      "id": "0e4f0eed_59eff867",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 25,
+      "line": 20,
+      "message": "How about just using merge or maybe even mergeOverride?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 21:36:08.000000000",
+      "in_reply_to": "769e1354_52b6f3fe",
+      "unresolved": true
+    },
+    {
+      "id": "5f13615a_ee51325a",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "Hmm really? I'm trying to find a place where you append \"headless\" as a suffix but I'm blind. Any hints?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-23 21:36:08.000000000",
+      "in_reply_to": "ccc34efa_7cff0f36",
+      "unresolved": true
+    },
+    {
+      "id": "26dad8c3_4fcddc52",
+      "file_path": "kubernetes/common/cassandra/templates/backup/cronjob.yaml",
+      "patchset_number": 25,
+      "line": 32,
+      "message": "bad copy paste. changed in ps 26",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "2b5a4da6_9cde9626",
+      "unresolved": false
+    },
+    {
+      "id": "cece6ae5_450fe0d6",
+      "file_path": "kubernetes/common/cassandra/templates/statefulset.yaml",
+      "patchset_number": 25,
+      "line": 17,
+      "message": "Done in patchset 26",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "9a7aee33_3800ecb2",
+      "unresolved": false
+    },
+    {
+      "id": "3ddef41b_82e87fbf",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 17,
+      "message": "Done in patchset 26",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "a2101d0f_716df4e9",
+      "unresolved": false
+    },
+    {
+      "id": "a3e7bbc2_b60be62a",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 42,
+      "message": "Done in ps 26",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "daa22c4c_aee6749b",
+      "unresolved": false
+    },
+    {
+      "id": "ddb3c3bd_a45f86a3",
+      "file_path": "kubernetes/common/common/templates/_labels.tpl",
+      "patchset_number": 25,
+      "line": 58,
+      "message": "Done in ps 26",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "bcd3778a_aca6ad0a",
+      "unresolved": false
+    },
+    {
+      "id": "75db65a2_336dffdb",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "Line 88 of this file",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "5f13615a_ee51325a",
+      "unresolved": true
+    },
+    {
+      "id": "c14e500c_c68b69e3",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 25,
+      "line": 58,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "ccf4e7ae_cdc9ec08",
+      "unresolved": false
+    },
+    {
+      "id": "0b7368e1_b42b3851",
+      "file_path": "kubernetes/common/common/templates/_storage.tpl",
+      "patchset_number": 25,
+      "line": 80,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:09:37.000000000",
+      "in_reply_to": "7f4dca0c_c699f02b",
+      "unresolved": false
+    },
+    {
+      "id": "22ecbe6f_0387f673",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 25,
+      "line": 20,
+      "message": "merge and mergeOverride only works in dict context, not list AFAIK.\nSo I rewritten the function with my \"best\" golang template/sprig knowledge and we shouldn't have duplicate now",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 08:49:58.000000000",
+      "in_reply_to": "0e4f0eed_59eff867",
+      "unresolved": false
+    },
+    {
+      "id": "ac19cf65_c7cc8cd6",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "I'm a very stupid guy who can't read very well so I decided to test your patch. I removed the postfix: NONE from values and for me the result for cassandra is:\n\napiVersion: v1\nkind: Service\nmetadata: \n  annotations:\n    service.alpha.kubernetes.io/tolerate-unready-endpoints: \"true\"\n    \n  name: cassandra\n  namespace: default\n  labels:\n    app.kubernetes.io/name: cassandra\n    helm.sh/chart: cassandra-5.0.0\n    app.kubernetes.io/instance: test\n    app.kubernetes.io/managed-by: Tiller\nspec:\n  clusterIP: None\n  ports:\n    \n    - port: 7000\n      targetPort: tcp-intra\n      name: tcp-intra\n    - port: 7001\n      targetPort: tls\n      name: tls\n    - port: 7199\n      targetPort: tcp-jmx\n      name: tcp-jmx\n    - port: 9042\n      targetPort: tcp-cql\n      name: tcp-cql\n    - port: 9160\n      targetPort: tcp-thrift\n      name: tcp-thrift\n    - port: 61621\n      targetPort: tcp-agent\n      name: tcp-agent\n  publishNotReadyAddresses: true\n  type: ClusterIP\n  selector:\n    app.kubernetes.io/name: cassandra\n    app.kubernetes.io/instance: test\n\nSo I don't really know where this default \"headless\" suffix that you mentioned is hidden:(",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-24 12:33:37.000000000",
+      "in_reply_to": "75db65a2_336dffdb",
+      "unresolved": true
+    },
+    {
+      "id": "ad1ca833_867ba7f6",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 28,
+      "line": 122,
+      "message": "yup it looks fine so now the trick that you can do to avoid assigning this special NONE value would be:\ndefine makeSuffix\n  if hasKey .Values.service.headless \"suffix\"\n    .Values.service.headless.suffix\n  else\n     \"headless\"\n\nthis way you can do in your values files:\nsuffix: \"\"\nand it will drop the headless suffix from your service name:)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-24 14:58:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "94d1ec0c_f95a33e6",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 25,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 16:06:30.000000000",
+      "in_reply_to": "ac19cf65_c7cc8cd6",
+      "unresolved": false
+    },
+    {
+      "id": "88784601_1a077013",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 29,
+      "line": 27,
+      "message": ":= otherwise you have a build failure.\n\nhave you tested that this function actually works?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-24 16:20:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "21f7e26d_50f8f3f9",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 29,
+      "line": 27,
+      "message": "Yes I've tested it and did linting and I did see any issue. \nThat's why I've declared portsNumber first...\n\"make common\" and \"helm template\" are working on my side.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 16:32:06.000000000",
+      "in_reply_to": "88784601_1a077013",
+      "unresolved": true
+    },
+    {
+      "id": "70957c7d_c08b690a",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 29,
+      "line": 27,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 16:45:18.000000000",
+      "in_reply_to": "21f7e26d_50f8f3f9",
+      "unresolved": false
+    },
+    {
+      "id": "2e01f784_082df100",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 30,
+      "line": 32,
+      "message": "I've got the same issue than line 27 but if I had the requested ':', $ports is empty :-(\nAny hints is welcome!",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 17:15:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cb33ea00_b8d8da62",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 30,
+      "line": 32,
+      "message": "Yeah I know this issue. You would need to do the same trick as I did in mariadb-init (secret.yaml) so basically you need to write a template that will printf your whole list to std out then catch that to variable and use fromYaml to make it back a helm object;)\n\nas simple as that:D",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-01-24 19:01:17.000000000",
+      "in_reply_to": "2e01f784_082df100",
+      "unresolved": true
+    },
+    {
+      "id": "1fac969f_1bc35a26",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 30,
+      "line": 32,
+      "message": "Well, it’ll wait the end of my holidays ;-)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-01-24 19:09:24.000000000",
+      "in_reply_to": "cb33ea00_b8d8da62",
+      "unresolved": true
+    }
+  ]
+}

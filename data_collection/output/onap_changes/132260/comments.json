@@ -1,0 +1,246 @@
+{
+  "id": "sdc~master~I9531e000213b3e2798a5f3e1cb4e6ed8103a02c8",
+  "change_id": "I9531e000213b3e2798a5f3e1cb4e6ed8103a02c8",
+  "_number": 132260,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1f75fc89_fcff8d10",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "you should not throw a NullPointerException, that is what Java already does to you automatically. You should handle the situation where the information you need/want is null, which can vary depending on what you want to do. \nIf that is something really necessary for the runtime system, as it seems to be here, a custom runtime or checked exception could be thrown here, for example PortalAPIException.\nThat could also be thrown in the method getUserBusinessLogic(), as it is returning a dependency of this class. This dependency in fact could be injected during the creation of the class, being something mandatory for the class to work/be instanciated.\nThe same comment applies to the others NullPointerException thrown.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-16 15:22:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0b8b3854_6ed0ab65",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "extract as const and reuse",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2022-11-16 15:23:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e601377e_c66f011c",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-16 17:03:58.000000000",
+      "in_reply_to": "0b8b3854_6ed0ab65",
+      "unresolved": false
+    },
+    {
+      "id": "e230c641_3e0d3ad3",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "Ack",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-16 17:03:58.000000000",
+      "in_reply_to": "1f75fc89_fcff8d10",
+      "unresolved": false
+    },
+    {
+      "id": "d0461b72_a7381597",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 4,
+      "line": 243,
+      "message": "same nullpointer problem can happen here if ctx.getBean(\"userBusinessLogicExt\") (line 317) returns null.\nYou should handle there, as you did to check the ctx.\nSame for the method getUserBusinessLogicExt",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-17 11:02:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "92ef8a71_f70f136e",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 4,
+      "line": 321,
+      "message": "one cleaner way to write this, in my opinion, is to check first for the negative condition and return, e.g.:\n        if (ctx == null) {\n            throw new PortalAPIException(\"Failed to get Bean userBusinessLogic, \nCurrentWebApplicationContext is null.\");\n        }\n        return (UserBusinessLogic) ctx.getBean(\"userBusinessLogic\");",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-17 11:05:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6908434e_1c5d9683",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 4,
+      "line": 243,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-17 15:10:42.000000000",
+      "in_reply_to": "d0461b72_a7381597",
+      "unresolved": false
+    },
+    {
+      "id": "2fa1a3fe_ca749579",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 4,
+      "line": 321,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-17 15:10:42.000000000",
+      "in_reply_to": "92ef8a71_f70f136e",
+      "unresolved": false
+    },
+    {
+      "id": "b7e291ae_89a474e3",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 304,
+      "message": "unnecessary comment, the method signature already says that it throws this exception.\nAlso, if the try catch exclusively for the getUserBusinessLogicExt it should be surrounding only that method.\nBut please, check my other comments in relation to the introduced catches.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-18 14:26:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2810a136_16b62de2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 338,
+      "message": "this catch will catch all the PortalAPIException also being thrown on line 330, 326, and rewriting it, I would remove it. There is already a generic exception catch in the end anyway.\nI would say similar logic applies for the other introduced catches.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-18 14:26:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4963985c_3e5e9170",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 389,
+      "message": "my idea was to simply handle the null pointer exception here.\nThe handling you did will not get the nullpointer exception.\nThis method can still return null, and then you will have a nullpointer at line 302, for example.\n\nWhat I suggest is to check for the null here:\n\nUserBusinessLogicExt userBusinessLogic = (UserBusinessLogicExt) ctx.getBean(\"userBusinessLogicExt\");\nif (userBusinessLogic == null) {\n    //add the logs you want and then throw the exception\n    throw new PortalAPIException([...]\n}\n\nreturn userBusinessLogic;",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-11-18 14:26:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db5a55b4_7f54b922",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 304,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-21 14:07:53.000000000",
+      "in_reply_to": "b7e291ae_89a474e3",
+      "unresolved": false
+    },
+    {
+      "id": "ac4159a7_8dc3a28a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 338,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-21 14:07:53.000000000",
+      "in_reply_to": "2810a136_16b62de2",
+      "unresolved": false
+    },
+    {
+      "id": "576b2990_eb4c1d37",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/ecomp/EcompIntImpl.java",
+      "patchset_number": 5,
+      "line": 389,
+      "message": "Done",
+      "author": {
+        "account_id": 8208,
+        "name": "Cameron Scholes",
+        "display_name": "Cameron Scholes",
+        "email": "cameron.scholes@est.tech",
+        "username": "eschcam"
+      },
+      "updated": "2022-11-21 14:07:53.000000000",
+      "in_reply_to": "4963985c_3e5e9170",
+      "unresolved": false
+    }
+  ]
+}

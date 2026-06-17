@@ -1,0 +1,92 @@
+{
+  "id": "cps~master~I9d443110a9da84d5ce465c5d902c9ff40ea8748b",
+  "change_id": "I9d443110a9da84d5ce465c5d902c9ff40ea8748b",
+  "_number": 137144,
+  "change_comments": [
+    {
+      "id": "64340493_c7eb1877",
+      "patchset_number": 1,
+      "message": "Hi lee Anjella, I was just having a quick look to get an ide of the latest in this Epic.\nI do have some question on this patch tough, maybe we can discuss in the morning please?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-02-06 18:08:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "78752752_caca1ca6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionValidationServiceImpl.java",
+      "patchset_number": 1,
+      "line": 48,
+      "message": "this method is also test uniqueness, it is important to show that in the name\ne.g. isValidUniqueSubscriptionId\n\nBut to be honest I think test for valid naming (correct characters etc) should be separate from tets for UNIQUE you probably need to report different errors for each case!\nFinally I don't understand why you check the CPS Path heer, is the end user creating a CPS path or is it hardcoded in NCMP I would assume the latter and then you dont need to check the CPS Path (but only the ID itself, do we have any agreement/limitation on what the ID can be ?!)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-02-06 18:08:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cd7c18a4_2c5a88a0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionValidationServiceImpl.java",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "Constant should be inlined - it is short and only used once",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-07 10:02:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7baddfe5_d7b52f34",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionValidationServiceImpl.java",
+      "patchset_number": 1,
+      "line": 48,
+      "message": "This doesn't check for valid characters, it only checks for uniqueness (the string format is to format the path query). It could be written more simply as:\n\n    public boolean isUniqueSubscriptionId(final String subscriptionId) {\n        return cpsQueryService.queryDataNodes(NCMP_DATASPACE_NAME,  SUBSCRIPTION_ANCHOR_NAME, \n                \"//filter/subscribers[text()='\" + subscriptionId + \"']\",\n                FetchDescendantsOption.OMIT_DESCENDANTS).isEmpty();\n    }",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-07 10:02:50.000000000",
+      "in_reply_to": "78752752_caca1ca6",
+      "unresolved": true
+    },
+    {
+      "id": "090f2fe2_7d7ded42",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionValidationServiceImpl.java",
+      "patchset_number": 1,
+      "line": 48,
+      "message": "FYI we should validate _subscriptionId_ here or in another method, using:\n\n    cpsValidator.validateNameCharacters(subscriptionId);",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-07 10:25:50.000000000",
+      "in_reply_to": "7baddfe5_d7b52f34",
+      "unresolved": true
+    }
+  ]
+}

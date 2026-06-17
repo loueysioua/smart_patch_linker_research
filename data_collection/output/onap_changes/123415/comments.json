@@ -1,0 +1,161 @@
+{
+  "id": "policy%2Fdocker~master~I53939557700237ccc7ab21e4069bd82ec6a4a4cf",
+  "change_id": "I53939557700237ccc7ab21e4069bd82ec6a4a4cf",
+  "_number": 123415,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bbefb9b1_7449452a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 9,
+      "message": "line is too long",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-20 14:38:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b461a585_564cbc30",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 9,
+      "message": "Done",
+      "author": {
+        "account_id": 7625,
+        "name": "Adheli Tavares",
+        "display_name": "Eli Tavares",
+        "email": "adheli.tavares@est.tech",
+        "username": "adheli.tavares"
+      },
+      "updated": "2021-08-20 15:05:23.000000000",
+      "in_reply_to": "bbefb9b1_7449452a",
+      "unresolved": false
+    },
+    {
+      "id": "24658324_4e43384e",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/downgrade/0160-pk_pdpstatistics.sql",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "oh, if that's all we're doing, then it probably doesn't matter",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-20 15:09:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9b7b11ba_289fcbc9",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Just a question: is it OK to have an upgrade script without a corresponding downgrade?  (i.e., it won't break the db-migrator if it fails at this step, will it?)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-20 15:09:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "30b631c2_412a18a7",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "if it fails at this step, then the next one won't successed anyway if we have data already set.\nyou can check with more details here https://wiki.onap.org/display/DW/OOM+Testing\nBut the issue is that when ID is created as NOT NULL, 0 is set to every existing row. in case of multiple name/version pairs, the new PK will fail with duplication. so we figured they could go on the same sql because PK set depends on it exclusively, if that makes sense :D",
+      "author": {
+        "account_id": 7625,
+        "name": "Adheli Tavares",
+        "display_name": "Eli Tavares",
+        "email": "adheli.tavares@est.tech",
+        "username": "adheli.tavares"
+      },
+      "updated": "2021-08-20 15:14:34.000000000",
+      "in_reply_to": "9b7b11ba_289fcbc9",
+      "unresolved": true
+    },
+    {
+      "id": "44cce8b0_58b82db7",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "I was thinking, if it fails at this step and the user chose to do a downgrade to revert back to honolulu, would the migrator still work OK?  Or does it expect there to be a corresponding downgrade script?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-20 15:16:50.000000000",
+      "in_reply_to": "30b631c2_412a18a7",
+      "unresolved": true
+    },
+    {
+      "id": "dfa6268d_d8449700",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "ok, I think I see what you mean now. Just confirmed that wouldn't cause an issue because downgrade would start from 0150 to 0100. The PK with timestamp would be created normally, as the previous was dropped and no new were created.",
+      "author": {
+        "account_id": 7625,
+        "name": "Adheli Tavares",
+        "display_name": "Eli Tavares",
+        "email": "adheli.tavares@est.tech",
+        "username": "adheli.tavares"
+      },
+      "updated": "2021-08-20 15:28:28.000000000",
+      "in_reply_to": "44cce8b0_58b82db7",
+      "unresolved": true
+    },
+    {
+      "id": "d3186caf_c6bf3203",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "If it fails at 160 and you run the downgrade this is the statement that is run:\n\nALTER TABLE pdpstatistics DROP COLUMN POLICYUNDEPLOYCOUNT, DROP COLUMN POLICYUNDEPLOYFAILCOUNT, DROP COLUMN POLICYUNDEPLOYSUCCESSCOUNT, DROP COLUMN ID;\n\nso everything is cleaned up.\n\nif you continue with the upgrade it will run both statements in 160 again which won't be a problem.",
+      "author": {
+        "account_id": 7668,
+        "name": "Kevin Timoney",
+        "display_name": null,
+        "email": "kevin.timoney@est.tech",
+        "username": "ktimoney"
+      },
+      "updated": "2021-08-20 15:35:38.000000000",
+      "in_reply_to": "dfa6268d_d8449700",
+      "unresolved": true
+    },
+    {
+      "id": "1c43edf1_af1cf772",
+      "file_path": "policy-db-migrator/src/main/docker/config/policyadmin/sql/0900/upgrade/0210-sequence.sql",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 7625,
+        "name": "Adheli Tavares",
+        "display_name": "Eli Tavares",
+        "email": "adheli.tavares@est.tech",
+        "username": "adheli.tavares"
+      },
+      "updated": "2021-08-23 08:08:07.000000000",
+      "in_reply_to": "d3186caf_c6bf3203",
+      "unresolved": false
+    }
+  ]
+}

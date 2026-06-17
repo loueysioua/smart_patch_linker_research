@@ -1,0 +1,357 @@
+{
+  "id": "oom~master~I60d1bb8b26809b2227bcaf1e3e76892d62902edc",
+  "change_id": "I60d1bb8b26809b2227bcaf1e3e76892d62902edc",
+  "_number": 142664,
+  "change_comments": [
+    {
+      "id": "b160c769_53154ed3",
+      "patchset_number": 1,
+      "message": "Hey Dan, thanks for your CR!\nI just ran a gating for it ([results here](https://logs.onap.org/onap-integration/gating/142664-1/)) and it looks like some of the SDNC pods are not coming up:\n- [ueb-listener has issues with the java version](https://logs.onap.org/onap-integration/gating/142664-1/infrastructure-healthcheck/k8s-teardown/k8s-teardown/pod-onap-sdnc-ueb-listener-b74fb59f6-g58rq-sdnc-ueb-listener-logs.html). Are you using the correct base image?\n- the `sdnr-wt-data-provider` jar [inside the sdnrdb-init-job](https://logs.onap.org/onap-integration/gating/142664-1/infrastructure-healthcheck/k8s-teardown/k8s-teardown/pod-onap-sdnc-sdnrdb-init-job-2769t-sdnc-sdnrdb-init-job-logs.html) is throwing a `RuntimeException` about Elasticsearch not being supported anymore",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-12-10 11:45:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "067fa3a5_a15e66a3",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2025-12-10 17:41:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ca27fd64_131cf602",
+      "patchset_number": 1,
+      "message": "Thanks. The ueb-listener will require a new docker build which I'm working on now (just need to change the base docker version from java 17 to java 21).  The sdnrdb-init-job issue is a config error in the helm chart.  I'll push an update with both fixes together to not waste cycles needlessly on the gating servers",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2025-12-10 17:41:58.000000000",
+      "in_reply_to": "b160c769_53154ed3",
+      "unresolved": false
+    },
+    {
+      "id": "01516414_083fbc9b",
+      "patchset_number": 1,
+      "message": "I finally was able to get the new dockers built and pushed update with new docker version as well as config change to address that elasticsearch issue",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2025-12-19 18:37:04.000000000",
+      "in_reply_to": "ca27fd64_131cf602",
+      "unresolved": false
+    },
+    {
+      "id": "ae919d49_761cc87e",
+      "patchset_number": 2,
+      "message": "Unfortunately, `sdnc-ansible-server` and `sdnc-web` [are not coming up](https://logs.onap.org/onap-integration/gating/142664-2/infrastructure-healthcheck/k8s-teardown/k8s-teardown/index.html) it seems. This could be the result of the `sdnrdb-init-job` [failing](https://logs.onap.org/onap-integration/gating/142664-2/infrastructure-healthcheck/k8s-teardown/k8s-teardown/pod-onap-sdnc-sdnrdb-init-job-zpf4n-sdnc-sdnrdb-init-job-logs.html)",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-01-05 13:15:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "33f135f4_90baaf36",
+      "patchset_number": 2,
+      "message": "The error turned out to be a validation that the sdnrdb-init-job was doing on the version of mariadb - it was expecting an older version than is currently being used.  The sdnc-ansible-server depends on the sdnc-web server, so that same issue impacted both.\n\nWe changed our code to eliminate that check.  Unfortunately we have been struggling for the last few weeks with various compile issues on the LF Jenkins servers to get that fix built, but at long last, today we finally were able to get the new image built.\n\nAt long last, we finally have the new image built.  I'll be pushing an update shortly with the updated SDNC image version.",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2026-01-21 18:46:03.000000000",
+      "in_reply_to": "ae919d49_761cc87e",
+      "unresolved": false
+    },
+    {
+      "id": "2fff8f5b_64f96590",
+      "patchset_number": 3,
+      "message": "recheck",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2026-01-22 13:02:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0918a8c7_7a18f015",
+      "patchset_number": 7,
+      "message": "@Dan can you rebase this CR and resolve the merge conflicts?",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-17 07:31:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ea70aecd_e772fe1f",
+      "patchset_number": 9,
+      "message": "Updated SDNC image version to 3.2.3, which contains TLS enablement fix, which I believe should address the issues seen in last gating test.",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2026-02-19 20:35:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "71998da3_0726d8b1",
+      "patchset_number": 10,
+      "message": "Please change the CR title to `[SDNC] Update versions for Quebec`",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 08:09:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d0d176b6_41403468",
+      "patchset_number": 10,
+      "message": "And please rebase when you make these changes",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 08:12:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "19cd43bd_8b4c314a",
+      "patchset_number": 10,
+      "message": "Made those changes and rebased",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2026-02-26 15:46:30.000000000",
+      "in_reply_to": "d0d176b6_41403468",
+      "unresolved": false
+    },
+    {
+      "id": "6e730094_c5e24b6d",
+      "patchset_number": 12,
+      "message": "recheck",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 19:46:41.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "7772a9bd_f3e17584",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 5,
+      "line": 332,
+      "message": "Since the elasticsearch chart is a bitnami chart and bitnami is not publishing tagged images anymore, can we remove elasticsearch from this chart?\n\nHaving it still in as a non-default choice would suggest that it would still be working, but in fact it is not right now.\nSo my suggestion here would be to either fully remove it, or make it actually work (by finding another tagged image that is compatible with the bitnami chart or replacing the bitnami chart with something else). What do you think?",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-01-27 07:03:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1b9da6ac_e0027e6a",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 5,
+      "line": 332,
+      "message": "For now, I updated the charts to comment out support for elasticsearch, and to force sdnr to always use mariadb. Hopefully in a future release we'll be able to go back to supporting both.",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2026-01-28 21:06:05.000000000",
+      "in_reply_to": "7772a9bd_f3e17584",
+      "unresolved": true
+    },
+    {
+      "id": "ea19c446_472f7839",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 10,
+      "line": 369,
+      "message": "Please add the following environment variables:\n\n```yaml\n          - name: OTEL_ENABLED\n            value: {{ .Values.global.tracing.enabled | quote }}\n          - name: OTEL_SERVICE_NAME\n            value: \"sdnc\"\n          - name: OTEL_EXPORTER_OTLP_ENDPOINT\n            value: \"{{ .Values.global.tracing.collector.baseUrl }}:{{ .Values.global.tracing.collector.port.otlpGrpc }}\"\n          - name: OTEL_EXPORTER_OTLP_PROTOCOL\n            value: \"grpc\"\n```",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 08:11:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "260176b9_9ae7d68c",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 10,
+      "line": 37,
+      "message": "Please add\n\n```yaml\n  tracing:\n    collector:\n      baseUrl: http://jaeger-collector.istio-config\n      port:\n        otlpGrpc: 4317\n```\n\nhere",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 08:11:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b7e2635e_7abe4059",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 5,
+      "line": 332,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 19:46:36.000000000",
+      "in_reply_to": "1b9da6ac_e0027e6a",
+      "unresolved": false
+    },
+    {
+      "id": "bba3436c_8fd6463a",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 10,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 19:46:36.000000000",
+      "in_reply_to": "260176b9_9ae7d68c",
+      "unresolved": false
+    },
+    {
+      "id": "d51baf0a_039ac215",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 12,
+      "line": 378,
+      "message": "Sorry, I gave you change suggestions that don't quite work: Please move the `{{ end }}` into line `370` such that it is above the `- name: OTEL_ENABLED` line.\nThen the tracing config should be defined for the service",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-26 21:01:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6d671102_a9a084b0",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 10,
+      "line": 369,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-27 10:04:15.000000000",
+      "in_reply_to": "ea19c446_472f7839",
+      "unresolved": false
+    },
+    {
+      "id": "bb8607b4_947bb806",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 12,
+      "line": 378,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2026-02-27 10:04:15.000000000",
+      "in_reply_to": "d51baf0a_039ac215",
+      "unresolved": false
+    }
+  ]
+}

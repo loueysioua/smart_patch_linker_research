@@ -1,0 +1,154 @@
+{
+  "id": "oom~master~I16348cae6ddce8d7068ff11d5c40f5f1a8ef1108",
+  "change_id": "I16348cae6ddce8d7068ff11d5c40f5f1a8ef1108",
+  "_number": 14049,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2017-09-21 04:18:11.000000000",
+    "updated": "2017-09-28 08:27:53.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2147,
+      "name": "Vitalie Dicusara",
+      "display_name": null,
+      "email": "vitalie.dicusara@amdocs.com",
+      "username": "vitalied"
+    },
+    "submitter": null
+  },
+  "subject": "Replace dockerdata-nfs hard coded path",
+  "commit_message": "Replace dockerdata-nfs hard coded path\n\nReplace dockerdata-nfs hard coded path with a configurable value\n\nChange-Id: I16348cae6ddce8d7068ff11d5c40f5f1a8ef1108\nIssue-ID: OOM-51\nSigned-off-by: vitalied <vitalie.dicusara@amdocs.com>\n",
+  "change_log": {
+    "entry_count": 9,
+    "entries": [
+      {
+        "id": "175030fee61d23480d5d777595715a9abae074c3",
+        "author": {
+          "account_id": 2147,
+          "name": "Vitalie Dicusara",
+          "display_name": null,
+          "email": "vitalie.dicusara@amdocs.com",
+          "username": "vitalied"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-21 04:18:11.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6bd88ec64ed4ce4d8f2609bebb0c4c1f32bed650",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-21 20:36:33.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nVitalie, could we tackle this is a different way: to avoid having to replicate the dockerSharePath in each values.yaml file, how about we create a common chart that would hold all global variables, and have each chart specifying the common chart as a requirement.\nTo use the common values.yaml, we would use Values.common.X.X\nThis would remove a lot of duplication in the overall development.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6a2fccae74e37ad07286d044d53b0373c97a4909",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-21 20:42:14.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "bf8c420cd58496ab3d90431299265ff25bbfc575",
+        "author": {
+          "account_id": 2147,
+          "name": "Vitalie Dicusara",
+          "display_name": null,
+          "email": "vitalie.dicusara@amdocs.com",
+          "username": "vitalied"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-22 03:37:19.000000000",
+        "message": "Patch Set 1:\n\n> Vitalie, could we tackle this is a different way: to avoid having\n > to replicate the dockerSharePath in each values.yaml file, how\n > about we create a common chart that would hold all global\n > variables, and have each chart specifying the common chart as a\n > requirement.\n > To use the common values.yaml, we would use Values.common.X.X\n > This would remove a lot of duplication in the overall development.\n\nAlex, each project has its own chart, values file and template files, it is fully independent and encapsulates implementation details. Externalizing any values outside of the project scope brakes the project independence and opens the gates towards a monolith architecture.\n\nAs alternative to common values createAll.bash leverages a powerful feature of HELM where we can provide as optional argument a HELM values filepath that can overwrite predefined values in our current projects.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6120fea1952f497bacda15f6603bae21657810a8",
+        "author": {
+          "account_id": 2147,
+          "name": "Vitalie Dicusara",
+          "display_name": null,
+          "email": "vitalie.dicusara@amdocs.com",
+          "username": "vitalied"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-22 03:45:10.000000000",
+        "message": "Patch Set 1:\n\n> (1 comment)\n\nThere is no need for an external common values file. The values from values.yaml should be considered as default ones. Those could be overwritten when running createAll.bash and providing as optional argument a HELM values filepath.",
+        "patchset_number": 1
+      },
+      {
+        "id": "4e9603c2ab41a7f8d72509a00d2fa7b5d6327fda",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-22 12:51:37.000000000",
+        "message": "Patch Set 1: -Code-Review\n\n> Externalizing any values outside of the project scope brakes the project independence and opens the gates towards a monolith architecture.\n\nCreating a common chart and having others dependent on it does not make the architecture monolithic, as every charts will remain a standalone chart + common chart. There is no inter-dependency introduce here. Just a common, shared, sub-chart to all the charts.\nThe goal of the common chart is to avoid duplication of properties in all the charts, and a common place where to customize a deployment. That avoids having to edit all the charts, but just the common one.\n\n\n> The values from values.yaml should be considered as default ones. \n\nYes, I agree. This is also what I'm suggesting; in addition to that, by using a common chart, it enables one to specify or not the value(s) in the chart. If specify, the one from the chart will be picked up, if not specified, the one from the common chart would be picked up.\n\n> Those could be overwritten when running createAll.bash and providing as optional argument a HELM values filepath.\n\nThis is still true, regardless the strategy. The only drawback is you have to pass the value file, whereas with the common chart, and having others chart having it as requirement, it would act as a sub-chart hence its values would be given to the parent.\n\nWith this proposal, every chart would remain standalone, and would share a common sub-chart. View this as a way to share common values.\n\n(removing my vote as this could be done later, but let's consider this as an improvement, if the benefit of this is well shared, understood, and valuable.)",
+        "patchset_number": 1
+      },
+      {
+        "id": "c7141b211cf3d4947113c0a55c4c9d8a840733ff",
+        "author": {
+          "account_id": 2147,
+          "name": "Vitalie Dicusara",
+          "display_name": null,
+          "email": "vitalie.dicusara@amdocs.com",
+          "username": "vitalied"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-22 16:02:47.000000000",
+        "message": "Patch Set 1:\n\n> > Externalizing any values outside of the project scope brakes the\n > project independence and opens the gates towards a monolith\n > architecture.\n > \n > Creating a common chart and having others dependent on it does not\n > make the architecture monolithic, as every charts will remain a\n > standalone chart + common chart. There is no inter-dependency\n > introduce here. Just a common, shared, sub-chart to all the charts.\n > The goal of the common chart is to avoid duplication of properties\n > in all the charts, and a common place where to customize a\n > deployment. That avoids having to edit all the charts, but just the\n > common one.\n > \n > \n > > The values from values.yaml should be considered as default ones.\n > \n > Yes, I agree. This is also what I'm suggesting; in addition to\n > that, by using a common chart, it enables one to specify or not the\n > value(s) in the chart. If specify, the one from the chart will be\n > picked up, if not specified, the one from the common chart would be\n > picked up.\n > \n > > Those could be overwritten when running createAll.bash and\n > providing as optional argument a HELM values filepath.\n > \n > This is still true, regardless the strategy. The only drawback is\n > you have to pass the value file, whereas with the common chart, and\n > having others chart having it as requirement, it would act as a\n > sub-chart hence its values would be given to the parent.\n > \n > With this proposal, every chart would remain standalone, and would\n > share a common sub-chart. View this as a way to share common\n > values.\n > \n > (removing my vote as this could be done later, but let's consider\n > this as an improvement, if the benefit of this is well shared,\n > understood, and valuable.\n\nAlex, a common chart can be created only outside of these projects and that will completely affect the current structure of these project. I would highly recommend to take this subject to our next OOM meeting",
+        "patchset_number": 1
+      },
+      {
+        "id": "ffb1f1d3356fccf4134e409367806037329381cc",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-22 17:20:50.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nI +1 to have this moving. I'd like to get others opinion as well.",
+        "patchset_number": 1
+      },
+      {
+        "id": "0d08bd4f4971e466299cb4875c5efd97b88b7380",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 08:27:53.000000000",
+        "message": "Abandoned\n\nMore than 36 hours",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,434 @@
+{
+  "id": "portal~master~I82c4a1ed26ede0119cdc4d1f9b818780ca876801",
+  "change_id": "I82c4a1ed26ede0119cdc4d1f9b818780ca876801",
+  "_number": 48379,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-21 20:49:21.000000000",
+    "updated": "2018-05-31 20:47:01.000000000",
+    "submitted": "2018-05-31 20:10:00.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 4053,
+      "name": "William Kurkian",
+      "display_name": null,
+      "email": "wkurkian@cisco.com",
+      "username": "wkurkian"
+    },
+    "submitter": {
+      "account_id": 45,
+      "name": "Manoop Talasila",
+      "display_name": null,
+      "email": "talasila@research.att.com",
+      "username": "talasila"
+    }
+  },
+  "subject": "Changed app to redirect when the session expires.",
+  "commit_message": "Changed app to redirect when the session expires.\n\nReverted previous change to redirect from incorrect login screens. Instead, navigating to the main application page without a valid session results in being sent to the login page\n\nRemoved some mistaken changes\n\nThese didn't relate to the fix\n\nIssue-ID: PORTAL-278\nChange-Id: I82c4a1ed26ede0119cdc4d1f9b818780ca876801\nSigned-off-by: William Kurkian <wkurkian@cisco.com>\n",
+  "change_log": {
+    "entry_count": 29,
+    "entries": [
+      {
+        "id": "f24dd5598ecdddbeb131fad44529ac4f6cd946b6",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-21 20:49:21.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6bbcb44b583d6c50738e858ae3610a8bb908ddf2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-21 20:53:17.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/126/",
+        "patchset_number": 1
+      },
+      {
+        "id": "9661f9d56b89e74275c5dd85c8acea1430abcdc6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-21 21:29:54.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/126/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-verify-script/126",
+        "patchset_number": 1
+      },
+      {
+        "id": "f929e8c1372543eace0c040d64028c6299632308",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-24 15:38:28.000000000",
+        "message": "Patch Set 1:\n\nAny feedback on this?",
+        "patchset_number": 1
+      },
+      {
+        "id": "1ed646879ee8c5e60f7adee07af7841f68230838",
+        "author": {
+          "account_id": 45,
+          "name": "Manoop Talasila",
+          "display_name": null,
+          "email": "talasila@research.att.com",
+          "username": "talasila"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-24 15:44:42.000000000",
+        "message": "Patch Set 1:\n\nI would let Sunder comment more from his perspective. But, after digging more into the code, here is what my analysis is:\n1) If the user already mapped the Portal IP and hostname in hosts file, then he already knows what hostname to use in the URL, so it is very rare that user would pick a different hostname while testing - which is the scenario the code change is handling.\n2) The original null \"licenseVerification\" issue you have seen in the PORTAL-278 will still be null, even with below change, so the change do not actually handle it.\n\nplease see, if my understanding of the change is accurate based on the above comments, if I miss-understand the change, please let me know. Thanks for the contribution and interest.",
+        "patchset_number": 1
+      },
+      {
+        "id": "0965fe102b5d07643f6c2564cd411f9b3b1d700c",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-24 16:04:11.000000000",
+        "message": "Patch Set 1:\n\nI understand your points, so let me explain. I also understand that you want to get Sundar's feedback.\n1) I agree this is a rather rare use case. This is mainly likely to happen if someone sets up ONAP and tries to access the portal, without realizing they have to use the URL even to just access it. For example, if they access the url directly it appears to work. The instructions for accessing the portal have been improved since I had this problem though.\n2) It wasn't that the \"licenseVerification\" was null, it was actually the case that the servlet context containing that property was null. This was caused by navigating to the applicationHome without a valid session, which occurs if you use an alternative hostname, such as if the machine has DNS entry.\nI think at the very least, if there should be a clear error on the main page if you don't have a session, such as if someone navigates to the main url directly from broser history. I could do that instead if that would be a more suitable fix.",
+        "patchset_number": 1
+      },
+      {
+        "id": "dd22ad18fd7f30db1701d121532ad1af55d68b22",
+        "author": {
+          "account_id": 679,
+          "name": "Sunder Tattavarada",
+          "display_name": null,
+          "email": "statta@att.com",
+          "username": "tattasunder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 13:45:54.000000000",
+        "message": "Patch Set 1:\n\nHi William, to your point on: \" I think at the very least, if there should be a clear error on the main page if you don't have a session, such as if someone navigates to the main url directly from broser history. I could do that instead if that would be a more suitable fix\" -- This is exactly what we wish we had. If there is no session, it will be apt to take the user to login page automatically. Can you please do that?",
+        "patchset_number": 1
+      },
+      {
+        "id": "464d7fdbbfe73fff618049d4a0cdeab84069e08c",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 14:50:52.000000000",
+        "message": "Patch Set 1:\n\nHi, Sunder, thanks for the feedback. I have spent some time looking at this and think I should be able to. I'll go ahead and see if I can do that.",
+        "patchset_number": 1
+      },
+      {
+        "id": "1bd42f44d6d5d003b6d54e46966391f02f4e2a1f",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 00:03:28.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "41b525e8dff873143f3bcbfd88a729ba6b861c6b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 00:03:36.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/132/",
+        "patchset_number": 2
+      },
+      {
+        "id": "86cedf350dc1c5cb9eba3d28855117d486197b4b",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 00:12:27.000000000",
+        "message": "Uploaded patch set 3: Commit message was updated.",
+        "patchset_number": 3
+      },
+      {
+        "id": "cc6d30e74c81239916939624c23f51bd31565faa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 00:13:08.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/132/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/132/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-verify-script/132",
+        "patchset_number": 2
+      },
+      {
+        "id": "8d397080f1f3a8a1f7378ac4dfd1491245751403",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 00:15:03.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/133/",
+        "patchset_number": 3
+      },
+      {
+        "id": "7083678b277a3822ea7dd10e23d70301b5a623d7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 00:39:22.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/133/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-verify-script/133",
+        "patchset_number": 3
+      },
+      {
+        "id": "f40a16dce2b1da97f183dc5094c73f124f9ca58f",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 00:47:56.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "00f8eb3194a7f0b3629db6fb5ce3c48c567f3e5a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 00:49:01.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/134/",
+        "patchset_number": 4
+      },
+      {
+        "id": "0f2182607a7040c0453f8a8faf5ccc3cd1e92cda",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 00:50:13.000000000",
+        "message": "Patch Set 4:\n\nI uploaded new changes to redirect to the login page when there is no session, or when it is invalid. Let me know of any feedback. Thanks, William",
+        "patchset_number": 4
+      },
+      {
+        "id": "39f1b175e19bbd8c37bc131689dcf833c58636f6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 01:18:09.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/134/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-verify-script/134",
+        "patchset_number": 4
+      },
+      {
+        "id": "c8df756bf8561dd2fccf0fcadf7624137057f67b",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 14:14:34.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "1c235405fa671b4e7114c501547c73e6fedddaf5",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 14:15:27.000000000",
+        "message": "Patch Set 5:\n\nSorry, I had one more change to make. It should be good now.",
+        "patchset_number": 5
+      },
+      {
+        "id": "f94294f866f19bc808f7c388f9c19a24efc4a137",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 14:17:04.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/135/",
+        "patchset_number": 5
+      },
+      {
+        "id": "1237cc104a49f968548e6f97589da1379848be4a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 14:46:00.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-verify-script/135/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-verify-script/135",
+        "patchset_number": 5
+      },
+      {
+        "id": "46fa4dadd72ed8830ed1b505853900a232754248",
+        "author": {
+          "account_id": 3177,
+          "name": "Kishore Reddy Gujja",
+          "display_name": null,
+          "email": "kishore.reddy.gujja@att.com",
+          "username": "kg811t"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:48:38.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "39726a5fa60dadd911f664a612dc9a84883d68b7",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 20:53:20.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "5ac66c236003c1f908cb60ee4eeacb5a9c0114ce",
+        "author": {
+          "account_id": 4053,
+          "name": "William Kurkian",
+          "display_name": null,
+          "email": "wkurkian@cisco.com",
+          "username": "wkurkian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-31 20:04:16.000000000",
+        "message": "Patch Set 5:\n\nAny update on this?",
+        "patchset_number": 5
+      },
+      {
+        "id": "8a9b224d880e1db64094620a01c21471d45de0a5",
+        "author": {
+          "account_id": 45,
+          "name": "Manoop Talasila",
+          "display_name": null,
+          "email": "talasila@research.att.com",
+          "username": "talasila"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-31 20:09:58.000000000",
+        "message": "Patch Set 5: Code-Review+2",
+        "patchset_number": 5
+      },
+      {
+        "id": "f80e130979881dbdeae74c43e5833e1c75b82721",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-31 20:10:00.000000000",
+        "message": "Change has been successfully merged by Manoop Talasila",
+        "patchset_number": 5
+      },
+      {
+        "id": "d6403f3ac89b92627b01ddbccc97dd764f4845e0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-31 20:16:12.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/portal-docker-master-two-scm-merge-docker-script/64/",
+        "patchset_number": 5
+      },
+      {
+        "id": "717026209a275c66331e22656ef0074ccbb84f93",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-31 20:47:01.000000000",
+        "message": "Patch Set 5:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-docker-master-two-scm-merge-docker-script/64/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-docker-master-two-scm-merge-docker-script/64",
+        "patchset_number": 5
+      }
+    ]
+  }
+}

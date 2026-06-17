@@ -1,0 +1,246 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I44d46f005d9aa30c434c22e479034107055277ce",
+  "change_id": "I44d46f005d9aa30c434c22e479034107055277ce",
+  "_number": 12499,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9a437d4f_7d72834a",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "I think the original code, or some modified version of this may be needed.   Let me add Ralph to check, he knows this code well.  There may be some unusual Runtime exceptions such as LinkageException, or others from within the control looops, when the logic is faulty, I think I have seen in the past, NullPointerExceptions from the \"java helpers\" etc .. , may be unusual LinkageExceptions that leak all the way up to here, when the drools application has some bugs. It hink it may need to be tolerated in that loop so not to so rules are kept been evaluated.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-14 18:42:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_fd9d535a",
+      "file_path": "policy-management/src/main/java/org/onap/policy/drools/system/PolicyEngine.java",
+      "patchset_number": 1,
+      "line": 1001,
+      "message": "oh, I just marked this sonar as a false positive, since line 1004, next line below exists the process.   This is fine too though.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-14 18:42:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_4fa9447a",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 735,
+      "message": "I don't know why 'halfMaxSleepTime' exists -- the original code had 'maxSleepTime', and this may have been introduced to fix a perceived problem. It looks ugly to me -- somehow, we missed this during the code inspection.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-09-15 08:27:16.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_ef835802",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "There is similar code at the end of 'PolicySession.java', where the 'DefaultThreadModel' class is defined. That one is using 'catch (Exception | LinkageError e)'. If I remember correctly, you fixed this one a while back due to a Sonar complaint -- it had 'Throwable' as well.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-09-15 08:27:16.000000000",
+      "in_reply_to": "9a437d4f_7d72834a",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_afcb1052",
+      "file_path": "policy-management/src/main/java/org/onap/policy/drools/system/PolicyEngine.java",
+      "patchset_number": 1,
+      "line": 1001,
+      "message": "Won't the interrupt terminate this thread, keeping 'System.exit(0)' from being called? If so, that seems like the wrong thing to do.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-09-15 08:27:16.000000000",
+      "in_reply_to": "9a437d4f_fd9d535a",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_a24c4743",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 735,
+      "message": "I'm just fixing sonar here. I can change it to what you think is correct if you want. Or defer to another JIRA being created to address it. Just let me know what you would like.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-09-15 12:46:47.000000000",
+      "in_reply_to": "9a437d4f_4fa9447a",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_ddcbaf51",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "Yes I was wondering about it. Maybe just catching Exception can handle it and remove blocker? If not, I'll put it back and mark as not going to fix.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-09-15 12:46:47.000000000",
+      "in_reply_to": "9a437d4f_7d72834a",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_c2450b18",
+      "file_path": "policy-management/src/main/java/org/onap/policy/drools/system/PolicyEngine.java",
+      "patchset_number": 1,
+      "line": 1001,
+      "message": "Not according to Sonar recommendations. Take a look at why they want this done. I thought it weird, but didn't seem like any harm was to be done on it. The interrupt is already being caught right here, so System.exit(0) doesn't even matter anyway. The interrupt flag is off. They are simply recommending turning it back on.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-09-15 12:46:47.000000000",
+      "in_reply_to": "9a437d4f_afcb1052",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_82914354",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "Originally, the code was only catching 'Exception', but we ran into cases where the Drools session worked for a while, but then just stopped processing altogether. If I remember correctly, there was a version mismatch on a dependency that resulted in a 'NoSuchMethodError', at which point we changed 'Exception' to 'Throwable'.\n\nJorge has since changed 'PolicySession' to use 'Exception | LinkageError' instead of 'Throwable'. This still handles cases like 'NoSuchMethodError' without intercepting the more severe system errors. I think 'Exception | LinkageError' should also be used here.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-09-15 13:22:29.000000000",
+      "in_reply_to": "9a437d4f_ddcbaf51",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_c29d0b5b",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "Ok - so bring back the try-catch (Exception | LinkageError)",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-09-15 13:33:47.000000000",
+      "in_reply_to": "9a437d4f_82914354",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_a2a447a6",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 735,
+      "message": "This was introduced in Kevin M. review.   Ralph, if you can discuss with Kevin,  if something has to change here, we can open another ticket if necessary.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 13:34:55.000000000",
+      "in_reply_to": "9a437d4f_a24c4743",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_02943335",
+      "file_path": "feature-session-persistence/src/main/java/org/onap/policy/drools/persistence/PersistenceFeature.java",
+      "patchset_number": 1,
+      "line": 868,
+      "message": "Let's do this change then Pam, restore the catch and add \"Exception | LinkageError\" to the clause",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 13:34:55.000000000",
+      "in_reply_to": "9a437d4f_82914354",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_222df7fe",
+      "file_path": "policy-management/src/main/java/org/onap/policy/drools/system/PolicyEngine.java",
+      "patchset_number": 1,
+      "line": 1001,
+      "message": "This thread was created as part of a 'shutdown' call, and the last step is to sleep 5 seconds, and terminate the process. If this thread now receives another 'InterruptedException', won't the thread terminate, so it never calls 'System.exit(0)'? The 'try' block has already terminated, we are now in the 'catch' block, and there is no outer 'try'.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-09-15 13:41:53.000000000",
+      "in_reply_to": "9a437d4f_c2450b18",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_021793a4",
+      "file_path": "policy-management/src/main/java/org/onap/policy/drools/system/PolicyEngine.java",
+      "patchset_number": 1,
+      "line": 1001,
+      "message": "No it already caught it and is exiting. Its just resetting the flag, not throwing the interrupt.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-09-15 13:45:43.000000000",
+      "in_reply_to": "9a437d4f_222df7fe",
+      "unresolved": false
+    }
+  ]
+}

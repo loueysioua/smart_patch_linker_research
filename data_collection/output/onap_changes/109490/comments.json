@@ -1,0 +1,76 @@
+{
+  "id": "integration~master~Ie480f068c2bda530c8be76c3d8d70d92f7c5b392",
+  "change_id": "Ie480f068c2bda530c8be76c3d8d70d92f7c5b392",
+  "_number": 109490,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "73de8b9d_3bccde17",
+      "file_path": "test/security/check_for_ingress_and_nodeports.py",
+      "patchset_number": 4,
+      "line": 190,
+      "message": "Why print instead of just using logging module? Logging can setup different colors for different logging levels globally.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-06-30 12:35:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "39449f39_5b370880",
+      "file_path": "test/security/check_for_ingress_and_nodeports.py",
+      "patchset_number": 4,
+      "line": 332,
+      "message": "Either script usage description or arguments handling here is broken; this conditional shows that those three options are meant to be mutually exclusive while usage synopsis shows otherwise:\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --scan-nodeport       Scan onap for node services (default: False)\n  --scan-ingress        Scan onap for ingress services (default: False)\n  --scan-and-compare    Scan nodeports and ingress and compare results\n                        (default: False)\n\nSo according to synopsis all those three can be used at the same time which is false.\nThose should not be script options but script subcommands, please see argparse subprasers: https://docs.python.org/3.6/library/argparse.html#sub-commands",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-06-30 12:35:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2546b615_cb9f501d",
+      "file_path": "test/security/check_for_ingress_and_nodeports.py",
+      "patchset_number": 4,
+      "line": 190,
+      "message": "Because I don't need any fancy logging features. I need a simple colored console output only.",
+      "author": {
+        "account_id": 5446,
+        "name": "Lucjan Bryndza",
+        "display_name": null,
+        "email": "l.bryndza@samsung.com",
+        "username": "lucjan.bryndza.s"
+      },
+      "updated": "2020-07-01 11:41:11.000000000",
+      "in_reply_to": "73de8b9d_3bccde17",
+      "unresolved": true
+    },
+    {
+      "id": "f322061d_63f68061",
+      "file_path": "test/security/check_for_ingress_and_nodeports.py",
+      "patchset_number": 4,
+      "line": 190,
+      "message": "Correct, in console you will get simple colored output. But in CI where the script will be run there is no TTY attached and the output will be obscured i.e.:\n\n$ cat doit.py  \n#!/usr/bin/python3\nfrom colorama import Fore\nprint(Fore.YELLOW,'test msg')\nprint(Fore.RESET)\n\nInteractive console output:\ntest msg (in color, not visible here)\n\nNon interactive run without TTY attached:\nESC[33m test msg\nESC[39m\n\nSo if you still don't want to use logging where this can be simply avoided you should IMO at least detect that there is no TTY attached and not print in color (control characters effectively)",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-07-01 12:07:59.000000000",
+      "in_reply_to": "2546b615_cb9f501d",
+      "unresolved": true
+    }
+  ]
+}

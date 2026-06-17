@@ -1,0 +1,433 @@
+{
+  "id": "oom%2Foffline-installer~master~I8b8ded38b39aa9a75e55fc63fa0e11b986556cb8",
+  "change_id": "I8b8ded38b39aa9a75e55fc63fa0e11b986556cb8",
+  "_number": 90726,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "64eea66d_849cb828",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "why introduce additional array ? I think we can rather rename \"app_helm_override_file\" to \"app_helm_override_files\" and append our override with certificate in application-override file",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-02 07:51:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a1184245_ebd27363",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "It is probably mostly because this file with certificates is generated, and it's name is not hardcoded, so is put into a variable. that is why there is still app_helm_override_file.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-03 08:49:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "05750966_fcf36cb4",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "But what is the reason to create another variable \"additional_helm_override_files\" as there is already the \"helm_over(r)ide_file\" array where should be placed all override files and does not matter if it's the one with our own certificate or what. In the helm_override_files should be list of all files needed (e.g. onap/resources/overrides/onap-all.yaml; onap/resources/overrides/environment.yaml; onap/resources/overrides/openstack.yaml etc.). Just need to be careful about the path...",
+      "author": {
+        "account_id": 5000,
+        "name": "Tom�? Levora",
+        "display_name": "Tomáš Levora",
+        "email": "tomas.levora@gmail.com",
+        "username": "Tomas.Levora"
+      },
+      "updated": "2019-07-03 11:47:07.000000000",
+      "in_reply_to": "a1184245_ebd27363",
+      "unresolved": false
+    },
+    {
+      "id": "4e2b46d5_14122f60",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "Well it has it's reasoning. Normally when you override a variable in ansible like list, then you don't append to it, but replace it. In this case it is for example cicdansible where you give your own list of overrides, you also need to remember to give the full path to override.yml file, and you need to remember you can't even use any ansible variables there.\nEven more, because the app overridefile should override everything else, so if it is put at the end of the list, then it wouldn't work even if you could append instead of replacing.\nFor that reason the app override is in a separate variable, additional overrides are in a separate variable, and they are merged, with relative paths apsolutized, to make it easier to actually change the defaults.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-03 12:13:03.000000000",
+      "in_reply_to": "05750966_fcf36cb4",
+      "unresolved": false
+    },
+    {
+      "id": "d1d0c9d6_373bf832",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "The initial idea with this lists was that when executing installation multiple files can be used as override (basically that is the way of supplying configuration to onap at deployment time). Michal did not create a new variable array, he has renamed previous one (I think the old name was better - but that is just a name).\n\nIn base version if user sets \"app_skip_helm_override = false\" there is no way to supply custom override files. In his change he:\n - allowed user to set path to multiple override files that can be supplied in two ways. In helm charts during packaging (relative path) or manually loaded on to infra node before starting installer (absolute path).\n - separated dynamically generated file from manually inserted files\n\nThe thing I miss in this change is a \"good documentation\", mentioning way of supplying files and importance of their order.",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-07-03 14:43:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "18a4a958_9ba852b6",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "I improved... Or tried to improve documentation a bit.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 09:52:07.000000000",
+      "in_reply_to": "d1d0c9d6_373bf832",
+      "unresolved": false
+    },
+    {
+      "id": "77854505_f0ddee8c",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "why do you assume app override has to override everything else? what if I as user want to have some other file that I want to put at the end so I don't need to touch others. In any case if you are in position where you specify same variables in multiple overrides you should know what will happen. Otherwise unexpected behaviour should be expected in this case.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-07-04 10:51:04.000000000",
+      "in_reply_to": "4e2b46d5_14122f60",
+      "unresolved": false
+    },
+    {
+      "id": "ef9f9d59_54d6c9b2",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "you can't know that relative path user will specify is relative to app_helm_charts_infra_directory",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-07-04 10:51:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fa27aaa2_a361da25",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "because the app override also contains user specified override variables. that is the reasoning for it being last.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 11:13:52.000000000",
+      "in_reply_to": "77854505_f0ddee8c",
+      "unresolved": false
+    },
+    {
+      "id": "fd8bbd3b_0cace9d5",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "First, the primary use of this feature is to specify those override files that are in charts, to set onap flavor.\nSecond, user has another way to specify his own modifications, by the override key in ansible variables, that is a dict containing helm overrides.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 11:13:52.000000000",
+      "in_reply_to": "ef9f9d59_54d6c9b2",
+      "unresolved": true
+    },
+    {
+      "id": "1f4334c4_32d6108e",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "my opinion is still the same, typical handling in OOM is that we have a one but typically more override files, I assume we can have in single array. User is responsible for not having overlaping overrides so we dont care about order of them. Our original and only override is probably not even needed with new Dublin policy, or at least I dont see any place which will justify certificate distribution but this we can cover in additional commit. I was expecting from this commit to extend providing of single/our override with more overrides. Maybe if we can just remove the original one after some testing, it will be accepted more easily. I dont get why we should care that certificate is generated or not.",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-04 12:04:43.000000000",
+      "in_reply_to": "fa27aaa2_a361da25",
+      "unresolved": false
+    },
+    {
+      "id": "717e51a3_db6ed979",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "this looks like hacky approach, I can expect that user will have own override files outside OOM so each attempt for settign relative path will lead to error. He should always use absolute path, it will be more readable and less error-prone. If the reason of allowing relative path is to make less typing, we can use app_helm_charts_infra_directory variable in path.",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-04 12:14:42.000000000",
+      "in_reply_to": "fd8bbd3b_0cace9d5",
+      "unresolved": true
+    },
+    {
+      "id": "7a598b56_7d028a9a",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 3,
+      "line": 21,
+      "message": "it should be \"onap/resources/overrides/onap-all.yaml\"",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-07-04 12:41:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "82097173_9bb4dabd",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "> my opinion is still the same, typical handling in OOM is that we have a one but typically more override files, I assume we can have in single array. User is responsible for not having overlaping overrides so we dont care about order of them. Our original and only override is probably not even needed with new Dublin policy, or at least I dont see any place which will justify certificate distribution but this we can cover in additional commit. I was expecting from this commit to extend providing of single/our override with more overrides. Maybe if we can just remove the original one after some testing, it will be accepted more easily. I dont get why we should care that certificate is generated or not.\n\nYou still miss the ability to pass single override variables. you can pass things like\noverride:\n    some_var: some_value\nwhen running offline installer, without creating your own override file on infra, so this is actually more user friendly. And in that role it needs to override all previous override files.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 12:46:18.000000000",
+      "in_reply_to": "1f4334c4_32d6108e",
+      "unresolved": false
+    },
+    {
+      "id": "df92b347_0ffac933",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "> this looks like hacky approach, I can expect that user will have own override files outside OOM so each attempt for settign relative path will lead to error. He should always use absolute path, it will be more readable and less error-prone. If the reason of allowing relative path is to make less typing, we can use app_helm_charts_infra_directory variable in path.\n\nCan you use jinja in extravars? the thing was that I assumed that you cannot use variables when, for example, doing things like placing override file paths in the current environment cfg. If I am wrong then we could use the variable, but in the other case, the only way to make paths relative would be the current hack.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 12:46:18.000000000",
+      "in_reply_to": "717e51a3_db6ed979",
+      "unresolved": true
+    },
+    {
+      "id": "ee4154f9_f289abf2",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 3,
+      "line": 21,
+      "message": "Done",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 12:48:21.000000000",
+      "in_reply_to": "7a598b56_7d028a9a",
+      "unresolved": false
+    },
+    {
+      "id": "83e51bd3_9c9f81fa",
+      "file_path": "ansible/roles/application/molecule/default/tests/test_default.py",
+      "patchset_number": 2,
+      "line": 19,
+      "message": "path looks incorrect, my concern is that instead of testing installer code, this is another example of creating own code which is tested instead.",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-04 13:44:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6a588133_78fa2c88",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "not getting that, we are discussing why we need two arrays with overrides ? how it relates with extravars ? ...",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-04 13:44:23.000000000",
+      "in_reply_to": "df92b347_0ffac933",
+      "unresolved": true
+    },
+    {
+      "id": "aa16b0c4_c18778be",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 67,
+      "message": "Well in general the app override generation allows people to specify overrides themselves in extravars. for example you have application_configuration.yml and there you do:\noverrides:\n  aai:\n    enabled: false\nand aai should be disabled.\nThe additional_helm_override_files is for preexisting override files that you want to inject, given by path. and they have lower priority. Users could provide their own by uploading them to infra, but for small modifications or cases where you want to modify overrides for a single run, it is easier to provide them directly.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-04 13:59:25.000000000",
+      "in_reply_to": "6a588133_78fa2c88",
+      "unresolved": true
+    },
+    {
+      "id": "86cce375_1ec7c5e2",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 6,
+      "line": 65,
+      "message": "please add space around \"+\"",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-08 11:13:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d1a45538_a4af4225",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 6,
+      "line": 68,
+      "message": "I am not sure if we need to print this info every time, but it's probably ok",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-07-08 11:13:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "021f810b_87ff0c0a",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 6,
+      "line": 14,
+      "message": "\"the one generated\" would be better I think",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-07-08 11:18:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bcc5b2ff_04f34d53",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 6,
+      "line": 14,
+      "message": "Done",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-08 12:26:30.000000000",
+      "in_reply_to": "021f810b_87ff0c0a",
+      "unresolved": false
+    },
+    {
+      "id": "ace167dc_6dc17d4f",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 6,
+      "line": 65,
+      "message": "Done",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-08 12:26:30.000000000",
+      "in_reply_to": "86cce375_1ec7c5e2",
+      "unresolved": false
+    },
+    {
+      "id": "c309bad9_3ff1ca95",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 6,
+      "line": 68,
+      "message": "This was a debugging aid to make sure we have all overrides in place,, especially when it was still transforming lists by expanding paths.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-07-08 12:26:30.000000000",
+      "in_reply_to": "d1a45538_a4af4225",
+      "unresolved": false
+    }
+  ]
+}

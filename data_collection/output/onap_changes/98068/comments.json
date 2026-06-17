@@ -1,0 +1,433 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I31edae42025a8167e242535da6eb41c15228bac8",
+  "change_id": "I31edae42025a8167e242535da6eb41c15228bac8",
+  "_number": 98068,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "76dd60b0_45a5c540",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 2,
+      "line": 79,
+      "message": "will the same property name contained both \"id\" and \"url\"??",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 18:22:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d3ebe5b5_04017ca5",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 2,
+      "line": 118,
+      "message": "there's an inconsistency here: this assumes they're sequential, but countAdditionalNexusRepos() does not",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 18:22:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9265627b_5aa7d3b6",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 54,
+      "message": "good idea!",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 21:59:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "44dc13b0_57944922",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 85,
+      "message": "as a general rule, static methods should be side-effect-free (e.g., shouldn't modify data structures); better to construct a map locally and then return it",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 21:59:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1bbb0aeb_0bed02b5",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "this should work fine.  However, another option would be to use a Pattern/Matcher with a capture group - that would avoid doing the substring junk.  (this is just a suggestion)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 21:59:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3d697938_b565dd42",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 128,
+      "message": "perhaps just log repoIndices instead of its size (this is just a suggestion)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 21:59:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "65806952_c253434a",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "Shouldn't the pattern be: \"repository[0-9]*\\\\.audit\\\\.id\" ?\n\nThe '*' allows no digits, so the current properties still work, and the '.' character in a pattern ordinarily matches any character, so it needs to be escaped. One additional problem: this pattern also matches \"repository0.audit.id\", \"repository00.audit.id\", and \"repository007.audit.id\", none of which will work correctly. You could use the pattern I suggested above, and add an additional check to ensure it doesn't start with \"repository0\".",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 09:49:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "791c2a09_4d600fd5",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 136,
+      "message": "I think it is best if you don't break out of the loop, so an incompletely-provisioned index doesn't cause the loop to terminate prematurely. How about:\n\nif (data.isActive) {\n  runAudit(data);\n}",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 09:49:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5d739d81_c64b78a3",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "good point - how about this:\n  repository[1-9][0-9]*\\\\.audit\\\\.id\n\nor could get more specific and limit the number of digits to two:\n  repository[1-9][0-9]?\\\\.audit\\\\.id",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 13:55:09.000000000",
+      "in_reply_to": "65806952_c253434a",
+      "unresolved": false
+    },
+    {
+      "id": "16fa37ed_aab2edf3",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "We also want to match the string 'repository.audit.id', which corresponds to index 0 (note that it is treated differently in 'InvokeData.getProperty(...)'). The easiest approach seems to be to use the following test:\n\ncurrName.matches(\"repository[0-9]*\\\\.audit\\\\.id\") && !currName.startsWith(\"resource0\")\n\nYou could also use a more complex pattern in 'matches' to get the same result.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 14:21:39.000000000",
+      "in_reply_to": "5d739d81_c64b78a3",
+      "unresolved": true
+    },
+    {
+      "id": "3d4b9ec5_104e080d",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 85,
+      "message": "Done",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-07 14:40:33.000000000",
+      "in_reply_to": "44dc13b0_57944922",
+      "unresolved": false
+    },
+    {
+      "id": "6d3a18ff_46ff770e",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "Is it necessary to match \"repository.audit.id\" since it is being treated as the default case and is handled in RepositoryAudit.invoke(...) before handling any additional repositories?",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-07 14:40:33.000000000",
+      "in_reply_to": "16fa37ed_aab2edf3",
+      "unresolved": true
+    },
+    {
+      "id": "fcbc7e39_484eb831",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 128,
+      "message": "Done",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-07 14:40:33.000000000",
+      "in_reply_to": "3d697938_b565dd42",
+      "unresolved": false
+    },
+    {
+      "id": "76bace4d_48a76021",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 136,
+      "message": "Done",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-07 14:40:33.000000000",
+      "in_reply_to": "791c2a09_4d600fd5",
+      "unresolved": false
+    },
+    {
+      "id": "59ef577e_7260efa8",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 4,
+      "line": 90,
+      "message": "good point.  Ralph, do you agree?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 15:36:34.000000000",
+      "in_reply_to": "6d3a18ff_46ff770e",
+      "unresolved": true
+    },
+    {
+      "id": "e6496ef4_e433724a",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 90,
+      "message": "This pattern doesn't match \"repository.audit.id\".\n\nAlso, the advantage of compiling the pattern is you can save the pattern, and reuse it (unlike String.matches). However, this code is compiling the pattern each time through the loop -- why not use a static private variable instead?",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 16:22:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "af3b2f66_12c13424",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 90,
+      "message": "Is it necessary to match \"repository.audit.id\" since it is being treated as the default case and is handled in RepositoryAudit.invoke(...) before handling any additional repositories?",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-07 16:43:00.000000000",
+      "in_reply_to": "e6496ef4_e433724a",
+      "unresolved": true
+    },
+    {
+      "id": "b48828d1_2949aad6",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 90,
+      "message": "Good point -- as currently coded, index 0 is mandatory, and any other indices are optional.\n\nMaybe index 0 should be optional as well? It could no longer be a special case, except for the property name. That way, they could use 'repository1.' and 'repository2.' to define their repositories, and 'repository.' to define common parameters, such as userids and passwords.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 16:57:38.000000000",
+      "in_reply_to": "af3b2f66_12c13424",
+      "unresolved": true
+    },
+    {
+      "id": "dd0b86bd_d80a96f0",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 90,
+      "message": "I don't think so.  However, I'd move this Pattern to a static final field.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 17:03:09.000000000",
+      "in_reply_to": "af3b2f66_12c13424",
+      "unresolved": true
+    },
+    {
+      "id": "dd44e271_2486dbb8",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 93,
+      "message": "since there are no optional groups, there is no need to check the group count",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 17:03:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9ca96ca0_488a3415",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 5,
+      "line": 9,
+      "message": "limit lines to ~70 characters",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 17:05:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8c673a06_3f6ac6e1",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 90,
+      "message": "that would be ok, too, though in that case, I'd just get rid of the \"0\" case.  If this approach is taken, then I would also add a check, in the invoke() method, to ensure the set is not empty (and remove \"Additional\" from this method name).",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 17:19:38.000000000",
+      "in_reply_to": "b48828d1_2949aad6",
+      "unresolved": true
+    },
+    {
+      "id": "af3dab1a_634b4250",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 6,
+      "line": 92,
+      "message": "make this a static final field",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 21:46:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c70dba2f_78b103f3",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 5,
+      "line": 93,
+      "message": "Done",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-08 13:57:22.000000000",
+      "in_reply_to": "dd44e271_2486dbb8",
+      "unresolved": false
+    },
+    {
+      "id": "6e159281_ddfedd91",
+      "file_path": "feature-state-management/src/main/java/org/onap/policy/drools/statemanagement/RepositoryAudit.java",
+      "patchset_number": 6,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 6006,
+        "name": "Peyton  Puckett",
+        "display_name": null,
+        "email": "peyton.puckett@att.com",
+        "username": "pp5762"
+      },
+      "updated": "2019-11-08 13:58:02.000000000",
+      "in_reply_to": "af3dab1a_634b4250",
+      "unresolved": false
+    }
+  ]
+}

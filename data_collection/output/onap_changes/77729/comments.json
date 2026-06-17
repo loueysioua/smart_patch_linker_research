@@ -1,0 +1,127 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~Ic20afa1487e24ff42db399bd68ea490744c193e9",
+  "change_id": "Ic20afa1487e24ff42db399bd68ea490744c193e9",
+  "_number": 77729,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "881b1340_30a3f2d8",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 4,
+      "line": 93,
+      "message": "What is the reason for copying?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "40e06e14_7cf62791",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 68,
+      "message": "Instead of these comments, extract code to well-named functions, so the test looks something along:\n\n```\n//then\nvar decoded = decode(receivedBytes)\nassertWireProtocol(decoded.wtpHeader)\nassertCommonHeader(decoded.vesCommonHeader)\nassertPayload(decoded.measurements)\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d9eddcad_4091bb28",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 70,
+      "message": "We can use PROTOBUF.getPayloadTypeBytes().getShort() and extract this assertion to method, so it reads as assertPayloadType(message, PROTOBUF):\n\n```\n    private void assertPayloadType(WireProtocolUnpacker unpacked, PayloadType payloadType) {\n        assertThat(unpacked.type).isEqualTo(payloadType.getPayloadTypeBytes().getShort());\n    }\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2453aed8_780df38c",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 76,
+      "message": "I believe protobuf implements `equals` method well, so we can simply write\n```\nassertThat(unpacked.event).isEqualTo(sampleEvent)\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "506e9041_f0baad36",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 89,
+      "message": "There already is `VesEvents` class exposing static methods for creating default messages - I guess we could include the MeasData part there and expose VesEvents for component tests?\n\nThis may be done in another task though",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3efbe894_2d9daee3",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/WireProtocolUnpacker.java",
+      "patchset_number": 4,
+      "line": 26,
+      "message": "Let's follow our general convention and name it `Decoder` with `decode` method.\n\nAlso it would be nicer to have separate class for decoding and another class for decoded objects (all decoded fields as private with getters probably)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-06 07:01:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c1852e7e_a3bb1e4e",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 4,
+      "line": 93,
+      "message": "Pawel - it would be better to retain the buffer. It might be done automatically by reactor netty by calling `nettyInbound.receive().retain()`.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-06 07:52:54.000000000",
+      "in_reply_to": "881b1340_30a3f2d8",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "id": "oom~master~I6d76a09328adc20b408f1e22fd608cd44b074712",
+  "change_id": "I6d76a09328adc20b408f1e22fd608cd44b074712",
+  "_number": 114655,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2678c860_8468c193",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 2,
+      "line": 27,
+      "message": "why not download this image from dockerhub instead of nexus if it's a generic one?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-11-06 12:51:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bc79dfcf_c91f7e12",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 2,
+      "line": 27,
+      "message": "Just wondering, Grzegorz is using here exactly the same image, as we use for common Cassandra... see oom/kubernetes/common/cassandra/values.yaml\n\n# application image\nrepository: nexus3.onap.org:10001\nimage: library/cassandra:3.11.4\npullPolicy: Always\n\nAre we plannig to update the image for our common Cassandra as well?\n(We were thinking about stepwise migration for Portal, we use common Cassandra image first, then we try to use common cassandra deployment of ONAP).",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2020-11-06 15:06:39.000000000",
+      "in_reply_to": "2678c860_8468c193",
+      "unresolved": true
+    },
+    {
+      "id": "ff9aede6_71dfa8e1",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 2,
+      "line": 27,
+      "message": "Ack",
+      "author": {
+        "account_id": 6779,
+        "name": "Grzegorz Lis",
+        "display_name": null,
+        "email": "grzegorz.lis@nokia.com",
+        "username": "Grzegorz-Lis"
+      },
+      "updated": "2020-11-06 16:27:26.000000000",
+      "in_reply_to": "bc79dfcf_c91f7e12",
+      "unresolved": false
+    },
+    {
+      "id": "4c21b0c1_15b2fdf7",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 2,
+      "line": 27,
+      "message": "Yes we want to move Cassandra common image in order to get it from dockerHub. \nWe’re working on having templates for dockerHub, docker.elastic and gcr.io and we’ll move all to them (for image not created by ONAP)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-11-06 18:40:47.000000000",
+      "in_reply_to": "ff9aede6_71dfa8e1",
+      "unresolved": false
+    },
+    {
+      "id": "df7c3273_a2f12472",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 3,
+      "line": 27,
+      "message": "Can we try newest 3.11.x release - 3.11.9?\nhttps://hub.docker.com/layers/cassandra/library/cassandra/3.11.9/images/sha256-6af2985866733a569449861b08246b9ac8e5f8f2cd7e7bc44bc5dc9207804062?context=explore\n\n3.11.4 looks good to me as well, but we might get some addt`l bugfixes with 3.11.9.",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2020-11-09 13:20:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "835e965c_7c24cebf",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 15,
+      "line": 42,
+      "message": "it should be {{ include \"repositoryGenerator.dockerHubRepository\" . }}/{{ .Values.image }} here",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-01-08 10:09:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4d5cfd6c_cb924f5d",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 15,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-01-08 14:49:08.000000000",
+      "in_reply_to": "835e965c_7c24cebf",
+      "unresolved": false
+    },
+    {
+      "id": "5dde541f_be392c49",
+      "file_path": "kubernetes/portal/components/portal-cassandra/values.yaml",
+      "patchset_number": 3,
+      "line": 27,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-01-08 14:49:08.000000000",
+      "in_reply_to": "df7c3273_a2f12472",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "aai%2Faai-common~master~I7daa5a44656ec2fe22724f28362b3ac38bfb5960",
+  "change_id": "I7daa5a44656ec2fe22724f28362b3ac38bfb5960",
+  "_number": 106589,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "dad4a165_a0956d5d",
+      "file_path": "aai-aaf-auth/src/test/java/org/onap/aai/aaf/auth/AafRequestWrapperTest.java",
+      "patchset_number": 1,
+      "line": 61,
+      "message": "You could add additional unit tests make this work complete. For example, what would happen if `getHeader` is requested to get a header that has never been passed?\n\nOverall you are testing the relationship between `getHeader` and `putHeader` (By the way, this relatioship is called a \"property\" in some circles). So no matter what header is passed to putHeader, it should always be returned by getHeader. What about this:\n```\nString randomHeaderKey = \"Header - \" + System.currentTimeMillis();\nString randomHeaderValue = \"Value - \" + System.currentTimeMillis();\n\nAafRequestWrapper af= new AafRequestWrapper(mockRequest);\nassertEquals(af.getHeader(randomHeaderKey),randomHeaderValue);\n```\nThis guarantees that no matter the header passed, it's always returned when calling getHeader. Now having said that, a request is supposed to be immutable. So why not just removing `putHeader` and add the header in the constructor of the AafRequestWrapper?\n\nThe next use case is what if the header has never been passed to `putHeader`? You should ensure that `getHeader` returns the expected value (probably a null but this has to be verified). Ideally you should not return nulls, but the request wrapper API is done that way. Maybe a `getHeaderOption` could be added to AafRequestWrapper and then used in the filter?\n\nFinally, to reduce boilder plate, a factory function for a mocked HttpServletRequest could be created:\n```\nprivate HttpServletRequest makeMockedHttpServletRequest(\n  Map<String, String> headers\n) {\n  HttpServletRequest mockRequest = createMock(HttpServletRequest.class);\n  headers.forEach((k, v) -> \n    expect(mockRequest.getHeader(k))\n      .andReturn(v)\n      .anyTimes()\n  )\n  return mockRequest;\n}\n```\n\nSorry for the long post, your change made me thinking a bit :)",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-19 19:35:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

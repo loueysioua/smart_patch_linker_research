@@ -1,0 +1,266 @@
+{
+  "id": "policy%2Fdrools-applications~master~I28dd3c9a629d297b408775a01afadd5c19351e37",
+  "change_id": "I28dd3c9a629d297b408775a01afadd5c19351e37",
+  "_number": 16439,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-09-28 15:26:36.000000000",
+    "updated": "2017-09-28 17:22:11.000000000",
+    "submitted": "2017-09-28 17:09:20.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1677,
+      "name": "Daniel Cruz",
+      "display_name": null,
+      "email": "dc443y@att.com",
+      "username": "dc443y"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Fix Retries for Policies",
+  "commit_message": "Fix Retries for Policies\n\nThis applies changes to make retries work properly\nfor all control loops. The current design was ignoring\nthe upper bound of the retries and retrying until either\na success or control loop timeout occured. This is now\nfixed to only do retries until the limit is reached that\nis specified from the policy.\n\nThe operation is now started in the GUARD.PERMITTED rule.\nI think this is better because it stops Policy from doing\nextra processing if there is a guard deny. This is also\nneeded so that we can properly do retries for all cases.\n\nThe notifications sent in GUARD_NOT_YET_QUERIED and\nGUARD.RESPONSE are now more informative with the\nmessage specifying the actor and recipe. The not queried\nrule has a message stating that we are sending a query\nto guard and the guard response message in the guard\nresponse rule specifices the result from guard.\n\nDuring a retest of vDNS it appeared that the archetype\ntemplate was no longer working, this was because there\nwere changes in the JUnit template that were not\nreflected in the archetype template. These were added\nto archetype and vDNS is verified to work again.\n\nAnother small fix needed was making sure the action for\nvCPE is \"Restart\" instead of \"restart\". APPC will\nreject our request if \"Restart\" is not sent as the\naction.\n\nIssue-ID: POLICY-259\nChange-Id: I28dd3c9a629d297b408775a01afadd5c19351e37\nSigned-off-by: Daniel Cruz <dc443y@att.com>\n",
+  "change_log": {
+    "entry_count": 17,
+    "entries": [
+      {
+        "id": "61d35b12a45927db50083e327da1cc838fd9f65c",
+        "author": {
+          "account_id": 1677,
+          "name": "Daniel Cruz",
+          "display_name": null,
+          "email": "dc443y@att.com",
+          "username": "dc443y"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-28 15:26:36.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f6cab15fe504ada4f315f6f65c28f9d1a747eb37",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 15:27:40.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-verify-java/333/",
+        "patchset_number": 1
+      },
+      {
+        "id": "55cda81caad4ef69f604dfcb659fe061d4817156",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 15:39:00.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-verify-java/333/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-verify-java/333",
+        "patchset_number": 1
+      },
+      {
+        "id": "2150ac4948675da374670e25b0c882001c1e2a33",
+        "author": {
+          "account_id": 1441,
+          "name": "Chenfei Gao",
+          "display_name": null,
+          "email": "cgao@research.att.com",
+          "username": "cgao"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 15:59:45.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(2 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "bb051e8c7baf2e4262f328258bd44190cc6e6302",
+        "author": {
+          "account_id": 1441,
+          "name": "Chenfei Gao",
+          "display_name": null,
+          "email": "cgao@research.att.com",
+          "username": "cgao"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 16:00:07.000000000",
+        "message": "Patch Set 1: -Code-Review\n\nNeed Michael's confirmation",
+        "patchset_number": 1
+      },
+      {
+        "id": "ac29fee4183d1304994f236bdc1ed7fb7f32db79",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 16:05:26.000000000",
+        "message": "Patch Set 1:\n\nMichael, Chenfei, can we get fast resolution on this? it is critical this gets submitted soon due to our coding deadline.",
+        "patchset_number": 1
+      },
+      {
+        "id": "115f00ebab45eb81f969e27d2c6b494d3b58bb21",
+        "author": {
+          "account_id": 1677,
+          "name": "Daniel Cruz",
+          "display_name": null,
+          "email": "dc443y@att.com",
+          "username": "dc443y"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-28 16:10:15.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "3cd1e0ecca9bbffdd5bb115fb053a10eb682f811",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 16:12:54.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-verify-java/334/",
+        "patchset_number": 2
+      },
+      {
+        "id": "ef873334c1babfc6b9d643bf59653c055b58a914",
+        "author": {
+          "account_id": 1441,
+          "name": "Chenfei Gao",
+          "display_name": null,
+          "email": "cgao@research.att.com",
+          "username": "cgao"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 16:23:08.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\nMichael is in PTO today and tomorrow. My only concern is if there is a guard deny and another operational policy chained to failure_guard, can it be proceeded? I roughly remember that was the reason why we should startOperation before querying guard. Otherwise, if we get a guard deny, finishOperation will not really work since there is no currentOperation assigned before. Thus, it will just throw an exception saying no operation to finish and not proceed. Daniel, could you check that?",
+        "patchset_number": 2
+      },
+      {
+        "id": "11420ed8de158e87ea698d97cfdb670d9cfeae3b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 16:28:13.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-verify-java/334/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-verify-java/334",
+        "patchset_number": 2
+      },
+      {
+        "id": "2e41f55c52b718a10ac1cbfce3e4b346d9634f72",
+        "author": {
+          "account_id": 1677,
+          "name": "Daniel Cruz",
+          "display_name": null,
+          "email": "dc443y@att.com",
+          "username": "dc443y"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-28 16:47:57.000000000",
+        "message": "Patch Set 2:\n\n> Michael is in PTO today and tomorrow. My only concern is if there\n > is a guard deny and another operational policy chained to\n > failure_guard, can it be proceeded? I roughly remember that was the\n > reason why we should startOperation before querying guard.\n > Otherwise, if we get a guard deny, finishOperation will not really\n > work since there is no currentOperation assigned before. Thus, it\n > will just throw an exception saying no operation to finish and not\n > proceed. Daniel, could you check that?\n\nI see what you are saying. I agree this should be fixed but just an FYI for myself, is Policy chaining going to be used in R1?",
+        "patchset_number": 2
+      },
+      {
+        "id": "06bcb42d8bad1a84c17b95c6b77441112e136e45",
+        "author": {
+          "account_id": 1441,
+          "name": "Chenfei Gao",
+          "display_name": null,
+          "email": "cgao@research.att.com",
+          "username": "cgao"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 17:05:11.000000000",
+        "message": "Patch Set 2: -Code-Review\n\nPolicy chaining is supported in platform capabilities. Current yaml specification, drools template actually support it. User has flexibility to specify operational policy chaining from CLAMP GUI and push down to policy yaml which is enforced by drools rules. Although we already support it, in R1, we don't have use case to demonstrate it. We just need one operational policy in each of R1 use cases. Just keep in mind that it is fine for R1 use cases but it will result in a bug if user wants to chain subsequent policy to failure_guard.",
+        "patchset_number": 2
+      },
+      {
+        "id": "da856d5c8e4df79803f42606d6b82aefa4ced966",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 17:08:35.000000000",
+        "message": "Patch Set 2:\n\nGoing to merge this.   We'll defer work policy chaining work to R2",
+        "patchset_number": 2
+      },
+      {
+        "id": "6f4d3365fd338f511341f7a7da41d389f70a0c33",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 17:08:48.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "4a93f689a1811fad66ee26aa474c7ffb4111c0b8",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-09-28 17:09:21.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 2
+      },
+      {
+        "id": "80c55a21c2e8a03e202c47099d0a89a08e3046a9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 17:10:45.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-merge-java/124/",
+        "patchset_number": 2
+      },
+      {
+        "id": "0c5a5b99963d72d588122186626b71308a1b89ed",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-28 17:22:11.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-merge-java/124/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-merge-java/124",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

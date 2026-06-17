@@ -1,0 +1,76 @@
+{
+  "id": "ci-management~master~I4254e09fa23d8d1b4ebebc9128cfcafe68172b35",
+  "change_id": "I4254e09fa23d8d1b4ebebc9128cfcafe68172b35",
+  "_number": 84252,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4ea7010d_5352c9f3",
+      "file_path": "Sandbox_Setup.md",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "The clone to ci-management needs to be using SSH. \nThe reason being, many teams will use this cloned code to make changes and push them into Gerrit which will fail if their remotes are HTTP. Although that can be fixed with extra steps, cloning SSH from the start makes things easier. \n\nI would suggest we add the instructions like:\n\nClone ci-management:\n   git clone ssh://<LFID>@gerrit.onap.org:29418/ci-management\nFetch the gerrit hooks:\n   gitdir=$(git rev-parse --git-dir); scp -p -P 29418 <LFID>@gerrit.onap.org:hooks/commit-msg ${gitdir}/hooks/",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2019-04-04 21:03:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "326881a7_3c31be53",
+      "file_path": "Sandbox_Setup.md",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "Hi Jess,\n\nI can't see any problem with pushing changes to gerrit over HTTPS protocol. That's exactly how I and my colleges are working on OPNFV (over 3 years) and on ONAP projects. BTW, I've used exactly the same https clone command to prepare this patch.\n\nAs I've mentioned in the commit message - this is exactly the format, which you'll get (anonymous https is a default) as a hint in gerrit GUI at https://gerrit.onap.org/r/#/admin/projects/ci-management - under link \"Clone with commit-msg hook\".\n\nI can see following advantages:\n\n* works over proxies and firewalls\n* can be used without modifications, just cut&paste from docs to console (no need to specify lfid like in previous ssh case)\n* suitable for both non-LF members (inspect code anonymously) and LF members (modify & push)\n\nPlease advise,\nMartin",
+      "author": {
+        "account_id": 5065,
+        "name": "Martin Klozik",
+        "display_name": null,
+        "email": "martin.klozik@tieto.com",
+        "username": "mklozik"
+      },
+      "updated": "2019-04-05 06:33:22.000000000",
+      "in_reply_to": "4ea7010d_5352c9f3",
+      "unresolved": false
+    },
+    {
+      "id": "6001fff5_73974023",
+      "file_path": "Sandbox_Setup.md",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "I agree, in docs I typically prefer the http clone method as it can be cloned anonymously without an account.\n\nIf using git-review (which I highly recommend) the hook install step could be shorted to simply:\n\n git review -s\n\nThis setups up a 2nd remote \"gerrit\" for pushing and installs the git hook. This is a handy setup because we can do 2 things:\n\n1) Git fetches via anonymous http\n2) Git pushes via gerrit remote `git push gerrit ...`",
+      "author": {
+        "account_id": 25,
+        "name": "Thanh Ha",
+        "display_name": "zxiiro",
+        "email": "thanh.ha@linuxfoundation.org",
+        "username": "zxiiro"
+      },
+      "updated": "2019-04-07 12:21:36.000000000",
+      "in_reply_to": "326881a7_3c31be53",
+      "unresolved": false
+    },
+    {
+      "id": "7a9e965f_151c4b5f",
+      "file_path": "Sandbox_Setup.md",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "Thanks for you inputs Thanh. I think I am so used to ssh :)",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2019-04-09 17:11:19.000000000",
+      "in_reply_to": "6001fff5_73974023",
+      "unresolved": false
+    }
+  ]
+}

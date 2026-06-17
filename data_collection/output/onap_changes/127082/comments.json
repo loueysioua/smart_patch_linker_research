@@ -1,0 +1,399 @@
+{
+  "id": "cps~master~Ic4381f0f7170ebd666d5bc8aa6ef2c4548d81766",
+  "change_id": "Ic4381f0f7170ebd666d5bc8aa6ef2c4548d81766",
+  "_number": 127082,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "cd97338d_9b2fa667",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Can these changes be done for dataNode functionality too? It would be good to improve performance for all the cases where it is applicable.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2022-02-14 02:47:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e0ac401_2421637e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "since we have several DB operation now should we use transaction (annotation)?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-14 08:56:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8b3f5ce6_81a8a1a5",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "1) lets commit this first.\n2) Can you be more specific which other places need a similar update you think?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-14 08:56:14.000000000",
+      "in_reply_to": "cd97338d_9b2fa667",
+      "unresolved": true
+    },
+    {
+      "id": "7623c77e_09025076",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "The same performance issue exists in 'addChildDataNode' method too as we are fetching all the child fragments to add one to the parentFragment.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2022-02-14 20:40:56.000000000",
+      "in_reply_to": "8b3f5ce6_81a8a1a5",
+      "unresolved": true
+    },
+    {
+      "id": "3d38c04a_1c1ff094",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "Should be refactored as below for consistency:\n\n newFragmentEntities.stream().forEach(newFragmentEntity -> {\n                newFragmentEntity.setParentId(parentFragment.getId());\n                fragmentRepository.save(newFragmentEntity);\n            });",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-02-15 09:27:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c21205f_2eb9fe1f",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "ah, I see, those 2 methods actually have a lot in common (now) and the actual work could be extracted out in a common method to both ome them as part of this commit",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 10:34:26.000000000",
+      "in_reply_to": "7623c77e_09025076",
+      "unresolved": true
+    },
+    {
+      "id": "dfa9aed9_a03e1cec",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "We decided to use a standard enhanced for loop for this instead as part of refactoring.",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:14:29.000000000",
+      "in_reply_to": "3d38c04a_1c1ff094",
+      "unresolved": false
+    },
+    {
+      "id": "62953655_014789a8",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:14:29.000000000",
+      "in_reply_to": "9e0ac401_2421637e",
+      "unresolved": false
+    },
+    {
+      "id": "c2e94a5f_d2edea09",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:14:29.000000000",
+      "in_reply_to": "7c21205f_2eb9fe1f",
+      "unresolved": false
+    },
+    {
+      "id": "f034402f_6a48ce2d",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 1,
+      "line": 172,
+      "message": "... list entry (grandchild) ....",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8c83ef53_b211f59c",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 159,
+      "message": "two new child list elements for an existing parent",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cced85ba_4c47a9a6",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 162,
+      "message": "a (grand)child node for one of the new list elements",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c00f6c2c_63448110",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 163,
+      "message": "grandChild",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "56bc1cf9_70039fff",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 165,
+      "message": "the list elements are added to existing parent node",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db4c3142_06e88360",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 172,
+      "message": "the (grand)child node of the new list entry is also present",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "daa13dbd_c2fedca1",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 175,
+      "message": "grandChild",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2022-02-15 14:26:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "70b7910c_af9fdbc5",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 159,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "8c83ef53_b211f59c",
+      "unresolved": false
+    },
+    {
+      "id": "5bdf2470_681dc3b8",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 162,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "cced85ba_4c47a9a6",
+      "unresolved": false
+    },
+    {
+      "id": "0288fe69_3704403d",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 163,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "c00f6c2c_63448110",
+      "unresolved": false
+    },
+    {
+      "id": "255924f9_d78fe103",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 165,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "56bc1cf9_70039fff",
+      "unresolved": false
+    },
+    {
+      "id": "a16369ce_0b6dabf5",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 172,
+      "message": "Done",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "db4c3142_06e88360",
+      "unresolved": false
+    },
+    {
+      "id": "26d52150_58185b65",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 175,
+      "message": "grandChild is already defined above. Have renamed this to grandChildFragmentEntity, as this is the value we are checking is present.",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2022-02-15 14:50:06.000000000",
+      "in_reply_to": "daa13dbd_c2fedca1",
+      "unresolved": true
+    },
+    {
+      "id": "8a0a877c_436bd173",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 8,
+      "line": 159,
+      "message": "NB: We have added the parent relationship as a Long which does not tell hibernate about the relationship when both parent and child are getting created in the same request. \n\nIn this test case, there are three inserts as expected, but the grandchild insert did not have parentId. So, the hibernate had to send another update to set the parent_id of the grandchild. \n\nTo fix it, we need update the FragmentEntity to define the parent_id as FragmentEntity and show a relationship between childFragments and parentId ( parentFragment). If we follow this approach, more changes are required but it may help us to fix the performance issues due to hierarchy in one go.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2022-02-16 06:12:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

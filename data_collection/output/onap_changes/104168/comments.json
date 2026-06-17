@@ -1,0 +1,263 @@
+{
+  "id": "oom~master~I399b168882d09bd8f08148758a0f683e15ac141c",
+  "change_id": "I399b168882d09bd8f08148758a0f683e15ac141c",
+  "_number": 104168,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "eaeaabe6_6e8f2a17",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 4,
+      "line": 41,
+      "message": "This kind of loop are exactly the thing that we should cache to speed up linting",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-25 18:25:12.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "518bf1a8_2829449d",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 4,
+      "line": 41,
+      "message": "you mean retrieving port once and reusing it here twice?\nand if you have a smarter way (jq/jinj2 'select | map | first' like) I would love",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-25 22:10:15.000000000",
+      "in_reply_to": "eaeaabe6_6e8f2a17",
+      "unresolved": false
+    },
+    {
+      "id": "00dafe05_31db1f87",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/values.yaml",
+      "patchset_number": 8,
+      "line": 69,
+      "message": "Same question re other template patch. If pod goes down/rescheduled, will init container re-run to fetch aaf artifacts? This was main reason for persisting them on the nfs.",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2020-04-01 09:43:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6deb5e10_17e12fbd",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/values.yaml",
+      "patchset_number": 8,
+      "line": 69,
+      "message": "if pod goes down --> K8S will relaunch it _but_ with the configmaps of the previous one so it'll retrieve the right configuration.\na pod is not actually rescheduled in K8S terms (https://kubernetes.io/docs/concepts/workloads/pods/pod/#what-is-a-pod) but recreated and then init part will  work too",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-01 09:59:28.000000000",
+      "in_reply_to": "00dafe05_31db1f87",
+      "unresolved": true
+    },
+    {
+      "id": "92dbf230_649a355d",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/values.yaml",
+      "patchset_number": 8,
+      "line": 69,
+      "message": "Ok. Ignoring the rescheduling, the aaf_agent will run again if pod restarts for whatever reason?\nAlso, just to not, dmaap-dr-prov has the same/similar setup with pv for aaf creds/artifacts. Should we apply the same logic there also?",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2020-04-01 11:18:30.000000000",
+      "in_reply_to": "6deb5e10_17e12fbd",
+      "unresolved": true
+    },
+    {
+      "id": "e2fc13fe_e486475f",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/values.yaml",
+      "patchset_number": 8,
+      "line": 69,
+      "message": "yes, if the pod restarts, everything restarts, init containers included.\n\nFor dr-prov, I'm currently working on it for K8S 1.16+ compatibility, I can do the same yes",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-01 11:22:35.000000000",
+      "in_reply_to": "92dbf230_649a355d",
+      "unresolved": true
+    },
+    {
+      "id": "56a943f2_56d470ba",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/values.yaml",
+      "patchset_number": 8,
+      "line": 69,
+      "message": "Ack",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2020-04-01 11:26:27.000000000",
+      "in_reply_to": "e2fc13fe_e486475f",
+      "unresolved": false
+    },
+    {
+      "id": "5c16f934_bb868903",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 11,
+      "line": 41,
+      "message": "1) Make it a helper\n2) Implement a caching mechanism otherwise it will start killing our linting time just like the common secret template did",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 23:10:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4568b2dc_715cee59",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/templates/statefulset.yaml",
+      "patchset_number": 11,
+      "line": 85,
+      "message": "don't we already have a template for this?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 23:10:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "79f41057_8422c5d3",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/templates/statefulset.yaml",
+      "patchset_number": 11,
+      "line": 183,
+      "message": "and this?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 23:10:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "10877042_2e8cb418",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 11,
+      "line": 41,
+      "message": "I've made a local helper.\nI'll see later if I move to a global one.\nBy the way, I'm a bit unsure to understand \"common.secret.buildCache\"\nI line _secret.tpl#L186, you won't build the cache if `$global.Values._secretsCache` is not present.\n\nI do understand that for \"one chart\" deploy (mariadb for example) it'll work.\n\nBut for DMaaP for example, let's say first chart being created by helm is dmaap-bc.\nWhen we move to dmaap-dr-node, `$global.Values._secretsCache` is set and then we don't add its own values no?\nOr Am I wrong somewhere (as it works, I assume I'm wrong ;) )?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-15 07:45:40.000000000",
+      "in_reply_to": "5c16f934_bb868903",
+      "unresolved": true
+    },
+    {
+      "id": "e84a7ab9_869d6faf",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/templates/statefulset.yaml",
+      "patchset_number": 11,
+      "line": 85,
+      "message": "you're a pain you know? :-P\nDone",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-15 07:45:40.000000000",
+      "in_reply_to": "4568b2dc_715cee59",
+      "unresolved": false
+    },
+    {
+      "id": "ee4d0b58_f0a6c5cd",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/templates/statefulset.yaml",
+      "patchset_number": 11,
+      "line": 183,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-15 07:45:40.000000000",
+      "in_reply_to": "79f41057_8422c5d3",
+      "unresolved": false
+    },
+    {
+      "id": "5f814238_ee0a3663",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 11,
+      "line": 41,
+      "message": "> I've made a local helper.\n> I'll see later if I move to a global one.\n> By the way, I'm a bit unsure to understand \"common.secret.buildCache\"\n> I line _secret.tpl#L186, you won't build the cache if `$global.Values._secretsCache` is not present.\n\nactually it's the other way around. I build the cache if `$global.Values._secretsCache`is not present.\n\n> \n> I do understand that for \"one chart\" deploy (mariadb for example) it'll work.\n> \n> But for DMaaP for example, let's say first chart being created by helm is dmaap-bc.\n> When we move to dmaap-dr-node, `$global.Values._secretsCache` is set and then we don't add its own values no?\n> Or Am I wrong somewhere (as it works, I assume I'm wrong ;) )?\n\nYou are so wrong as the guy who designed Public transport fares in Paris:D\n\nEvery chart has its own set of values. Whenever you go from one chart to another one .Values are cleaned up so you would rebuild the cache once again. There are only 2 things copied from parent chart to children:\n1) global section ($global.Values.global in this case)\n2) Overrides (For example everything in dmaap-dr-node node in dmaap values)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-15 09:44:28.000000000",
+      "in_reply_to": "10877042_2e8cb418",
+      "unresolved": true
+    },
+    {
+      "id": "5b4e5c6c_ab34d04f",
+      "file_path": "kubernetes/dmaap/components/dmaap-dr-node/resources/config/node.properties",
+      "patchset_number": 11,
+      "line": 41,
+      "message": "OK, I meant that for build cache.\nAnd I got messed up with \"global\" name which is not the \".Values.global\" part.\nOK, so I can make my helper a generic one!",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-15 12:31:11.000000000",
+      "in_reply_to": "5f814238_ee0a3663",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I1114af13a3262e49b87fb270d5c78cda4de9e5c9",
+  "change_id": "I1114af13a3262e49b87fb270d5c78cda4de9e5c9",
+  "_number": 112579,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a63d1d1e_7f413d6b",
+      "file_path": "policy-management/src/main/server-gen/bin/deploy-artifact",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "Is the issue here that for external zip, jar files that are generated in windows OS?  Or this is a generic problem, or only when running on a windows host?\n\nIf it is only for when wanting to install external artifacts generated in windows OS, I guess I have some reservations, as I have some concerns with supporting Windows OS in general.\n\nOne constraint of adding this, is that the dos2unix utilities should be installed in the drools pdp image.   Is dos2unix already available in the current alpine images?\n\nAnother consideration is that there are some other folks like ecomp folks that build with these packages, their own image, that will require them to support in their OS of choice this package.\n\nOne other alternative would be to strip \\r characters at the end with sed or other text processing utility to avoid dependencies with the package.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-09-11 21:38:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "539cbfc2_db6570c9",
+      "file_path": "policy-management/src/main/server-gen/bin/deploy-artifact",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "happens when maven generates the jar file.  Particular case is when running maven with eclipse on windows, don't know if there are other cases\n\nthis should work whether the pom.properties is generated on linux or on windows, thus it's backward compatible.  Furthermore, it addresses the exact issue - the file has CR added on windows, thus use a utility to remove the CRs.\n\nyes, dos2unix is already installed, which is why I used it.  However, I can switch to 'sed', assuming it works.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-11 22:11:51.000000000",
+      "in_reply_to": "a63d1d1e_7f413d6b",
+      "unresolved": true
+    }
+  ]
+}

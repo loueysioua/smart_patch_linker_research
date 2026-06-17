@@ -1,0 +1,169 @@
+{
+  "id": "cps~master~I871502fe4b7fdd8d88a7ef3667b0e3670d1db60b",
+  "change_id": "I871502fe4b7fdd8d88a7ef3667b0e3670d1db60b",
+  "_number": 137145,
+  "change_comments": [
+    {
+      "id": "924c9f3f_12e19a90",
+      "patchset_number": 1,
+      "message": "I wonder if there wasn't a simpler solution, see my question below...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-02-06 16:57:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "262c1a0e_1c4f87f5",
+      "patchset_number": 1,
+      "message": "The more I think about the bug ticket, the less sense it makes.\nFirstly, it's of no consequence to the user when orphaned modules get cleaned up in the DB.\n\nMore importantly, removing orphaned modules is an implementation detail of CPS core, and has nothing to do with NCMP or CM-handles. The changes made here to 'fix' the issue create architectural problems where CPS-core no longer removes unused modules automatically! And makes NCMP responsible for this basic task. (Sorry Sourabh, I pointed you in this direction, but it's completely incorrect.)\n\nI think we should close the ticket as 'not a bug', and abandon the change as it won't lead to any improvements.\n\nSome more info:\nRegarding order of operations in NCMP handle deregistration: removing modules and cached data BEFORE removing cm-handles is the CORRECT behaviour, e.g. if an error occurs during module removal, the handle will remain (in DELETING state). If we had removed the cm-handle first, and an error occurred later, the handle would be gone, but the data/modules would be still in the system, leading to inconsistency. So current behaviour is correct.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-06 19:06:30.000000000",
+      "in_reply_to": "924c9f3f_12e19a90",
+      "unresolved": true
+    },
+    {
+      "id": "77bb5127_86977a72",
+      "patchset_number": 1,
+      "message": "@Sourabh Having discussed with Toine, it's clear that there is an improvement by swapping lines 120 and 121 in CpsModuleServiceImpl.java. So if you revert other changes, we can approve",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-07 09:27:14.000000000",
+      "in_reply_to": "262c1a0e_1c4f87f5",
+      "unresolved": true
+    },
+    {
+      "id": "30771fb7_94a4f9d7",
+      "patchset_number": 1,
+      "message": "Abandon as we have new commit : 137151: Orphaned modules are removed from the DB before cmhandle removal | https://gerrit.onap.org/r/c/cps/+/137151",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-02-07 10:32:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6bf79506_2614680a",
+      "patchset_number": 1,
+      "message": "ACK",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-02-07 10:32:37.000000000",
+      "in_reply_to": "77bb5127_86977a72",
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "7d41e308_992e1677",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsModuleServiceImpl.java",
+      "patchset_number": 1,
+      "line": 120,
+      "message": "why did we not simply move this line to the end of this method ?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-02-06 16:57:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eeca0d8e_0dbb8482",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 480,
+      "message": "shoudl we call cpsModuleService.deleteUnusedYangResourceModules(); here too?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-02-06 17:18:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d923072e_3c965eae",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsModuleServiceImpl.java",
+      "patchset_number": 1,
+      "line": 120,
+      "message": "Agreed. Reverting other changes and swapping lines 120 and 121 is a good solution:\n\n    cpsModulePersistenceService.deleteSchemaSets(dataspaceName, schemaSetNames);\n    cpsModulePersistenceService.deleteUnusedYangResourceModules();",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-07 09:27:14.000000000",
+      "in_reply_to": "7d41e308_992e1677",
+      "unresolved": true
+    },
+    {
+      "id": "410d0884_2bfc072d",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsModuleServiceImpl.java",
+      "patchset_number": 1,
+      "line": 120,
+      "message": "ACK",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-02-07 10:32:37.000000000",
+      "in_reply_to": "d923072e_3c965eae",
+      "unresolved": false
+    },
+    {
+      "id": "e685e181_8496f641",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 480,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-02-07 10:32:49.000000000",
+      "in_reply_to": "eeca0d8e_0dbb8482",
+      "unresolved": false
+    }
+  ]
+}

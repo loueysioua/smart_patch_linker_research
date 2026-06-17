@@ -1,0 +1,263 @@
+{
+  "id": "policy%2Fgui~master~Ia355f36bf263bb1385db363a267c53af86504905",
+  "change_id": "Ia355f36bf263bb1385db363a267c53af86504905",
+  "_number": 122873,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "02096057_19787569",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "maybe cache this value in a local variable so the look-up doesn't have to be repeated for each property.\n\nfor that matter, isn't there a way to clone a set of properties so the \"foreach\" wouldn't be needed at all?  same question in the functions below",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-27 13:23:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fe8db3f1_7e5e18a7",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 225,
+      "message": "You may want to look at that code to improve the rendering of the JsonEditor (If the iconlib is not rendered properly).\nLine 27, https://gerrit.onap.org/r/gitweb?p=policy/clamp.git;a=blob;f=runtime/ui-react/src/components/dialogs/Policy/PolicyEditor.js;h=be77f14e9858055e0cdda856ce83130fb592c903;hb=HEAD",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-07-27 13:28:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "658e96c9_ba3330ab",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 225,
+      "message": "Hi Seb. Rendering seems to be fine. Icons are rendering as intended I think. I usually double check against: https://pmk65.github.io/jedemov2/dist/demo.html - to make sure.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-27 14:42:30.000000000",
+      "in_reply_to": "fe8db3f1_7e5e18a7",
+      "unresolved": true
+    },
+    {
+      "id": "4f165340_f9ea7556",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "any thoughts?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-28 12:58:26.000000000",
+      "in_reply_to": "02096057_19787569",
+      "unresolved": true
+    },
+    {
+      "id": "9f047847_c197a9ff",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "Apologies Jim. Just saw this comment. Looking now...",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-28 13:26:52.000000000",
+      "in_reply_to": "4f165340_f9ea7556",
+      "unresolved": true
+    },
+    {
+      "id": "0b9916d4_279aeb0d",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "I will add the local variable in the next patchset.\n\nWith the short foreach I am extracting the start values from the node templates. And then will use those start values to populate initial data in the json editor. But I am only taking those node templates that have common types associated with them. The backend common properties do not contain start values - so this is required.\n\nAs for the foreach loops used in other functions. I try to use them as little as I can. I will see if I can remove some of the foreach loops in other functions for the next patchset. They are sometimes needed here because I need to have the data in a particular format to be rendered nicely on the UI.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-28 14:33:53.000000000",
+      "in_reply_to": "9f047847_c197a9ff",
+      "unresolved": true
+    },
+    {
+      "id": "46068fc9_3f5490cd",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "basically, we're just making a copy of a Map, so why not use a copy constructor?.  In java, this particular chunk, for example, could be changed to something like:\n\n  shortenedNodeTemplatesObjectStartValues[key] = new HashMap<>(propertiesObject.properties)\n\nthis is shorter, AND it's more obvious what it's doing",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-28 18:07:15.000000000",
+      "in_reply_to": "0b9916d4_279aeb0d",
+      "unresolved": true
+    },
+    {
+      "id": "2439d41f_67e259d7",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "I have added the cached variable you suggested Jim.\n\nThe loops in the below functions - updateTemplate and makeSchemaForCommonProperties - \n\nThe former has to take the values entered by the user and \"fill them into\" the correct places in the full service template. I have to pick out particular items and place them in the correct places in the template. Foreach is just the most clean way to do this that I can see currently.\n\nIn the latter, I have to construct a schema locally in a very specific way so as to be understood by the json schema editor.\n\nCould we make the optimisations vis-a-vis loops and other elements in a future review?",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-28 18:16:06.000000000",
+      "in_reply_to": "0b9916d4_279aeb0d",
+      "unresolved": true
+    },
+    {
+      "id": "27216841_5ee252db",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "a future review is fine",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-28 19:00:39.000000000",
+      "in_reply_to": "2439d41f_67e259d7",
+      "unresolved": false
+    },
+    {
+      "id": "7659ae42_9d27695d",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "this is what I was saying should be cached, to avoid repeated look-up by \"key\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-28 19:00:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f2c1e7ed_8ae0fa7d",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "Thanks Jim",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-29 08:57:32.000000000",
+      "in_reply_to": "27216841_5ee252db",
+      "unresolved": false
+    },
+    {
+      "id": "2786aeba_31c99028",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "Ah, fixed now. Thanks",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-29 08:57:32.000000000",
+      "in_reply_to": "7659ae42_9d27695d",
+      "unresolved": true
+    },
+    {
+      "id": "53f70184_b768fcc2",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-29 13:10:51.000000000",
+      "in_reply_to": "2786aeba_31c99028",
+      "unresolved": false
+    },
+    {
+      "id": "0e43319b_30b9f295",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 225,
+      "message": "Hi Seb. Is there something you need me to do here?",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-30 09:05:10.000000000",
+      "in_reply_to": "658e96c9_ba3330ab",
+      "unresolved": true
+    },
+    {
+      "id": "0b8b30af_7fc70af9",
+      "file_path": "gui-clamp/ui-react/src/components/dialogs/ControlLoop/CommissioningModal.js",
+      "patchset_number": 1,
+      "line": 225,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-30 14:34:08.000000000",
+      "in_reply_to": "0e43319b_30b9f295",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "id": "dcaegen2%2Fservices%2Fprh~master~I62d2ae758b58435ca8930354cb86172236646c20",
+  "change_id": "I62d2ae758b58435ca8930354cb86172236646c20",
+  "_number": 48155,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_7d8bd71e",
+      "file_path": "prh-app-server/src/main/java/org/onap/dcaegen2/services/prh/tasks/DmaapConsumerTaskImpl.java",
+      "patchset_number": 1,
+      "line": 61,
+      "message": "Can it be this line be part of resolveClient method?",
+      "author": {
+        "account_id": 2999,
+        "name": "Maciej Wejs",
+        "display_name": null,
+        "email": "maciej.wejs@nokia.com",
+        "username": "wejs"
+      },
+      "updated": "2018-05-18 11:32:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1d8093f6",
+      "file_path": "prh-app-server/src/main/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImpl.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "Can it be this line be part of resolveClient method?\nIn this case it returns not used reference.\nMore over can this two methods (execute and publish) be make more similar in this class and consumer class?",
+      "author": {
+        "account_id": 2999,
+        "name": "Maciej Wejs",
+        "display_name": null,
+        "email": "maciej.wejs@nokia.com",
+        "username": "wejs"
+      },
+      "updated": "2018-05-18 11:32:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9d4b43b1",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/AAIConsumerTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 109,
+      "message": "Many of the tests cases in different classes have one common issue -> duplicate code. These sections can be moved to a private method, well named method (givenBLABLA) and the configurable part simply passed as parameters (i.e. expected http code returned by the mock). Also the \"when\" clauses are usually part of the given section as this is the expected behavior that produces an output in the invocation chain.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-18 13:30:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bd487fb4",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/AAIConsumerTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 148,
+      "message": "This empty variable which holds a response is a little bit messy since it's in almost every test method. This variable should not be here since an empty response is hardly a required test input from a readibilty POV, just an artificial holder for the result. I want to read code from up to down, without jumping between the sections to reference stuff and assignments.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-18 13:30:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7d63d741",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "Inconsistent test -> api. The method signature does not declare that the PrhTaskException is thrown, but there are tests that verify this. Why not add this exception to the method sig ? Or verify the Exception that is actually declared, but not tested.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-18 13:30:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1d0ad379",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 74,
+      "message": "The GIVEN/WHEN/THEN derives from BDD. If you clearly separate sections using this notation I'd strongly suggest using BDDMockito instead of Mockito. BDDMockito provides APIs that are more suitable and conforming to the behavioral naming convention. Check http://www.baeldung.com/bdd-mockito\nNaturally, this applies to all cases :)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-18 13:30:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bd715f0e",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "Why is the response asserted for null, when the production code does not seem to return a null value ?? (if I'm not mistaken). If this is to see if an exception was thrown (which means no value will be assigned to local variable response, thus it'll be null) then the intent is not clear and the tests are misleading. Possible solutions:\n1. use assertJ's cool fluent and lambda-compatible matchers to check that an exception of a certain type is expected upon invoking the production code.\n\n2. Avoid the try-catch and use the junit @ExpectedException\n\n3. use junit fail() method after the execute() method invocation to fail the test when exception was not thrown\n\nAnother suggestion: use static imports. No need to have the Assertions.* explicitly :)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-18 13:30:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8363e240",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/AAIConsumerTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 2813,
+        "name": "Przemyslaw Wasala",
+        "display_name": null,
+        "email": "przemo.wasala@gmail.com",
+        "username": "przemyslaw.wasala"
+      },
+      "updated": "2018-05-21 09:34:15.000000000",
+      "in_reply_to": "5a93c517_9d4b43b1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2358ce89",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/AAIConsumerTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 148,
+      "message": "Done",
+      "author": {
+        "account_id": 2813,
+        "name": "Przemyslaw Wasala",
+        "display_name": null,
+        "email": "przemo.wasala@gmail.com",
+        "username": "przemyslaw.wasala"
+      },
+      "updated": "2018-05-21 09:34:15.000000000",
+      "in_reply_to": "5a93c517_bd487fb4",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a34b7eb0",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 74,
+      "message": "For now I want to use only mockito without any extension. I will check BDDMockito and if BDDMockito meets the requirements of this simply tests I will try to use them later. Can we do this later ?",
+      "author": {
+        "account_id": 2813,
+        "name": "Przemyslaw Wasala",
+        "display_name": null,
+        "email": "przemo.wasala@gmail.com",
+        "username": "przemyslaw.wasala"
+      },
+      "updated": "2018-05-21 09:34:15.000000000",
+      "in_reply_to": "5a93c517_1d0ad379",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c3480ab6",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "Done",
+      "author": {
+        "account_id": 2813,
+        "name": "Przemyslaw Wasala",
+        "display_name": null,
+        "email": "przemo.wasala@gmail.com",
+        "username": "przemyslaw.wasala"
+      },
+      "updated": "2018-05-21 09:34:15.000000000",
+      "in_reply_to": "5a93c517_bd715f0e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_83bf6260",
+      "file_path": "prh-app-server/src/test/java/org/onap/dcaegen2/services/prh/tasks/DmaapPublisherTaskImplTest.java",
+      "patchset_number": 2,
+      "line": 74,
+      "message": "Sure it's ok, nevertheless I highly recommend to check it out :)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-05-21 10:54:23.000000000",
+      "in_reply_to": "5a93c517_a34b7eb0",
+      "unresolved": false
+    }
+  ]
+}

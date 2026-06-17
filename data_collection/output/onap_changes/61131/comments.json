@@ -1,0 +1,348 @@
+{
+  "id": "policy%2Fdistribution~master~I246d57133ed1f0c3548bcdee173d7b64fb368abc",
+  "change_id": "I246d57133ed1f0c3548bcdee173d7b64fb368abc",
+  "_number": 61131,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_1a45b4b2",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/healthcheck/HealthCheckMonitor.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "Does this need to be a singleton? Why not just a regular object?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-19 16:35:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_3a40b0a4",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/healthcheck/HealthCheckMonitor.java",
+      "patchset_number": 3,
+      "line": 81,
+      "message": "Are we using Java properties here? Should these not be in our parameters as a parameter group, otherwise we have two different ways of configuring app.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-19 16:35:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_fa49d8d0",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/startstop/DistributionActivator.java",
+      "patchset_number": 3,
+      "line": 72,
+      "message": "Will we only ever have one distribution server running? Having a static health check monitor means even if we wanted more than one activator/distributor in the future, we couldn't because the health check is static.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-19 16:35:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_ba1360b7",
+      "file_path": "main/src/main/resources/healthcheck.properties",
+      "patchset_number": 3,
+      "line": 30,
+      "message": "Should  this not be a parameter group?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-19 16:35:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_b8a3684e",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/healthcheck/HealthCheckMonitor.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "As per my understanding, Singleton because \n1) We need a HealthCheckMonitor running per DistributionActivator. And one DistributionActivator will start one instance of full distribution service.\n2) The HealthCheckMonitor is started/stopped by the DistributionActivator & used by HealthCheckService for serving REST calls over HTTP Get.\n3) HealthCheckMonitor starts/stops the Jetty server for the REST Endpoint. And making it singleton ensures that only one instance of server is started/stopped per DistributionActivator.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:02:09.000000000",
+      "in_reply_to": "1a76adc5_1a45b4b2",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_73abb3d6",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/healthcheck/HealthCheckMonitor.java",
+      "patchset_number": 3,
+      "line": 81,
+      "message": "Replied in the other comment in healthcheck.properties file.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:02:09.000000000",
+      "in_reply_to": "1a76adc5_3a40b0a4",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_733653e9",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/startstop/DistributionActivator.java",
+      "patchset_number": 3,
+      "line": 72,
+      "message": "I am ok in changing this to non-static, but request you please have a look at my understanding of it.\n\nAs per my understanding, there will be one instance of DistributionActivator per full distribution service. Which will start the HealthCheckMonitor and the entire distribution framework. We already have a factory of ReceptionHandler, with which we can have multiple reception handlers for subscribing to multiple distributors (like SDC). \nHence, one instance of DistributionActivator can start the service  which can then subscribe to multiple distributors. \nSo do we still need multiple instances of DistributionActivator in one instance of full distribution service?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:02:09.000000000",
+      "in_reply_to": "1a76adc5_fa49d8d0",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_b3a94be1",
+      "file_path": "main/src/main/resources/healthcheck.properties",
+      "patchset_number": 3,
+      "line": 30,
+      "message": "I can move this to parameter groups. But few things to note are:\n1) In that case it will be part of the single JSON configuration file provided at startup to main class. Then user has to define the parameter values.\n2) I am intending to use the policy-common-endpoints way of starting the rest server. And that requires a java Properties object with the properties defined for configuring the server. So I will have to still create a Properties object to use this way.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:02:09.000000000",
+      "in_reply_to": "1a76adc5_ba1360b7",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_d3d40722",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/startstop/DistributionActivator.java",
+      "patchset_number": 3,
+      "line": 72,
+      "message": "Yes, I agree we will probably never have more than one distribution activator. However I'm not a big fan of singletons and static variables (I know we use it for the parameter service but that is a static type of thing). Also not having it as a singleton makes testing easier.\n\nWold it be a lot of work to change the health check monitor to be non static and just instantiate one instance of it in the activator?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-20 12:25:17.000000000",
+      "in_reply_to": "1a76adc5_733653e9",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_5321d74b",
+      "file_path": "main/src/main/resources/healthcheck.properties",
+      "patchset_number": 3,
+      "line": 30,
+      "message": "Yes. You will have to create a Properties object to pass to the policy-common-endpoints but you will already have validated all the parameters so you know the values are correct.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-08-20 12:25:17.000000000",
+      "in_reply_to": "1a76adc5_b3a94be1",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_d3b727d7",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/startstop/DistributionActivator.java",
+      "patchset_number": 3,
+      "line": 72,
+      "message": "Ok, I will change it to non-static and non-singleton and submit a patch soon.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:52:50.000000000",
+      "in_reply_to": "1a76adc5_d3d40722",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_93b1afe3",
+      "file_path": "main/src/main/resources/healthcheck.properties",
+      "patchset_number": 3,
+      "line": 30,
+      "message": "Ok, I will change it to parameter group and submit a patch soon.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-20 12:52:50.000000000",
+      "in_reply_to": "1a76adc5_5321d74b",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_c753dc37",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/startstop/DistributionActivator.java",
+      "patchset_number": 3,
+      "line": 72,
+      "message": "Done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-21 17:57:56.000000000",
+      "in_reply_to": "1a76adc5_d3b727d7",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_8735e4f8",
+      "file_path": "main/src/main/resources/healthcheck.properties",
+      "patchset_number": 3,
+      "line": 30,
+      "message": "Done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-21 17:57:56.000000000",
+      "in_reply_to": "1a76adc5_93b1afe3",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_c218aa77",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/rest/HealthCheckReport.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "This should be shared amongst all our REST endpoints. Can we move to policy/common?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-08-21 18:17:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_e2c4c693",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/rest/HealthCheckReport.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Sure, we can move it to policy/common.\nI will create a review in policy/common repo tomorrow.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-21 19:00:31.000000000",
+      "in_reply_to": "1a76adc5_c218aa77",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_0fa486a4",
+      "file_path": "main/src/main/java/org/onap/policy/distribution/main/rest/HealthCheckReport.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Created a review for the same - https://gerrit.onap.org/r/#/c/61833/\nThis has to be merged first. Then I will update a patch in the current one otherwise build will fail.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-22 11:24:38.000000000",
+      "in_reply_to": "1a76adc5_e2c4c693",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_6ae168fd",
+      "file_path": "main/src/test/java/org/onap/policy/distribution/main/parameters/CommonTestData.java",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "I'm not sure about storing default password/user. I know sonar will complain. Usually those sonar complaints are for property value names, so I override them. But this is an actual password/user id. If the property file doesn't provide values, then we should throw exceptions.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-08-22 13:32:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_ea9a586d",
+      "file_path": "main/src/test/java/org/onap/policy/distribution/main/parameters/CommonTestData.java",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "This class is storing sample data just for unit tests to run.\nThe actual parameters will come through configuration parameters (RestServerParameters.java) in JSON file which will be validated even before starting the framework.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-22 13:40:41.000000000",
+      "in_reply_to": "1a76adc5_6ae168fd",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_0af9d47f",
+      "file_path": "main/src/test/java/org/onap/policy/distribution/main/parameters/CommonTestData.java",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Oh ok - I missed that. Thanks!!",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-08-22 13:57:28.000000000",
+      "in_reply_to": "1a76adc5_ea9a586d",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,518 @@
+{
+  "id": "sdc~master~I9f12d0f4f9727c33f8444980b780758533e714cf",
+  "change_id": "I9f12d0f4f9727c33f8444980b780758533e714cf",
+  "_number": 130293,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "978508c1_fca636d5",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 1,
+      "line": 277,
+      "message": "why the valueOf?",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-16 16:14:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c02cd3c1_97f523a9",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 362,
+      "message": "We shouldnt support changes to existing properties only the addition of properties.",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-16 16:14:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dcb0cae5_3b6be624",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 1,
+      "line": 277,
+      "message": "if an integer or double, etc is input while casting it will throw an error since it's expecting a string but this won't happen with String.valueOf",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-17 09:52:20.000000000",
+      "in_reply_to": "978508c1_fca636d5",
+      "unresolved": true
+    },
+    {
+      "id": "23278746_4c577493",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 362,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-17 12:27:58.000000000",
+      "in_reply_to": "c02cd3c1_97f523a9",
+      "unresolved": false
+    },
+    {
+      "id": "f282f836_a60f9691",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 318,
+      "message": "In the scenario where the definition in the service is from a newer version of the model (as opposed to something changed by a user for that service) then changing the description, default value etc is a valid thing to do. Failing the import in this scenario would fall short of what would be a reasonable expectation for it to succeed. However we have no way of knowing if the changes are from a newer version of the model or a customization. \nIf we do allow these things to be changed then at any subsequent upgrade the values could be overwritten thereby removing the customization. This would not be desirable.\n\nTherefore I think the best thing to do is to only the support the addition of new properties to the existing definition and change nothing else (i.e. any other changes are ignored). So the approach would be to add any not already existing properties to the existing definition rather than creating a new version from the new definition.\n\nWe would also then need to make sure at upgrade that the definition included in the upragde is deployed and includes and of these additionally added properties",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-22 13:00:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d97d3946_f49deab2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 317,
+      "message": "Problem with this approach is we are potentially overwriting the metadata for the original resource with default metadata.\n\nI would suggest to:\ncreate a new class NullNodeTypeMetadata which extends NodeTypeMetadata which is instaniated in ServiceCsarInfo if we cant find metadata  \ncreate a new class DefaultUploadResourceInfo which contains the default values\nin NodeTypeMetadataMapper resturn an instance of DefaultUploadResourceInfo when the given nodeTypeMetadata is an instance of NullNodeTypeMetadata\nin ResourceImportManager.importCertifiedResource if the resource already exists:\n    - if the given UploadResourceInfo is not DefaultUploadResourceInfo then use it\n    - if the given UploadResourceInfo is DefaultUploadResourceInfo then use the metadata from the existing resource instead",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-25 09:26:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6084481f_b259e899",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 342,
+      "message": "this method is updating the value of latestMappedToscaTemplate which is kind of hidden in the detail. From code readability if should be clearer what the method is doing\nI would suggest to change to:\nprivate Map<String, Object> getNewProperties()\nand then in the calling code check if the returned map is empty",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-25 09:26:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb6d1672_56c068f9",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 369,
+      "message": "Can we just do:\nsecondMap.putAll(firstMap)\n?\nbut i guess this may change anyway depending on above comment",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-25 09:26:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "40203aeb_11cd6509",
+      "file_path": "catalog-be/src/test/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogicTest.java",
+      "patchset_number": 8,
+      "line": 247,
+      "message": "there is no testing of importing an updated node type.",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-25 09:26:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6ed34a83_ef9777b4",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 317,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-26 12:05:07.000000000",
+      "in_reply_to": "d97d3946_f49deab2",
+      "unresolved": false
+    },
+    {
+      "id": "c846a3be_31265c22",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 342,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-26 12:05:07.000000000",
+      "in_reply_to": "6084481f_b259e899",
+      "unresolved": false
+    },
+    {
+      "id": "be4bae54_3caa0573",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 8,
+      "line": 369,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-26 12:05:07.000000000",
+      "in_reply_to": "fb6d1672_56c068f9",
+      "unresolved": false
+    },
+    {
+      "id": "05d2a379_6c74c18b",
+      "file_path": "catalog-be/src/test/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogicTest.java",
+      "patchset_number": 8,
+      "line": 247,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-26 12:05:07.000000000",
+      "in_reply_to": "40203aeb_11cd6509",
+      "unresolved": false
+    },
+    {
+      "id": "7c6ed5bd_8f2a1129",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 10,
+      "line": 313,
+      "message": "remove all of these values and instead hard code them in DefaultUploadResourceInfo",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-30 10:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ee148c59_99a8c15e",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceBusinessLogic.java",
+      "patchset_number": 10,
+      "line": 3527,
+      "message": "we dont need the isDefaultMetadata on the resource object\ninstead set the values in ResourceImportManager.importCertifiedResource if the resource already exists:\n\n    - if the given UploadResourceInfo is not DefaultUploadResourceInfo then use it\n    - if the given UploadResourceInfo is DefaultUploadResourceInfo then use the metadata from the existing resource instead",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-30 10:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "accf60b7_0217986f",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 9,
+      "line": 420,
+      "message": "there is no need to set this.",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-30 10:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d6dee024_16e868dc",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 10,
+      "line": 313,
+      "message": "what about things like modifier, name, model? Should they be hard coded too? and if so what to?",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-30 11:22:53.000000000",
+      "in_reply_to": "7c6ed5bd_8f2a1129",
+      "unresolved": true
+    },
+    {
+      "id": "6ff27cf9_4fcd9d4b",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 10,
+      "line": 313,
+      "message": "No, the model and modifier should be set to the same values as are applicable to the service being imported. \nThe name should be set to the last element of the node type name (e.g. VNF for tosca.nodes.VNF)\nThey should be set not be set in this NullNodeTypeMetatdata though",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-30 12:22:37.000000000",
+      "in_reply_to": "d6dee024_16e868dc",
+      "unresolved": true
+    },
+    {
+      "id": "369487ca_0720eeca",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 10,
+      "line": 313,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-01 11:09:08.000000000",
+      "in_reply_to": "6ff27cf9_4fcd9d4b",
+      "unresolved": false
+    },
+    {
+      "id": "d99916e8_0308fa26",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceBusinessLogic.java",
+      "patchset_number": 10,
+      "line": 3527,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-01 11:09:08.000000000",
+      "in_reply_to": "ee148c59_99a8c15e",
+      "unresolved": false
+    },
+    {
+      "id": "a379e363_623b98bd",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 9,
+      "line": 420,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-01 11:09:08.000000000",
+      "in_reply_to": "accf60b7_0217986f",
+      "unresolved": false
+    },
+    {
+      "id": "65746ad8_715c755a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 193,
+      "message": "add name to NullNodeTypeMetadata to simplify this",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-02 09:57:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "116a603d_a7cad0ca",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 211,
+      "message": "this can then also be done in the mapper as the name is in the NullNodeTypeMetadata",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-02 09:57:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b8553644_2b12eaf0",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 213,
+      "message": "not needed",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-02 09:57:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "54509afe_500af721",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 214,
+      "message": "the model is known higher up in the chain, just pass it down rather than adding to nodeTypesMetadataList, i.e. in the service object in SericeImportBusinessLogic createServiceFromCsar",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-02 09:57:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bc167e22_ffd13022",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 193,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-02 11:43:47.000000000",
+      "in_reply_to": "65746ad8_715c755a",
+      "unresolved": false
+    },
+    {
+      "id": "821f6051_5f679924",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 211,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-02 11:43:47.000000000",
+      "in_reply_to": "116a603d_a7cad0ca",
+      "unresolved": false
+    },
+    {
+      "id": "325183c6_bd10d016",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 213,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-02 11:43:47.000000000",
+      "in_reply_to": "b8553644_2b12eaf0",
+      "unresolved": false
+    },
+    {
+      "id": "e27097f2_ebb6f0fb",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 14,
+      "line": 214,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-09-02 11:43:47.000000000",
+      "in_reply_to": "54509afe_500af721",
+      "unresolved": false
+    },
+    {
+      "id": "5db5ea3f_421da0f3",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/NodeTypesMetadataList.java",
+      "patchset_number": 15,
+      "line": 35,
+      "message": "these are not needed now so can be removed",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-09-05 12:28:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

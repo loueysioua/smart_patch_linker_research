@@ -1,0 +1,110 @@
+{
+  "id": "oom%2Foffline-installer~master~I54958d6e97febbda461bfb68f3829b002e7200b4",
+  "change_id": "I54958d6e97febbda461bfb68f3829b002e7200b4",
+  "_number": 98461,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "41dbd148_42d31992",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "what parts are really related to onap??\n- Is the functionality expecting onap's implemented helm deploy plugin is used? Or does this work also when normal plain helm used?\n- Can this be used also with minikube?\n\nPlease do not just answer my comment, but directly improve the describtion part if feasible.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-11-16 09:06:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cbf11a94_c5b5cbf3",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "@Samuli sorry :) I can improve the description, but this script is part of offline-installer and that is part of OOM and OOM uses that helm deploy plugin. That means that this script is not intended to be used outside of these constraints - it is just a tool to heal not so healthy ONAP installation. So to answer your question - as of now, this tool relies on that plugin.\n\nI will soon dig deeper to that deploy plugin and I left myself some TODOs in this script to deal with it - so in the future it can be used outside of ONAP and OOM, but then again - why would anyone want to use it? This script is just a band aid for broken ONAP installation.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-11-18 08:46:05.000000000",
+      "in_reply_to": "41dbd148_42d31992",
+      "unresolved": true
+    },
+    {
+      "id": "1c6e571f_71a793ce",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "To me, this help msg suggests that there's a usage scenario for \"-c\" opt without any args to it while synopsis says \"[(-c|--component <component release name>)...|(-D|--delete-all)]\" which claims otherwise (\"-c\" always has to be followed by an arg). \n\n\"-c onap-<component> --delete-all\" are mutually exclusive and this fails only if arg to \"-c\" is given; if i run \"/tmp/helm-healer.sh -c --delete-all\" it doesn't fail but continues just producing an error:\n\nINFO: Explicitly asked for component redeploy:  --delete-all \nERROR: Component release name '--delete-all' does not match release prefix: onap (SKIP) \nINFO: Redeploy onap... \nINFO: helmfetching local/onap\n\n\nMy point here is: is using \"-c\" without arg an alternative usage scenario (undocumented?) or it's just buggy input args validation?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-11-18 10:04:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "37f48d66_ae2b392c",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "I don't see the confusion - I reference here an option the syntax is stated above (-c <component>) - this is just a bunch of more words to describe the purpose for it. Look at other paragraphs: --prefix, --file also requires value and I omitted the value in the paragraphs. Maybe my brain is just wired differently and I should rewrite this whole help if it is not clear.\n\n\"is using \"-c\" without arg an alternative usage scenario (undocumented?)\"\n\nNo, it requires value\n\n\"it's just buggy input args validation\"\n\nNo, at least the output you received is as intended after -c must follow a component name.\n\nAs you correctly wrote -c and -D are mutually exclusive and scripts handle this correctly. Or not?",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-11-18 10:20:39.000000000",
+      "in_reply_to": "1c6e571f_71a793ce",
+      "unresolved": true
+    },
+    {
+      "id": "2277affe_03188221",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "Ah, ok, the behaviour is different depending on opts order:\n\nThis fails as expected:\n\n/tmp/helm-healer.sh --delete-all -c\nERROR: 'Delete all components' used already - argument mismatch \nTry help: helm-healer.sh --help\n\nThis doesn't:\n/tmp/helm-healer.sh -c --delete-all\nINFO: Explicitly asked for component redeploy:  --delete-all \nERROR: Component release name '--delete-all' does not match release prefix: onap (SKIP) \nINFO: Redeploy onap... \nINFO: helmfetching local/onap\n\nI only tested it in the latter form that's why i asked if using \"-c\" without any arg was another usecase because it doesn't fail like the former one.\n\nBut that's just the onerous way of doing input opts and args sanitization in bash right. If it's not trivial to fix it i can live with that.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-11-18 10:34:47.000000000",
+      "in_reply_to": "37f48d66_ae2b392c",
+      "unresolved": true
+    },
+    {
+      "id": "8794b2c2_a57df416",
+      "file_path": "tools/helm-healer.sh",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "Well, I made a simple finite automata, so the argument parsing is quite simple: -c change state to component parsing and expects a component right after it.\n\nIf I had to take into account validation you proposed then if for some terrible reasons someone named onap component --delete-all then it would not ever delete it :) There is another way how to deal with it by using standardized special option '--' after which no option is interpreted but that would fix only one case of -c --delete-all - the one on the very end of the command...\n\nI am maybe wrong but I think that all commands behaves in similar way:\n\n$ ssh -p -e \"ssh -p 2222\" 192.168.1.100\nBad port '-e'",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-11-18 10:43:11.000000000",
+      "in_reply_to": "2277affe_03188221",
+      "unresolved": true
+    }
+  ]
+}

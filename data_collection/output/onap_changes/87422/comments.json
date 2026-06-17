@@ -1,0 +1,280 @@
+{
+  "id": "oom%2Foffline-installer~master~I9078f9dfe5894d94d4b6a9e44411f034508992e7",
+  "change_id": "I9078f9dfe5894d94d4b6a9e44411f034508992e7",
+  "_number": 87422,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a9af0e8c_aca11793",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "why this import is needed?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-10 08:03:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5d928898_bc5576ad",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "Because if for some reason the docker container is not running and above tasks don't report 'changed' on second run the container wouldn't be running. And we don't want to have same docker_container module call to create dns container here and in handlers because if it was here and you altered it then it didn't have any effect because what's in the handlers is run at the end.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 08:09:56.000000000",
+      "in_reply_to": "a9af0e8c_aca11793",
+      "unresolved": false
+    },
+    {
+      "id": "88f4465f_6ec25d43",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 2,
+      "message": "having handler for starting \"dns container\" sounds a bit strange to me. It sounds like just one time operation, not something we need to have in handler for repeatable task. Wouldn't be better to remove that \"handler\" and add just task instead of this handler logic ? I also did not find any other place in the code from where this handler is called",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-12 08:53:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e74b1563_71c51ed1",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 9,
+      "message": "we have this :ro in many other places, it's safer, why did you remove it ? do we expect someone to write into that file ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-12 08:53:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e90bb96d_989ba360",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "is it really a handler what we need for this \"docker run\" command ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-12 08:53:43.000000000",
+      "in_reply_to": "5d928898_bc5576ad",
+      "unresolved": false
+    },
+    {
+      "id": "dbe55bc5_d22df2ba",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "I'm also confused with this commit. And usage of handler and still importing the same tasks.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-13 05:58:28.000000000",
+      "in_reply_to": "e90bb96d_989ba360",
+      "unresolved": false
+    },
+    {
+      "id": "936a5bb7_b60c5e84",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 9,
+      "message": "This change was just a follow up on https://gerrit.onap.org/r/c/85907/7/ansible/roles/dns/tasks/main.yml (this patch removes the task in which this change was done so had to include it here)\nSo Samuli is to explain the reason.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-13 07:54:10.000000000",
+      "in_reply_to": "e74b1563_71c51ed1",
+      "unresolved": false
+    },
+    {
+      "id": "8caa3164_61e2d38c",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 9,
+      "message": "and I don't remember the reason, except it did not worked without this change.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-13 08:01:20.000000000",
+      "in_reply_to": "936a5bb7_b60c5e84",
+      "unresolved": false
+    },
+    {
+      "id": "812728e5_2d059e5a",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 2,
+      "message": "It's not one time, it's triggered in roles/dns/tasks/main.yml in two tasks, e.g. if one is about to change dns server image task 'Load dns server container' needs to call this handler for changes to take effect.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-13 08:02:59.000000000",
+      "in_reply_to": "88f4465f_6ec25d43",
+      "unresolved": false
+    },
+    {
+      "id": "f0a5b6e3_c3885366",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "This was just my proposal of solving the problem of having same definition of docker container for dns image in two places (this file and in handlers). Putting docker_container only here would require removing handlers in above two tasks, while leaving the handler and task for starting container here will revert the original issue.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-13 08:02:59.000000000",
+      "in_reply_to": "dbe55bc5_d22df2ba",
+      "unresolved": false
+    },
+    {
+      "id": "dc657aa4_f459c637",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "Does it make sense to add restart and optionally recreate params here? if handler *does* run it should always cause container restart, othervise the only condition for restart is the params of handler being different",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-13 14:25:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "38f6c609_6f0f81a2",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 26,
+      "message": "is it doable without this command module? not objecting, just not sure",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-13 14:25:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bac9e420_4d5e386a",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 26,
+      "message": "Don't know of an alternative approach. This one's idempotent at least.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-13 14:40:43.000000000",
+      "in_reply_to": "38f6c609_6f0f81a2",
+      "unresolved": false
+    },
+    {
+      "id": "79f8cfc0_63f568f3",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "Got your point, added 'recreate' param to always recreate container whenever handler is called. So caller decides on the condition of recreating the container and the handler itself always recreates it whenever called.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-14 07:50:19.000000000",
+      "in_reply_to": "dc657aa4_f459c637",
+      "unresolved": false
+    },
+    {
+      "id": "2f8b88b8_c36dc070",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 2,
+      "message": "now I see the point, thx",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-15 09:19:50.000000000",
+      "in_reply_to": "812728e5_2d059e5a",
+      "unresolved": false
+    },
+    {
+      "id": "b8e92c84_9dc51415",
+      "file_path": "ansible/roles/dns/handlers/main.yml",
+      "patchset_number": 2,
+      "line": 9,
+      "message": "so it's something molecule related, but we should not have it here ..... please add ro back, if there is a real reason to change it, we should have it in respective commit to see why",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-15 09:19:50.000000000",
+      "in_reply_to": "8caa3164_61e2d38c",
+      "unresolved": false
+    }
+  ]
+}

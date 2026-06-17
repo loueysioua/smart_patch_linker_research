@@ -1,0 +1,263 @@
+{
+  "id": "policy%2Fclamp~master~I2a98ce16dfb3761a174c90f4b965d1a37a0d8576",
+  "change_id": "I2a98ce16dfb3761a174c90f4b965d1a37a0d8576",
+  "_number": 122546,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f6a3f7bc_8916be26",
+      "file_path": "runtime-controlloop/pom.xml",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "use ${version.jackson}",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 14:04:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "138b0823_b78447e5",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "avoid jackson - prefer StandardCoder",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 14:04:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1164d52f_9ea8d42c",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 409,
+      "message": "need to handle case where section=null?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 14:04:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c79ef43_c0872140",
+      "file_path": "runtime-controlloop/pom.xml",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Ok, will do",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 14:26:34.000000000",
+      "in_reply_to": "f6a3f7bc_8916be26",
+      "unresolved": true
+    },
+    {
+      "id": "86f08eea_51a9db9c",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "Do you mean just for the exception here Jim? I am using Jackson because it has the Json Schema converter I need.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 14:26:34.000000000",
+      "in_reply_to": "138b0823_b78447e5",
+      "unresolved": true
+    },
+    {
+      "id": "b2993e06_97ed34df",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 409,
+      "message": "section has a default value of \"all\", so it shouldn't be null. That will be caught by the \"default\" case.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 14:26:34.000000000",
+      "in_reply_to": "1164d52f_9ea8d42c",
+      "unresolved": true
+    },
+    {
+      "id": "80914689_b90fc311",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "And also, similar functionality does not seem to be available in gson.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 15:24:52.000000000",
+      "in_reply_to": "86f08eea_51a9db9c",
+      "unresolved": true
+    },
+    {
+      "id": "500e9270_37faf4ab",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "oh, it isn't using jackson to translate data, it's using it to dump a schema.  Then probably ok to use it.  However, these classes do not typically have any jackson annotations, so may not yield correct output.  For example, a lot of these classes are subclasses of ToscaEntity, which contains a \"derivedFrom\" field, which is serialized as \"derived_from\".  Does that should up correctly in the output from the \"schema\" method below?  (And I don't want to introduce jackson into policy-models, if we can avoid it, because that may force us to deal with vulnerability issues reported on IQ.  Though just including the jackson annotations jar for models might be ok.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 16:14:41.000000000",
+      "in_reply_to": "80914689_b90fc311",
+      "unresolved": true
+    },
+    {
+      "id": "e89d0560_8bc6dd5b",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 409,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 16:14:41.000000000",
+      "in_reply_to": "b2993e06_97ed34df",
+      "unresolved": false
+    },
+    {
+      "id": "c9d3c08c_b6896fe0",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "That will be ok I think. I am converting the camel case in the output Json Schema to snake case in the endpoint function. So derivedFrom gets changed to derived_from\n\nObjectMapper mapper = new ObjectMapper();\nmapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);\n\nThat gets me what I want. Won't need to change the models I don't think.",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 16:22:27.000000000",
+      "in_reply_to": "500e9270_37faf4ab",
+      "unresolved": true
+    },
+    {
+      "id": "2e1f7350_9b1b56ff",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "OK, though it seems like there may be some cases where camel case is used instead",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 16:53:50.000000000",
+      "in_reply_to": "c9d3c08c_b6896fe0",
+      "unresolved": false
+    },
+    {
+      "id": "c8d1c359_a439314c",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "I have gone through the output of each of the generated json schemas for that endpoint and all was using snake case. Any particular class you are referring to?",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 17:14:20.000000000",
+      "in_reply_to": "2e1f7350_9b1b56ff",
+      "unresolved": false
+    },
+    {
+      "id": "279d9aba_e2999356",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "good enough for me - thanks!",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-09 17:24:08.000000000",
+      "in_reply_to": "c8d1c359_a439314c",
+      "unresolved": false
+    },
+    {
+      "id": "02c68c91_8dc1685d",
+      "file_path": "runtime-controlloop/src/main/java/org/onap/policy/clamp/controlloop/runtime/commissioning/rest/CommissioningController.java",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "Thanks Jim",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-09 17:25:35.000000000",
+      "in_reply_to": "279d9aba_e2999356",
+      "unresolved": false
+    },
+    {
+      "id": "cd70f6a4_7036c268",
+      "file_path": "runtime-controlloop/pom.xml",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Done",
+      "author": {
+        "account_id": 7603,
+        "name": "Saul Gill",
+        "display_name": null,
+        "email": "saul.gill@est.tech",
+        "username": "saul.gill"
+      },
+      "updated": "2021-07-12 09:27:48.000000000",
+      "in_reply_to": "7c79ef43_c0872140",
+      "unresolved": false
+    }
+  ]
+}

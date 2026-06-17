@@ -1,0 +1,178 @@
+{
+  "id": "sdc~master~Iefb3fd84d5087f7e114cd61f762bedfcafe864ec",
+  "change_id": "Iefb3fd84d5087f7e114cd61f762bedfcafe864ec",
+  "_number": 133678,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "6c218301_51c8170f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 452,
+      "message": "no reasons to continue in this case, return immediately",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-16 15:03:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9c941579_939809f3",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 457,
+      "message": "uncovered code",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-16 15:03:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "457c2c37_64985c04",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/ParsedToscaYamlInfo.java",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "used anywhere?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-16 15:03:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9ffbca0a_cc58207d",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 452,
+      "message": "Done",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2023-03-20 11:29:09.000000000",
+      "in_reply_to": "6c218301_51c8170f",
+      "unresolved": false
+    },
+    {
+      "id": "bad6f145_5b6494af",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 457,
+      "message": "Done",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2023-03-20 11:29:09.000000000",
+      "in_reply_to": "9c941579_939809f3",
+      "unresolved": false
+    },
+    {
+      "id": "5d4208ef_2833b753",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/ParsedToscaYamlInfo.java",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Done",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2023-03-20 11:29:09.000000000",
+      "in_reply_to": "457c2c37_64985c04",
+      "unresolved": false
+    },
+    {
+      "id": "739eae7f_bf159db6",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 459,
+      "message": "when i said 'return immediately ' I meant something like this\n\nprivate ImmutablePair<StorageOperationStatus, String> validateInputName(final Component component,\n                                                                            final ComponentInstInputsMap componentInstInputsMap) {\n        final Map<String, List<ComponentInstancePropInput>> inputDeclaredProperties = new HashMap<>();\n        if (MapUtils.isNotEmpty(componentInstInputsMap.getComponentInstanceProperties())) {\n            inputDeclaredProperties.putAll(componentInstInputsMap.getComponentInstanceProperties());\n        } else if (MapUtils.isNotEmpty(componentInstInputsMap.getServiceProperties())) {\n            inputDeclaredProperties.putAll(componentInstInputsMap.getServiceProperties());\n        }\n\n        if (MapUtils.isNotEmpty(inputDeclaredProperties) && CollectionUtils.isNotEmpty(component.getInputs())) {\n            for (final List<ComponentInstancePropInput> componentInstancePropInputs : inputDeclaredProperties.values()) {\n                for (final ComponentInstancePropInput componentInstancePropInput : componentInstancePropInputs) {\n                    final Optional<InputDefinition> inputDefinition = component.getInputs().stream()\n                        .filter(input -> input.getName().equals(componentInstancePropInput.getInputName())\n                            || input.getName().equals(componentInstancePropInput.getName())).findAny();\n                    if (inputDefinition.isPresent()) {\n                        return new ImmutablePair<>(StorageOperationStatus.INVALID_VALUE, inputDefinition.get().getName());\n                    }\n                }\n\n            }\n        }\n\n        return new ImmutablePair<>(StorageOperationStatus.OK, StringUtils.EMPTY);\n    }",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-20 19:06:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c47b7077_757c2054",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/property/DefaultPropertyDeclarator.java",
+      "patchset_number": 3,
+      "line": 278,
+      "message": "inline\n\nreturn validateDeclaredInputName(declaredInputName);",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-20 19:06:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4d5dc40f_6de9391a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/InputsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 459,
+      "message": "Ack",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2023-03-20 19:36:32.000000000",
+      "in_reply_to": "739eae7f_bf159db6",
+      "unresolved": false
+    },
+    {
+      "id": "fbb9f0f8_9cb01ab7",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/property/DefaultPropertyDeclarator.java",
+      "patchset_number": 3,
+      "line": 278,
+      "message": "Done",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2023-03-20 19:36:32.000000000",
+      "in_reply_to": "c47b7077_757c2054",
+      "unresolved": false
+    }
+  ]
+}

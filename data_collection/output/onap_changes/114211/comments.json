@@ -1,0 +1,246 @@
+{
+  "id": "oom~master~I349b9454ca0d7a3f2724aa27c041a4ea2da3689f",
+  "change_id": "I349b9454ca0d7a3f2724aa27c041a4ea2da3689f",
+  "_number": 114211,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "79d89a5c_b54bf81a",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 106,
+      "message": "personally I'm not a fan of hiding such limits when pod is unlimited explicitly",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-10-27 17:57:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "07729e03_85599142",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "Hmm what else is running inside this container? Isn't it only jvm process? If it's the only one then why waste 25% of RAM?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-10-27 17:57:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0996e7f3_31b42415",
+      "file_path": "kubernetes/clamp/components/clamp-backend/values.yaml",
+      "patchset_number": 7,
+      "line": 34,
+      "message": "at this point I'm sure that Sylvain touched this file with his broken editor xD",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-10-27 17:57:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b26815fa_e5b4c4fe",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 106,
+      "message": "No, all onap components do the same by setting those limits somewhere in a startup script, in a variable of the container itself or whatever... If you don't do it the JVM will control it depending of the java version and this will never be unlimited. \nSo unlimited does not mean anything for Java, and it does not mean anything for mostly all Onap java components :-)",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-10-27 18:44:27.000000000",
+      "in_reply_to": "79d89a5c_b54bf81a",
+      "unresolved": true
+    },
+    {
+      "id": "db7557d9_74fb865a",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "Nothing else, only the JVM.\nThese are new parameters introduced since Java 9 (I think :-) ) for JVM running inside a container.\nI do think this should be introduced in all Onap java components.\nDoing so gives us finally a dynamic app that we can control with flavours.\nCurrently flavors are just totally broken because everybody sets the JVM heap params somewhere else.",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-10-27 18:44:27.000000000",
+      "in_reply_to": "07729e03_85599142",
+      "unresolved": true
+    },
+    {
+      "id": "b2866818_626cc01c",
+      "file_path": "kubernetes/clamp/components/clamp-backend/values.yaml",
+      "patchset_number": 7,
+      "line": 34,
+      "message": "LoL",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-10-27 18:44:27.000000000",
+      "in_reply_to": "0996e7f3_31b42415",
+      "unresolved": true
+    },
+    {
+      "id": "46e259b3_050c7f54",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 106,
+      "message": "Here’s my proposal: let’s let people the ability to set their own value if they want, and defaulting to « -Xms256m -Xmx1g »",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-10-27 21:06:09.000000000",
+      "in_reply_to": "b26815fa_e5b4c4fe",
+      "unresolved": true
+    },
+    {
+      "id": "37e09657_07664c50",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "I believe @Krzysztof question is why max 75% and not 95% or even 100%. \nIs there any reason to keep 25% out of Java?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-10-27 21:06:09.000000000",
+      "in_reply_to": "db7557d9_74fb865a",
+      "unresolved": true
+    },
+    {
+      "id": "fe63134b_93b87d57",
+      "file_path": "kubernetes/clamp/components/clamp-backend/values.yaml",
+      "patchset_number": 7,
+      "line": 34,
+      "message": "I keep trying to remove this « feature » but it seems I can’t :’(",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-10-27 21:08:21.000000000",
+      "in_reply_to": "b2866818_626cc01c",
+      "unresolved": true
+    },
+    {
+      "id": "e3b26d1a_e2969738",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 106,
+      "message": "Sylvain,\n\nIn fact, I would tend to agree with Krzysztof on that point, if it's \"unlimited\" we do not set anything and we let the JVM default values.\n\nFrom the web: \"\nFor Java 11 and above\nThe Xmx value is 25% of the available memory with a maximum of 25 GB. However, where there is 2 GB or less of physical memory, the value set is 50% of available memory with a minimum value of 16 MB and a maximum value of 512 MB.\"\n--> So without limitation it could be huge because it takes the memory of your node as a reference.\n\n\nBut i think we should go further than that by removing all the hardcoded/hidden java memory settings everywhere.\nCurrently the \"flavor\" settings is kind of a broken feature in ONAP, because some compos have hidden those parameters somewhere. So changing the flavor does not impact the memory settings at all, which is in my opinion just sad. \nIt's even worst than that, if you reduce the K8S memory limit under the minimal hardcoded HEAP settings, your pod is never going to start !\nI think if we want to reduce the footprint taken by ONAP this is not going to help :-(\n\nI think we should repair that feature, and make our apps more dynamic. That's the goal of the new params introduced in Java 11: -XX:MaxRAMPercentage and -XX:MinRAMPercentage\n\n\nSo to recap here (that could be a trial), i would say we remove the memory settings so that \"unlimited\" is JVM controlled.\nAnd we keep the flexibility (-XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=75) when flavor is set so that user can really control the memory in the override file for instance.\n\n\nDoes it sound reasonable ?",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-10-28 09:30:02.000000000",
+      "in_reply_to": "46e259b3_050c7f54",
+      "unresolved": true
+    },
+    {
+      "id": "561a1af6_0a2a6fca",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "It sounds counterintuitive, but both -XX:MaxRAMPercentage and -XX:MinRAMPercentage are used to calculate maximum HEAP size when MaxHeapSize / -Xmx are not set. There are others type of memories managed by the JVM, so set it to 95% is very risky.\nAnd if the limits defined in the flavor are reached, I think k8s is going to kill it.",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-10-28 09:30:02.000000000",
+      "in_reply_to": "37e09657_07664c50",
+      "unresolved": true
+    },
+    {
+      "id": "e5e94291_e7f83645",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 106,
+      "message": "I've removed when unlimited and set only when on flavor.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-10-29 08:13:28.000000000",
+      "in_reply_to": "e3b26d1a_e2969738",
+      "unresolved": true
+    },
+    {
+      "id": "ff1051d9_528e1bf2",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "Hmmm then why are we defining just a heap size instead of using -Xmx and -Xms and let the JVM determine the proportion between memories that it needs to allocate?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-10-29 15:15:08.000000000",
+      "in_reply_to": "561a1af6_0a2a6fca",
+      "unresolved": true
+    },
+    {
+      "id": "337dd15b_f810fcd5",
+      "file_path": "kubernetes/clamp/components/clamp-backend/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "From different articles I could read and the java -X command:\nXmx and Xms settings are only for heap size not for the others (metaspace,stacks, etc ...)\nIf you set a value for -Xms, the -XX:InitialRAMPercentage option is ignored. If you set a value for -Xmx, the -XX:MaxRAMPercentage option is ignored.\n\nAbout the settings MaxRAMPercentage:\nIt’s true that we can define the -XX:MaxRAMPercentage parameter to 100% but it’s not recommended.\nIt's required to have some bandwidth for the \"Pod internal resources\" (SSH session, communication with kube api-server)",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-11-03 09:54:33.000000000",
+      "in_reply_to": "ff1051d9_528e1bf2",
+      "unresolved": true
+    }
+  ]
+}

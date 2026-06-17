@@ -1,0 +1,258 @@
+{
+  "id": "cps~master~Icc6f59fbeebb03703626132c6d5c2afde0e5dd3d",
+  "change_id": "Icc6f59fbeebb03703626132c6d5c2afde0e5dd3d",
+  "_number": 135931,
+  "change_comments": [
+    {
+      "id": "c4fa77ae_ac528b1c",
+      "patchset_number": 1,
+      "message": "I see it is WiP but we really need to address the performance issue before we can go forward with this!\n\nPossibly need a more details analysis PoC how to achieve the delate with minimum overhead/impacts...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4ca1675_1d6c9d0e",
+      "patchset_number": 1,
+      "message": "Hi Toine,\n \nHaven't applied any logic here copied from previous method didn't modified properly, still analysing Kafka events .Just to discuss with Lee Anjella I have added these changes using multipleAnchors. Currently the code for update operation is in progress so tried with multipleAnchors . Once the code is ready we will update POC and then work on it\n\nThanks for the review comments will update it.",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6bf6ab6b_dc947476",
+      "patchset_number": 1,
+      "message": "thats fine I realize it is is a WiP just giving you some pointer on what will be important!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-13 07:52:35.000000000",
+      "in_reply_to": "d4ca1675_1d6c9d0e",
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "9513c66c_c205fcf4",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "NB: Please use more specific commit message in future\n(we have many events and commit messages will be seen in git view with context)\n\nsuggestion: Introduction of delt-feature event",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "36440e87_a962a105",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 177,
+      "message": "I think 'process' is the incorrect term heer (I know you copied it from legacy method but that is simply badly named too!)\n\n'process' is more appropriate for an incommign event.\nI think i this case you should use the verb 'send' you can change all related method names including the legacy in above.\n\nAlso the 'async' but is superfluous, events are always async and it is not as if the send is doin in a separate thread\n\nsuggested methodNames:\n\nsendDataUpdateEvent\nsendDeltaEvent",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5f97d6c7_8a806fc3",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 1,
+      "line": 100,
+      "message": "I don't understand the logic here\nData is null for update operations, why?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bd573eac_4504a173",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "this going to be very big and very expensive, performance consideration!\nWE had to disable to cps-temporal' event exactly for this reason!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f60d81dd_76bb293a",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/NotificationService.java",
+      "patchset_number": 1,
+      "line": 115,
+      "message": "this is using a config parameter specifically design for cps-temporal function! You should NOT use the same for this feature (maybe similar but not exact same)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-09-12 08:27:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "16b17b21_ca424deb",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "Ok",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": "9513c66c_c205fcf4",
+      "unresolved": false
+    },
+    {
+      "id": "612a12d4_9f4811ea",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 177,
+      "message": "will update",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": "36440e87_a962a105",
+      "unresolved": false
+    },
+    {
+      "id": "c4d7e17a_375f88b0",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 1,
+      "line": 100,
+      "message": "yes Toine , I just followed the same steps of previous and it requires modification Also working on the POC .",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": "5f97d6c7_8a806fc3",
+      "unresolved": false
+    },
+    {
+      "id": "0fbb8353_dcd619d8",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "ok",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": "bd573eac_4504a173",
+      "unresolved": false
+    },
+    {
+      "id": "2611fdaf_4ce98dad",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/NotificationService.java",
+      "patchset_number": 1,
+      "line": 115,
+      "message": "ok",
+      "author": {
+        "account_id": 7840,
+        "name": "Rudrangi Anupriya",
+        "display_name": null,
+        "email": "ra00745022@techmahindra.com",
+        "username": "anupriya63"
+      },
+      "updated": "2023-09-12 12:50:08.000000000",
+      "in_reply_to": "f60d81dd_76bb293a",
+      "unresolved": false
+    },
+    {
+      "id": "2b92f1b1_75536b67",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 2,
+      "line": 119,
+      "message": "Since you are going to work with CloudEvents you wont be needing a different pojo class to be created.\n\nSee the CloudEventBuilder in the cps-ncmp repo to spot examples around it.\nOr we can discuss more around it.\n\nAlso you might have to follow some RFC standard..right ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2023-09-20 10:19:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "21dc4c0f_1e99b56c",
+      "file_path": "cps-service/src/main/java/org/onap/cps/notification/CpsDataUpdatedEventFactory.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "also this would fetch everything..i.e on every change whole Anchor is fetched and not just the changed part.. wont scale much.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2023-09-21 09:22:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

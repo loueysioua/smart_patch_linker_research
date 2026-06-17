@@ -1,0 +1,59 @@
+{
+  "id": "policy%2Fmodels~master~I2c67ec282c77d42b9e8a11cc70cb518976075a00",
+  "change_id": "I2c67ec282c77d42b9e8a11cc70cb518976075a00",
+  "_number": 132011,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "54640ac4_b6b73c8d",
+      "file_path": "models-interactions/model-actors/actor.sdnr/src/main/java/org/onap/policy/controlloop/actor/sdnr/SdnrActor.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "seems this is replacing the other operator, I believe you would simply add another statement? Or is this fixing code?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2022-11-04 17:10:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "775df424_6e75e8de",
+      "file_path": "models-interactions/model-actors/actor.sdnr/src/main/java/org/onap/policy/controlloop/actor/sdnr/SdnrActor.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "good question, in essence no change in this file, just formatting I leaked here.\nthe A1pActor use the same SdnrOperation class as SdnrActor.  It\ndoes not inherit from SdnrActor (it was giving me some trouble when I tried it out).\nThe A1pOperation does inherit from SdnrOperation and all that code  from SdnrOperation\nis pretty much reused.\nSo, here it just calls the 2-arguments super constructor from Bidirectional...  \nAs a note, at runtime both actors use the same Operations and message format but over different topics.   I couldn't figure out a better way than creating another actor to go through\ndifferent request/response topics.   Here is the a1p constructor for convenience comparing it:\n\npublic class A1pActor extends BidirectionalTopicActor<BidirectionalTopicActorParams>\n..\n    public A1pActor() {\n        super(NAME, BidirectionalTopicActorParams.class);\n\n        addOperator(new BidirectionalTopicOperator(NAME, SdnrOperation.NAME, this, SdnrOperation.SELECTOR_KEYS,\n            A1pOperation::new));\n    }",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2022-11-04 17:34:33.000000000",
+      "in_reply_to": "54640ac4_b6b73c8d",
+      "unresolved": true
+    },
+    {
+      "id": "3db5ec46_fa79457e",
+      "file_path": "models-interactions/model-actors/actor.sdnr/src/main/java/org/onap/policy/controlloop/actor/sdnr/SdnrActor.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Ack",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2022-11-04 21:22:33.000000000",
+      "in_reply_to": "775df424_6e75e8de",
+      "unresolved": false
+    }
+  ]
+}

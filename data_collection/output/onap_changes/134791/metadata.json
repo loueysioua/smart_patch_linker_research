@@ -1,0 +1,804 @@
+{
+  "id": "cps~master~Ic47a2c9eb34150ed76bd5ce452fe1c9aaf9b4c5c",
+  "change_id": "Ic47a2c9eb34150ed76bd5ce452fe1c9aaf9b4c5c",
+  "_number": 134791,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2023-06-08 13:55:32.000000000",
+    "updated": "2023-06-14 14:08:13.000000000",
+    "submitted": "2023-06-14 13:57:11.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 6742,
+      "name": "Daniel Hanrahan",
+      "display_name": null,
+      "email": "daniel.hanrahan@est.tech",
+      "username": "danielhanrahan"
+    },
+    "submitter": {
+      "account_id": 6639,
+      "name": "Toine Siebelink",
+      "display_name": null,
+      "email": "toine.siebelink@est.tech",
+      "username": "ToineSiebelink"
+    }
+  },
+  "subject": "Lower memory usage in FragmentRepository",
+  "commit_message": "Lower memory usage in FragmentRepository\n\nAvoid using Spring Data \"interface projection\" in FragmentRepository.\nThe use of FragmentExtract in FragmentRepository is causing an\noverhead of around 5 kilobytes per fragment, which is leading to\nabnormally high memory usage when queries return a large number of\nnodes. For example, around 250MB of additional memory is needlessly\nused when fetching 50,000 datanodes.\n\n- Remove FragmentExtract interface and FragmentEntityArranger class.\n- Add FragmentPrefetchRepository, using JdbcTemplate and RowMapper\n  to fetch FragmentEntity descendants in a single SQL query.\n- Many CpsDataService operations have memory reductions:\n  - queryDataNodes\n  - getDataNodesForMultipleXpaths\n  - updateDataNodesAndDescendants\n  - updateNodeLeaves\n  - and any NCMP methods using the above.\n\nIssue-ID: CPS-1716\nSigned-off-by: danielhanrahan <daniel.hanrahan@est.tech>\nChange-Id: Ic47a2c9eb34150ed76bd5ce452fe1c9aaf9b4c5c\n",
+  "change_log": {
+    "entry_count": 55,
+    "entries": [
+      {
+        "id": "c0d936d53e9af2e6bd8b5b644e21b189761fcbb3",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-08 13:55:32.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "278d3c9bbfd102918da014ff912985721355c806",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-08 13:55:42.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 1
+      },
+      {
+        "id": "77ec38b414f1a37ce381d37b9b1d47a5e7640c7a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 13:56:23.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3393/ (1/5)",
+        "patchset_number": 1
+      },
+      {
+        "id": "7158b78180aea34123eff8afb6162047192ed28a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 13:56:40.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22498/ (2/5)",
+        "patchset_number": 1
+      },
+      {
+        "id": "ed264c8b77245fded45eeb57ca70e109699d4b42",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 13:56:58.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4362/ (4/5)",
+        "patchset_number": 1
+      },
+      {
+        "id": "6bec8754b85c9953e14b356d1432d9692819085d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 13:56:58.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5037/ (3/5)",
+        "patchset_number": 1
+      },
+      {
+        "id": "b3714176ad6ccdec72cf604a23dd24fc8495e757",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 13:57:41.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3124/ (5/5)",
+        "patchset_number": 1
+      },
+      {
+        "id": "0d1b7c3a91bac3265118908902301794bab0c624",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-08 14:06:55.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3393/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3393\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4362/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4362\n\nhttps://jenkins.onap.org/job/doc-rules/3124/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3124\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5037/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5037\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22498/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22498",
+        "patchset_number": 1
+      },
+      {
+        "id": "008e645b4815c512e4a8f05562500c4e9bb09905",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-12 08:32:04.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "92ba36aacac499f82c09a88d60e3ff91c8244ade",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:33:01.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3401/ (1/5)",
+        "patchset_number": 2
+      },
+      {
+        "id": "ca52d309b0a9e1f3236481f95f4449a5c1fb9a26",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:33:10.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22531/ (2/5)",
+        "patchset_number": 2
+      },
+      {
+        "id": "f5cb9d2ab0a4e4f5e5f279b201667c68367909af",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:33:23.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5045/ (3/5)",
+        "patchset_number": 2
+      },
+      {
+        "id": "56090a7acc1b3cc243d5b7179ee19d7fc132cf4c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:34:26.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4370/ (4/5)",
+        "patchset_number": 2
+      },
+      {
+        "id": "5b97b218131b944a67e55b7a095436068b44e86c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:34:40.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3157/ (5/5)",
+        "patchset_number": 2
+      },
+      {
+        "id": "45282d5a47afb5d7f91f108cccfcf2193bad0706",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 08:42:48.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3401/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3401\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4370/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4370\n\nhttps://jenkins.onap.org/job/doc-rules/3157/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3157\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5045/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5045\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22531/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22531",
+        "patchset_number": 2
+      },
+      {
+        "id": "4f66e7c3319cf0055158fd20b213a29770a041f1",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 10:52:25.000000000",
+        "message": "Patch Set 2:\n\n(6 comments)\n\nDid a prelminary review, mainly some questions...",
+        "patchset_number": 2
+      },
+      {
+        "id": "1591f880e4b1371f7d6cafedc27902ef0de22147",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-12 11:00:26.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "c400abefdb0c6ebeafc79228e86f276d44fc6cb5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:01:18.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3405/ (1/5)",
+        "patchset_number": 3
+      },
+      {
+        "id": "f76981f918f4c89041c8e91f2bc3994d5d7137b2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:01:30.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22540/ (2/5)",
+        "patchset_number": 3
+      },
+      {
+        "id": "600f49c490e2ec971a634e4e568ae45af89e2892",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:01:48.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5049/ (3/5)",
+        "patchset_number": 3
+      },
+      {
+        "id": "633fff7af69f80812232bae1e56e29ec5b5e2a78",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:02:05.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4374/ (4/5)",
+        "patchset_number": 3
+      },
+      {
+        "id": "04d12e243a5f827d2f3009833441fe2b48e629ad",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:02:28.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3166/ (5/5)",
+        "patchset_number": 3
+      },
+      {
+        "id": "2dc7d669fae08b32a4594185ca8d907f4f4cc2c2",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-12 11:11:22.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 3
+      },
+      {
+        "id": "4204cd42df811e390ab7ce0ac6836dd74b86447d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 11:11:30.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3405/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3405\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4374/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4374\n\nhttps://jenkins.onap.org/job/doc-rules/3166/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3166\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5049/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5049\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22540/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22540",
+        "patchset_number": 3
+      },
+      {
+        "id": "a874cc9268aa029d18842b505176db354f1d82f2",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-12 11:11:32.000000000",
+        "message": "Topic lower-memory removed",
+        "patchset_number": 3
+      },
+      {
+        "id": "905330ac44d95bfda747c214071648e2be9d0ec8",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-12 18:24:13.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "820c3dff52c8d04168acf55df1573098adc6e22b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:25:09.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3415/ (1/5)",
+        "patchset_number": 4
+      },
+      {
+        "id": "ed074de6413f3f58323e73045c679fccbf366c37",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:25:27.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22565/ (2/5)",
+        "patchset_number": 4
+      },
+      {
+        "id": "d735079f3c8d5622733594f3bc4ab9293c33fe9c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:26:32.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5059/ (3/5)",
+        "patchset_number": 4
+      },
+      {
+        "id": "5ec63263af224878206632fc73d4691922692489",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:26:49.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4384/ (4/5)",
+        "patchset_number": 4
+      },
+      {
+        "id": "b3af6a4b6de3413e50403107bea2f2366052f8e4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:28:19.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3191/ (5/5)",
+        "patchset_number": 4
+      },
+      {
+        "id": "e00c7001acb82d20396d97c6620a09365540b3fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-12 18:35:39.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3415/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3415\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4384/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4384\n\nhttps://jenkins.onap.org/job/doc-rules/3191/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3191\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5059/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5059\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22565/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22565",
+        "patchset_number": 4
+      },
+      {
+        "id": "389d90f52a616d714d0a3c9ee6c5102cba09788d",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-13 08:14:02.000000000",
+        "message": "Patch Set 4:\n\n(7 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "29da030589ddc2d85ee14fd8709fba5acd16ce5b",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-14 10:53:49.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "22927dafd01e353ecc6a9d6173060c570d78b282",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 10:54:50.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3428/ (1/5)",
+        "patchset_number": 5
+      },
+      {
+        "id": "e75b1fa4816eb897b677486daa4c58b3140c3440",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 10:55:14.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5073/ (2/5)",
+        "patchset_number": 5
+      },
+      {
+        "id": "6506d95256312d514591c8ace826c398611d639f",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2023-06-14 10:55:23.000000000",
+        "message": "Patch Set 5:\n\n(7 comments)",
+        "patchset_number": 5
+      },
+      {
+        "id": "9466367e8d8ecd16677dd82d31c7b96de7e610bb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 10:55:44.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22636/ (3/5)",
+        "patchset_number": 5
+      },
+      {
+        "id": "b9e36f7f5cfa0f026e9bb76a6b9be8236217603d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 10:55:54.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4398/ (4/5)",
+        "patchset_number": 5
+      },
+      {
+        "id": "1f6c1b99385019dd868dab2464fe7edbcaf91520",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 10:56:00.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3263/ (5/5)",
+        "patchset_number": 5
+      },
+      {
+        "id": "9a0a789460dcdd486eac9a3d47a6aca2433fc34a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 11:05:34.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3428/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3428\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4398/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4398\n\nhttps://jenkins.onap.org/job/doc-rules/3263/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3263\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5073/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5073\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22636/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22636",
+        "patchset_number": 5
+      },
+      {
+        "id": "847e963eca42859f40f82075d1ebb0a09b868fb6",
+        "author": {
+          "account_id": 7957,
+          "name": "Sourabh Sourabh",
+          "display_name": null,
+          "email": "sourabh.sharma.lnf@gmail.com",
+          "username": "sourabh_sourabh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 12:04:51.000000000",
+        "message": "Patch Set 5:\n\n(9 comments)",
+        "patchset_number": 5
+      },
+      {
+        "id": "f8ea9adbc86ad81b13fdc0af287f6ec35ee2ec19",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-14 13:29:40.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "f8df713db4c440920023ced1d32b9aeb48fc12a3",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2023-06-14 13:30:40.000000000",
+        "message": "Patch Set 6:\n\n(9 comments)",
+        "patchset_number": 6
+      },
+      {
+        "id": "781beb56deac83a3434b1a8f0e36d56e4d694131",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:30:45.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/3430/ (1/5)",
+        "patchset_number": 6
+      },
+      {
+        "id": "0934d20b42d9a817d5b59100a7542012c2c272e7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:30:45.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/cps-review-verification-maven-master/4400/ (2/5)",
+        "patchset_number": 6
+      },
+      {
+        "id": "49f2c24625007b975f0a834d9ff99480b7f64df7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:30:57.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/rtdv3-global-verify-master/22647/ (3/5)",
+        "patchset_number": 6
+      },
+      {
+        "id": "a4efe8bf9d61ede465c20df0472c4cff97ce5bde",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:31:17.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/5075/ (4/5)",
+        "patchset_number": 6
+      },
+      {
+        "id": "a8a2029e55f2cd1405a9aa6e7ecf80dc387dba5c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:31:31.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/doc-rules/3274/ (5/5)",
+        "patchset_number": 6
+      },
+      {
+        "id": "42746cc8912c59f4a5618f80bd0cb3a4e5814e20",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:40:11.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "c25b71da811e4fac3e52d74e210488dc10fb7b28",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:41:03.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/3430/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/3430\n\nhttps://jenkins.onap.org/job/cps-review-verification-maven-master/4400/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-review-verification-maven-master/4400\n\nhttps://jenkins.onap.org/job/doc-rules/3274/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/doc-rules/3274\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/5075/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/5075\n\nhttps://jenkins.onap.org/job/rtdv3-global-verify-master/22647/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/22647",
+        "patchset_number": 6
+      },
+      {
+        "id": "fdb54536b9a69e281538daad5b2481a13b134922",
+        "author": {
+          "account_id": 7957,
+          "name": "Sourabh Sourabh",
+          "display_name": null,
+          "email": "sourabh.sharma.lnf@gmail.com",
+          "username": "sourabh_sourabh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:46:35.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "b0bbcb70c7a1c01442285ae559c4a53478f3347d",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 13:54:38.000000000",
+        "message": "Patch Set 6: Code-Review+2\n\n(2 comments)",
+        "patchset_number": 6
+      },
+      {
+        "id": "45c758a60cdd19b4524fbb2528ed9c7938ff45f0",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-06-14 13:57:11.000000000",
+        "message": "Change has been successfully merged by Toine Siebelink",
+        "patchset_number": 6
+      },
+      {
+        "id": "6c9f27af12108eab8999eec7a2ed69f20d6dde1c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-06-14 14:08:13.000000000",
+        "message": "Patch Set 6:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/rtdv3-global-merge-master/8896/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-merge-master/8896\n\nhttps://jenkins.onap.org/job/cps-merge-verification-maven-master/765/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-merge-verification-maven-master/765\n\nhttps://jenkins.onap.org/job/cps-master-merge-java/900/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-merge-java/900",
+        "patchset_number": 6
+      }
+    ]
+  }
+}

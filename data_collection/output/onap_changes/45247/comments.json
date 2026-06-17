@@ -1,0 +1,161 @@
+{
+  "id": "sdc~master~I987fe097792ccd5d41a0ad811602dad72259d45f",
+  "change_id": "I987fe097792ccd5d41a0ad811602dad72259d45f",
+  "_number": 45247,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_3644c045",
+      "file_path": "services/activity-spec/activity-spec-init/start.sh",
+      "patchset_number": 1,
+      "line": null,
+      "message": "We have agreed that the port must be explicitly mentions, haven't we? Even if it's a default.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-05-03 08:39:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d676bca3",
+      "file_path": "services/activity-spec/activity-spec-web/activity-spec-assembly/Dockerfile",
+      "patchset_number": 1,
+      "line": 11,
+      "message": "I don't like this. In my opinion you must declare exactly what you are adding to the image (e.g. exact versions). You don't want surprises. In general, the way you've changed the build assumes too much, and relies to much on the knowledge of what other files/modules/components do.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-05-03 08:39:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_763ec8b9",
+      "file_path": "services/activity-spec/activity-spec-web/pom.xml",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "Avoid moving things around without special reason. You could have pulled the war directly from its original location, and stored logback.xml under \"activity-spec-assembly\" if you think it's the right location for it.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-05-03 08:39:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f652d811",
+      "file_path": "services/activity-spec/activity-spec-web/pom.xml",
+      "patchset_number": 1,
+      "line": 89,
+      "message": "Why didn't you like the old location of Dockerfile? It was places at the top level, because the resulting image must include artifacts from different sub-modules. So it doesn't makes sense for it to be a \"sibling\" of those modules. Instead, Docker build should be above everything that will be included in a resulting image.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-05-03 08:39:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b66f70c3",
+      "file_path": "services/activity-spec/activity-spec-init/start.sh",
+      "patchset_number": 1,
+      "line": null,
+      "message": "I still don't see any additional benefit in passing a default port here as Cassandra itself takes care of it.\nhttps://docs.datastax.com/en/cassandra/3.0/cassandra/configuration/secureFireWall.html\n\nMoreover if someone wants to override the default port then it can be done using environment variable. Adding a default port here will create confusion to anyone who will be looking at this without any intention of changing it.",
+      "author": {
+        "account_id": 2125,
+        "name": "Priyanshu Agarwal",
+        "display_name": null,
+        "email": "pagarwal@amdocs.com",
+        "username": "priyanshua"
+      },
+      "updated": "2018-05-03 09:10:18.000000000",
+      "in_reply_to": "5a93c517_3644c045",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_766568df",
+      "file_path": "services/activity-spec/activity-spec-web/activity-spec-assembly/Dockerfile",
+      "patchset_number": 1,
+      "line": 11,
+      "message": "Putting up specific version will cause unnecessary change to the docker file every time a new version is created. In my personal opinion; I would want to avoid repetitive changes which doesn't add any value.\n\nAlso changing the build reduced the overhead and complexity; i don't see any assumptions there.",
+      "author": {
+        "account_id": 2125,
+        "name": "Priyanshu Agarwal",
+        "display_name": null,
+        "email": "pagarwal@amdocs.com",
+        "username": "priyanshua"
+      },
+      "updated": "2018-05-03 09:10:18.000000000",
+      "in_reply_to": "5a93c517_d676bca3",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_365b6023",
+      "file_path": "services/activity-spec/activity-spec-web/pom.xml",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "logback.xml is an artifact of webservice; I don't see any point in keeping it under activity-spec-assembly. Docker documentation and standard practices which I learned ,clearly mentions that build scope of DOCKERFILE should be limited to avoid large build up time and cache issues.",
+      "author": {
+        "account_id": 2125,
+        "name": "Priyanshu Agarwal",
+        "display_name": null,
+        "email": "pagarwal@amdocs.com",
+        "username": "priyanshua"
+      },
+      "updated": "2018-05-03 09:10:18.000000000",
+      "in_reply_to": "5a93c517_763ec8b9",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f6a098f5",
+      "file_path": "services/activity-spec/activity-spec-web/pom.xml",
+      "patchset_number": 1,
+      "line": 89,
+      "message": "I didn't like the original approach. Building a docker image there will take everything from that root path and put it in build context resulting in un-optimized process of docker image creation.\nhttps://docs.docker.com/develop/develop-images/dockerfile_best-practices/\n\nThis is the reason; I have modified the build process (one time activity) to have DOCKERFILE in assembly along with its relevant artifacts only. That way build scope is reduced and docker image creation confined with its own artifacts.",
+      "author": {
+        "account_id": 2125,
+        "name": "Priyanshu Agarwal",
+        "display_name": null,
+        "email": "pagarwal@amdocs.com",
+        "username": "priyanshua"
+      },
+      "updated": "2018-05-03 09:10:18.000000000",
+      "in_reply_to": "5a93c517_f652d811",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_16e50437",
+      "file_path": "services/activity-spec/activity-spec-init/start.sh",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Here we go again :( Sorry, we should have documented everything as we discussed it. The benefit is not in passing, the benefit is in telling a developer looking at the Dockerfile/start scrip that it CAN be passed, and HOW. Without the need for the developer to look it up in C* documentation.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-05-03 09:49:04.000000000",
+      "in_reply_to": "5a93c517_b66f70c3",
+      "unresolved": false
+    }
+  ]
+}

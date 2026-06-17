@@ -1,0 +1,160 @@
+{
+  "id": "cps~master~I1f2fa5dce82eefbc99906bc468c6541f0d35851b",
+  "change_id": "I1f2fa5dce82eefbc99906bc468c6541f0d35851b",
+  "_number": 140421,
+  "change_comments": [
+    {
+      "id": "b2e376c3_00bbfc04",
+      "patchset_number": 1,
+      "message": "agree with Daniel's comment, nothing lese to add",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-03-12 17:02:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "f99f55c3_3caaa416",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 1,
+      "line": 142,
+      "message": "Nb. Pre-existing problem, but this should be called selectedCmHandleIds.\nNote that the alternate id output is handled separately on line 160.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-03-11 16:01:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f8f0dbb7_3b6a89ce",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 1,
+      "line": 157,
+      "message": "Nb. Could be simplified a bit:\n\n    trustLevelPerCmHandleIdInBatch.forEach((cmHandleId, trustLevel) -> {\n        final TrustLevel effectiveTrustLevel = trustLevel.getEffectiveTrustLevel(dmiTrustLevel);\n        if (targetTrustLevel.equals(effectiveTrustLevel)) {\n            selectedCmHandleReferences.add(cmHandleId);\n        }\n    });",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-03-11 16:01:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5128b481_e2cfb9b1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 1,
+      "line": 142,
+      "message": "Ack",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2025-03-13 10:21:39.000000000",
+      "in_reply_to": "f99f55c3_3caaa416",
+      "unresolved": false
+    },
+    {
+      "id": "655740bf_0dc8dbb9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 1,
+      "line": 157,
+      "message": "Done",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2025-03-13 10:21:39.000000000",
+      "in_reply_to": "f8f0dbb7_3b6a89ce",
+      "unresolved": false
+    },
+    {
+      "id": "b820e805_27c23504",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 2,
+      "line": 150,
+      "message": "maybe I will suggest an alternate solution using EntryProcessor.\nI think it can be more performant in this case.\n\nWill ping u separately for the solution.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2025-03-13 16:59:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "04d78c10_9e99a7c4",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 2,
+      "line": 150,
+      "message": "Nope. getAll is extremely fast for reading. We tested this patch, it is 5x faster than before - it eliminates virtually all the overhead from Hazelcast.\n\nFYI EntryProcessor is recommended for *writing* entries. EntryProcessor: \"Usually you perform a loop of keys - executing IMap.get(key), *mutating the value and finally putting the entry back in the map* using IMap.put(key,value)\"\n\nSo let's not complicate an already working solution.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-03-13 17:11:39.000000000",
+      "in_reply_to": "b820e805_27c23504",
+      "unresolved": true
+    },
+    {
+      "id": "c121627e_5a7a08fd",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 2,
+      "line": 150,
+      "message": "agreed: simple is good!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-03-13 17:25:53.000000000",
+      "in_reply_to": "04d78c10_9e99a7c4",
+      "unresolved": false
+    },
+    {
+      "id": "6216783f_a8f31e85",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleQueryServiceImpl.java",
+      "patchset_number": 2,
+      "line": 150,
+      "message": "amm.. i would right away agree on the simplicity. current code is simple.\nBut would need to see for myself abt the approach I am thinking.\nI am ok to get this thing merged on the basis of simplicity.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2025-03-13 17:29:33.000000000",
+      "in_reply_to": "c121627e_5a7a08fd",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "oom~master~I41c30356ab06473da2ffe86096f98408ca37f69a",
+  "change_id": "I41c30356ab06473da2ffe86096f98408ca37f69a",
+  "_number": 28475,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_4386ec14",
+      "file_path": "kubernetes/cli/templates/all-service.yaml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "Could you please explain why the port and the targetPort are different? Per k8s documentation (https://kubernetes.io/docs/concepts/services-networking/service/), \"By default the targetPort will be set to the same value as the port field.\"\nIs this differentiation really necessary?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-01-18 14:55:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_23a08042",
+      "file_path": "kubernetes/cli/templates/all-service.yaml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "The code shows that \n* CLI pod exposes port 80 and 8080.\n* the CLI service is mapping port 80 to 8080, and port 8080 to 9090.\n\nWould be good to have a bit explanation about this in the description. ~.~",
+      "author": {
+        "account_id": 1699,
+        "name": "Beili Zhou",
+        "display_name": null,
+        "email": "beili.zhou@amdocs.com",
+        "username": "beiliz"
+      },
+      "updated": "2018-01-18 18:32:33.000000000",
+      "in_reply_to": "5a93c517_4386ec14",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_060f922f",
+      "file_path": "kubernetes/cli/templates/cli-deployment.yaml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "port 8080 is used for? should it show up in readinessProbe too?",
+      "author": {
+        "account_id": 2541,
+        "name": "Jasmine Wen",
+        "display_name": null,
+        "email": "jasmine.wen@amdocs.com",
+        "username": "jasmineWen"
+      },
+      "updated": "2018-01-18 20:08:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8693a24e",
+      "file_path": "kubernetes/cli/templates/all-service.yaml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "Because https://git.onap.org/cli/tree/deployment/docker/src/main/docker/docker-compose.yaml describes the necessary port mapping:\n\nservices:\n  occ:\n    image: onap/cli\n    environment:\n      OPEN_CLI_MODE: 'daemon'\n    ports:\n      - 8080:80\n      - 9090:8080\n\nIf you ssh in CLI container, you can find there are 2 exposed port, 80 for lighttpd, 8080 for gotty to provide CLI on webpage. If you login in vnc-portal, you click the CLI icon, it tries to access port 8080, so 8080 port should be mapped to container port 80. You can also check the https://git.onap.org/cli/tree/deployment/http/web/index.html. If you click link to open CLI in webpage, it will access port 9090, so port 9090 should be mapped to container 8080. I have implemented this solution, currently we can use 8080 to access web page and 9090 to access CLI.\n\nonap@onap-ProLiant-DL360-Gen9:~/setup/oom-amsterdam/kubernetes/cli/templates$ kubectl exec -it cli-1971128182-p1mwg bash -n onap-cli\n\nroot@cli-1971128182-p1mwg:/opt/onap/cli# netstat -nltp\nActive Internet connections (only servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    \ntcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -                   \ntcp6       0      0 :::8080                 :::*                    LISTEN      16/gotty\n\n\nhttps://git.onap.org/cli/tree/deployment/http/web/index.html:\nfunction redirectToConsole(){\n   window.location.href=\"http://\"+  window.location.hostname + \":9090\";\n}\n\n<p style=\"color:blue\">Click <a onclick=\"redirectToConsole();\">here</a></p>",
+      "author": {
+        "account_id": 2939,
+        "name": "Xiaobo Chen",
+        "display_name": null,
+        "email": "xiaobo.chen@tieto.com",
+        "username": "jackiechen1985"
+      },
+      "updated": "2018-01-19 02:37:48.000000000",
+      "in_reply_to": "5a93c517_23a08042",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6690d643",
+      "file_path": "kubernetes/cli/templates/all-service.yaml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "Because https://git.onap.org/cli/tree/deployment/docker/src/main/docker/docker-compose.yaml describes the necessary port mapping:\n\nservices:\n  occ:\n    image: onap/cli\n    environment:\n      OPEN_CLI_MODE: 'daemon'\n    ports:\n      - 8080:80\n      - 9090:8080\n\nIf you ssh in CLI container, you can find there are 2 exposed port, 80 for lighttpd, 8080 for gotty to provide CLI on webpage. If you login in vnc-portal, you click the CLI icon, it tries to access port 8080, so 8080 port should be mapped to container port 80. You can also check the https://git.onap.org/cli/tree/deployment/http/web/index.html. If you click link to open CLI in webpage, it will access port 9090, so port 9090 should be mapped to container 8080. I have implemented this solution, currently we can use 8080 to access web page and 9090 to access CLI.\n\nonap@onap-ProLiant-DL360-Gen9:~/setup/oom-amsterdam/kubernetes/cli/templates$ kubectl exec -it cli-1971128182-p1mwg bash -n onap-cli\n\nroot@cli-1971128182-p1mwg:/opt/onap/cli# netstat -nltp\nActive Internet connections (only servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    \ntcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -                   \ntcp6       0      0 :::8080                 :::*                    LISTEN      16/gotty\n\n\nhttps://git.onap.org/cli/tree/deployment/http/web/index.html:\nfunction redirectToConsole(){\n   window.location.href=\"http://\"+  window.location.hostname + \":9090\";\n}\n\n<p style=\"color:blue\">Click <a onclick=\"redirectToConsole();\">here</a></p>",
+      "author": {
+        "account_id": 2939,
+        "name": "Xiaobo Chen",
+        "display_name": null,
+        "email": "xiaobo.chen@tieto.com",
+        "username": "jackiechen1985"
+      },
+      "updated": "2018-01-19 02:37:48.000000000",
+      "in_reply_to": "5a93c517_4386ec14",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e6a3869c",
+      "file_path": "kubernetes/cli/templates/cli-deployment.yaml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "80 for lighttpd providing web service.\n8080 for gotty providing an TTY(CLI) on web page.\n\nI am not sure if it need to be added to readinessProbe. But when we try to access CLI, first we use 80 port to access web page, then we click a link on this web page to access 8080 in order to open CLI.\n\nDo you have any suggestion about it? What's the necessity to add a readinessProbe?",
+      "author": {
+        "account_id": 2939,
+        "name": "Xiaobo Chen",
+        "display_name": null,
+        "email": "xiaobo.chen@tieto.com",
+        "username": "jackiechen1985"
+      },
+      "updated": "2018-01-19 02:59:22.000000000",
+      "in_reply_to": "5a93c517_060f922f",
+      "unresolved": false
+    }
+  ]
+}

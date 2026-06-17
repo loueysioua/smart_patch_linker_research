@@ -1,0 +1,1182 @@
+{
+  "id": "oom~master~Id9eed3b13ac85595c386e380f41cfbc38b52c69f",
+  "change_id": "Id9eed3b13ac85595c386e380f41cfbc38b52c69f",
+  "_number": 99322,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-12-09 10:08:37.000000000",
+    "updated": "2019-12-18 11:44:53.000000000",
+    "submitted": "2019-12-18 11:32:01.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2319,
+      "name": "Sylvain Desbureaux",
+      "display_name": null,
+      "email": "sylvain.desbureaux@orange.com",
+      "username": "sdesbure"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "[SDNC] Use global storage templates for PVC",
+  "commit_message": "[SDNC] Use global storage templates for PVC\n\nOOM has now templates in order to create the needed PVC, using:\n\n* a PV with a specific class when using a common nfs mount path between\nnodes (sames as today use) --> is the default behavior today\n* or a storage class if we want to use dynamic PV.\n  On this case, we use (in order of priority):\n  - persistence.storageClassOverride if set on the chart\n  - global.persistence.storageClass if set globally\n  - persistence.storageClass if set on the chart\n\nI've also used \"range\" for PV creation of the statefulset\n\nI've created one file per PV (one for mdsal, one for certs).\n\nsdnc-prom was using hostpath directly on deployment, move to a PV/PVC.\n\nChange-Id: Id9eed3b13ac85595c386e380f41cfbc38b52c69f\nIssue-ID: OOM-1227\nSigned-off-by: Sylvain Desbureaux <sylvain.desbureaux@orange.com>\n",
+  "change_log": {
+    "entry_count": 82,
+    "entries": [
+      {
+        "id": "a5a2af93593a99380d458644a5e7c16e972fd68a",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-09 10:08:37.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ebbc7108ce198001feba2199a247f7f4c970d361",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 10:08:50.000000000",
+        "message": "Patch Set 1:\n\nGitlab Orange 4: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 1
+      },
+      {
+        "id": "4010513c01fc15eb8bd31d7b44472f0639297478",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 10:11:07.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3260/",
+        "patchset_number": 1
+      },
+      {
+        "id": "1ca48d2d52989e432469bfe05a4db8206560f37e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 10:19:05.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3260/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/oom-master-verify-helm/3260/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3260",
+        "patchset_number": 1
+      },
+      {
+        "id": "5f5a829ca0635a48fedf976480b534b0eb71331d",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 10:31:10.000000000",
+        "message": "Patch Set 1:\n\nGitlab Orange 4: Chained CI build failure on some jobs.\nJobs with issue:\n- Step: apps_deploy \"* Project: oom \"* Status: failed \"* Pipeline: 'https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//pipelines/101636641' \"* API pipeline url: 'https://gitlab.com/api/v4/projects/6550110/pipelines/101636641' \"* Failed jobs: \"*   - id: 373277406 \"*     name: prepare/prepare \"*     status: failed \"*     duration: 827.08979 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//-/jobs/373277406 \"",
+        "patchset_number": 1
+      },
+      {
+        "id": "d337004ab6e53bdead15927dc98822904f594149",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 10:31:11.000000000",
+        "message": "Patch Set 1:\n\nGitlab Orange 4: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-1/index.html",
+        "patchset_number": 1
+      },
+      {
+        "id": "0cc283b31f2834c368912499f1c59581acf14fd3",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-09 10:58:54.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a2d2e4f4071ac91cd7c46c6e900bc92a354d805a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 11:24:43.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3267/",
+        "patchset_number": 2
+      },
+      {
+        "id": "75e08a5465c3bcba4f57f1e9b5df34c256e643f0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 11:31:54.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3267/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/oom-master-verify-helm/3267/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3267",
+        "patchset_number": 2
+      },
+      {
+        "id": "097fbf7c0364a4d7c398ada0b9e9db6c64d90987",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-09 12:08:22.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "24a49fc1a99100f497a374c6a89d803a0698283c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 12:09:46.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3269/",
+        "patchset_number": 3
+      },
+      {
+        "id": "7f59cc7839c9efd88fa5b6f9a49907bca577f734",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 12:17:22.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3269/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/oom-master-verify-helm/3269/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3269",
+        "patchset_number": 3
+      },
+      {
+        "id": "e5a5f35af1847f3d013809d0a89e5fbb9c0df5c7",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-09 12:18:46.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "06eac0554ef81af70d764634d140d47d92910bb8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 12:31:24.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3271/",
+        "patchset_number": 4
+      },
+      {
+        "id": "c8950390a9d083777f7e212cc54708f9767a7141",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 12:39:10.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3271/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/oom-master-verify-helm/3271/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3271",
+        "patchset_number": 4
+      },
+      {
+        "id": "8d6659e006eb410f47944c04688211db43aa3abd",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-09 12:47:23.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "cecb1a5de8449c7511e37a1e2ec7837a361f4532",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 12:47:25.000000000",
+        "message": "Patch Set 5:\n\nGitlab controller: Deployment put on queue, number 4 on the queue.",
+        "patchset_number": 5
+      },
+      {
+        "id": "e29acdee7641cef4d62bbe7385f33e963adb1aba",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 15:08:16.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 3: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "004062bb70fc83ba9d51b94b4935fb3023e715e4",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 15:31:15.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 3: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "ca38a1f710625d92b9787dc935ae68b548f4ea83",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-09 15:32:21.000000000",
+        "message": "Patch Set 5:\n\noom_redeploy",
+        "patchset_number": 5
+      },
+      {
+        "id": "ee5b124dbe18f5b72690dcceb64f5a6b2aa77ab6",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 15:32:22.000000000",
+        "message": "Patch Set 5:\n\nGitlab controller: Deployment put on queue, number 4 on the queue.",
+        "patchset_number": 5
+      },
+      {
+        "id": "269fb1f2d8c4079f331df733b818a86c9af8917d",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 17:45:20.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 3: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "2676953bc1160dddbde8b9a40c74af58705c932b",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 18:06:25.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 3: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "def08e492a32716124f7c48e406bda1ed9179979",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-09 21:43:36.000000000",
+        "message": "Patch Set 5:\n\noom_redeploy",
+        "patchset_number": 5
+      },
+      {
+        "id": "84623a96b53eb24ca5110ec911cf40d2d4eb70c3",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 21:43:37.000000000",
+        "message": "Patch Set 5:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 5
+      },
+      {
+        "id": "c756babec57ab2ed018510e36ac4959f30d480cc",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 21:43:43.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 2: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "938107acb4bb7a835de81752df74ebc1a425be33",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-09 22:02:27.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 2: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "55443d343e79e694d97f19322281a7678756e725",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-10 16:26:44.000000000",
+        "message": "Patch Set 5:\n\noom_redeploy",
+        "patchset_number": 5
+      },
+      {
+        "id": "bd1b3cd2f4afcb5e6550befd0234ad9dc8f74e19",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-10 16:26:45.000000000",
+        "message": "Patch Set 5:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 5
+      },
+      {
+        "id": "1f3b6ad82e4642a4de557c7f1bc19d69382d9844",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-10 16:26:51.000000000",
+        "message": "Patch Set 5:\n\nGitlab Azure 1: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "141ff26b6b80dba92cdf228dc3dc71aca795a797",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-10 17:17:42.000000000",
+        "message": "Patch Set 5:\n\nGitlab Azure 1: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "95fdef6adcf053d25163ad7b7181cbf9857801fa",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-11 14:10:20.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "25fdef5773920420a16adb21f86d8e14bbd58061",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-11 14:29:31.000000000",
+        "message": "Patch Set 5:\n\noom_redeploy",
+        "patchset_number": 5
+      },
+      {
+        "id": "db8d5acca3234c857c5b288521a92a230dff55c4",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-11 15:21:17.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 4: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "c08cbff60a0f91e1c5170917b6b4739fd3351517",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-11 15:44:48.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 4: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "b3b920f8bc9051e4d0bbb3cc5a029e92c12bb6d5",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-12 10:10:11.000000000",
+        "message": "Patch Set 5:\n\noom_redeploy",
+        "patchset_number": 5
+      },
+      {
+        "id": "b8b33ec63818f984b833949e57b4ae545f383af9",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 11:12:14.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 2: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 5
+      },
+      {
+        "id": "e5b3fd72314a5617a78fd2f6cbc7fceccee8e053",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 11:33:28.000000000",
+        "message": "Patch Set 5:\n\nGitlab Orange 2: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-5/index.html",
+        "patchset_number": 5
+      },
+      {
+        "id": "5a321ae4cd633c5a7e961709bdb1d6cd4f13a9df",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-12 14:03:31.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "955e46fba432b3ffb305e1e9c0c324b8c19adb8f",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 14:03:34.000000000",
+        "message": "Patch Set 6:\n\nGitlab controller: Deployment put on queue, number 5 on the queue.",
+        "patchset_number": 6
+      },
+      {
+        "id": "e5325b83a73c9c206de6736d7a3f26826d961cd7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 14:07:48.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3297/",
+        "patchset_number": 6
+      },
+      {
+        "id": "a86cf79b432f6497c20ffe451de87957ef6d484e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 14:24:29.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3297/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3297",
+        "patchset_number": 6
+      },
+      {
+        "id": "f0ca51defae786c2bd62ed144c88fe8da418e4ac",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 14:37:38.000000000",
+        "message": "Patch Set 6:\n\nGitlab Orange 2: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 6
+      },
+      {
+        "id": "deb1454796b2c7ecb3391f67a63ebd0f8694d93d",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 17:18:30.000000000",
+        "message": "Patch Set 6:\n\nGitlab Orange 2: Chained CI build failure on some jobs.\nJobs with issue:\n- Step: apps_test \"* Project: xtesting-onap \"* Status: failed \"* Pipeline: 'https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/pipelines/102678998' \"* API pipeline url: 'https://gitlab.com/api/v4/projects/10614465/pipelines/102678998' \"* Failed jobs: \"*   - id: 377798747 \"*     name: infrastructure-healthcheck/infrastructure_healthcheck \"*     status: failed \"*     duration: 389.856529 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798747 \"*   - id: 377798749 \"*     name: healthcheck/core \"*     status: failed \"*     duration: 391.410621 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798749 \"*   - id: 377798750 \"*     name: healthcheck/small \"*     status: failed \"*     duration: 410.396619 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798750 \"*   - id: 377798751 \"*     name: healthcheck/medium \"*     status: failed \"*     duration: 432.835767 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798751 \"*   - id: 377798753 \"*     name: healthcheck/full \"*     status: failed \"*     duration: 539.769713 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798753 \"*   - id: 377798756 \"*     name: healthcheck/healthdist \"*     status: failed \"*     duration: 712.857384 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/377798756 \"",
+        "patchset_number": 6
+      },
+      {
+        "id": "d3f9c098e00a703466e050b6736e3f1a7b4c586c",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-12 17:18:31.000000000",
+        "message": "Patch Set 6:\n\nGitlab Orange 2: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-6/index.html\n______________ Results _________________\n************ Infrastructure-healthcheck Results ************\n--------> onap-k8s\n * Nb Pods: 215\n * Nb Failed Pods: 25\n * List of Failed Pods: [\n   - onap-aaf-aaf-gui-c8b9f4b6f-x4wt2\n   - onap-aaf-aaf-sms-c94596d94-gs254\n   - onap-aai-aai-data-router-7cd8669b68-g7jtj\n   - onap-clamp-clamp-796957bb7-9sj9b\n   - onap-clamp-clamp-backend-6cc6f5b875-pllx4\n   - onap-contrib-awx-0\n   - onap-dcaegen2-dcae-bootstrap-777f675d79-bnfgk\n   - onap-dcaegen2-dcae-dashboard-6bd8c79c95-tl8xt\n   - onap-dcaegen2-dcae-deployment-handler-5dc4874bbc-27jl8\n   - onap-dcaegen2-dcae-inventory-api-64bcb5b46d-fphk8\n   - onap-dcaegen2-dcae-policy-handler-76d9957bff-pjs9m\n   - onap-dcaegen2-dcae-servicechange-handler-6555db5d47-m5m9k\n   - onap-dmaap-dmaap-dr-node-0\n   - onap-dmaap-dmaap-dr-prov-584b6bdd88-5rh9c\n   - onap-oof-oof-86c448d5c7-ndsb8\n   - onap-oof-oof-has-api-5bb7b84888-zdfjh\n   - onap-oof-oof-has-controller-56f598fb9f-bqs5t\n   - onap-oof-oof-has-data-d575ff6df-n5rh7\n   - onap-oof-oof-has-solver-746bff67d8-stpr4\n   - onap-sdc-sdc-wfd-be-5c8747d55d-fgtpw\n   - onap-sdc-sdc-wfd-fe-fbccb85d-d5j75\n   - onap-sdnc-sdnc-0\n   - onap-uui-uui-server-676957854d-kpkpb\n   - onap-vfc-vfc-ems-driver-86bdb477f4-pp8ct\n   - onap-vnfsdk-vnfsdk-init-postgres-8d259]\n--------> onap-helm\n * Nb Helm Charts: 36\n * Nb Failed Helm Charts: 0\n * List of Failed Helm Charts: []\n************************************************************\n********************* Healthcheck Results ******************\n--------> robot  full healthcheck tests\n2019-12-12 17:11:39,052 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | FAIL |\nConnectionError: HTTPSConnectionPool(host='aaf-sms.onap', port=10443): Max retries exceeded with url: /v1/sms/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f530d946e90>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | FAIL |\nConnectionError: HTTPSConnectionPool(host='clamp.onap', port=8443): Max retries exceeded with url: /restservices/clds/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f530d2b19d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | FAIL |\n500 != 200\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | FAIL |\nConnectionError: HTTPConnectionPool(host='dmaap-dr-node.onap', port=8080): Max retries exceeded with url: /internal/fetchProv (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f530d283a90>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-has-api.onap', port=8091): Max retries exceeded with url: /v1/plans/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f530d1f3050>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-osdf.onap', port=8698): Max retries exceeded with url: /api/oof/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f530d261b50>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | PASS |\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | FAIL |\nConnectionError: HTTPConnectionPool(host='sdnc.onap', port=8282): Max retries exceeded with url: /restconf/operations/SLI-API:healthcheck (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f530d16d190>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | PASS |\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | PASS |\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 49 passed, 12 failed\n61 tests total, 49 passed, 12 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n--------> healthdist (vFW onboarding and distribution)\n--------> postinstall tests (dmaap and A&AI)\n2019-12-12 17:08:55,099 - xtesting.core.robotframework - INFO - \n==============================================================================\nPost-Install-Tests :: Testing Installation                                    \n==============================================================================\nBasic DMAAP Message Router ACL Update Test                            | PASS |\n------------------------------------------------------------------------------\nBasic AAI Service Design Models Size Test                             | PASS |\n------------------------------------------------------------------------------\nPost-Install-Tests :: Testing Installation                            | PASS |\n2 critical tests, 2 passed, 0 failed\n2 tests total, 2 passed, 0 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/postinstall/output.xml\n************************************************************\n********************** Smoke usecases **********************\nEnd to End VNF use cases not executed!\n____________________________________",
+        "patchset_number": 6
+      },
+      {
+        "id": "961cf01e62a34e0d7b574cfa7e68c2b4c95ff3b0",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-13 09:44:36.000000000",
+        "message": "Patch Set 6:\n\noom_redeploy",
+        "patchset_number": 6
+      },
+      {
+        "id": "365b6ae9dd264b7b6ade9bcb3f653106e7413f90",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-13 09:44:48.000000000",
+        "message": "Patch Set 6:\n\nGitlab Orange 2: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 6
+      },
+      {
+        "id": "fbf7e9abfa1be1b7018ff52b326c0810023f2a5b",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-13 10:47:29.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "b769b9197316546adaf968b1ff770ed7e7812408",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-13 10:47:42.000000000",
+        "message": "Patch Set 7:\n\nGitlab Orange 4: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 7
+      },
+      {
+        "id": "37e1ba5a14f2c878626a328b60e30c6732713cc0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-13 10:49:50.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3308/",
+        "patchset_number": 7
+      },
+      {
+        "id": "7d4c62c925e6ab6ea3d9542e8b186ca0f00d3d28",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-13 11:01:38.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3308/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3308",
+        "patchset_number": 7
+      },
+      {
+        "id": "6bf3fe87a1402b46272a14bce0935cea770b7bfb",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-13 12:39:30.000000000",
+        "message": "Patch Set 6:\n\nGitlab Orange 2: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-6/index.html\n______________ Results _________________\n************ Infrastructure-healthcheck Results ************\n--------> onap-k8s\n * Nb Pods: 195\n * Nb Failed Pods: 34\n * List of Failed Pods: [\n   - onap-aaf-aaf-cm-76bf68f7bf-fxmtb\n   - onap-aaf-aaf-gui-c8b9f4b6f-slswz\n   - onap-aaf-aaf-sms-c94596d94-rz628\n   - onap-aai-aai-data-router-7cd8669b68-p9r2p\n   - onap-dcaegen2-dcae-bootstrap-777f675d79-rxhwt\n   - onap-dcaegen2-dcae-cloudify-manager-6d86555847-gghhz\n   - onap-dcaegen2-dcae-dashboard-6bd8c79c95-tvp8z\n   - onap-dcaegen2-dcae-dashboard-pg-0\n   - onap-dcaegen2-dcae-db-0\n   - onap-dcaegen2-dcae-deployment-handler-5dc4874bbc-7qhv5\n   - onap-dcaegen2-dcae-inv-pg-0\n   - onap-dcaegen2-dcae-inventory-api-64bcb5b46d-dpljn\n   - onap-dcaegen2-dcae-policy-handler-76d9957bff-lf5wj\n   - onap-dcaegen2-dcae-redis-0\n   - onap-dcaegen2-dcae-servicechange-handler-6555db5d47-ccgtn\n   - onap-dmaap-dmaap-dr-node-0\n   - onap-dmaap-dmaap-dr-prov-584b6bdd88-658wq\n   - onap-oof-oof-86c448d5c7-7npl6\n   - onap-oof-oof-has-api-5bb7b84888-pcjld\n   - onap-oof-oof-has-controller-56f598fb9f-5jnfr\n   - onap-oof-oof-has-data-d575ff6df-ntx9c\n   - onap-oof-oof-has-reservation-547c8f4d7f-rks2n\n   - onap-oof-oof-has-solver-746bff67d8-pf2h9\n   - onap-sdc-sdc-wfd-be-5c8747d55d-sx6p7\n   - onap-sdc-sdc-wfd-fe-fbccb85d-qkpnt\n   - onap-sdnc-sdnc-0\n   - onap-vfc-vfc-catalog-6df6d4b9d8-96d4l\n   - onap-vfc-vfc-mariadb-0\n   - onap-vfc-vfc-nslcm-67f99d7dc5-x82wf\n   - onap-vfc-vfc-vnflcm-55bc4d7b8-n8dbz\n   - onap-vfc-vfc-vnfmgr-f4c9598f6-jcrb4\n   - onap-vfc-vfc-vnfres-585dbc56d7-28xxv\n   - onap-vnfsdk-vnfsdk-6ff5767447-7jsgk\n   - onap-vnfsdk-vnfsdk-init-postgres-5z48f]\n--------> onap-helm\n * Nb Helm Charts: 36\n * Nb Failed Helm Charts: 0\n * List of Failed Helm Charts: []\n************************************************************\n********************* Healthcheck Results ******************\n--------> robot  full healthcheck tests\n2019-12-13 12:30:24,392 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | FAIL |\nConnectionError: HTTPSConnectionPool(host='aaf-sms.onap', port=10443): Max retries exceeded with url: /v1/sms/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f97d9299650>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | PASS |\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | FAIL |\n500 != 200\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | FAIL |\nConnectionError: HTTPConnectionPool(host='dmaap-dr-node.onap', port=8080): Max retries exceeded with url: /internal/fetchProv (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f97d84818d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-has-api.onap', port=8091): Max retries exceeded with url: /v1/plans/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f97d8273210>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-osdf.onap', port=8698): Max retries exceeded with url: /api/oof/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f97d82e1ad0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | PASS |\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | FAIL |\nConnectionError: HTTPConnectionPool(host='sdnc.onap', port=8282): Max retries exceeded with url: /restconf/operations/SLI-API:healthcheck (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f97d81f4590>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | PASS |\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | FAIL |\nConnectionError: HTTPConnectionPool(host='refrepo.onap', port=8702): Max retries exceeded with url: /onapapi/vnfsdk-marketplace/v1/PackageResource/healthcheck (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f97d813b0d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 45 passed, 16 failed\n61 tests total, 45 passed, 16 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n--------> healthdist (vFW onboarding and distribution)\n2019-12-13 12:33:33,588 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nHealth Distribution Test                                              | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | PASS |\n1 critical test, 1 passed, 0 failed\n1 test total, 1 passed, 0 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/healthdist/output.xml\n--------> postinstall tests (dmaap and A&AI)\n2019-12-13 12:29:22,081 - xtesting.core.robotframework - INFO - \n==============================================================================\nPost-Install-Tests :: Testing Installation                                    \n==============================================================================\nBasic DMAAP Message Router ACL Update Test                            | PASS |\n------------------------------------------------------------------------------\nBasic AAI Service Design Models Size Test                             | PASS |\n------------------------------------------------------------------------------\nPost-Install-Tests :: Testing Installation                            | PASS |\n2 critical tests, 2 passed, 0 failed\n2 tests total, 2 passed, 0 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/postinstall/output.xml\n************************************************************\n********************** Smoke usecases **********************\nEnd to End VNF use cases not executed!\n____________________________________",
+        "patchset_number": 6
+      },
+      {
+        "id": "1f515eda3047d3f648dbb16c4713900547413b5e",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 07:46:25.000000000",
+        "message": "Patch Set 7:\n\noom_redeploy",
+        "patchset_number": 7
+      },
+      {
+        "id": "6b16bfc20ab15277f6b7a8af97720f84912acf2a",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 07:46:26.000000000",
+        "message": "Patch Set 7:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 7
+      },
+      {
+        "id": "adaf6438e3119d4184b794dcd15b48688aedc65b",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 07:46:33.000000000",
+        "message": "Patch Set 7:\n\nGitlab Orange 2: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 7
+      },
+      {
+        "id": "30d946cbccadf0e56c15956ff7d94a3e789a793d",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-16 09:42:42.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "d779e9794d2a226dcb7ae061e5ff3cd947bb46b4",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:42:56.000000000",
+        "message": "Patch Set 8:\n\nGitlab Orange 3: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 8
+      },
+      {
+        "id": "bf20c4e3be3a576aeb3d10f7d20a5ea3f07dec9e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:45:18.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3314/",
+        "patchset_number": 8
+      },
+      {
+        "id": "d0ac9b1fab06e76f8167339ad740a0dd568472f8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:53:03.000000000",
+        "message": "Patch Set 8: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3314/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/oom-master-verify-helm/3314/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3314",
+        "patchset_number": 8
+      },
+      {
+        "id": "f12e0da21ae7df967eaad829e92407276f2971d3",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-16 09:55:00.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "af447a4ac1a1ebf06ecca2467c6e1b7d14e0dd28",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:55:02.000000000",
+        "message": "Patch Set 9:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 9
+      },
+      {
+        "id": "2f8f3173545fdb9790843fb951b6c568ba75faa8",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:55:08.000000000",
+        "message": "Patch Set 9:\n\nGitlab Azure 1: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 9
+      },
+      {
+        "id": "8f6d2abbe679c2b59131d359d0750796d3b01703",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 09:57:19.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3315/",
+        "patchset_number": 9
+      },
+      {
+        "id": "7ba2324186f38066cb5643417cbc3d6618b96b3c",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:00:26.000000000",
+        "message": "Patch Set 8:\n\nGitlab Orange 3: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-8/index.html",
+        "patchset_number": 8
+      },
+      {
+        "id": "1763a4e443152da80588ed1afcaa20d8fa2085a6",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:07:52.000000000",
+        "message": "Patch Set 9:\n\nGitlab Azure 1: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-9/index.html",
+        "patchset_number": 9
+      },
+      {
+        "id": "f535c5e6ec0aad59a471b6bf5565a01e2316adb5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:08:29.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3315/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3315",
+        "patchset_number": 9
+      },
+      {
+        "id": "ac9ef3720e11c52362d78a834dc041ceb7b39fee",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 10:37:49.000000000",
+        "message": "Patch Set 9:\n\noom_redeploy",
+        "patchset_number": 9
+      },
+      {
+        "id": "d33b8c320134d0e226fa5a5e31b4172200c8a8d9",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:38:01.000000000",
+        "message": "Patch Set 9:\n\nGitlab Azure 1: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 9
+      },
+      {
+        "id": "c9ffbe67c20af68a906dcea29f58f3371f28471b",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 10:40:48.000000000",
+        "message": "Patch Set 9:\n\noom_redeploy",
+        "patchset_number": 9
+      },
+      {
+        "id": "c95bb0414f91fd6632f6e00ffbf6e0634446a86d",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:40:49.000000000",
+        "message": "Patch Set 9:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 9
+      },
+      {
+        "id": "1152afde93c7edecc67ef5e8e4c3c41a56203621",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:40:55.000000000",
+        "message": "Patch Set 9:\n\nGitlab Orange 3: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 9
+      },
+      {
+        "id": "6c15463d9ca4dc21041724c1c1787dc6965b9627",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:41:50.000000000",
+        "message": "Patch Set 7:\n\nGitlab Orange 2: Chained CI build failure on some jobs.\nJobs with issue:\n- Step: apps_test \"* Project: xtesting-onap \"* Status: failed \"* Pipeline: 'https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/pipelines/103342651' \"* API pipeline url: 'https://gitlab.com/api/v4/projects/10614465/pipelines/103342651' \"* Failed jobs: \"*   - id: 380300770 \"*     name: infrastructure-healthcheck/infrastructure_healthcheck \"*     status: failed \"*     duration: 160.090419 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300770 \"*   - id: 380300774 \"*     name: healthcheck/core \"*     status: failed \"*     duration: 112.503291 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300774 \"*   - id: 380300777 \"*     name: healthcheck/small \"*     status: failed \"*     duration: 124.525106 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300777 \"*   - id: 380300780 \"*     name: healthcheck/medium \"*     status: failed \"*     duration: 127.06831 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300780 \"*   - id: 380300785 \"*     name: healthcheck/full \"*     status: failed \"*     duration: 268.575868 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300785 \"*   - id: 380300789 \"*     name: healthcheck/healthdist \"*     status: failed \"*     duration: 160.378863 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/380300789 \"",
+        "patchset_number": 7
+      },
+      {
+        "id": "ebd7c3f90d86c7dfb808f374696ba2208116e78e",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 10:41:51.000000000",
+        "message": "Patch Set 7:\n\nGitlab Orange 2: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-7/index.html\n______________ Results _________________\n************ Infrastructure-healthcheck Results ************\n--------> onap-k8s\n * Nb Pods: 199\n * Nb Failed Pods: 32\n * List of Failed Pods: [\n   - onap-aaf-aaf-sms-c94596d94-896k7\n   - onap-aai-aai-data-router-7cd8669b68-f62wt\n   - onap-dcaegen2-dcae-bootstrap-777f675d79-xhjlk\n   - onap-dcaegen2-dcae-db-1\n   - onap-dcaegen2-dcae-servicechange-handler-6555db5d47-nmc4l\n   - onap-dmaap-dmaap-dr-db-1\n   - onap-dmaap-dmaap-dr-node-0\n   - onap-dmaap-dmaap-dr-prov-584b6bdd88-xl8qk\n   - onap-mariadb-galera-mariadb-galera-2\n   - onap-nbi-nbi-59fd5844ff-h9b2c\n   - onap-nbi-nbi-config-config-job-jvjqp\n   - onap-oof-oof-86c448d5c7-t6ph2\n   - onap-oof-oof-has-api-5bb7b84888-m79nh\n   - onap-oof-oof-has-controller-56f598fb9f-7c9k4\n   - onap-oof-oof-has-data-d575ff6df-895jb\n   - onap-oof-oof-has-reservation-547c8f4d7f-7z6s2\n   - onap-oof-oof-has-solver-746bff67d8-gtb8m\n   - onap-sdc-sdc-dcae-be-877f5d9c4-2l4hv\n   - onap-sdc-sdc-dcae-be-tools-v9m4c\n   - onap-sdc-sdc-dcae-dt-77fbfbcb7-9p5lz\n   - onap-sdc-sdc-dcae-fe-779f6767cd-9pq9s\n   - onap-sdc-sdc-dcae-tosca-lab-86956f76c6-59kdj\n   - onap-sdc-sdc-fe-cdcc4cfff-77dkw\n   - onap-sdc-sdc-wfd-be-5c8747d55d-lnnn7\n   - onap-sdc-sdc-wfd-fe-fbccb85d-p2vtq\n   - onap-sdnc-sdnc-0\n   - onap-sdnc-sdnc-ansible-server-6ffc9d4945-g62l9\n   - onap-sdnc-sdnc-dgbuilder-c6b85c648-xcd2x\n   - onap-sdnc-sdnc-dmaap-listener-847666c7c8-t8vcc\n   - onap-sdnc-sdnc-ueb-listener-5f757dd5b9-tnntr\n   - onap-uui-uui-server-676957854d-kvlkc\n   - onap-vid-vid-79cfcf64b6-phpq8]\n--------> onap-helm\n * Nb Helm Charts: 36\n * Nb Failed Helm Charts: 2\n * List of Failed Helm Charts: [\n   - onap-sdnc\n   - onap-so]\n************************************************************\n********************* Healthcheck Results ******************\n--------> robot  full healthcheck tests\n2019-12-16 10:37:54,346 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | FAIL |\nConnectionError: HTTPSConnectionPool(host='aaf-sms.onap', port=10443): Max retries exceeded with url: /v1/sms/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f1e92b573d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | PASS |\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | FAIL |\n500 != 200\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | FAIL |\nConnectionError: HTTPConnectionPool(host='dmaap-dr-node.onap', port=8080): Max retries exceeded with url: /internal/fetchProv (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1e91d3b8d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | FAIL |\nConnectionError: HTTPConnectionPool(host='nbi.onap', port=8080): Max retries exceeded with url: /nbi/api/v4/status (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1e91cfdd10>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-has-api.onap', port=8091): Max retries exceeded with url: /v1/plans/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f1e91b23750>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-osdf.onap', port=8698): Max retries exceeded with url: /api/oof/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f1e91b236d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | PASS |\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | FAIL |\nConnectionError: HTTPSConnectionPool(host='sdc-fe.onap', port=9443): Max retries exceeded with url: /sdc1/rest/healthCheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f1e91b545d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | FAIL |\nConnectionError: HTTPConnectionPool(host='sdnc.onap', port=8282): Max retries exceeded with url: /restconf/operations/SLI-API:healthcheck (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1e91b00d10>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | FAIL |\nConnectionError: HTTPConnectionPool(host='so.onap', port=8080): Max retries exceeded with url: /manage/health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f1e91b92d10>: Failed to establish a new connection: [Errno -2] Name does not resolve'))\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | PASS |\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | FAIL |\nConnectionError: HTTPSConnectionPool(host='vid.onap', port=8443): Max retries exceeded with url: /vid/healthCheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f1e91adb9d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 45 passed, 16 failed\n61 tests total, 45 passed, 16 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n--------> healthdist (vFW onboarding and distribution)\n2019-12-16 10:36:07,122 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nHealth Distribution Test                                              | FAIL |\n400 != 201\n\nAlso keyword teardown failed:\nVariable '${catalog_service_id}' not found.\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n1 critical test, 0 passed, 1 failed\n1 test total, 0 passed, 1 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/healthdist/output.xml\n--------> postinstall tests (dmaap and A&AI)\n2019-12-16 10:35:10,791 - xtesting.core.robotframework - INFO - \n==============================================================================\nPost-Install-Tests :: Testing Installation                                    \n==============================================================================\nBasic DMAAP Message Router ACL Update Test                            | PASS |\n------------------------------------------------------------------------------\nBasic AAI Service Design Models Size Test                             | PASS |\n------------------------------------------------------------------------------\nPost-Install-Tests :: Testing Installation                            | PASS |\n2 critical tests, 2 passed, 0 failed\n2 tests total, 2 passed, 0 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/postinstall/output.xml\n************************************************************\n********************** Smoke usecases **********************\nEnd to End VNF use cases not executed!\n____________________________________",
+        "patchset_number": 7
+      },
+      {
+        "id": "c5d525472f05989b2911b5a57c40a76699e552d7",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 12:23:21.000000000",
+        "message": "Patch Set 9:\n\noom_redeploy",
+        "patchset_number": 9
+      },
+      {
+        "id": "b7c0a4990e410d01d09fa031c3ce0c6b4bea67fb",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 12:23:44.000000000",
+        "message": "Patch Set 9:\n\nGitlab Orange 3: Chained CI build failure on some jobs.\nJobs with issue:\n- Step: apps_deploy \"* Project: oom \"* Status: success \"* Pipeline: 'https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//pipelines/103351018' \"* API pipeline url: 'https://gitlab.com/api/v4/projects/6550110/pipelines/103351018' \"* Failed jobs: \"*   - id: 380344911 \"*     name: wait_full/wait_for_end_of_install_full \"*     status: canceled \"*     duration: 3955.12766 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//-/jobs/380344911 \"*   - id: 380344915 \"*     name: postinstall/postinstallation \"*     status: canceled \"*     duration: 13.065707 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//-/jobs/380344915 \"*   - id: 380344917 \"*     name: postconfigure/postconfiguration \"*     status: canceled \"*     duration: 26.64311 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/onap_oom_automatic_installation//-/jobs/380344917 \"",
+        "patchset_number": 9
+      },
+      {
+        "id": "2fbbac405ae67a005bb63dd9f5fcd68872d90cab",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 12:23:45.000000000",
+        "message": "Patch Set 9:\n\nGitlab Orange 3: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//99322-9/index.html",
+        "patchset_number": 9
+      },
+      {
+        "id": "934b0d463c55692769f89efbc7e44625281bc06c",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-16 12:23:49.000000000",
+        "message": "Patch Set 9:\n\nGitlab Orange 3: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 9
+      },
+      {
+        "id": "c8aa94bf2216bfdddc6918d7a6aea147d68bad1f",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 15:45:32.000000000",
+        "message": "Patch Set 9:\n\n__________________ Results _________________\n************ Infrastructure-healthcheck Results ************\n--------> onap-k8s\n * Nb Pods: 227\n * Nb Failed Pods: 12\n * List of Failed Pods: [\n   - onap-aaf-aaf-sms-c94596d94-njrz2\n   - onap-aai-aai-data-router-7cd8669b68-bhk9v\n   - onap-dmaap-dmaap-dr-node-0\n   - onap-dmaap-dmaap-dr-prov-584b6bdd88-2kz2v\n   - onap-oof-oof-86c448d5c7-ncb2t\n   - onap-oof-oof-has-api-5bb7b84888-b9h2j\n   - onap-oof-oof-has-controller-56f598fb9f-fvm2w\n   - onap-oof-oof-has-data-d575ff6df-29l9s\n   - onap-oof-oof-has-reservation-547c8f4d7f-wc4jq\n   - onap-oof-oof-has-solver-746bff67d8-65kvb\n   - onap-sdc-sdc-wfd-be-5c8747d55d-s2kz9\n   - onap-sdc-sdc-wfd-fe-fbccb85d-54d6m]\n--------> onap-helm\n * Nb Helm Charts: 36\n * Nb Failed Helm Charts: 0\n * List of Failed Helm Charts: []\n************************************************************\n********************* Healthcheck Results ******************\n--------> robot  full healthcheck tests\n2019-12-16 14:51:00,736 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | FAIL |\nConnectionError: HTTPSConnectionPool(host='aaf-sms.onap', port=10443): Max retries exceeded with url: /v1/sms/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0bec903590>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | PASS |\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | FAIL |\n500 != 200\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | FAIL |\nConnectionError: HTTPConnectionPool(host='dmaap-dr-node.onap', port=8080): Max retries exceeded with url: /internal/fetchProv (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f0bebae4050>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-has-api.onap', port=8091): Max retries exceeded with url: /v1/plans/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0beb8d62d0>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | FAIL |\nConnectionError: HTTPSConnectionPool(host='oof-osdf.onap', port=8698): Max retries exceeded with url: /api/oof/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0beb944d90>: Failed to establish a new connection: [Errno 111] Connection refused'))\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | PASS |\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | PASS |\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | PASS |\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 51 passed, 10 failed\n61 tests total, 51 passed, 10 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n--------> healthdist (vFW onboarding and distribution)\n--------> postinstall tests (dmaap and A&AI)\n2019-12-16 14:48:35,443 - xtesting.core.robotframework - INFO - \n==============================================================================\nPost-Install-Tests :: Testing Installation                                    \n==============================================================================\nBasic DMAAP Message Router ACL Update Test                            | PASS |\n------------------------------------------------------------------------------\nBasic AAI Service Design Models Size Test                             | PASS |\n------------------------------------------------------------------------------\nPost-Install-Tests :: Testing Installation                            | PASS |\n2 critical tests, 2 passed, 0 failed\n2 tests total, 2 passed, 0 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/postinstall/output.xml\n************************************************************\n********************** Smoke usecases **********************\n--------> End to End tests (onap-tests)\n+------------------------+---------------------+------------------------+------------------+----------------+\n|       TEST CASE        |       PROJECT       |          TIER          |     DURATION     |     RESULT     |\n+------------------------+---------------------+------------------------+------------------+----------------+\n|        basic_vm        |     integration     |     smoke-usecases     |      09:14       |      PASS      |\n|     freeradius_nbi     |     integration     |     smoke-usecases     |      08:54       |      PASS      |\n|     clearwater_ims     |     integration     |     smoke-usecases     |      12:51       |      PASS      |\n+------------------------+---------------------+------------------------+------------------+----------------+",
+        "patchset_number": 9
+      },
+      {
+        "id": "64b1fdb28685c7a108afde4764ed4510b64bc074",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-12-16 15:46:16.000000000",
+        "message": "Patch Set 9: Code-Review+1\n\nReady for review",
+        "patchset_number": 9
+      },
+      {
+        "id": "50f1697d26ceaca6f77eb6090cfd5a91e82f8183",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-18 11:31:58.000000000",
+        "message": "Patch Set 9: Code-Review+2",
+        "patchset_number": 9
+      },
+      {
+        "id": "b39eab56c29e0dfb6a5f984e719159af23c1167c",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-12-18 11:32:01.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 9
+      },
+      {
+        "id": "325dfccdea832c67131b49120dad9d9d85315972",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-12-18 11:44:53.000000000",
+        "message": "Patch Set 9:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-merge-helm/1222/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-merge-helm/1222",
+        "patchset_number": 9
+      }
+    ]
+  }
+}

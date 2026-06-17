@@ -1,0 +1,59 @@
+{
+  "id": "dcae%2Fdemo%2Fstartup%2Fmessage-router~master~Icd39bd289c8d4dccd440e725636c90b86ebe5e59",
+  "change_id": "Icd39bd289c8d4dccd440e725636c90b86ebe5e59",
+  "_number": 3099,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "da141535_e2c75763",
+      "file_path": "deploy.sh",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "I notice that sometimes docker0 isn't ready will cause the failure to setup msg router.\n\n  root@vm1-message-router# cat /var/log/S20mr_serv.sh.err\ndocker0: error fetching interface information: Device not found\n\n        Can't find a suitable configuration file in this directory or any\n        parent. Are you in the right directory?\n\n        Supported filenames: docker-compose.yml, docker-compose.yaml",
+      "author": {
+        "account_id": 399,
+        "name": "Ethan Lynn",
+        "display_name": null,
+        "email": "ethanlynnl@vmware.com",
+        "username": "ethanlynnl"
+      },
+      "updated": "2017-04-06 08:17:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da141535_02c7eb46",
+      "file_path": "deploy.sh",
+      "patchset_number": 1,
+      "line": 11,
+      "message": "Lines 10-11 don't work. There's a space between ./docker_files and the kafka package \n\n./docker_files/ kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz\n\nIt should be ./docker_files/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz",
+      "author": {
+        "account_id": 55,
+        "name": "Marco Platania",
+        "display_name": null,
+        "email": "platania@research.att.com",
+        "username": "platania"
+      },
+      "updated": "2017-04-06 14:22:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da141535_a2b6ffda",
+      "file_path": "deploy.sh",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "What about adding this piece of code that checks whether the interface is up, and if it's not up after a given time it exits:\n\nCOUNTER=0\nDOCKER_NAME=\"\"\nuntil [[ $DOCKER_NAME == \"docker0\" ]]; do\n  sleep 5\n  DOCKER_NAME=$(ifconfig | grep \"docker0\" | cut -d\" \" -f1)\n  let COUNTER=COUNTER+1\n  if [[ $COUNTER -eq 10 ]]; then \n    echo \"Timeout expired\"\n    exit 1\n  fi\ndone\n\nAt this point, the script either exits with a return code or processes the next instruction, which is:\n\nIP_DOCKER0=$(ifconfig docker0 |grep \"inet addr\" | cut -d: -f2 |cut -d\" \" -f1)",
+      "author": {
+        "account_id": 55,
+        "name": "Marco Platania",
+        "display_name": null,
+        "email": "platania@research.att.com",
+        "username": "platania"
+      },
+      "updated": "2017-04-06 14:22:17.000000000",
+      "in_reply_to": "da141535_e2c75763",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,481 @@
+{
+  "id": "cps~master~Ifc40062ae83429a9ffba350ec3bcc28cb7147293",
+  "change_id": "Ifc40062ae83429a9ffba350ec3bcc28cb7147293",
+  "_number": 138598,
+  "change_comments": [
+    {
+      "id": "87dd872b_053a614d",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-30 14:31:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2e763387_5b371b06",
+      "patchset_number": 1,
+      "message": "nothing objectionable for me.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-31 10:53:05.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "f0f72866_a3c97971",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "also should include the type",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 08:14:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "62559386_7879cf96",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 1,
+      "line": 171,
+      "message": "just 'conflicts'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 08:14:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d707ffa1_2d9b7b9a",
+      "file_path": "policy-executor-stub/pom.xml",
+      "patchset_number": 1,
+      "line": 83,
+      "message": "Maintain alphabetical order",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bd85f2f9_f353a0b4",
+      "file_path": "policy-executor-stub/src/main/java/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubController.java",
+      "patchset_number": 1,
+      "line": 47,
+      "message": "ERROR_CODE_PATTERN",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "65a10462_489febc0",
+      "file_path": "policy-executor-stub/src/main/java/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubController.java",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "Method Extraction: \n \n Extracted handleNcmpDeleteSchema and createPolicyExecutionResponse methods for clarity and single responsibility principle.:\n \n \n return handleNcmpDeleteSchema(firstRequest);\n        }\n\n        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);\n    }\n\n    private ResponseEntity<PolicyExecutionResponse> handleNcmpDeleteSchema(Request firstRequest) {\n        final NcmpDelete ncmpDelete;\n        try {\n            ncmpDelete = objectMapper.readValue((String) firstRequest.getData(), NcmpDelete.class);\n        } catch (final JsonProcessingException e) {\n            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);\n        }\n\n        final String targetIdentifier = ncmpDelete.getTargetIdentifier();\n        if (targetIdentifier == null) {\n            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);\n        }\n\n        final Matcher matcher = ERROR_CODE_PATTERN.matcher(targetIdentifier);\n        if (matcher.find()) {\n            final int errorCode = Integer.parseInt(matcher.group(1));\n            return new ResponseEntity<>(HttpStatusCode.valueOf(errorCode));\n        }\n\n        return createPolicyExecutionResponse(targetIdentifier);\n    }\n\n    private ResponseEntity<PolicyExecutionResponse> createPolicyExecutionResponse(String targetIdentifier) {\n        final String decisionId = String.valueOf(++decisionCounter);\n        final String decision;\n        final String message;\n\n        if (targetIdentifier.toLowerCase(Locale.getDefault()).contains(\"cps-is-great\")) {\n            decision = \"allow\";\n            message = \"All good\";\n        } else {\n            decision = \"deny\";\n            message = \"Only FDNs containing 'cps-is-great' are allowed\";\n        }\n\n        final PolicyExecutionResponse policyExecutionResponse =\n                new PolicyExecutionResponse(decisionId, decision, message);\n\n        return ResponseEntity.ok(policyExecutionResponse);\n    }\n}",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1e6ed3a9_32a388fd",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "'All good'",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "28337ebb_161cea9c",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "policy action",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b55da7ed_cb831406",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "with missing or invalid attributes",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "92ab8b13_32478f30",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "=#",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-07-31 11:22:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "209a49d1_183cf501",
+      "file_path": "policy-executor-stub/pom.xml",
+      "patchset_number": 1,
+      "line": 83,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "d707ffa1_2d9b7b9a",
+      "unresolved": false
+    },
+    {
+      "id": "06d6f8e0_77e89352",
+      "file_path": "policy-executor-stub/src/main/java/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubController.java",
+      "patchset_number": 1,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "bd85f2f9_f353a0b4",
+      "unresolved": false
+    },
+    {
+      "id": "5cbb5f8b_3e38f594",
+      "file_path": "policy-executor-stub/src/main/java/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubController.java",
+      "patchset_number": 1,
+      "line": 99,
+      "message": "thansk, it was a bit long and needed that!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "65a10462_489febc0",
+      "unresolved": false
+    },
+    {
+      "id": "2d8d6bbc_6d9b40cc",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "1e6ed3a9_32a388fd",
+      "unresolved": false
+    },
+    {
+      "id": "577770a7_3cbadc72",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "28337ebb_161cea9c",
+      "unresolved": false
+    },
+    {
+      "id": "566504c4_c5fe76b5",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "better, thanks!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "b55da7ed_cb831406",
+      "unresolved": false
+    },
+    {
+      "id": "3f965fc0_e70e7b4f",
+      "file_path": "policy-executor-stub/src/test/groovy/org/onap/cps/policyexecutor/stub/controller/PolicyExecutorStubControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-31 12:55:27.000000000",
+      "in_reply_to": "92ab8b13_32478f30",
+      "unresolved": false
+    },
+    {
+      "id": "3453b7c0_54e69a3a",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 2,
+      "line": 171,
+      "message": "NB: The provided request breaks a policy rule OR The provided request violates a policy rule",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-31 14:09:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "43ea1447_4397847a",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 3,
+      "line": 60,
+      "message": "We agreed that 409 response code will not be required.\n200 OK will indicate successful policy execution and the actual result (allow/deny for example) can be parsed from the response body.",
+      "author": {
+        "account_id": 7975,
+        "name": "Gergely Molnar",
+        "display_name": null,
+        "email": "gergely.e.molnar@ericsson.com",
+        "username": "emolger"
+      },
+      "updated": "2024-08-01 11:08:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "372f0ba7_52aeb734",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 3,
+      "line": 162,
+      "message": "As mentioned above, we can discard this part.",
+      "author": {
+        "account_id": 7975,
+        "name": "Gergely Molnar",
+        "display_name": null,
+        "email": "gergely.e.molnar@ericsson.com",
+        "username": "emolger"
+      },
+      "updated": "2024-08-01 11:08:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9ae26ca7_689fc5b0",
+      "file_path": "docs/schemas/policy-executor/ncmp-create-schema-1.0.0.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "I cannot recall this field from the discussions.\nIs there a use for it?",
+      "author": {
+        "account_id": 7975,
+        "name": "Gergely Molnar",
+        "display_name": null,
+        "email": "gergely.e.molnar@ericsson.com",
+        "username": "emolger"
+      },
+      "updated": "2024-08-01 11:08:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a7953301_df82cc0d",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 2,
+      "line": 171,
+      "message": "yes I still got a bad typo in that. I change it to 'violates' that si a good term",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-01 11:55:25.000000000",
+      "in_reply_to": "3453b7c0_54e69a3a",
+      "unresolved": true
+    },
+    {
+      "id": "d9501d30_12a24869",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 3,
+      "line": 60,
+      "message": "agreed, will create a new patch to remove this",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-01 11:55:25.000000000",
+      "in_reply_to": "43ea1447_4397847a",
+      "unresolved": true
+    },
+    {
+      "id": "dfcf7189_293851a2",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 3,
+      "line": 162,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-01 11:55:25.000000000",
+      "in_reply_to": "372f0ba7_52aeb734",
+      "unresolved": false
+    },
+    {
+      "id": "bee33424_87b9ecfe",
+      "file_path": "docs/schemas/policy-executor/ncmp-create-schema-1.0.0.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "its an OpenAPI 'keyword' for objects. we always put it in ((with value), although by default I think this is false anyway. Setting it to true mean an object can have any other properties, handles in Java a sa Map<String, Object>. There are more options see\nSee https://swagger.io/docs/specification/data-models/dictionaries/\n\nbut we simple dont need it and I prefer to explicitly set it to false",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-01 11:55:25.000000000",
+      "in_reply_to": "9ae26ca7_689fc5b0",
+      "unresolved": true
+    },
+    {
+      "id": "00bd80ab_c3b51678",
+      "file_path": "docs/api/swagger/policy-executor/openapi.yaml",
+      "patchset_number": 3,
+      "line": 60,
+      "message": "Ack",
+      "author": {
+        "account_id": 7975,
+        "name": "Gergely Molnar",
+        "display_name": null,
+        "email": "gergely.e.molnar@ericsson.com",
+        "username": "emolger"
+      },
+      "updated": "2024-08-01 12:01:24.000000000",
+      "in_reply_to": "d9501d30_12a24869",
+      "unresolved": false
+    },
+    {
+      "id": "637d1efb_e2583bda",
+      "file_path": "docs/schemas/policy-executor/ncmp-create-schema-1.0.0.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "Ack",
+      "author": {
+        "account_id": 7975,
+        "name": "Gergely Molnar",
+        "display_name": null,
+        "email": "gergely.e.molnar@ericsson.com",
+        "username": "emolger"
+      },
+      "updated": "2024-08-01 12:01:24.000000000",
+      "in_reply_to": "bee33424_87b9ecfe",
+      "unresolved": false
+    }
+  ]
+}

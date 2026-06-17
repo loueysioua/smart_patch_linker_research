@@ -1,0 +1,258 @@
+{
+  "id": "oom~master~I585e126601dc423caba3fa2af9ca4c80de0bf699",
+  "change_id": "I585e126601dc423caba3fa2af9ca4c80de0bf699",
+  "_number": 85225,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-04-12 15:36:26.000000000",
+    "updated": "2019-04-16 20:32:26.000000000",
+    "submitted": "2019-04-16 20:23:04.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 333,
+      "name": "Yang Xu",
+      "display_name": null,
+      "email": "xuyang11@gmail.com",
+      "username": "xuyang11"
+    },
+    "submitter": {
+      "account_id": 137,
+      "name": "Alexis de Talhouet",
+      "display_name": null,
+      "email": "adetalhouet89@gmail.com",
+      "username": "adetalhouet"
+    }
+  },
+  "subject": "Set aai&music Cassandra readiness periodSeconds",
+  "commit_message": "Set aai&music Cassandra readiness periodSeconds\n\nChange-Id: I585e126601dc423caba3fa2af9ca4c80de0bf699\nIssue-ID: OOM-1795\nSigned-off-by: Yang Xu <yang.xu3@huawei.com>\n",
+  "change_log": {
+    "entry_count": 16,
+    "entries": [
+      {
+        "id": "d267be2d4ae8642f687c3fa053ea469bc0a1f76e",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-12 15:36:26.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "831c40d1accef30d252013381df4af281858b9f1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-12 15:37:39.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/1955/",
+        "patchset_number": 1
+      },
+      {
+        "id": "10a344e71252083329ce5a1a1d62c640842caa90",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-12 15:44:57.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/1955/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/1955",
+        "patchset_number": 1
+      },
+      {
+        "id": "f7d79d830f88ebecf22d5fa518583dc0c6c28527",
+        "author": {
+          "account_id": 35,
+          "name": "Gary Wu",
+          "display_name": null,
+          "email": "gary.wu@gmail.com",
+          "username": "gwu"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-12 15:54:25.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "ab5b0a47574607a40bd4d1ab47caa825f7d67907",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-12 20:34:27.000000000",
+        "message": "Patch Set 1:\n\nResults comparing before and after the patch:\n\nbefore the change:\nroot@sb01-rancher:~# kubectl -n onap describe pod dev-aai-aai-cassandra-0 | grep Readiness\n   Readiness:      exec [/bin/bash -c nodetool status | grep $POD_IP | awk '$1!=\"UN\" { exit 1; }'] delay=10s timeout=600s period=10s #success=1 #failure=3\n\n\nafter the change:\nroot@sb01-rancher:~# kubectl -n onap describe pod dev-aai-aai-cassandra-0 | grep Readiness\n    Readiness:      exec [/bin/bash -c nodetool status | grep $POD_IP | awk '$1!=\"UN\" { exit 1; }'] delay=10s timeout=1s period=600s #success=1 #failure=3",
+        "patchset_number": 1
+      },
+      {
+        "id": "b0ff32e03a76966757d9f015f480903e240cd787",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-15 08:08:30.000000000",
+        "message": "Patch Set 1:\n\nReferring to https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes\n\nThe new \"delay=10s timeout=1s period=600s\" also seems wrong due to 10 minute period between probes. It would be too slow to respond to changes. Also the timeout may now be too short on a heavily loaded system.\n\nMaybe \"delay=10s timeout=10s period=10s\" is a nicer compromise?",
+        "patchset_number": 1
+      },
+      {
+        "id": "77c34f3c7b85e1df79db4e7f3c4f2369ecdf71da",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-15 12:33:04.000000000",
+        "message": "Patch Set 1:\n\nthe nodetool status check is so abusive that Cassandra with no appliction takes a factor of 2x cpu cycles of any other container in the system. nodetool is simply too intense and should be changed to a simple tcp port check or something if you want to run it more than once every 10 or 15 minutes.",
+        "patchset_number": 1
+      },
+      {
+        "id": "815c080f6ac911d2e6a172cf043c4b3915c4ffcb",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-15 13:40:21.000000000",
+        "message": "Patch Set 1:\n\ncould it be related to https://issues.apache.org/jira/browse/CASSANDRA-14475 ?",
+        "patchset_number": 1
+      },
+      {
+        "id": "77d95a2e2c41082a59caf236b93bd4a022a45a0f",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-15 22:47:34.000000000",
+        "message": "Patch Set 1:\n\n> could it be related to https://issues.apache.org/jira/browse/CASSANDRA-14475\n > ?\n\nThanks for the pointer. I followed the suggestion in the ticket and tried to set -XX:ParallelGCThreads=1 for dev-cassandra cluster, and did not see noticeable improvement:\n\nEvery 2.0s: kubectl -n onap top pod |sort -k2,2nr|head -20                                                                                   sb01-rancher: Mon Apr 15 22:46:48 2019\n\ndev-log-log-logstash-57c8d6b8c4-p8zs4                         1616m        842Mi\ndev-oof-music-tomcat-5bd9646dbd-8n995                         1565m        255Mi\ndev-oof-music-cassandra-0                                     1541m        744Mi\ndev-uui-uui-server-988796dcd-2xm9x                            972m         473Mi\ndep-dcae-tca-analytics-58cc6966dc-5btfr                       899m         1224Mi\ndev-cassandra-cassandra-2                                     836m         715Mi\ndev-consul-consul-fc46494f5-d6hhq                             813m         46Mi\ndev-appc-appc-0                                               665m         785Mi\ndev-dcaegen2-dcae-servicechange-handler-5cccff85b6-vcmrj      608m         53Mi\ndev-cassandra-cassandra-0                                     579m         713Mi\ndev-cassandra-cassandra-1                                     557m         746Mi\ndev-oof-music-cassandra-2                                     399m         738Mi\ndev-oof-music-cassandra-1                                     370m         734Mi\ndev-sdc-sdc-dcae-be-7f6b959cf8-zzn6m                          325m         67Mi\ndev-sdc-sdc-cs-d9c6ffd4-46f2s                                 305m         1519Mi\ndev-sdc-sdc-dcae-fe-54565c749c-vwwqc                          248m         64Mi\ndev-sdc-sdc-dcae-tosca-lab-57c67455c-tm9gt                    240m         62Mi\ndev-sdnc-sdnc-ueb-listener-68d768f56d-jx94c                   194m         62Mi\ndev-sdc-sdc-be-76d97d569f-4xp8n                               179m         66Mi\ndev-sdc-sdc-dcae-dt-5d96d49687-6tnq2                          177m         78Mi",
+        "patchset_number": 1
+      },
+      {
+        "id": "6f80ec3581db317a7b247fa27f77df7b13003203",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-15 22:56:53.000000000",
+        "message": "Patch Set 1:\n\n> could it be related to https://issues.apache.org/jira/browse/CASSANDRA-14475\n > ?\n\nThe patch is to fix the mismatch of attribute and its value in template. The actual value shown in the results is set from integration-override.yaml, which is part of Integration deployment parameter we exercise at deployment time. \n\nI have submitted the test results above, and the actual value of timeout is out of scope this patch. Please approve.",
+        "patchset_number": 1
+      },
+      {
+        "id": "33a7f11479d3eaa7290cbc7df11b69a9f419eb9b",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-16 01:03:52.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\n@mahendra is this also reflected in the shared cassandra?",
+        "patchset_number": 1
+      },
+      {
+        "id": "3eed3be85a902bfd30c0c132a9d0b0490016052e",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-16 20:18:30.000000000",
+        "message": "Patch Set 1:\n\nI checked other Cassandra usage, they don't have this issue",
+        "patchset_number": 1
+      },
+      {
+        "id": "fcf8eb43584289631a6a33513de1cb8e1d0a00e0",
+        "author": {
+          "account_id": 333,
+          "name": "Yang Xu",
+          "display_name": null,
+          "email": "xuyang11@gmail.com",
+          "username": "xuyang11"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-16 20:20:08.000000000",
+        "message": "Patch Set 1:\n\nOOM team, please help merge the patch",
+        "patchset_number": 1
+      },
+      {
+        "id": "f6f29f36ca4ac2f8d479f3f222400028bd0c4779",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-16 20:22:50.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "46b36c9586731eed62e78eda8a4b84c55269f663",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-16 20:23:04.000000000",
+        "message": "Change has been successfully merged by Alexis de Talhouët",
+        "patchset_number": 1
+      },
+      {
+        "id": "d4366bfd2593ef6c586d1fcb847bea742ca6785f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-16 20:32:26.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-merge-helm/705/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-merge-helm/705",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "id": "oom~master~I5507d23ff62c9d5d5d19f86374ea91ccea2e95a9",
+  "change_id": "I5507d23ff62c9d5d5d19f86374ea91ccea2e95a9",
+  "_number": 41499,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-04-07 03:49:37.000000000",
+    "updated": "2018-04-15 06:38:38.000000000",
+    "submitted": "2018-04-13 02:14:34.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 659,
+      "name": "James MacNider",
+      "display_name": null,
+      "email": "James.MacNider@amdocs.com",
+      "username": "jmac"
+    },
+    "submitter": {
+      "account_id": 131,
+      "name": "Mandeep Khinda",
+      "display_name": null,
+      "email": "Mandeep.Khinda@gmail.com",
+      "username": "mkhinda"
+    }
+  },
+  "subject": "Ensure sdnctl user/schema created on master MySQL",
+  "commit_message": "Ensure sdnctl user/schema created on master MySQL\n\nChange-Id: I5507d23ff62c9d5d5d19f86374ea91ccea2e95a9\nSigned-off-by: jmac <james.macnider@amdocs.com>\nIssue-ID: OOM-887\n",
+  "change_log": {
+    "entry_count": 9,
+    "entries": [
+      {
+        "id": "f1ffec730407c66e0bd82fd898223b2e162dbe98",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-07 03:49:37.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "bdda6f2363437f66f2a537c827a44bb6c4427f00",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-07 03:51:44.000000000",
+        "message": "Patch Set 1:\n\nSimilar changes would also be required for APP-C if/when they decide to deploy more than one MySQL node in the future.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e2ebae8012af8587bd5afb31a7023c86f8e156c7",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-10 16:55:34.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "a0ee86fdbd9a19de22d29dbaa02966cbccba31c7",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-11 02:30:48.000000000",
+        "message": "Patch Set 1: Verified-1\n\nSomething still not right.  I had to disable persistence and the nfs provisioner because I run a k8s cluster.\nI did so like this:\nsdnc:\n  enabled: true\n  mysql:\n    disableNfsProvisioner: true\n    persistence:\n      enabled: false\n\nThings seem like the come up but the sdnc app pod is in a restart loop.  I suspect the liveness probe is restarting it because port 8181 isn't open? Here are some logs.\n\n02:29:54.265 [main] INFO  o.o.c.sli.core.sli.SvcLogicLoader - Activating SvcLogicGraph [module=SUBNET-API, rpc=subnet-allocated-notification, mode=sync, version=1.3.1-SNAPSHOT]\nLoad and activate finished at Wed Apr 11 02:29:54 UTC 2018\nLoad and activate took 3.82862663269 seconds\nInstalling Opendaylight cluster features\nAuthentication failed\nAuthentication failed\nUpdate cluster information statically\nGet current Hostname deep-sdnc-0\n################################################\n##             Configure Cluster              ##\n################################################\nConfiguring unique name in akka.conf\nConfiguring hostname in akka.conf\nConfiguring data and rpc seed nodes in akka.conf\nmodules = [\n\t\n\t{\n\t\tname = \"inventory\"\n\t\tnamespace = \"urn:opendaylight:inventory\"\n\t\tshard-strategy = \"module\"\n\t},\n\t{\n\t\tname = \"topology\"\n\t\tnamespace = \"urn:TBD:params:xml:ns:yang:network-topology\"\n\t\tshard-strategy = \"module\"\n\t},\n\t{\n\t\tname = \"toaster\"\n\t\tnamespace = \"http://netconfcentral.org/ns/toaster\"\n\t\tshard-strategy = \"module\"\n\t}\n]\nConfiguring replication type in module-shards.conf\n################################################\n##   NOTE: Manually restart controller to     ##\n##         apply configuration.               ##\n################################################\nRestarting OpenDaylight\nkaraf: There is a Root instance already running with name root and pid 240\n\n\n\n\nAlso the sdnc portal is restarting with these logs:\n\nWarning: connect.session() MemoryStore is not\ndesigned for a production environment, as it will leak\nmemory, and will not scale past a single process.\nindex.js\ndbFabric=false\nchecking dbIP:null\nExpress server listening on port 8843\nError: connect ECONNREFUSED 127.0.0.1:3306\n\nI am not sure if this patch is meant to result in the SDNC staying running or if it fixes something else that I don't know what to look for.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d121fcb6b030c33f32e01ae11513407417793e0a",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-11 12:50:13.000000000",
+        "message": "Patch Set 1:\n\nThis can't be verified currently because the SDN-C container itself changed and isn't stable.  When this patch was posted, everything came up cleanly.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b840f0b11852424c9acf49ead28b6dc3af238e26",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-13 02:14:31.000000000",
+        "message": "Patch Set 1: Code-Review+2 Verified+1\n\nNAME                                        READY     STATUS    RESTARTS   AGE\ndeep-sdnc-0                                 2/2       Running   0          27m\ndeep-sdnc-db-0                              2/2       Running   0          27m\ndeep-sdnc-dgbuilder-d99f9db88-skjj5         1/1       Running   0          27m\ndeep-sdnc-dmaap-listener-766c4747cf-rqxlh   1/1       Running   0          27m\ndeep-sdnc-portal-7b8c8d994d-966sm           0/1       Running   1          1m\ndeep-sdnc-ueb-listener-6fbd96b99d-n2wnc     1/1       Running   0          27m\n\nwith these values:\nsdnc:\n  global:\n    persistence:\n      mountPath: /onapdata\n  enabled: true\n  mysql:\n    persistence:\n      mountPath: /onapdata\n    disableNfsProvisioner: true",
+        "patchset_number": 1
+      },
+      {
+        "id": "c486ae13c4a36dec345ad6a4d0c740964833f23b",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-04-13 02:14:34.000000000",
+        "message": "Change has been successfully merged by Mandeep Khinda",
+        "patchset_number": 1
+      },
+      {
+        "id": "2cfdca133b0da83581301f78b2543c45115a7195",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-13 02:40:36.000000000",
+        "message": "Patch Set 1:\n\nWhen testing with 3 controllers and 2 databases (no nfs-provisioner) there is a problem with the 2nd database not coming up:\ndeep-sdnc-0                                 0/2       Init:0/1           0          8m\ndeep-sdnc-1                                 0/2       Init:0/1           0          8m\ndeep-sdnc-2                                 0/2       Init:0/1           0          8m\ndeep-sdnc-db-0                              2/2       Running            0          8m\ndeep-sdnc-db-1                              1/2       CrashLoopBackOff   5          7m\n\n2018-04-13T02:39:59.925449Z 0 [ERROR] InnoDB: Unable to lock ./ibdata1 error: 11\n2018-04-13T02:39:59.925479Z 0 [Note] InnoDB: Check that you do not already have another mysqld process using the same InnoDB data or log files.",
+        "patchset_number": 1
+      },
+      {
+        "id": "11e9343ac32b72e40a66f5df0eeff9a59a3e4dba",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-15 06:38:38.000000000",
+        "message": "Patch Set 1:\n\n> When testing with 3 controllers and 2 databases (no\n > nfs-provisioner) there is a problem with the 2nd database not\n > coming up:\n > deep-sdnc-0                                 0/2       Init:0/1     \n >      0          8m\n > deep-sdnc-1                                 0/2       Init:0/1     \n >      0          8m\n > deep-sdnc-2                                 0/2       Init:0/1     \n >      0          8m\n > deep-sdnc-db-0                              2/2       Running      \n >      0          8m\n > deep-sdnc-db-1                              1/2      \n > CrashLoopBackOff   5          7m\n > \n > 2018-04-13T02:39:59.925449Z 0 [ERROR] InnoDB: Unable to lock\n > ./ibdata1 error: 11\n > 2018-04-13T02:39:59.925479Z 0 [Note] InnoDB: Check that you do not\n > already have another mysqld process using the same InnoDB data or\n > log files.\n\nFor APPC the decision for Beijing was to stay with one instance of mysql only, therefore current support is for one PV/PVC in non-nfs-provisioner mode.\nFurther need to support multiple volumes for Mysql db, maybe similarly to how I implemented for postgres or redis.",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

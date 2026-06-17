@@ -1,0 +1,127 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~I13a091de9207bab1c7d4eee3179263c5d994ffbf",
+  "change_id": "I13a091de9207bab1c7d4eee3179263c5d994ffbf",
+  "_number": 100045,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "12241a3e_446df934",
+      "file_path": "k8s/k8s-node-type.yaml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "need to add 2020 to the copyright list in all modified files that have copyright notices",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2020-01-09 15:16:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fe1aaa82_17e71bcd",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 153,
+      "message": "if container_ports is not passed in, it will be given a value of [] above.\n\nSubsequently container_ports[0][0] will thrown an exception\nIndexError: list index out of range",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2020-01-09 15:16:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d7bdd3d4_1bcc385c",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 1,
+      "line": 642,
+      "message": "suggest using dc[\"policy\"].get(\"trigger_type\") to prevent a\nKeyError: 'trigger_type' if it does not exist\n\nOR\n\nif \"policy\" in dc and \"trigger_type\" in dc[\"policy\"] and dc[\"policy\"][\"trigger_type\"] == \"docker\":",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2020-01-09 15:16:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d6b2e728_99f73d1f",
+      "file_path": "k8s/k8s-node-type.yaml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-01-17 12:37:31.000000000",
+      "in_reply_to": "12241a3e_446df934",
+      "unresolved": false
+    },
+    {
+      "id": "ba76bccf_7fdf8365",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 153,
+      "message": "The line is correct as written. If container_ports is indeed an empty list, it will evaluate to False as the condition of the ternary operator. Hence, only the false branch of the expression will be evaluated, and None assigned to hc_port, as intended. If there is a member in container_ports, it is assumed to be a nonempty tuple (as in the previous implementation, line 153), hence both [0] calls will work.\n\n>>> cp = []\n>>> cp[0][0] if cp else 12\n12\n>>> cp.append((3, 4))\n>>> cp[0][0] if cp else 12\n3\n\nhttps://docs.python.org/2/reference/expressions.html#conditional-expressions\nhttps://docs.python.org/2/library/stdtypes.html#truth-value-testing",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-01-17 12:37:31.000000000",
+      "in_reply_to": "fe1aaa82_17e71bcd",
+      "unresolved": false
+    },
+    {
+      "id": "fd0c0eb2_e3fc6f75",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 1,
+      "line": 642,
+      "message": "I have done this change. Though, is trigger_type and optional item in a docker_config policy? The original code assumes it would be present. Is docker_config guaranteed to be present on line 639? As script_path still is assumed to be a member of the policy dict on line 645.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-01-17 12:37:31.000000000",
+      "in_reply_to": "d7bdd3d4_1bcc385c",
+      "unresolved": false
+    },
+    {
+      "id": "40a11c18_2ec18f9f",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 4,
+      "line": 507,
+      "message": "log_info might be in kwargs, in which case _add_elk_logging_sidecar will attempt to do a get() on a NoneType.  This was the source of the problem reported in my earlier comments.\nkwargs.get(\"log_info\") or {}\nfixes that particular problem",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2020-01-17 21:19:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

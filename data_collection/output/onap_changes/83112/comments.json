@@ -1,0 +1,93 @@
+{
+  "id": "oom%2Foffline-installer~master~Ie2c4cdcf65aeac664d4b76daa7e979f4f23b6bdf",
+  "change_id": "Ie2c4cdcf65aeac664d4b76daa7e979f4f23b6bdf",
+  "_number": 83112,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "cec7129c_b905dac8",
+      "file_path": "ansible/roles/firewall/tasks/firewall-disable.yml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "so this is coming from molecule testing, right ? I dont understand why iptables module is not reporting correct value, but this is false just when iptables is empty right ? I thought there are always some default rules in there, if this is NOOP kind of task, it makes no sense, shouldn't we rather have changed_when: true ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-26 08:30:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5dff24ef_42248c8b",
+      "file_path": "ansible/roles/firewall/tasks/firewall-disable.yml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "yes from molecule.\nI don't know why iptables module does not implement this as idempotent.\n\nif we set this changed_when: true then molecule idempotence test does not pass.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-26 08:38:46.000000000",
+      "in_reply_to": "cec7129c_b905dac8",
+      "unresolved": false
+    },
+    {
+      "id": "5fae5f36_eea791b3",
+      "file_path": "ansible/roles/firewall/tasks/firewall-disable.yml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "what is the output of iptables flush? I mean can we set changed_when: to some condition in combination with register: instead to default it to true/false ?",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-27 13:44:09.000000000",
+      "in_reply_to": "5dff24ef_42248c8b",
+      "unresolved": false
+    },
+    {
+      "id": "20bed698_0f219574",
+      "file_path": "ansible/roles/firewall/tasks/firewall-disable.yml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "that would be nice.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-27 14:34:52.000000000",
+      "in_reply_to": "5fae5f36_eea791b3",
+      "unresolved": false
+    },
+    {
+      "id": "b131b36a_a8aa004c",
+      "file_path": "ansible/roles/firewall/tasks/firewall-disable.yml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "iptables is quite dummy module, no output it's producing. At this point where it is called, rules should be out already. So maybe we can simply keep it as it is.\n\nIn case of some cleaner approach, we should be moving outside of iptables module and calling some commands directly. But this is too much to me for the sake of passing idempotency check and also not very nice.\n\n# flush all chains\niptables -F\niptables -t nat -F\niptables -t mangle -F\n# delete all chains\niptables -X\n\n(removing -1)",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-01 11:02:56.000000000",
+      "in_reply_to": "20bed698_0f219574",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,476 @@
+{
+  "id": "oom~master~Ib13bb5744705ef3b2d3f5c9e9a73b26620c515c7",
+  "change_id": "Ib13bb5744705ef3b2d3f5c9e9a73b26620c515c7",
+  "_number": 48717,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-23 15:59:02.000000000",
+    "updated": "2018-05-30 20:12:04.000000000",
+    "submitted": "2018-05-30 17:25:38.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 49,
+      "name": "Patrick Brady",
+      "display_name": null,
+      "email": "patrick.brady@att.com",
+      "username": "pb071"
+    },
+    "submitter": {
+      "account_id": 505,
+      "name": "Jun (Nicolas) Hu",
+      "display_name": null,
+      "email": "jun.nicolas.hu@att.com",
+      "username": "jh245g"
+    }
+  },
+  "subject": "Add appc cdt proxy to oom",
+  "commit_message": "Add appc cdt proxy to oom\n\nChange to the appc startODL.sh script to startup the cdt\nproxy service to allow backend connection from the cdt tool.\n\nAdding a new port forward into the appc container for the\nabove service. External port 9090, internal port 9191\n\nChange-Id: Ib13bb5744705ef3b2d3f5c9e9a73b26620c515c7\nSigned-off-by: Patrick Brady <pb071s@att.com>\nIssue-ID: APPC-924\n",
+  "change_log": {
+    "entry_count": 32,
+    "entries": [
+      {
+        "id": "ae0d24438a015958ee6c11224a420d8f8c55eaca",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-23 15:59:02.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "18ceeb7c95838b16635a55c42d57606afaef34e4",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-24 14:41:25.000000000",
+        "message": "Patch Set 1:\n\nHi Patrick,\n\nI think you also have to modify templates/service.yaml file.\n\n\n\nTest Results :\n\nroot@k8s-1:/mayank/oom_328_helm_prepull_fix/oom/kubernetes# helm install local/onap -n dev8 --namespace onap8 -f onap/resources/environments/disable-allcharts.yaml --set appc.enabled=true --set global.pullPolicy=IfNotPresent\nNAME:   dev8\nLAST DEPLOYED: Thu May 24 14:39:41 2018\nNAMESPACE: onap8\nSTATUS: DEPLOYED\n\nRESOURCES:\n==> v1/PersistentVolumeClaim\nNAME               STATUS  VOLUME             CAPACITY  ACCESS MODES  STORAGECLASS       AGE\ndev8-appc-db-data  Bound   dev8-appc-db-data  1Gi       RWX           dev8-appc-db-data  1s\n\n==> v1/Pod(related)\nNAME                                  READY  STATUS             RESTARTS  AGE\ndev8-appc-cdt-7cf7f9b6d8-6cj8q        0/1    ContainerCreating  0         0s\ndev8-appc-dgbuilder-7449cdfdf8-gzcqf  0/1    Init:0/1           0         0s\n\n==> v1/PersistentVolume\nNAME               CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS     CLAIM                    STORAGECLASS       REASON  AGE\ndev8-appc-db-data  1Gi       RWX           Retain          Bound      onap8/dev8-appc-db-data  dev8-appc-db-data  1s\ndev8-appc-data0    1Gi       RWO           Retain          Available  dev8-appc-data           1s\n\n==> v1beta1/ClusterRoleBinding\nNAME           AGE\nonap8-binding  1s\n\n==> v1/Service\nNAME              TYPE       CLUSTER-IP    EXTERNAL-IP  PORT(S)                        AGE\nappc-cdt          NodePort   10.43.101.72  <none>       80:30289/TCP                   1s\nappc-dgbuilder    NodePort   10.43.68.136  <none>       3000:30228/TCP                 1s\nappc-sdnctldb02   ClusterIP  None          <none>       3306/TCP                       1s\nappc-dbhost       ClusterIP  None          <none>       3306/TCP                       1s\nappc-dbhost-read  ClusterIP  10.43.114.9   <none>       3306/TCP                       1s\nappc-sdnctldb01   ClusterIP  None          <none>       3306/TCP                       1s\nappc-cluster      ClusterIP  None          <none>       2550/TCP                       1s\nappc              NodePort   10.43.223.81  <none>       8282:30230/TCP,1830:30231/TCP  0s\n\n==> v1beta1/Deployment\nNAME                 DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE\ndev8-appc-cdt        1        1        1           0          0s\ndev8-appc-dgbuilder  1        1        1           0          0s\n\n==> v1beta1/StatefulSet\nNAME          DESIRED  CURRENT  AGE\ndev8-appc-db  1        1        0s\ndev8-appc     1        1        0s\n\n==> v1/Secret\nNAME                       TYPE                     DATA  AGE\ndev8-appc-dgbuilder        Opaque                   1     1s\ndev8-appc-db               Opaque                   1     1s\ndev8-appc                  Opaque                   1     1s\nonap8-docker-registry-key  kubernetes.io/dockercfg  1     1s\n\n==> v1/ConfigMap\nNAME                                 DATA  AGE\ndev8-appc-dgbuilder-config           1     1s\ndev8-appc-dgbuilder-scripts          2     1s\ndev8-appc-db-db-configmap            2     1s\ndev8-appc-onap-appc-svclogic-bin     1     1s\ndev8-appc-onap-appc-svclogic-config  1     1s\ndev8-appc-logging-cfg                1     1s\ndev8-appc-onap-sdnc-svclogic-bin     1     1s\ndev8-appc-onap-sdnc-svclogic-config  1     1s\ndev8-appc-onap-appc-bin              2     1s\ndev8-appc-onap-sdnc-data-properties  3     1s\ndev8-appc-onap-sdnc-bin              2     1s\ndev8-appc-filebeat                   1     1s\ndev8-appc-onap-appc-data-properties  4     1s\n\n\n\nService Information --> \n\nroot@k8s-1:/mayank/oom_328_helm_prepull_fix/oom/kubernetes# kubectl get svc --all-namespaces | grep -i appc\nonap8         appc                       NodePort       10.43.223.81    <none>         8282:30230/TCP,1830:30231/TCP   13s\nonap8         appc-cdt                   NodePort       10.43.101.72    <none>         80:30289/TCP                    14s\nonap8         appc-cluster               ClusterIP      None            <none>         2550/TCP                        14s\nonap8         appc-dbhost                ClusterIP      None            <none>         3306/TCP                        14s\nonap8         appc-dbhost-read           ClusterIP      10.43.114.9     <none>         3306/TCP                        14s\nonap8         appc-dgbuilder             NodePort       10.43.68.136    <none>         3000:30228/TCP                  14s\nonap8         appc-sdnctldb01            ClusterIP      None            <none>         3306/TCP                        14s\nonap8         appc-sdnctldb02            ClusterIP      None            <none>         3306/TCP                        14s\n\nPort is not exposed.\n\nThanks,\n_MG",
+        "patchset_number": 1
+      },
+      {
+        "id": "473d638fa896c34f7c2d1a5ddc9dcd6c14edda66",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-24 14:54:55.000000000",
+        "message": "Patch Set 1:\n\nHi Patrick\n\nI verified and tested..\nPlease check bellow -\n\nAdditional changes required:\n\ndiff --git a/kubernetes/appc/templates/service.yaml b/kubernetes/appc/templates/service.yaml\nindex 6c85985..0ba73e3 100644\n--- a/kubernetes/appc/templates/service.yaml\n+++ b/kubernetes/appc/templates/service.yaml\n@@ -31,6 +31,9 @@ spec:\n     - port: {{ .Values.service.externalPort2 }}\n       nodePort: {{ .Values.global.nodePortPrefix | default .Values.nodePortPrefix }}{{ .Values.service.nodePort2 }}\n       name: \"{{ .Values.service.portName }}-1830\"\n+    - port: {{ .Values.service.externalPort3 }}\n+      nodePort: {{ .Values.global.nodePortPrefix | default .Values.nodePortPrefix }}{{ .Values.service.nodePort3 }}\n+      name: \"{{ .Values.service.portName }}-9090\"\n     {{- else -}}\n     - port: {{ .Values.service.externalPort }}\n       targetPort: {{ .Values.service.internalPort }}\n@@ -38,6 +41,9 @@ spec:\n     - port: {{ .Values.service.externalPort2 }}\n       targetPort: {{ .Values.service.internalPort2 }}\n       name: {{ .Values.service.portName }}-1830\n+    - port: {{ .Values.service.externalPort3 }}\n+      targetPort: {{ .Values.service.internalPort3 }}\n+      name: {{ .Values.service.portName }}-9090\n     {{- end}}\n   selector:\n     app: {{ include \"common.name\" . }}\n\nTest Result:\n\nInstallation -->\nroot@k8s-1:/mayank/oom_328_helm_prepull_fix/oom/kubernetes# helm install local/onap -n dev8 --namespace onap8 -f onap/resources/environments/disable-allcharts.yaml --set appc.enabled=true --set global.pullPolicy=IfNotPresent\nNAME:   dev8\nLAST DEPLOYED: Thu May 24 14:51:11 2018\nNAMESPACE: onap8\nSTATUS: DEPLOYED\n\nRESOURCES:\n==> v1/Service\nNAME              TYPE       CLUSTER-IP    EXTERNAL-IP  PORT(S)                                       AGE\nappc-cdt          NodePort   10.43.45.221  <none>       80:30289/TCP                                  0s\nappc-dgbuilder    NodePort   10.43.85.214  <none>       3000:30228/TCP                                0s\nappc-sdnctldb02   ClusterIP  None          <none>       3306/TCP                                      0s\nappc-sdnctldb01   ClusterIP  None          <none>       3306/TCP                                      0s\nappc-dbhost       ClusterIP  None          <none>       3306/TCP                                      0s\nappc-dbhost-read  ClusterIP  10.43.239.91  <none>       3306/TCP                                      0s\nappc              NodePort   10.43.30.152  <none>       8282:30230/TCP,1830:30231/TCP,9090:30232/TCP  0s\nappc-cluster      ClusterIP  None          <none>       2550/TCP                                      0s\n\n==> v1beta1/StatefulSet\nNAME          DESIRED  CURRENT  AGE\ndev8-appc-db  1        1        0s\ndev8-appc     1        1        0s\n\n==> v1/Secret\nNAME                       TYPE                     DATA  AGE\ndev8-appc-dgbuilder        Opaque                   1     0s\ndev8-appc-db               Opaque                   1     0s\ndev8-appc                  Opaque                   1     0s\nonap8-docker-registry-key  kubernetes.io/dockercfg  1     0s\n\n==> v1/ConfigMap\nNAME                                 DATA  AGE\ndev8-appc-dgbuilder-scripts          2     0s\ndev8-appc-dgbuilder-config           1     0s\ndev8-appc-db-db-configmap            2     0s\ndev8-appc-onap-appc-bin              2     0s\ndev8-appc-onap-sdnc-svclogic-bin     1     0s\ndev8-appc-logging-cfg                1     0s\ndev8-appc-filebeat                   1     0s\ndev8-appc-onap-appc-svclogic-config  1     0s\ndev8-appc-onap-appc-svclogic-bin     1     0s\ndev8-appc-onap-sdnc-data-properties  3     0s\ndev8-appc-onap-appc-data-properties  4     0s\ndev8-appc-onap-sdnc-bin              2     0s\ndev8-appc-onap-sdnc-svclogic-config  1     0s\n\n==> v1/PersistentVolume\nNAME               CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS     CLAIM                    STORAGECLASS       REASON  AGE\ndev8-appc-db-data  1Gi       RWX           Retain          Bound      onap8/dev8-appc-db-data  dev8-appc-db-data  0s\ndev8-appc-data0    1Gi       RWO           Retain          Available  dev8-appc-data           0s\n\n==> v1beta1/ClusterRoleBinding\nNAME           AGE\nonap8-binding  0s\n\n==> v1/PersistentVolumeClaim\nNAME               STATUS  VOLUME             CAPACITY  ACCESS MODES  STORAGECLASS       AGE\ndev8-appc-db-data  Bound   dev8-appc-db-data  1Gi       RWX           dev8-appc-db-data  0s\n\n==> v1beta1/Deployment\nNAME                 DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE\ndev8-appc-cdt        1        1        1           0          0s\ndev8-appc-dgbuilder  1        1        1           0          0s\n\n==> v1/Pod(related)\nNAME                                  READY  STATUS             RESTARTS  AGE\ndev8-appc-cdt-7cf7f9b6d8-lbwdf        0/1    ContainerCreating  0         0s\ndev8-appc-dgbuilder-7449cdfdf8-b48r9  0/1    Init:0/1           0         0s\n\n\n\n\nService Information -->\n\nroot@k8s-1:/mayank/oom_328_helm_prepull_fix/oom/kubernetes# kubectl get svc --all-namespaces | grep -i appc\nonap8         appc                       NodePort       10.43.30.152    <none>         8282:30230/TCP,1830:30231/TCP,9090:30232/TCP   1m\nonap8         appc-cdt                   NodePort       10.43.45.221    <none>         80:30289/TCP                                   1m\nonap8         appc-cluster               ClusterIP      None            <none>         2550/TCP                                       1m\nonap8         appc-dbhost                ClusterIP      None            <none>         3306/TCP                                       1m\nonap8         appc-dbhost-read           ClusterIP      10.43.239.91    <none>         3306/TCP                                       1m\nonap8         appc-dgbuilder             NodePort       10.43.85.214    <none>         3000:30228/TCP                                 1m\nonap8         appc-sdnctldb01            ClusterIP      None            <none>         3306/TCP                                       1m\nonap8         appc-sdnctldb02            ClusterIP      None            <none>         3306/TCP                                       1m\n\nPod Status -->\n\nroot@k8s-1:/mayank/oom_328_helm_prepull_fix/oom/kubernetes# kubectl get pods --all-namespaces | grep -i appc\nonap8         dev8-appc-0                                      1/2       Running   0          2m\nonap8         dev8-appc-cdt-7cf7f9b6d8-lbwdf                   1/1       Running   0          2m\nonap8         dev8-appc-db-0                                   2/2       Running   0          2m\nonap8         dev8-appc-dgbuilder-7449cdfdf8-b48r9             1/1       Running   0          2m\n\n\nThanks,\n_MG",
+        "patchset_number": 1
+      },
+      {
+        "id": "3fb8d942cc12d29b3cd4eff60c4514cddf4ada66",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-24 15:08:05.000000000",
+        "message": "Patch Set 1:\n\nThanks, I'll look at those",
+        "patchset_number": 1
+      },
+      {
+        "id": "6b869395687f37f1459519f65cafec741e31dd80",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-24 16:38:29.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "54ff2b8d1d141de4192a2aec448dd820c9f4c2b6",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 05:46:29.000000000",
+        "message": "Patch Set 1:\n\nHi Patrick,\n\nI checked in appc and not able to locate port 9090 or 9191.\n\nroot@dev8-appc-0:/# netstat -tanlp\nActive Internet connections (servers and established)\nProto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name\ntcp6       0      0 :::44444                :::*                    LISTEN      123/java\ntcp6       0      0 127.0.0.1:8383          :::*                    LISTEN      123/java\ntcp6       0      0 :::8101                 :::*                    LISTEN      123/java\ntcp6       0      0 :::1830                 :::*                    LISTEN      123/java\ntcp6       0      0 :::6666                 :::*                    LISTEN      123/java\ntcp6       0      0 :::1099                 :::*                    LISTEN      123/java\ntcp6       0      0 :::8080                 :::*                    LISTEN      123/java\ntcp6       0      0 127.0.0.1:40496         :::*                    LISTEN      123/java\ntcp6       0      0 :::8181                 :::*                    LISTEN      123/java\ntcp6       0      0 127.0.0.1:2550          :::*                    LISTEN      123/java\ntcp6       0      0 :::8185                 :::*                    LISTEN      123/java\ntcp6       0      0 :::40027                :::*                    LISTEN      123/java\ntcp6       0      0 127.0.0.1:56310         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 127.0.0.1:52680         127.0.0.1:1830          ESTABLISHED 123/java\ntcp6       0      0 127.0.0.1:51000         127.0.0.1:1830          TIME_WAIT   -\ntcp6       0      0 127.0.0.1:58048         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 127.0.0.1:57730         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 10.42.60.240:43316      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43322      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43328      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 127.0.0.1:1830          127.0.0.1:52680         ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43332      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 127.0.0.1:51044         127.0.0.1:1830          TIME_WAIT   -\ntcp6       0      0 10.42.60.240:43326      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:49228      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43318      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43320      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 127.0.0.1:52326         127.0.0.1:1830          TIME_WAIT   -\ntcp6       0      0 10.42.60.240:43330      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 127.0.0.1:56770         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 127.0.0.1:57062         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 127.0.0.1:57414         127.0.0.1:8101          TIME_WAIT   -\ntcp6       0      0 10.42.60.240:43334      10.42.192.248:3306      ESTABLISHED 123/java\ntcp6       0      0 10.42.60.240:43324      10.42.192.248:3306      ESTABLISHED 123/java\n\n\nCan you please confirm what port need to be exposed and how CDT application send data?\n\nThanks,\nMG",
+        "patchset_number": 1
+      },
+      {
+        "id": "d6488d4a8aa713f89d67c51ccdc12e50cf23e8d9",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:15:51.000000000",
+        "message": "Patch Set 2:\n\nThe cdt proxy service in the appc container is on port 9191, you need to make sure you have the changes to the startODL.sh file (also in this commit) in order to run that.\n\nI need to make a change to the javascript in cdt so that it will connect to the correct kubernetes port instead of 9090, like it is now.",
+        "patchset_number": 2
+      },
+      {
+        "id": "de0cfc6130176e5031c848dd0b4fcc36e2fab054",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:20:29.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "2be7f59d1bc9e06ab6c2cdc9df34a260cbed6e20",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:46:00.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "3186a3b77636202ca04f82a1615396bb26b58ca6",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 05:31:24.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)\n\nPlease try to test CDT can connect with appc application.",
+        "patchset_number": 3
+      },
+      {
+        "id": "f562e040d719e8a8d7a83ffd3bc6b04942680b2c",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 05:47:35.000000000",
+        "message": "Patch Set 3:\n\nHi Patrick,\n\nThere two files bellow which you one you talking about?\n\nroot@dev8-appc-0:/# find -name \"startODL.sh\"\n./opt/onap/ccsdk/bin/startODL.sh\n./opt/onap/appc/bin/startODL.sh\n\nBoth are part of different config Map.\n\n          - mountPath: /opt/onap/appc/bin/startODL.sh\n            name: onap-appc-bin\n            subPath: startODL.sh\n\n        - name: onap-appc-bin\n          configMap:\n            name: {{ include \"common.fullname\" . }}-onap-appc-bin\n            defaultMode: 0755\n\t\t\t\n\t\tPath in OOM -> resources/config/appc/opt/onap/appc/bin/\n\t\t\n\n          - mountPath: /opt/onap/ccsdk/bin/startODL.sh\n            name: onap-sdnc-bin\n            subPath: startODL.sh\n\t\t\t\n        - name: onap-sdnc-bin\n          configMap:\n            name: {{ include \"common.fullname\" . }}-onap-sdnc-bin\n            defaultMode: 0755\n\n\t\tPath in OOM --> resources/config/appc/opt/onap/ccsdk/bin/\n\t\t\nYou changed file resources/config/appc/opt/onap/appc/bin/\n\nI am not sure that same settings need to be included inside startODL in ccsdk.\nafter implementation of those changes still not able to locate port inside container. can you please check agian.\n\nThanks,\nMayank Gupta",
+        "patchset_number": 3
+      },
+      {
+        "id": "d98d92db6e765b877352636fc7da111a1376dd1c",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 05:58:45.000000000",
+        "message": "Patch Set 3:\n\nHi Patrick,\n\nI also not able to locate cdt jar fine inside appc container.\n\nroot@dev8-appc-0:/# cd /opt/onap/appc/\nbin/      data/     features/ svclogic/\nroot@dev8-appc-0:/# cd /opt/onap/appc/\nbin/      data/     features/ svclogic/\nroot@dev8-appc-0:/# cd /opt/onap/appc/\nroot@dev8-appc-0:/opt/onap/appc#\nroot@dev8-appc-0:/opt/onap/appc# ls -lrt\ntotal 16\ndrwxrwxr-x  2 root root 4096 May 17 15:01 bin\ndrwxrwxr-x  4 root root 4096 May 17 15:13 data\ndrwxr-xr-x 30 root root 4096 May 17 15:23 features\ndrwxr-xr-x  7 root root 4096 May 25 05:41 svclogic\nroot@dev8-appc-0:/opt/onap/appc# java -jar /opt/onap/appc/cdt-proxy-service/cdt-proxy-service.jar &\n[1] 13099\nroot@dev8-appc-0:/opt/onap/appc# Error: Unable to access jarfile /opt/onap/appc/cdt-proxy-service/cdt-proxy-service.jar\n\n[1]+  Exit 1                  java -jar /opt/onap/appc/cdt-proxy-service/cdt-proxy-service.jar\nroot@dev8-appc-0:/opt/onap/appc#\nroot@dev8-appc-0:/opt/onap/appc#\nroot@dev8-appc-0:/opt/onap/appc#\nroot@dev8-appc-0:/opt/onap/appc# cd /\nroot@dev8-appc-0:/#\nroot@dev8-appc-0:/# find -name \"cdt-proxy-service.jar\"\nroot@dev8-appc-0:/# find -name \"cdt-proxy-service.jar\" ./\n\n\nThanks,\nMayank Gupta",
+        "patchset_number": 3
+      },
+      {
+        "id": "fc45fef84550866286efa86398c2488a06817477",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 19:47:07.000000000",
+        "message": "Patch Set 3: Code-Review-1 Verified-1\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "5e7d257c7c15d015c9026ad8e63eb5d21934dd77",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-29 13:15:10.000000000",
+        "message": "Patch Set 3:\n\nPatrick, the issue that I'm seeing now is you've hardcoded that node port in the appc cdt config.... this port should be made configurable. It can't be hardcoded. https://gerrit.onap.org/r/#/c/49201/",
+        "patchset_number": 3
+      },
+      {
+        "id": "17936932776d98d05aba406c9d11bd042e0d1474",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-29 13:43:38.000000000",
+        "message": "Patch Set 3:\n\nThe thing is, the node port prefix is meant to be a user discretion param. Say you want two ONAP deployments in one K8S cluster, nodePortSufix will be different",
+        "patchset_number": 3
+      },
+      {
+        "id": "8585d748f64bc6f49baf1b72b9ed043750ac7111",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-29 15:12:09.000000000",
+        "message": "Patch Set 3: -Code-Review\n\n> (1 comment)\n\nIf I put it back to node port 32, will that work then?",
+        "patchset_number": 3
+      },
+      {
+        "id": "476492539ca06db09b5b44939bcc08056c0c4b1a",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-29 15:22:30.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "4c47341eb8858fba5c13c2390c11e2e400ae18be",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-29 15:25:00.000000000",
+        "message": "Patch Set 3:\n\nMayank, the jar file is there in the latest versions of the appc-image. Maybe you have an older version of the image downloaded.",
+        "patchset_number": 3
+      },
+      {
+        "id": "468de0c4ba9697fd8692c18725939f12a0d3e08f",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-29 15:26:33.000000000",
+        "message": "Patch Set 3:\n\nAlexis, I know the hardcoded port is an issue. I am just trying to get this working now, while I figure out a better way to do it.",
+        "patchset_number": 3
+      },
+      {
+        "id": "3846e434398d5cf374131c296d2811647b63e2f3",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-29 15:42:37.000000000",
+        "message": "Patch Set 4:\n\nOk, cool. Thanks",
+        "patchset_number": 4
+      },
+      {
+        "id": "66920c1a8775c096723b5f21cefb7bbe4f776567",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 15:05:34.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "33097aaec811bbb0c5622c0272c6c5fccb8fefd5",
+        "author": {
+          "account_id": 2535,
+          "name": "Mayank Gupta",
+          "display_name": null,
+          "email": "mayank.gupta@amdocs.com",
+          "username": "mayankg2703"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 15:13:23.000000000",
+        "message": "Patch Set 4:\n\nLooks good to me.\n\nthough, need to change configuration at CDT related to port.",
+        "patchset_number": 4
+      },
+      {
+        "id": "1862542af562cd2284c3cf14de03c993e1ac216c",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 15:28:40.000000000",
+        "message": "Patch Set 4:\n\n> Looks good to me.\n > \n > though, need to change configuration at CDT related to port.\n\nYes, I am putting a change in cdt to allow the port to be set at docker runtime.",
+        "patchset_number": 4
+      },
+      {
+        "id": "8b07dfd05b80bafca9992da625e45234f79c9ebc",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 15:37:14.000000000",
+        "message": "Patch Set 4: -Code-Review\n\nI'll have a change ready soon to allow the cdt port to be automatically set based on the node port prefix. I can either add it to this change, or I can open a new change.",
+        "patchset_number": 4
+      },
+      {
+        "id": "9d6de30880f0921a692c9589c9890af75d37ce32",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-30 16:34:42.000000000",
+        "message": "Patch Set 4: Code-Review+1\n\nI will create a new gerrit with changes for automatic port assignment, this one can be merged",
+        "patchset_number": 4
+      },
+      {
+        "id": "f89f7bfe29dcfeb0ec04b81ef8d933c1bd3b0ff9",
+        "author": {
+          "account_id": 505,
+          "name": "Jun (Nicolas) Hu",
+          "display_name": null,
+          "email": "jun.nicolas.hu@att.com",
+          "username": "jh245g"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 17:10:55.000000000",
+        "message": "Patch Set 4: Code-Review+2 Verified+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "33613d543de4ca5768c6c14340eb2f4296ca24b0",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-30 17:25:38.000000000",
+        "message": "Change has been successfully merged by Jun (Nicolas) Hu",
+        "patchset_number": 4
+      },
+      {
+        "id": "977124f3c6fa774c036add37baeedb8227caf36a",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:07:53.000000000",
+        "message": "Patch Set 4: Reverted\n\nThis patchset was reverted in change: Ib25fe545352009373180189fe72ba373b57c8973",
+        "patchset_number": 4
+      },
+      {
+        "id": "08b0a042c67c10fc090a5e4a8cf9ee7245f64819",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:09:39.000000000",
+        "message": "Patch Set 4: Reverted\n\nThis patchset was reverted in change: I4f496b7ae157ca69df76a71dbd4406714649949c",
+        "patchset_number": 4
+      },
+      {
+        "id": "739af78b96e86238afdc3222a7ca5138e577a8f2",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:11:35.000000000",
+        "message": "Patch Set 4: Reverted\n\nThis patchset was reverted in change: Iec475e828911c3cd0a09935bdc60e6361dd43d3d",
+        "patchset_number": 4
+      },
+      {
+        "id": "024d5ea8922d0f9a8fee434b09a6bb03d715e182",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:11:39.000000000",
+        "message": "Patch Set 4: Reverted\n\nThis patchset was reverted in change: I45bbd6c8fa7f9ae4dae75d38bebe3853da4da116",
+        "patchset_number": 4
+      },
+      {
+        "id": "13e0e1ea32e3ebc9daccff0b8b31492ae10e146d",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 20:12:04.000000000",
+        "message": "Patch Set 4: Reverted\n\nThis patchset was reverted in change: Ied1c62289edc8815074fa195637392bb0f8dfc7e",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

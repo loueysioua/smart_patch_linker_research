@@ -1,0 +1,140 @@
+{
+  "id": "so~master~I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5",
+  "change_id": "I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5",
+  "_number": 144107,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2026-04-24 08:16:16.000000000",
+    "updated": "2026-04-24 08:27:11.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    },
+    "submitter": null
+  },
+  "subject": "Enable Java 17 build: POM, tooling, test fixes",
+  "commit_message": "Enable Java 17 build: POM, tooling, test fixes\n\nFoundation commit on the spring-boot-3-0 branch that\nenables the SO reactor to build and test cleanly under\nJava 17 (Temurin 17.0.18), still on Spring Boot 2.7.18.\nFramework bumps (Spring Boot 3, Spring Cloud 2022.0,\nCamunda 7.20, CXF 4, Hibernate 6) are NOT in this CR —\nthey land in subsequent phase CRs alongside per-module\nJakarta migration work.\n\nValidated locally by `mvn clean install -Dformat.skipValidate=true`\n(BUILD SUCCESS across all 47 modules; all tests pass).\n\n- java.version: 11 -> 17\n- maven-compiler-plugin: 3.8.0 -> 3.11.0\n- source/target switched to ${java.version}; <release>\n  flag omitted because groovy-eclipse-batch:3.0.8-01 (the\n  latest available under org.codehaus.groovy) rejects\n  \"release version 17\" but accepts source/target at 17\n- maven-surefire-plugin: 3.0.0-M9 -> 3.1.2; adds argLine\n  with --add-opens flags required by tests running on\n  Java 17 (ModelMapper, JAXB runtime, Mockito)\n- jacoco-maven-plugin: 0.8.5 (oparent default) -> 0.8.12\n  (required for Java 17 bytecode class file major 61)\n- maven-plugin-plugin pinned at 3.11.0 in pluginManagement\n  (oparent default 3.6.0 fails on Java 17 bytecode)\n- New `openrewrite` opt-in profile wiring\n  rewrite-maven-plugin:5.31.0. Recipe artifacts are NOT\n  preloaded; phase CRs that run recipes pass GAVs via\n  -Drewrite.recipeArtifactCoordinates at invocation time.\n\n- project-configs/code-tools/onap-eclipse-format.xml:\n  Eclipse JDT compiler compliance/source/targetPlatform\n  bumped from 1.8 to 17\n- graph-inventory/fluent-builder-maven-plugin/pom.xml:\n  maven-plugin-plugin 3.6.0 -> 3.11.0 (explicit version\n  overrides oparent)\n- common/utils/pom.xml: jaxb-core 2.3.0 -> 2.3.0.1\n  (latest 2.3.x; no 2.3.9 exists for jaxb-core) and\n  jaxb-impl 2.3.0 -> 2.3.9 (2.3.0 throws NPE on\n  Injector.defineClass under Java 17)\n- common/common/pom.xml: modelmapper 2.3.2 -> 3.2.6\n  (2.3.2 fails to create ByteBuddy subclass proxies\n  under Java 17)\n\n- JsonUtils.jsonElementExist (MSOCoreBPMN): explicit null\n  handling to preserve contract. Under Java 11 a chained\n  NPE accidentally produced true; Java 14+ helpful NPEs\n  (JEP 358) broke that chain.\n- ExceptionBuilder (MSOCommonBPMN): stack-trace walker now\n  also skips jdk.internal.reflect, sun.reflect, Method,\n  and org.mockito frames. Previously these were\n  transparent under Java 11, now visible under Java 17\n  stricter reflection.\n- ExceptionBuilderUnitTest: updated two expected-message\n  strings to match the corrected caller identification\n  (was relying on accidental proxy class naming of\n  Mockito 4.x subclass spies).\n- MSOCommonBPMN: test-resource extension\n  mockito-extensions/org.mockito.plugins.MockMaker =\n  mock-maker-inline. BBInputSetupTest's\n  Mockito.spy(new ArrayList<>()) fails under the default\n  subclass-based maker on Java 17 (constructor bypass\n  leaves elementData null); inline maker fixes it.\n- NetworkAdapterObjectMapper: anonymous PropertyMap inner\n  class refactored to a named static nested class\n  (SubnetPropertyMap). Purely a readability improvement;\n  the anonymous form also works with modelmapper 3.2.6.\n- NetworkAdapterObjectMapperTest: Mockito.spy(Class) ->\n  Mockito.spy(new ...) for consistency (no functional\n  change after modelmapper 3.2.6).\n\n- Spring Boot 2.7.18 -> 3.0.x (requires Jakarta\n  namespace migration across ~2000 javax imports and\n  framework migration; not feasible as a root-POM\n  only change)\n- Spring Cloud, Camunda, Apache CXF, Hibernate bumps\n- Jakarta namespace sweep of module source\n- APPC client removal (SO-4310; appc.client.version\n  property retained here so module POMs keep resolving\n  until that CR lands)\n- Module-level Spring Security 6, Hibernate 6, CXF 4\n  migration (Phases 2-6)\n\nPart of: SO-4307\n\nIssue-ID: SO-4309\nChange-Id: I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5\nSigned-off-by: Fiete Ostkamp <fiete.ostkamp@telekom.de>\n",
+  "change_log": {
+    "entry_count": 8,
+    "entries": [
+      {
+        "id": "2baf63e162584c1c22201d3ce77a76afdcb7e882",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:16:16.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "a26778c9bc3f329d06cb1fb3def70cd5d9b5b789",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:16:27.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24879558392",
+        "patchset_number": 1
+      },
+      {
+        "id": "5383d330ab3206fe3d0cd295e3617fcecb4df00a",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:16:29.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24879559592",
+        "patchset_number": 1
+      },
+      {
+        "id": "89de93026af434f8c89fe3fd4b2e34c2c0098c5d",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:16:59.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24879559592",
+        "patchset_number": 1
+      },
+      {
+        "id": "12183a9cc6323a01d09d0eb05df6debcaf177229",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 08:17:24.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/so-master-verify-java/6454/",
+        "patchset_number": 1
+      },
+      {
+        "id": "c95f30b8ccaca6253e17ac4a8c7b9eb35bc0d7db",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:17:45.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24879558392",
+        "patchset_number": 1
+      },
+      {
+        "id": "387dc9fcbb3975c0ccc72877a6750226828c7ff8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 08:21:27.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-master-verify-java/6454/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/so-master-verify-java/6454/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-verify-java/6454",
+        "patchset_number": 1
+      },
+      {
+        "id": "6e2f4d2e1b22026062fc8438588062f008a1e2b4",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:27:11.000000000",
+        "message": "Abandoned",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

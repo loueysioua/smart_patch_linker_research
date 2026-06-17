@@ -1,0 +1,178 @@
+{
+  "id": "oom%2Foffline-installer~master~Id5e81e9d60d15393d5d2e12aef3da476a3b0d4c3",
+  "change_id": "Id5e81e9d60d15393d5d2e12aef3da476a3b0d4c3",
+  "_number": 79023,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "73464e9a_1332ba37",
+      "file_path": "ansible/roles/package-repository/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "there should be ansible_distribution variable in facts. Can we use it in this case so we avoid unnecessarily runing CentOS stuff on RHEL?",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-25 13:48:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "622f8ee2_e7c0c3eb",
+      "file_path": "ansible/roles/package-repository/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "Yes I agree. Also change yum_repositories to package_repositories.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-25 14:00:31.000000000",
+      "in_reply_to": "73464e9a_1332ba37",
+      "unresolved": false
+    },
+    {
+      "id": "7095bec9_07b55364",
+      "file_path": "ansible/roles/package-repository/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "In theory this \"Adding our repo and disabling all other repos\" task is not just Centos specific and we might benefit from the same logic also in some RHEL deployments (for some customized rhel deployments with preenabled repos). In that scenario we can have same task to be running on RHEL but need to store repos names to be disabled in some array as configuration parameter ... into application_configuration.yml ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-02-25 14:20:36.000000000",
+      "in_reply_to": "622f8ee2_e7c0c3eb",
+      "unresolved": false
+    },
+    {
+      "id": "4def6de9_d573fc29",
+      "file_path": "ansible/roles/package-repository/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "MichalP: yes but that would require an additional patch as simply overwriting above dict wouldn't work due to default ansible config   \"DEFAULT_HASH_BEHAVIOUR(default) = replace\". We would need to merge above dict and that defined by user.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-25 14:36:02.000000000",
+      "in_reply_to": "7095bec9_07b55364",
+      "unresolved": false
+    },
+    {
+      "id": "7d6dd67d_2dd76fd6",
+      "file_path": "ansible/roles/package-repository/defaults/main.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "I'm gonna change the implementation - there shouldn't be a need to define any repos to be disabled at all, all enabled repos except onap should be switched off, i'll find a way to enumerate them.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-26 14:58:56.000000000",
+      "in_reply_to": "4def6de9_d573fc29",
+      "unresolved": true
+    },
+    {
+      "id": "3f7e83f3_15c332f6",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 21,
+      "message": "wouldn't it better to use replace ansible module to replace enabled=1 to 0? it has backup option which creates backup with timestamp so we don't need to copy and then remove.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-27 15:31:41.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4bfa6583_41694e69",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 21,
+      "message": "+1 for changing enabled tag only instead of moving file",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-02-28 05:49:05.000000000",
+      "in_reply_to": "3f7e83f3_15c332f6",
+      "unresolved": false
+    },
+    {
+      "id": "f89e8995_d4667e92",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 21,
+      "message": "Have you actually seen default Centos repo file? There is no \"enabled\" keyword in each repo definition so nothing to be changed. Secondly repo files are ini style files and there's a dedicated module for that, namely \"ini_file\". And i didn't use 'ini_file' as my solution is more future proof - only slight changes will be needed to support Debian like repo files. Even using 'ini_file' there would be need not only to enumarate repo files but also sections inside them with repo definitions so logic would be more complicated.\n\nDon't use a module like 'replace' or 'lineinfile' if there's a dedicated module for particular kind of structured file - you don't have to deal manually with idempotence then, which is the case in those two mentioned.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-28 08:03:11.000000000",
+      "in_reply_to": "4bfa6583_41694e69",
+      "unresolved": true
+    },
+    {
+      "id": "7b25a501_034f96b7",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 21,
+      "message": "To be more specific: default repo file doesn't have 'enabled' keyword in each repo section as 'enabled=1' is a default behaviour, unless specified explicitly otherwise.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-28 08:06:15.000000000",
+      "in_reply_to": "f89e8995_d4667e92",
+      "unresolved": true
+    },
+    {
+      "id": "8f5b438c_a6f0cf2c",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 21,
+      "message": "No I did not seen default centos repo file recently. I just asked if it wouldn't be better for this case to do it like that. It is fine by me to do it like as well.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-28 09:30:31.000000000",
+      "in_reply_to": "7b25a501_034f96b7",
+      "unresolved": true
+    }
+  ]
+}

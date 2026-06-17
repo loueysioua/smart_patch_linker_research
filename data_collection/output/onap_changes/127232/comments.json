@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fapi~master~Ib6840040b32f24f019da802d3b246dab1bfccbe3",
+  "change_id": "Ib6840040b32f24f019da802d3b246dab1bfccbe3",
+  "_number": 127232,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "50ae0c90_b89ad19e",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/PdpGroupService.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "And here, the code is very similar to line 61 to 68, maybe it would be possible to create a common method that could be called to do either of the checks.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2022-02-22 08:42:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "87e1e6ed_7bb5e592",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 281,
+      "message": "Hi Rashmi, Just a clarification if we use the delete method from ServiceTemplateRespository, would it delete the corresponding policy entity from policy table? I wonder wouldn't it be for deleting the entire service template?",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-02-22 11:37:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dd11ff1c_fda429ed",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 281,
+      "message": "Agree with Ramesh. But, this deleteById is probably going to delete nothing as there is no entry in the toscaServicetemplate table with the policyKey as primary key.\n@Rashmi You need separate repository for JpaToscaPolicy/JpaToscaPolicyType etc. For e.g., here what we do today is, JpaToscaServiceTemplate is updated by removing the policies (single entry in the ToscaServiceTemplate table is updated this way), and the corresponding JpaToscaPolicy entryis fully removed from the ToscaPolicy table.\nSame comment in other places like deletePolicyType.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-02-22 13:07:12.000000000",
+      "in_reply_to": "87e1e6ed_7bb5e592",
+      "unresolved": true
+    },
+    {
+      "id": "de14eddf_b6ce4728",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 370,
+      "message": "Also another question here. Are we going to use simpleToscaProvider for fetching the cascaded policies? Should we use repository and perform this operation?",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-02-22 13:17:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "da9a9274_bdcc6826",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 370,
+      "message": "No, getCascadedPolicies is just a utility method, it is not talking to DB.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-02-22 13:48:02.000000000",
+      "in_reply_to": "de14eddf_b6ce4728",
+      "unresolved": true
+    },
+    {
+      "id": "e44d471f_d0822ac9",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 281,
+      "message": "Ah yes indeed you are right. There is no entry for that key in the ToscaServiceTemplate, same for deletePolicy. I will take a second look and fix them all. Thanks",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-02-22 13:48:28.000000000",
+      "in_reply_to": "dd11ff1c_fda429ed",
+      "unresolved": true
+    },
+    {
+      "id": "46703826_0fc66650",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 370,
+      "message": "okay. Probably we may need to move this method to util class incase we remove the providers in future.",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-02-22 14:00:01.000000000",
+      "in_reply_to": "da9a9274_bdcc6826",
+      "unresolved": true
+    },
+    {
+      "id": "07d162cc_e9094b74",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/PdpGroupService.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Hi Liam, the code is different, in one we look for policy-types and policies in the other",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-02-23 06:02:21.000000000",
+      "in_reply_to": "50ae0c90_b89ad19e",
+      "unresolved": true
+    },
+    {
+      "id": "cde142dc_3d3dab64",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/ToscaServiceTemplateService.java",
+      "patchset_number": 1,
+      "line": 370,
+      "message": "Ack",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-02-23 06:02:21.000000000",
+      "in_reply_to": "da9a9274_bdcc6826",
+      "unresolved": false
+    },
+    {
+      "id": "acd4c949_5c70c214",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/service/PdpGroupService.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2022-02-23 10:36:52.000000000",
+      "in_reply_to": "07d162cc_e9094b74",
+      "unresolved": false
+    }
+  ]
+}

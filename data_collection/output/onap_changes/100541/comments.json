@@ -1,0 +1,178 @@
+{
+  "id": "so~master~I92ab4b45acb120d647ea3de7a455e2e873c12a72",
+  "change_id": "I92ab4b45acb120d647ea3de7a455e2e873c12a72",
+  "_number": 100541,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f0ac7eae_ff8b5139",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 14,
+      "message": "Is this needed if AAIPnfResources creates pnf if it doesn't already exist?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-01-27 08:27:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5d9cb70c_474d07fb",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 23,
+      "message": "If we are going to keep using the InjectExecution, we could think of simplifying the call in camunda modeller by introducing method taking only execution as its parameter and extracting the gBuildingBlockExecution in its body. (Not necessarily in this commit)",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-01-27 08:27:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "643b3c00_fe11a266",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/aai/tasks/AAICreateTasks.java",
+      "patchset_number": 5,
+      "line": 261,
+      "message": "It can be imported.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-01-27 08:27:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7f557eed_2673d76e",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 14,
+      "message": "Yes, I think we can remove it completely. This will simplify this BB to just 1 task. We can remove CheckAaiForPnfCorrelationId class too.\n\nAnd I'll need to add additional tests to this USs to ensure that this works as expected:\n- PNF entry in AAI is created if it does not exist\n- PNF entry should be assigned to service instance in the same step\n- Assignment should fail if PNF entry is already assigned to another service instance.",
+      "author": {
+        "account_id": 4027,
+        "name": "Lukasz Grech",
+        "display_name": null,
+        "email": "lukasz.grech@nokia.com",
+        "username": "lgrech"
+      },
+      "updated": "2020-01-27 10:52:50.000000000",
+      "in_reply_to": "f0ac7eae_ff8b5139",
+      "unresolved": true
+    },
+    {
+      "id": "5b0c7a65_d6a8a278",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 14,
+      "message": "BTW. Hopefully \"Assignment should fail if PNF entry is already assigned to another service instance\" will be taken care of automatically by AAI. If not I'll will create separate US for that.",
+      "author": {
+        "account_id": 4027,
+        "name": "Lukasz Grech",
+        "display_name": null,
+        "email": "lukasz.grech@nokia.com",
+        "username": "lgrech"
+      },
+      "updated": "2020-01-27 12:37:34.000000000",
+      "in_reply_to": "7f557eed_2673d76e",
+      "unresolved": true
+    },
+    {
+      "id": "962ddd99_c794b885",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 14,
+      "message": "I removed CheckAaiForPnfCorrelationId as discussed above and executed suggested testcases. The results are as follows:\n(Preconditions -> Event -> Result)\n\n- Pnf does not exist in AAI -> Send a request with pnf P1 and service S1 -> P1 is created in AAI and connected to S1\n\n- Pnf P1 with a connection to service S1 exist in AAI -> Send a request with pnf P1 and service S2 -> No changes in AAI, log from bpmn-infra: multiplicity violated:multiplicity rule violated: only one edge can exist with label: org.onap.relationships.inventory.ComposedOf between service-instance and pnf) (ec=ERR.5.4.6140)\"\n\n- Pnf P1 without connection to any service exists in AAI -> Send a request with pnf P1 and service S1 -> P1 is connected to S1 in AAI",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2020-01-28 10:42:00.000000000",
+      "in_reply_to": "5b0c7a65_d6a8a278",
+      "unresolved": true
+    },
+    {
+      "id": "5144fc1c_ebebccc7",
+      "file_path": "bpmn/so-bpmn-building-blocks/src/main/resources/subprocess/BuildingBlock/AssignPnfBB.bpmn",
+      "patchset_number": 5,
+      "line": 23,
+      "message": "It's a good idea.",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2020-01-28 10:42:00.000000000",
+      "in_reply_to": "5d9cb70c_474d07fb",
+      "unresolved": true
+    },
+    {
+      "id": "bf3d2ab2_93f2992b",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/aai/tasks/AAICreateTasks.java",
+      "patchset_number": 5,
+      "line": 261,
+      "message": "Done",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2020-01-28 10:42:00.000000000",
+      "in_reply_to": "643b3c00_fe11a266",
+      "unresolved": true
+    },
+    {
+      "id": "47f66db1_0c429e0e",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/java/org/onap/so/bpmn/infrastructure/aai/tasks/AAICreateTasksTest.java",
+      "patchset_number": 6,
+      "line": 109,
+      "message": "This statement is used only in one test, so there is not point to put it in the \"before\" section. Move it to createPnfShouldCallCreatePnfAndConnectServiceInstance test please.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-01-28 13:29:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "11cbc951_d44f22b5",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/java/org/onap/so/bpmn/infrastructure/aai/tasks/AAICreateTasksTest.java",
+      "patchset_number": 6,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2020-01-29 07:03:36.000000000",
+      "in_reply_to": "47f66db1_0c429e0e",
+      "unresolved": true
+    }
+  ]
+}

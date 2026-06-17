@@ -1,0 +1,246 @@
+{
+  "id": "oom%2Fplatform%2Fcert-service~master~I6ec46b14ba04b5be10de5994236efd8fc14c5d2e",
+  "change_id": "I6ec46b14ba04b5be10de5994236efd8fc14c5d2e",
+  "_number": 116961,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "50753bb7_3734ee15",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/exceptions/CmpServerException.java",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "Do we really need extra exception. To be honest seems CmpClientException is actually CmpServerException cause it is used in places where server response is checked.",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2021-01-19 08:52:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0b67d954_a24384a9",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "Just a question - shouldn't we also return fail info (assign or append it to text)?",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2021-01-19 08:52:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bc983452_172bed7d",
+      "file_path": "docs/sections/change-log.rst",
+      "patchset_number": 2,
+      "line": 28,
+      "message": "This is official documentation so should be written in non-dev sentences (from user perspective)",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2021-01-19 08:52:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6dfa5ba2_114a1dc2",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "I think, that it is enough to write in the response only StatusString as it is human readable.\nI observed that FailInfo contains some error code which does not bring to much info for the called (however it could be useful while trouble shooting that's why it is written to log)",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 09:36:46.000000000",
+      "in_reply_to": "0b67d954_a24384a9",
+      "unresolved": false
+    },
+    {
+      "id": "5d69efda_5a71d4a6",
+      "file_path": "docs/sections/change-log.rst",
+      "patchset_number": 2,
+      "line": 28,
+      "message": "Done",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 12:09:50.000000000",
+      "in_reply_to": "bc983452_172bed7d",
+      "unresolved": false
+    },
+    {
+      "id": "7006d4fe_debeb96d",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 156,
+      "message": "Please extract body of this if to separe method e.g handle response status. To many if in one place...",
+      "author": {
+        "account_id": 6310,
+        "name": "Tomasz Wr�bel",
+        "display_name": "Tomasz Wrobel",
+        "email": "tomasz.wrobel@nokia.com",
+        "username": "twrobel"
+      },
+      "updated": "2021-01-19 13:11:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3361441f_5fec978c",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 158,
+      "message": "1. Succes response also is logged in WARN level ? \n2. You call getStatus here and in next line you check if is null. It can produce NPE.",
+      "author": {
+        "account_id": 6310,
+        "name": "Tomasz Wr�bel",
+        "display_name": "Tomasz Wrobel",
+        "email": "tomasz.wrobel@nokia.com",
+        "username": "twrobel"
+      },
+      "updated": "2021-01-19 13:11:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "053be013_8e2f2bb0",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 168,
+      "message": "Please try to simplify text creation logic. \nSample: \n\nif (certResponse.getStatus().getStatusString() != null) {\n            LOG.warn(\"Response status text: {}\", certResponse.getStatus().getStatusString().getStringAt(0).getString());\n            LOG.warn(\"Response status code: {}\", certResponse.getStatus().getStatus().toString());\n        }\n        if (certResponse.getStatus().getFailInfo() != null) {\n            LOG.warn(\"Response fail info:   {}\", certResponse.getStatus().getFailInfo().toString());\n        }\n\n        if (certResponse.getStatus().getStatus().intValue() == PkiStatus.ERROR.getCode()) {\n            String text = Optional.ofNullable(certResponse.getStatus().getStatusString().getStringAt(0).getString()).orElse(\"N/A\");\n            throw new CmpServerException(text);\n        }",
+      "author": {
+        "account_id": 6310,
+        "name": "Tomasz Wr�bel",
+        "display_name": "Tomasz Wrobel",
+        "email": "tomasz.wrobel@nokia.com",
+        "username": "twrobel"
+      },
+      "updated": "2021-01-19 13:11:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c9f5a11f_cfe2df5c",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpResponseHelper.java",
+      "patchset_number": 3,
+      "line": 77,
+      "message": "If you want to keep current implementation here we should return CmpServerException",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2021-01-19 13:41:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a23d2403_c18e1cc6",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/exceptions/CmpServerException.java",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "As discussed both exceptions will stay.",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 14:27:15.000000000",
+      "in_reply_to": "50753bb7_3734ee15",
+      "unresolved": false
+    },
+    {
+      "id": "e26ed490_66de82a2",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpResponseHelper.java",
+      "patchset_number": 3,
+      "line": 77,
+      "message": "Done",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 14:27:47.000000000",
+      "in_reply_to": "c9f5a11f_cfe2df5c",
+      "unresolved": false
+    },
+    {
+      "id": "2333face_ddad4d0d",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 156,
+      "message": "Done",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 14:28:39.000000000",
+      "in_reply_to": "7006d4fe_debeb96d",
+      "unresolved": false
+    },
+    {
+      "id": "f94b22b7_6f4866da",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 158,
+      "message": "Done",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 14:28:39.000000000",
+      "in_reply_to": "3361441f_5fec978c",
+      "unresolved": false
+    },
+    {
+      "id": "dfebdcd4_e0ceded3",
+      "file_path": "certService/src/main/java/org/onap/oom/certservice/cmpv2client/impl/CmpClientImpl.java",
+      "patchset_number": 3,
+      "line": 168,
+      "message": "Done",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2021-01-19 14:28:39.000000000",
+      "in_reply_to": "053be013_8e2f2bb0",
+      "unresolved": false
+    }
+  ]
+}

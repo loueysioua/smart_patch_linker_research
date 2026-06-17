@@ -1,0 +1,258 @@
+{
+  "id": "oom%2Foffline-installer~master~Ic827002d28e535334dbab7e5ad4aed8aa95c97a9",
+  "change_id": "Ic827002d28e535334dbab7e5ad4aed8aa95c97a9",
+  "_number": 88691,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-05-28 15:21:53.000000000",
+    "updated": "2019-06-24 15:11:58.000000000",
+    "submitted": "2019-06-24 15:11:58.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 5019,
+      "name": "Michal Zegan",
+      "display_name": null,
+      "email": "m.zegan@samsung.com",
+      "username": "m.zegan"
+    },
+    "submitter": {
+      "account_id": 3957,
+      "name": "Samuli Silvius",
+      "display_name": null,
+      "email": "s.silvius@partner.samsung.com",
+      "username": "silvius"
+    }
+  },
+  "subject": "Add kubernetes-node group for workers",
+  "commit_message": "Add kubernetes-node group for workers\n\nMoved all kubernetes nodes from the kubernetes to kubernetes-node group,\nand made the kubernetes group a parent of both kubernetes-node and\nkubernetes-control-plane.\nThe reason is that we still need to have separate groups for\ncontrol planes and for nodes, but some\noperations are performed equally on any kind of kubernetes\ncluster member, and currently one would need to separately include all\nrelated groups one by one. Example of\nsuch common operation is installation of docker, that was not\nperformed for kubernetes-control-plane group, so that\ndocker was not installed on control planes that were neither infra nor nodes.\nThe side effect of this change is that if infrastructure\nserver is also a cluster member, it lands in a kubernetes group by default,\nand node specific setup would be performed on it.\nFor that reason, playbook is modified to perform this setup on all\nkubernetes cluster members except the infra server.\n\nChange-Id: Ic827002d28e535334dbab7e5ad4aed8aa95c97a9\nIssue-ID: OOM-1778\nSigned-off-by: Michal Zegan <m.zegan@samsung.com>\n",
+  "change_log": {
+    "entry_count": 16,
+    "entries": [
+      {
+        "id": "c2139b6fcc743dda4bf8593df1bd4783ca774c64",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-05-28 15:21:53.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "af1c99d335d9c9c6021219b8454f2ce81da22018",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-05-28 15:25:09.000000000",
+        "message": "Patch Set 1:\n\nActually wondering if it doesn't also make sense to add the kubernetes-etcd group? in case of production clusters you rather don't colocate etcd and nodes, and it is now relatively easy to do.",
+        "patchset_number": 1
+      },
+      {
+        "id": "edc6941746159ad19dcce85fcab0614806ecffeb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-05-28 15:49:44.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/offline-installer-master-review/256/",
+        "patchset_number": 1
+      },
+      {
+        "id": "d1b1b85543c134302262f09e56a251dee1572840",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-05-29 05:49:11.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "cb9be26f66b2daab0ed52047aca20182b1b2adcf",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-05-29 05:54:51.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> Actually wondering if it doesn't also make sense to add the kubernetes-etcd group? in case of production clusters you rather don't colocate etcd and nodes, and it is now relatively easy to do.\n\nOr is the kubernetes-control-plane group actually a kubernetes-master group now that would be equal to kubernetes-etcd? So can deal both with just kubernetes-master group?",
+        "patchset_number": 1
+      },
+      {
+        "id": "cfda7ba6c2721c26ddd7aa784f69a44d1815eeaa",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-05-29 09:12:52.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > Actually wondering if it doesn't also make sense to add the kubernetes-etcd group? in case of production clusters you rather don't colocate etcd and nodes, and it is now relatively easy to do.\n> \n> Or is the kubernetes-control-plane group actually a kubernetes-master group now that would be equal to kubernetes-etcd? So can deal both with just kubernetes-master group?\nWell they are separate roles not without a reason. Especially if we want to have high availability support in the future, we need a way to have etcd cluster separate from both master and nodes (especially nodes).\nIt may be something not so relevant here, but it seems a natural extension.",
+        "patchset_number": 1
+      },
+      {
+        "id": "de572b1bb26d4ed529676204340fb4a927c62ffd",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-05-29 09:43:10.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1:\n> > > \n> > > Actually wondering if it doesn't also make sense to add the kubernetes-etcd group? in case of production clusters you rather don't colocate etcd and nodes, and it is now relatively easy to do.\n> > \n> > Or is the kubernetes-control-plane group actually a kubernetes-master group now that would be equal to kubernetes-etcd? So can deal both with just kubernetes-master group?\n> Well they are separate roles not without a reason. Especially if we want to have high availability support in the future, we need a way to have etcd cluster separate from both master and nodes (especially nodes).\n> It may be something not so relevant here, but it seems a natural extension.\n\nYes but for now etcd would be in master. So Could kubernetes-control-plane be named as kubernetes-master? And in addition we could have kubernetes-etcd when we need it.",
+        "patchset_number": 1
+      },
+      {
+        "id": "247d867c62b3c251bac26004724c523bac2a022e",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-05-29 09:47:42.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1:\n> > > \n> > > > Patch Set 1:\n> > > > \n> > > > Actually wondering if it doesn't also make sense to add the kubernetes-etcd group? in case of production clusters you rather don't colocate etcd and nodes, and it is now relatively easy to do.\n> > > \n> > > Or is the kubernetes-control-plane group actually a kubernetes-master group now that would be equal to kubernetes-etcd? So can deal both with just kubernetes-master group?\n> > Well they are separate roles not without a reason. Especially if we want to have high availability support in the future, we need a way to have etcd cluster separate from both master and nodes (especially nodes).\n> > It may be something not so relevant here, but it seems a natural extension.\n> \n> Yes but for now etcd would be in master. So Could kubernetes-control-plane be named as kubernetes-master? And in addition we could have kubernetes-etcd when we need it.\n\nWell not sure then. I could as well make kubernetes-etcd role defaulting to infra, and not require further extension of this.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9fbd1e0c549cc8d363f1a5ea3640c804ce7c4254",
+        "author": {
+          "account_id": 5000,
+          "name": "Tom�? Levora",
+          "display_name": "Tomáš Levora",
+          "email": "tomas.levora@gmail.com",
+          "username": "Tomas.Levora"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-05-29 10:31:35.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "3f0acca5c4c074103893e05418515b70b0589b65",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-06-03 12:48:43.000000000",
+        "message": "Patch Set 1:\n\nOk, i will add the kubernetes-etcd as a new group. I believe it makes the most sense, and will not require extensive changes later.",
+        "patchset_number": 1
+      },
+      {
+        "id": "da70336efcd1e3295fd22047b9aed02a795c75c1",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-06-03 12:59:36.000000000",
+        "message": "Uploaded patch set 2: Patch Set 1 was rebased.",
+        "patchset_number": 2
+      },
+      {
+        "id": "f00a0d069b25df75a44770f9beb225c60dbc4eab",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-06-03 14:20:22.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/offline-installer-master-review/307/",
+        "patchset_number": 2
+      },
+      {
+        "id": "43ae3ff4b8b5403523bbea2eb5c4ac9f09662a16",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-06-03 14:21:19.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/offline-installer-master-review/307/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/offline-installer-master-review/307",
+        "patchset_number": 2
+      },
+      {
+        "id": "caca47ad9978386ddd1662358a75faa3c96aa074",
+        "author": {
+          "account_id": 5019,
+          "name": "Michal Zegan",
+          "display_name": null,
+          "email": "m.zegan@samsung.com",
+          "username": "m.zegan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-06-04 14:45:15.000000000",
+        "message": "Topic set to kubernetes-inventory-groups",
+        "patchset_number": 2
+      },
+      {
+        "id": "7b605fb4075710a6ae49934d9bb57e09561a350c",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-06-24 15:10:01.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "f5be8cff4e01b8156fa8a825aaa953c5d38fb924",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-06-24 15:11:58.000000000",
+        "message": "Change has been successfully merged by Samuli Silvius",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,804 @@
+{
+  "id": "portal-ng%2Fbff~master~I8a7f5cb9b06d5d53114bcfa6bd7c7f9c5e64263d",
+  "change_id": "I8a7f5cb9b06d5d53114bcfa6bd7c7f9c5e64263d",
+  "_number": 144199,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2026-05-04 12:07:05.000000000",
+    "updated": "2026-05-04 14:19:21.000000000",
+    "submitted": "2026-05-04 14:14:44.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    },
+    "submitter": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    }
+  },
+  "subject": "Cache rbac mappings from keycloak",
+  "commit_message": "Cache rbac mappings from keycloak\n\n- replace current implementation that issues\n  one request to keycloak per northbound request\n- cache rbac permissions by jwt id in memory\n- this is done by replacing the authorized: true/false\n  request to keycloak with a request to fetch all permissions\n  for the user and then caching that for the authorized session\n- expire the cached auth once the ttl (time to live) of the token\n  expires\n- fix GHA pipeline\n- relying on spring security for this was evaluated, but not possible\n  with webflux and under the constraint that all RBAC related config\n  shall be solely coming from keycloak\n\nIssue-ID: PORTALNG-170\nChange-Id: I8a7f5cb9b06d5d53114bcfa6bd7c7f9c5e64263d\nSigned-off-by: Fiete Ostkamp <fiete.ostkamp@telekom.de>\n",
+  "change_log": {
+    "entry_count": 55,
+    "entries": [
+      {
+        "id": "aa8a42b6c4fbc0bd69db363ccd938a891034bc84",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:05.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "eba42049bc9693e86cc8443fb1f052c12853c836",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:15.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/portal-ng-bff/actions/runs/25318046180",
+        "patchset_number": 1
+      },
+      {
+        "id": "4661607aa5ba3459f1e4d47436e9a0028f0a351c",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:16.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25318047601",
+        "patchset_number": 1
+      },
+      {
+        "id": "651977ce5257bfabfeb378e8dc96e217641dac72",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:19.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25318048751",
+        "patchset_number": 1
+      },
+      {
+        "id": "c805fc182f8439e4bc2c2919c11c3d0f5a840f7f",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:57.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25318047601",
+        "patchset_number": 1
+      },
+      {
+        "id": "b4a9e4848c8ee5d38aafd6f0f789a29c5b40b3e2",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:07:58.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25318048751",
+        "patchset_number": 1
+      },
+      {
+        "id": "43ba93b2e6f7580b2fe62fd1f510ce2cd329811b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:08:47.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/621/ (1/2)",
+        "patchset_number": 1
+      },
+      {
+        "id": "b3929538a786edb269fe52fe64d52c138680527d",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:08:52.000000000",
+        "message": "Patch Set 1:\n\nFAILURE: https://github.com/onap/portal-ng-bff/actions/runs/25318046180",
+        "patchset_number": 1
+      },
+      {
+        "id": "3d9d872a8473092b14e207e99c24605cd60eba14",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:09:09.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/264/ (2/2)",
+        "patchset_number": 1
+      },
+      {
+        "id": "129c6626fa210882de0d52529a1f9e1d08da0e26",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:11:44.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/621/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/621/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-build-master/621\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/264/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/264/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-verify-master/264",
+        "patchset_number": 1
+      },
+      {
+        "id": "f4788150f12017e158bcbc19fd1ecd4382834239",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:39:50.000000000",
+        "message": "Uploaded patch set 2.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 2
+      },
+      {
+        "id": "3095ae82ae8b41cc533099cb5633da2ea2ce2ef2",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:40:01.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/portal-ng-bff/actions/runs/25319490090",
+        "patchset_number": 2
+      },
+      {
+        "id": "c264b0d4b89ca9fcdebe41cdbab7cbaf9baf9da9",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:40:04.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25319492813",
+        "patchset_number": 2
+      },
+      {
+        "id": "0b7b2212f0c1013fac6796f4f6bd675a7f81577f",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:40:11.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25319491495",
+        "patchset_number": 2
+      },
+      {
+        "id": "a42cb3b89b7a47bc7fa7016e32f7715c76028971",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:40:37.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25319492813",
+        "patchset_number": 2
+      },
+      {
+        "id": "c72975f703fc6e63fa482750e536d2e74f3984cc",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:40:54.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25319491495",
+        "patchset_number": 2
+      },
+      {
+        "id": "2e8f4fb4e5b71163ee7bf4db27a60352674134af",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:41:04.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/622/ (1/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "50f40f2b294547edebabb59bf2f096364e3efa12",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:41:29.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/265/ (2/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "7243cede4f2e4d84514886bf9f88c30f71c5b308",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:41:38.000000000",
+        "message": "Patch Set 2:\n\nFAILURE: https://github.com/onap/portal-ng-bff/actions/runs/25319490090",
+        "patchset_number": 2
+      },
+      {
+        "id": "56d402ee9b702b841fc4618074c97cb00fcc4d35",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:44:11.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/622/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/622/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-build-master/622\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/265/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/265/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-verify-master/265",
+        "patchset_number": 2
+      },
+      {
+        "id": "c81994344b080719b589bdf8b2d11bca9956d78a",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:57:53.000000000",
+        "message": "Uploaded patch set 3: Patch Set 2 was rebased.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 3
+      },
+      {
+        "id": "ca1b8946b18bddfbcfdcc46a97826a3086aa964d",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:58:04.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/portal-ng-bff/actions/runs/25320319338",
+        "patchset_number": 3
+      },
+      {
+        "id": "6e8ce7a3b6ec6e6da18e0ccfdd16848c0d5d90de",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:58:05.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25320320691",
+        "patchset_number": 3
+      },
+      {
+        "id": "324779ddb4d38ffedcd9627ac62dc503540b8c7d",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:58:12.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25320321790",
+        "patchset_number": 3
+      },
+      {
+        "id": "14215dc419df9f8982b181e4cf4a44a29fdad2eb",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:58:44.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25320320691",
+        "patchset_number": 3
+      },
+      {
+        "id": "9d379ad5384bd40c36796d358cb0b0cd7447dd41",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:58:46.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25320321790",
+        "patchset_number": 3
+      },
+      {
+        "id": "943fdd93fd229591374e547360aa6eb9e06b3025",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:59:24.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/624/ (1/2)",
+        "patchset_number": 3
+      },
+      {
+        "id": "ef47eacb6faf59d6ae1a6f4040447567c6214b04",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 12:59:44.000000000",
+        "message": "Patch Set 3:\n\nFAILURE: https://github.com/onap/portal-ng-bff/actions/runs/25320319338",
+        "patchset_number": 3
+      },
+      {
+        "id": "a48e78727bfab46d384e5737da6643650b0d2b65",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 12:59:49.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/267/ (2/2)",
+        "patchset_number": 3
+      },
+      {
+        "id": "d8b1ef89afebf7f82600ef79e1dd82beb45cb0d6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 13:02:30.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/624/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/624/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-build-master/624\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/267/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/267/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-verify-master/267",
+        "patchset_number": 3
+      },
+      {
+        "id": "99c124792f803ebe390c1da0900fae1ead3bc490",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:54:41.000000000",
+        "message": "Uploaded patch set 4.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 4
+      },
+      {
+        "id": "7485442b7faf97cf28c8a9e99fa3532e935ea1bb",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:54:56.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25323082990",
+        "patchset_number": 4
+      },
+      {
+        "id": "9ae043d9b152d8080ab9880eb16b4899f499c02c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:54:56.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25323084323",
+        "patchset_number": 4
+      },
+      {
+        "id": "9b695fa2208014fb2d83472d29fd48e8f3e69305",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:55:12.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/portal-ng-bff/actions/runs/25323080992",
+        "patchset_number": 4
+      },
+      {
+        "id": "a02a3ddda2562263161f3e2394caed30c95306d7",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:55:27.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25323084323",
+        "patchset_number": 4
+      },
+      {
+        "id": "13e63bf33e58284f29327317b668e5a3f36bdffe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 13:55:53.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/625/ (1/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "5540c306c592b9a2a95efba0d898af91a9f86c1b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 13:56:23.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/268/ (2/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "7b9d19b41df3eae68e0972e14610a00da812f2c2",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:57:13.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25323082990",
+        "patchset_number": 4
+      },
+      {
+        "id": "f1b12c3ba0e6ea1c3554a6f87930ba3f45c9b3dc",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 13:58:15.000000000",
+        "message": "Patch Set 4:\n\nSUCCESS: https://github.com/onap/portal-ng-bff/actions/runs/25323080992",
+        "patchset_number": 4
+      },
+      {
+        "id": "c346be6f75d91438e94c65f74c3d34a1a803fd06",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 13:59:20.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/625/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-build-master/625\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/268/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-verify-master/268",
+        "patchset_number": 4
+      },
+      {
+        "id": "856f8abb99a92eca488f1f025d4394df6e337d3f",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:02:03.000000000",
+        "message": "Uploaded patch set 5: Commit message was updated.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 5
+      },
+      {
+        "id": "fa8d73734e80e13f1a44bd3c0f31a930b7645ff7",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:02:15.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/portal-ng-bff/actions/runs/25323453469",
+        "patchset_number": 5
+      },
+      {
+        "id": "e59d5f656ba8e755d718febda109ae5f8447bdfd",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:02:19.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25323456337",
+        "patchset_number": 5
+      },
+      {
+        "id": "dca6290008bc57b566354c9e32ec8acd86d8c57a",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:02:25.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25323457694",
+        "patchset_number": 5
+      },
+      {
+        "id": "beb38d84249497a99f31b53ba1c63509ec7306fa",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:02:57.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25323457694",
+        "patchset_number": 5
+      },
+      {
+        "id": "bf53be12e002a0029864e8940386057a16c7e3d5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 14:03:11.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/626/ (1/2)",
+        "patchset_number": 5
+      },
+      {
+        "id": "423f996a1c3246a20f730714d5f4adcd66708a9c",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:03:32.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25323456337",
+        "patchset_number": 5
+      },
+      {
+        "id": "575b7a81a4db0e663a190564bd82dbba46d63804",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 14:03:42.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/269/ (2/2)",
+        "patchset_number": 5
+      },
+      {
+        "id": "5200527ba7197962f19cf9de4ca55b2e3a31f3f3",
+        "author": {
+          "account_id": 3,
+          "name": "ONAP GitHub Actions",
+          "display_name": null,
+          "email": "collab-it+ecomp-jobbuilder@linuxfoundation.org",
+          "username": "ecomp-jobbuilder"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:06:01.000000000",
+        "message": "Patch Set 5:\n\nSUCCESS: https://github.com/onap/portal-ng-bff/actions/runs/25323453469",
+        "patchset_number": 5
+      },
+      {
+        "id": "4af64a865c7aa1e4cbcf98a1ada6097a6ea06c07",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 14:06:40.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-build-master/626/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-build-master/626\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-verify-master/269/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-verify-master/269",
+        "patchset_number": 5
+      },
+      {
+        "id": "4778680926ea21b47f38963ef2e37a33940b5fb4",
+        "author": {
+          "account_id": 8307,
+          "name": "Stefan Dierichs",
+          "display_name": null,
+          "email": "s.dierichs@telekom.de",
+          "username": "sdierich"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 14:13:18.000000000",
+        "message": "Patch Set 5: Code-Review+2",
+        "patchset_number": 5
+      },
+      {
+        "id": "fddd6086a38a2038735cf7cfc0c835aa4e6f1431",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:14:44.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 5
+      },
+      {
+        "id": "b6efec670ea2b28093ba46dcf43b44ec87359692",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:14:55.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25324073508",
+        "patchset_number": 1
+      },
+      {
+        "id": "67ccddf28b8a48a981a055d457e5119dacca1cc9",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 14:15:45.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25324073508",
+        "patchset_number": 1
+      },
+      {
+        "id": "c6a53b7882aaebde3e43d88594ad3ecfe6365e87",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 14:19:21.000000000",
+        "message": "Patch Set 5:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/portal-ng-bff-gradle-publish-jar-master/390/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-gradle-publish-jar-master/390\n\nhttps://jenkins.onap.org/job/portal-ng-bff-docker-merge-master/217/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/portal-ng-bff-docker-merge-master/217",
+        "patchset_number": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,637 @@
+{
+  "id": "policy%2Fpap~master~Icf91d728160a23db614dfba6b40ddccd2f6163a5",
+  "change_id": "Icf91d728160a23db614dfba6b40ddccd2f6163a5",
+  "_number": 126066,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4ee0c1a4_46cc1023",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "Can you check what we did in policy/clamp here, we had loads of problems with dependency management and clashes with policy/parent? Francesco would know the details.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-13 12:37:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea4dfc88_040d42e5",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "Checked with Francesco and had a look in clamp. Seems like micrometer version is specified here. Also all spring boot starter components' and versions are specified in the policy-parent. I guess we have more control this way.\nBut, just thinking which one is better. From a managing point of view isn't it better to have dependency management like this and let spring decide on versions of spring components to bring in, and we could still specify the specific version if needed in the policy-parent which should override any spring-boot managed versions.\nThoughts?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-13 13:38:33.000000000",
+      "in_reply_to": "4ee0c1a4_46cc1023",
+      "unresolved": true
+    },
+    {
+      "id": "7fc502c2_17e3d23f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/HealthCheckRestControllerV1.java",
+      "patchset_number": 10,
+      "line": 45,
+      "message": "(since spring framework 4.3) You no longer need to specify an explicit injection annotation in such a single-constructor scenario. This is particularly elegant for classes which otherwise do not carry any container annotations at all, for example when programmatically registered (https://spring.io/blog/2016/03/04/core-container-refinements-in-spring-framework-4-3).\nOther suggestion: @RequiredArgsConstructor lombock annotation:\n\n@RestController\n@RequestMapping(path = \"/policy/pap/v1\")\n@RequiredArgsConstructor\npublic class HealthCheckRestControllerV1  extends PapRestControllerV1 {\n\n    private final HealthCheckProvider provider;\n\n..........",
+      "author": {
+        "account_id": 7565,
+        "name": "Francesco Fiora",
+        "display_name": null,
+        "email": "francesco.fiora@est.tech",
+        "username": "FrancescoFioraEst"
+      },
+      "updated": "2021-12-13 14:41:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a386456_f920215b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/HealthCheckRestControllerV1.java",
+      "patchset_number": 10,
+      "line": 45,
+      "message": "I think you are talking about constructor injection for which annotation need not be specified anymore. But I don't understand how it applies here. Could you please specify which constructor you are talking about?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-13 15:44:57.000000000",
+      "in_reply_to": "7fc502c2_17e3d23f",
+      "unresolved": true
+    },
+    {
+      "id": "1e87978d_76551566",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "I think we ran into some problems with versions of dependencies that Spring was pulling in and we were pulling in from policy/parent and also from oparent. We need to decide what to do here.....also shouldn't these dependencies be in policy-parent if we decide to go that way.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-13 16:43:02.000000000",
+      "in_reply_to": "ea4dfc88_040d42e5",
+      "unresolved": true
+    },
+    {
+      "id": "c07acb84_490587c1",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "If going the policy-parent way, then yes, the dependencyManagement above for spring boot can be removed and then just use whatever defined in policy-parent. I will go that way for now to be on the safe side, as I am trying to get this merged by tomorrow before I go on vacation. Lets revisit the dependency management later if that is okay.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-13 17:06:27.000000000",
+      "in_reply_to": "1e87978d_76551566",
+      "unresolved": true
+    },
+    {
+      "id": "6ee6d696_9bd184a2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/HealthCheckRestControllerV1.java",
+      "patchset_number": 10,
+      "line": 45,
+      "message": "using lombok.RequiredArgsConstructor annotation, the constructor will implemented by lombok.\nMy suggestion is to combine the constructor injection with lombok.",
+      "author": {
+        "account_id": 7565,
+        "name": "Francesco Fiora",
+        "display_name": null,
+        "email": "francesco.fiora@est.tech",
+        "username": "FrancescoFioraEst"
+      },
+      "updated": "2021-12-13 17:07:48.000000000",
+      "in_reply_to": "1a386456_f920215b",
+      "unresolved": true
+    },
+    {
+      "id": "388b0de6_32788bd7",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/HealthCheckRestControllerV1.java",
+      "patchset_number": 10,
+      "line": 45,
+      "message": "Ok, Got it. Not really necessary here I think, but I understand constructor injection can be better compared to field based injection in some cases like testing.\nDone Thanks!",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-13 18:04:08.000000000",
+      "in_reply_to": "6ee6d696_9bd184a2",
+      "unresolved": false
+    },
+    {
+      "id": "b60a18c2_f5a1c9f6",
+      "file_path": "packages/policy-pap-docker/src/main/docker/policy-pap.sh",
+      "patchset_number": 13,
+      "line": 36,
+      "message": "generate jar with pap.jar name to make it clear what the jar is for?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3a16ad9f_76fcdd34",
+      "file_path": "packages/policy-pap-docker/src/main/docker/policy-pap.sh",
+      "patchset_number": 13,
+      "line": 68,
+      "message": "is it using a fat jar, do you need to include lib in classpath?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "405a0ecf_7c8a309d",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 9,
+      "message": "is AAF still supported?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1d18d3e4_fa5d6546",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "Is prometheus supported?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "13c083c7_5979c4db",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "is there a reason for this section to not go inside \"pap\"?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "be024119_736e644f",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 11,
+      "message": "can hostname be configured (as before)?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "59860b90_debcf73d",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 13,
+      "message": "In the counterpart json file, this is true I think ?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bbe8c14a_45a8ae6b",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 15,
+      "message": "is pap needed? if not could reduce indentation ..",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-12-13 21:50:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f9aa94a4_fb7a9600",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "OK, that's fine. Could you open a new story JIRA on the EPIC POLICY-3770 to track this?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-14 09:06:56.000000000",
+      "in_reply_to": "c07acb84_490587c1",
+      "unresolved": true
+    },
+    {
+      "id": "6ddc18fd_3e7e74e3",
+      "file_path": "main/pom.xml",
+      "patchset_number": 10,
+      "line": 73,
+      "message": "Created https://jira.onap.org/browse/POLICY-3860 to cover this.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "f9aa94a4_fb7a9600",
+      "unresolved": false
+    },
+    {
+      "id": "7937186f_b942dd00",
+      "file_path": "packages/policy-pap-docker/src/main/docker/policy-pap.sh",
+      "patchset_number": 13,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "b60a18c2_f5a1c9f6",
+      "unresolved": false
+    },
+    {
+      "id": "af5e68b7_200030d3",
+      "file_path": "packages/policy-pap-docker/src/main/docker/policy-pap.sh",
+      "patchset_number": 13,
+      "line": 68,
+      "message": "Good point, yes. Done, thanks!",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "3a16ad9f_76fcdd34",
+      "unresolved": false
+    },
+    {
+      "id": "4f3c4fe0_9fe1b746",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 9,
+      "message": "yes it is. To do this, in application.yaml activate \"aaf-auth\" profile by specifying:\n  profiles:\n    active: aaf-auth\nI haven't specified this here because we have aaf as false everywhere even in the config files used in OOM.\n\nI have created https://jira.onap.org/browse/POLICY-3861 for the documentation changes - to document any changes like this. Basically the only change with the spring boot migration will be in the startup configuration file, and the prometheus endpoint.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "405a0ecf_7c8a309d",
+      "unresolved": true
+    },
+    {
+      "id": "b96d7022_1c0d86d6",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "Yes it is, and it will give a lot more information now than just system metrics.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "1d18d3e4_fa5d6546",
+      "unresolved": true
+    },
+    {
+      "id": "9f9f3fe5_31300e62",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "This is the spring-boot server part, and we have to specify it like this. We don't use policy-endpoints anymore to create a RestServer.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "13c083c7_5979c4db",
+      "unresolved": true
+    },
+    {
+      "id": "4b2714bc_e7baddd5",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 11,
+      "message": "We can if we want, by specifying server.address, but no need to specify that here.\nfor eg. \nserver:\n  address: 0.0.0.0",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "be024119_736e644f",
+      "unresolved": true
+    },
+    {
+      "id": "e079e283_cf49d164",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 13,
+      "message": "We could keep it true, but thought this is better for running locally or in standalone mode.\nIn OOM and in CSITs we are mounting the startup configuration file anyway even today.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "59860b90_debcf73d",
+      "unresolved": true
+    },
+    {
+      "id": "7c8d3f69_b504fb4f",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 15,
+      "message": "Yes, with the current impementation I have done https://gerrit.onap.org/r/c/policy/pap/+/126066/14/main/src/main/java/org/onap/policy/pap/main/parameters/PapParameterGroup.java#27 , it takes everything under pap section and maps it the class automatically. We could directly map the fields one by one, but wanted to keep the changes minimal to the existing implemenation.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 11:56:39.000000000",
+      "in_reply_to": "bbe8c14a_45a8ae6b",
+      "unresolved": true
+    },
+    {
+      "id": "b3716fbe_5627377e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PapRestControllerV1.java",
+      "patchset_number": 17,
+      "line": 48,
+      "message": "May be this will have an impact on the yaml input/output support for PAP Api's. Please verify.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-12-14 16:51:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "05b443b7_0d9d8cc1",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupHealthCheckProvider.java",
+      "patchset_number": 17,
+      "line": 54,
+      "message": "may be extra?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-12-14 16:51:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8276330f_6af352a2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PapRestControllerV1.java",
+      "patchset_number": 17,
+      "line": 48,
+      "message": "I verified the endpoints on Json only for PAP as json is what we always use, and didn't try the yaml ones. But good point. Created POLICY-3864 to verify this one and fix any issues identified",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 18:05:03.000000000",
+      "in_reply_to": "b3716fbe_5627377e",
+      "unresolved": true
+    },
+    {
+      "id": "8aae8462_e1c4a714",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupHealthCheckProvider.java",
+      "patchset_number": 17,
+      "line": 54,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-12-14 18:05:03.000000000",
+      "in_reply_to": "05b443b7_0d9d8cc1",
+      "unresolved": false
+    },
+    {
+      "id": "37156a54_155e165f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PapRestControllerV1.java",
+      "patchset_number": 17,
+      "line": 48,
+      "message": "Ack",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-12-14 18:32:51.000000000",
+      "in_reply_to": "8276330f_6af352a2",
+      "unresolved": false
+    },
+    {
+      "id": "1cbebd89_e8653c56",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 9,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "4f3c4fe0_9fe1b746",
+      "unresolved": false
+    },
+    {
+      "id": "4af8aa42_e30db803",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "b96d7022_1c0d86d6",
+      "unresolved": false
+    },
+    {
+      "id": "67539192_0f3779f0",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 10,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "9f9f3fe5_31300e62",
+      "unresolved": false
+    },
+    {
+      "id": "b404c23d_f946eea1",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 11,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "4b2714bc_e7baddd5",
+      "unresolved": false
+    },
+    {
+      "id": "a51fd25f_a10e51ce",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 13,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "e079e283_cf49d164",
+      "unresolved": false
+    },
+    {
+      "id": "611f3f05_6b5cfc5a",
+      "file_path": "packages/policy-pap-tarball/src/main/resources/etc/papParameters.yaml",
+      "patchset_number": 13,
+      "line": 15,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-12-15 09:08:41.000000000",
+      "in_reply_to": "7c8d3f69_b504fb4f",
+      "unresolved": false
+    }
+  ]
+}

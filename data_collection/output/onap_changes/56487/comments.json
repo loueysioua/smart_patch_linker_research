@@ -1,0 +1,110 @@
+{
+  "id": "portal%2Fsdk~master~I143c3d6167b101e5113faa3c70f57bfb8638e8de",
+  "change_id": "I143c3d6167b101e5113faa3c70f57bfb8638e8de",
+  "_number": 56487,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a9dcd25_3337b3e5",
+      "file_path": "ecomp-sdk/epsdk-analytics/src/main/java/org/onap/portalsdk/analytics/scheduler/SendEmail.java",
+      "patchset_number": 1,
+      "line": 417,
+      "message": "can you please also add out.close in the finally block above. that got missed.",
+      "author": {
+        "account_id": 679,
+        "name": "Sunder Tattavarada",
+        "display_name": null,
+        "email": "statta@att.com",
+        "username": "tattasunder"
+      },
+      "updated": "2018-07-18 18:24:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a9dcd25_d333eff4",
+      "file_path": "ecomp-sdk/epsdk-analytics/src/main/java/org/onap/portalsdk/analytics/system/fusion/controller/FileServletController.java",
+      "patchset_number": 1,
+      "line": 155,
+      "message": "please close the out stream and also in the in stream  in the finally block. if not it leads to data leaks",
+      "author": {
+        "account_id": 679,
+        "name": "Sunder Tattavarada",
+        "display_name": null,
+        "email": "statta@att.com",
+        "username": "tattasunder"
+      },
+      "updated": "2018-07-18 18:24:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a9dcd25_934d6775",
+      "file_path": "ecomp-sdk/epsdk-fw/src/main/java/org/onap/portalsdk/core/onboarding/crossapi/PortalRestAPIProxy.java",
+      "patchset_number": 1,
+      "line": 609,
+      "message": "same here please close the readers",
+      "author": {
+        "account_id": 679,
+        "name": "Sunder Tattavarada",
+        "display_name": null,
+        "email": "statta@att.com",
+        "username": "tattasunder"
+      },
+      "updated": "2018-07-18 18:24:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_594dc371",
+      "file_path": "ecomp-sdk/epsdk-analytics/src/main/java/org/onap/portalsdk/analytics/scheduler/SendEmail.java",
+      "patchset_number": 1,
+      "line": 417,
+      "message": "Hello, \nWhile using try-with-resources construct, close in finally block is not required. Please see below example for more detail on this: \n\nCompliant Solution (try-with-resources)\nThis compliant solution uses a try-with-resources statement to manage both br and bw.  \n\npublic void processFile(String inPath, String outPath)\n   throws IOException{\n  try (BufferedReader br = new BufferedReader(new FileReader(inPath));\n       BufferedWriter bw = new BufferedWriter(new FileWriter(outPath))) {\n    // Process the input and produce the output\n  } catch (IOException ex) {\n    System.err.println(\"thrown exception: \" + ex.toString());\n    Throwable[] suppressed = ex.getSuppressed();\n    for (int i = 0; i < suppressed.length; i++) {\n      System.err.println(\"suppressed exception: \" + suppressed[i].toString());\n    }\n  }\n}\n\nBelow link provides more details: \nhttps://wiki.sei.cmu.edu/confluence/display/java/ERR54-J.+Use+a+try-with-resources+statement+to+safely+handle+closeable+resources\n\nSonar flagged this issue: \nhttps://sonar.onap.org/issues?myIssues=true&open=AV_om8Wl-08if2a6uf0K&projectUuids=AV8LJxI3uDqGnRl2bdaB&resolved=false&rules=squid%3AS2093&severities=MAJOR",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-18 23:17:52.000000000",
+      "in_reply_to": "1a9dcd25_3337b3e5",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_79520715",
+      "file_path": "ecomp-sdk/epsdk-analytics/src/main/java/org/onap/portalsdk/analytics/system/fusion/controller/FileServletController.java",
+      "patchset_number": 1,
+      "line": 155,
+      "message": "Hi, \nusing try-with-resources construct ensures that the resource is closed. closing this in finally block is not necessary. \nPlease see the link below for more information:\n\nBelow link provides more details: \nhttps://wiki.sei.cmu.edu/confluence/display/java/ERR54-J.+Use+a+try-with-resources+statement+to+safely+handle+closeable+resources\n\nSonar flagged this issue: \nhttps://sonar.onap.org/issues?myIssues=true&open=AV_om8Wl-08if2a6uf0K&projectUuids=AV8LJxI3uDqGnRl2bdaB&resolved=false&rules=squid%3AS2093&severities=MAJOR",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-18 23:17:52.000000000",
+      "in_reply_to": "1a9dcd25_d333eff4",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_99335bf6",
+      "file_path": "ecomp-sdk/epsdk-fw/src/main/java/org/onap/portalsdk/core/onboarding/crossapi/PortalRestAPIProxy.java",
+      "patchset_number": 1,
+      "line": 609,
+      "message": "Hi, \nThis fix is to make sure the resource is closed upon exit from try automatically. \nUsing the try-with-resources\ntry(BufferedReader br = new BufferedReader(...)) {\n  ... \n\n  ... \n} catch (Exception e) {\n\n ... \n\n}\nThere is no need for closing the br in finally block. The scope of br is ended in the try block and when the code exits try, the br will be closed. \n\nYou could read more about try-with-resources contstruct here. \n\nJava 7 introduced the try-with-resources statement, which guarantees that the resource in question will be closed. Since the new syntax is closer to bullet-proof, it should be preferred over the older try/catch/finally version.\n\nThis rule checks that close-able resources are opened in a try-with-resources statement.\n\nNoncompliant Code Example\nFileReader fr = null;\nBufferedReader br = null;\ntry {\n  fr = new FileReader(fileName);\n  br = new BufferedReader(fr);\n  return br.readLine();\n} catch (...) {\n} finally {\n  if (br != null) {\n    try {\n      br.close();\n    } catch(IOException e){...}\n  }\n  if (fr != null ) {\n    try {\n      br.close();\n    } catch(IOException e){...}\n  }\n}\n\nCOMPLAINT code example: \ntry (BufferedReader br =\n        new BufferedReader(new FileReader(fileName))) { // no need to name intermediate resources if you don't want to\n  return br.readLine();\n}\ncatch (...) {}\n\nhttps://wiki.sei.cmu.edu/confluence/display/java/ERR54-J.+Use+a+try-with-resources+statement+to+safely+handle+closeable+resources",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-18 23:17:52.000000000",
+      "in_reply_to": "1a9dcd25_934d6775",
+      "unresolved": false
+    }
+  ]
+}

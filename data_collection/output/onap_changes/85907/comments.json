@@ -1,0 +1,654 @@
+{
+  "id": "oom%2Foffline-installer~master~I793191e05cb0b527c3da6d820c1916231e69d865",
+  "change_id": "I793191e05cb0b527c3da6d820c1916231e69d865",
+  "_number": 85907,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4f4787e4_554c662f",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "Is there a reason you set this env in most of the role's molecule.yml? It's superfluous as it's already set in the source image we use in our Dockerfile:\n\n# docker history centos/systemd | grep docker\n<missing>           4 months ago        /bin/sh -c #(nop)  ENV container=docker         0B",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-08 14:49:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d925b423_19c2bdc4",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "I know. We can remove it from image. Just to make it visible here and matching test role's code using it. We have also molecule.yml files where we do not use pre-build image but Dockerfile.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-08 17:26:06.000000000",
+      "in_reply_to": "4f4787e4_554c662f",
+      "unresolved": true
+    },
+    {
+      "id": "67bfe5b1_87c940c9",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "No we can't remove it from image because it's not in our dockerfile, it's embedded in centos/systemd image, that's why i showed history for that image, not ours. So can i remove it from those roles that use pre-built images and leave it elsewhere? I think the less code and more defaults the better readability.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-09 06:15:12.000000000",
+      "in_reply_to": "d925b423_19c2bdc4",
+      "unresolved": true
+    },
+    {
+      "id": "affc8c76_7c08d05e",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "ah ok. It really does not matter much. I would keep those, but it's ok if you want to remove those.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-09 06:35:06.000000000",
+      "in_reply_to": "67bfe5b1_87c940c9",
+      "unresolved": true
+    },
+    {
+      "id": "adfba13f_bd3685eb",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "What is it for?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-09 12:29:13.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "10d58d7c_f99b2523",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "just to gather facts from localhost. There are fancier ways.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-09 13:00:44.000000000",
+      "in_reply_to": "adfba13f_bd3685eb",
+      "unresolved": true
+    },
+    {
+      "id": "a8636131_267bd8bb",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "I didn't ask about the play but about the highlighted text :) I guess it's leftover from debugs, should be cleaned up, i see it in several places.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-09 13:30:25.000000000",
+      "in_reply_to": "10d58d7c_f99b2523",
+      "unresolved": true
+    },
+    {
+      "id": "354e4678_e7ec9516",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "well if I remember I needed to have some task on the play. Sure you find better solution.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-09 16:07:44.000000000",
+      "in_reply_to": "a8636131_267bd8bb",
+      "unresolved": true
+    },
+    {
+      "id": "af463585_8ca820f3",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 3,
+      "line": 6,
+      "message": "No task needed to gather facts. I'll remove that in my commit.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 06:45:00.000000000",
+      "in_reply_to": "354e4678_e7ec9516",
+      "unresolved": true
+    },
+    {
+      "id": "b1f60b6d_a2b1f841",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "This doesn't have to be the case, i think it can be avoided with filesystem symlinks for group_vars, see below. Only issue us that you can't override variables from group_vars in molecule.yml then, but there shouldn't be a need for that. For example you've overridden 'vnc_passwd' which for me isn't necessary.\n\nAbove statement is just an assumption, not sure it can work. Once we merge this one i'll try to improve on that.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 11:37:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bc662f07_6630c844",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "This isn't the best idea, once changed in role defaults no one will be aware of a need to change it here also. See https://gerrit.onap.org/r/c/87448/1/ansible/test/roles/prepare-dns/defaults",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 11:37:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5ccd77a3_21d49dcf",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "ok that would be great. However we need to be able to override some variables that are empty in default group_vars.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-10 11:42:46.000000000",
+      "in_reply_to": "b1f60b6d_a2b1f841",
+      "unresolved": true
+    },
+    {
+      "id": "8b6bd971_b3c0ab5b",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "Yes definetly, that's why I commented this here. I never copy-paste anything if possible.\nGreat we have a solution now!",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-10 11:42:46.000000000",
+      "in_reply_to": "bc662f07_6630c844",
+      "unresolved": true
+    },
+    {
+      "id": "35dfd569_e553a498",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "Well, if overriding is needed then no go on that - if you symlink group_vars and try override a variable in molecule.yml it won't work, var will still be interpolated to it's value from group_vars from what i recall, needs testing.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 12:03:42.000000000",
+      "in_reply_to": "5ccd77a3_21d49dcf",
+      "unresolved": true
+    },
+    {
+      "id": "52dabeb7_a0aa90e8",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "We do have or not, depends on use case, see comment above.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-10 12:03:42.000000000",
+      "in_reply_to": "8b6bd971_b3c0ab5b",
+      "unresolved": true
+    },
+    {
+      "id": "c6a681ba_fd63480c",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "yes I have been tested. Won't work. I was planning to contribute to molecule itself but it was implemented too messy there. But would be good commit to molecule to improve this.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-10 12:07:54.000000000",
+      "in_reply_to": "35dfd569_e553a498",
+      "unresolved": true
+    },
+    {
+      "id": "7a43c049_a0953a1e",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/group_vars/all.yml",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "indeed",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-10 12:07:54.000000000",
+      "in_reply_to": "52dabeb7_a0aa90e8",
+      "unresolved": true
+    },
+    {
+      "id": "cd506899_a30b4874",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 7,
+      "line": 15,
+      "message": "This shouldn't happen and is a symptom of issues with logic in prepare-docker - anything with \"prepare-*\" in it's name should be in prepare.yml, not here. With this included here you a side effects can happen.\n\nWhile i understand inclusion of 'prepare-docker' here due to it's design, why it's the case with 'prepare-common'?\n\nI'm hesitating between -1 on this or leaving it for improvement is separate commit.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-14 09:35:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f467ac8f_3f96d72a",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 7,
+      "line": 15,
+      "message": "Ok i just realized why are we having test failing due to linting issues in _molecule_internal_role_, not oom tested role - it's because of this inclusion. So far we did nowhere came upon issues with linting prepare-docker role because natively it's out of scope of tested roles, and once you included it here it is... And that is the reason for https://jira.onap.org/browse/OOM-1850 And another reason for what i wrote above - molecule roles should not be put into test scope.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-14 09:51:21.000000000",
+      "in_reply_to": "cd506899_a30b4874",
+      "unresolved": true
+    },
+    {
+      "id": "37f1f3bf_418092d1",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 7,
+      "line": 15,
+      "message": "If you invent another solution, let me know.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-14 10:22:18.000000000",
+      "in_reply_to": "f467ac8f_3f96d72a",
+      "unresolved": true
+    },
+    {
+      "id": "34f94303_79f82db1",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "This is the direct reason tests fail for this commit - docker role tests are natively run without this mount bind and it (docker role tests) doesn't support being run with socket mounted from outside. Trying to find a fix/workaround for that in docker role itself (OO-1852)",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-14 12:53:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ce20a747_8a682bc6",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "yes also noticed this. But it was working fine already long time. So what commit broke it?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-14 13:01:23.000000000",
+      "in_reply_to": "34f94303_79f82db1",
+      "unresolved": true
+    },
+    {
+      "id": "dd493823_d5ea8be7",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "It's working correctly outside of the scope of this commit because in docker/molecule/default/molecule.yml there is no mount bind for /var/run/docker.sock, it's only here in your commit so effectively you're trying to use unsupported 'mode' here (running 'docker' role in a container with mount binded /var/run/docker.sock).",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-14 13:12:10.000000000",
+      "in_reply_to": "ce20a747_8a682bc6",
+      "unresolved": true
+    },
+    {
+      "id": "a80a2e2f_feabdc37",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "and it worked fine. I have been running this test quite long time with success. And Michal's commit (he changed docker restarted to docker stop, remove socket file, docker start) broke it but then I introduced the https://gerrit.onap.org/r/#/c/85907/8/ansible/roles/docker/handlers/docker_restart.yml fix for it.\nAnd I'm quite sure I also tested it. But now I'm not sure..",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-14 16:59:04.000000000",
+      "in_reply_to": "dd493823_d5ea8be7",
+      "unresolved": true
+    },
+    {
+      "id": "f04fcc4b_8b80400e",
+      "file_path": "ansible/test/roles/post-certificates/tasks/main.yml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "What the heck is this? That restarted my host docker engine. Why do we need this?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-15 07:49:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f147ec6_e501e7d4",
+      "file_path": "ansible/test/roles/post-certificates/tasks/main.yml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "and you notice this only now:)\n\nYes it makes certificated work and nexus can be successfully populated.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-15 09:14:19.000000000",
+      "in_reply_to": "f04fcc4b_8b80400e",
+      "unresolved": true
+    },
+    {
+      "id": "22a9e397_48ee0e05",
+      "file_path": "ansible/test/roles/post-certificates/tasks/main.yml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "I don't like this. What are the exact issues if it's not here?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-15 09:47:34.000000000",
+      "in_reply_to": "2f147ec6_e501e7d4",
+      "unresolved": true
+    },
+    {
+      "id": "7238c4ad_4e9c7172",
+      "file_path": "ansible/test/roles/post-certificates/tasks/main.yml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "join the club.\n\nI did this quite long time ago and spend quite some time.\nTelling you exact issues here is not going to work.\nAs I mentioned certificates need to be setup on local host so that it's trusted by nexus and docker client on host can push images to nexus. That required docker restart.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-15 10:24:53.000000000",
+      "in_reply_to": "22a9e397_48ee0e05",
+      "unresolved": true
+    },
+    {
+      "id": "c6d38fb7_290c52fc",
+      "file_path": "ansible/test/play-infrastructure/.yamllint",
+      "patchset_number": 11,
+      "line": 11,
+      "message": "can be removed?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-21 15:57:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d15dabeb_76e4b1f3",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 15,
+      "line": 8,
+      "message": "if I would have know this, many days work would be saved.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 07:11:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4dfa165a_87777711",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 15,
+      "line": 19,
+      "message": "is this still needed even if dind?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 07:11:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a23be29_d99ab26f",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/playbook.yml",
+      "patchset_number": 15,
+      "line": 11,
+      "message": "this is so cool!",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 07:11:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "747a4219_643bca3b",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/prepare.yml",
+      "patchset_number": 15,
+      "line": 18,
+      "message": "how did not think about this.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 07:11:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0374f397_658281bd",
+      "file_path": "ansible/test/roles/cleanup-dns/tasks/main.yml",
+      "patchset_number": 15,
+      "line": 9,
+      "message": "this task now never executed? As where this var is set?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 07:11:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c8591cbb_e26da841",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 15,
+      "line": 19,
+      "message": "note that I don't do \"/opt/onap:/opt/onap\"... It is an anonymous volume created only because I expect much data, especially rpms, to land there, not because I strictly need a volume.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-27 08:22:59.000000000",
+      "in_reply_to": "4dfa165a_87777711",
+      "unresolved": true
+    },
+    {
+      "id": "fe740d8f_34988ef3",
+      "file_path": "ansible/test/roles/cleanup-dns/tasks/main.yml",
+      "patchset_number": 15,
+      "line": 9,
+      "message": "it never executes. not sure how I forgot to remove this role.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-27 08:22:59.000000000",
+      "in_reply_to": "0374f397_658281bd",
+      "unresolved": true
+    },
+    {
+      "id": "32ae1a0d_5fd53a93",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 15,
+      "line": 19,
+      "message": "Ack",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-27 08:52:30.000000000",
+      "in_reply_to": "c8591cbb_e26da841",
+      "unresolved": false
+    },
+    {
+      "id": "fcaa509e_99c43051",
+      "file_path": "ansible/test/play-infrastructure/molecule/default/molecule.yml",
+      "patchset_number": 20,
+      "line": 16,
+      "message": "can be removed",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-28 13:50:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

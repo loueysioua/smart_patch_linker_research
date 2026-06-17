@@ -1,0 +1,238 @@
+{
+  "id": "aai%2Faai-common~master~If9eddd69a1dc496167b7f275a8a25a8674f4a566",
+  "change_id": "If9eddd69a1dc496167b7f275a8a25a8674f4a566",
+  "_number": 75126,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-12-28 09:14:28.000000000",
+    "updated": "2019-01-18 21:02:57.000000000",
+    "submitted": "2019-01-18 20:50:02.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2731,
+      "name": "KK",
+      "display_name": null,
+      "email": "krzysztof.kurczewski@nokia.com",
+      "username": "kurczews"
+    },
+    "submitter": {
+      "account_id": 33,
+      "name": "James Forsyth",
+      "display_name": null,
+      "email": "jf2512@att.com",
+      "username": "jimmydot"
+    }
+  },
+  "subject": "Add .gitignore for swagger",
+  "commit_message": "Add .gitignore for swagger\n\nPrevent swagger generated resources to be included in\ncommits by accident.\n\nIssue-ID: AAI-2042\nChange-Id: If9eddd69a1dc496167b7f275a8a25a8674f4a566\nSigned-off-by: kurczews <krzysztof.kurczewski@nokia.com>\n",
+  "change_log": {
+    "entry_count": 15,
+    "entries": [
+      {
+        "id": "abb92a1a9bf58bdf79927b6dc26e6130e626b8e5",
+        "author": {
+          "account_id": 2731,
+          "name": "KK",
+          "display_name": null,
+          "email": "krzysztof.kurczewski@nokia.com",
+          "username": "kurczews"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-28 09:14:28.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "3f54ef12d91628ceec3e643547d9d79d62fd2537",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-28 09:17:43.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/721/",
+        "patchset_number": 1
+      },
+      {
+        "id": "b4c6673f871689efbb6ccb2bab162f4f336b37d3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-28 09:28:48.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/721/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/721",
+        "patchset_number": 1
+      },
+      {
+        "id": "2b2948ec8e6ceaf9ad305c736d3fefbb647fc25f",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-07 07:09:10.000000000",
+        "message": "Patch Set 1:\n\nUntil recently (Casablanca release), the generated swagger files were actually checked in to become part of the API documentation . However, the files are now too large and hit the gerrit limits, so they are only packaged inside the JAR files instead (they can be browsed from the nexus repository).\n\nIf the generated files were reduced in size again, would we want to resume checking them into the repository too?",
+        "patchset_number": 1
+      },
+      {
+        "id": "ce84bf900efd66a6de02b2537875df1430db03a2",
+        "author": {
+          "account_id": 2731,
+          "name": "KK",
+          "display_name": null,
+          "email": "krzysztof.kurczewski@nokia.com",
+          "username": "kurczews"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-07 07:25:51.000000000",
+        "message": "Patch Set 1:\n\nThanks Keong, I missed that fact.\n\nSo correct me if I'm wrong, endpoints are generated from .xsd and indeed are needed inside JAR. On the other hand .html and .yaml are only for docs purpose, so they shouldn't be packaged in JAR at all.\n\nHence we should move them to /target or other excluded folder. \n\nBut in the end my goal is to not have dandling files after every maven build.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6adcc2561563d0a8008651b0bf719d1e9463b772",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-08 05:04:19.000000000",
+        "message": "Patch Set 1:\n\nFor the generated HTML, I think this is only for documentation purpose. There still needs to be a way to distribute the files, otherwise they are pretty useless to other developers. Packaging inside the JAR is probably a least-worst option for now.\n\nNot sure whether the YAML files are used as input to some other process. I suspect they need to go with the XSD files and POJO codes that are generated so that some clients can interface with AAI.\n\nI agree the dangling files after a build are annoying (there are actually more files generated from the test run as well), since unclean working directories block some git operations.\n\nI think they should generate into the target directory.",
+        "patchset_number": 1
+      },
+      {
+        "id": "67e2f33d54a9311ae154130f516bde9757245a8b",
+        "author": {
+          "account_id": 2731,
+          "name": "KK",
+          "display_name": null,
+          "email": "krzysztof.kurczewski@nokia.com",
+          "username": "kurczews"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-08 06:54:00.000000000",
+        "message": "Patch Set 1:\n\n> [...] this is only for documentation purpose. There still needs to be a way to distribute the files. [...] Packaging inside the JAR is probably a least-worst option for now.\n\nLike every docs they should be distributed in some way but they are not functional part of JAR. Regular folder like aai-common/docs is perfect place for such things.\n\nI investigated a little bit and this is not that easy. aai-schema is not included as dependency per se (at least in aai-resources scope).\n\naai-resources uses maven-dependency-plugin to extract oxm/* and dbedgerules/* files from actual dependency. Other files seems to be ignored. Hence it doesn't matter if these files are inside JAR because they are effectively ignored.\n\nThis is a twisted solution, it could be simplified but this involves a way more changes than simple .gitignore which solves original problem.",
+        "patchset_number": 1
+      },
+      {
+        "id": "1ad2d014dc695af7884cf97daf5b119f2fd24cbe",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-08 07:13:38.000000000",
+        "message": "Patch Set 1:\n\nThe AAI Schema Service will slowly untwist the implementation and dependencies, but that is not completed yet.\nThe biggest problem with the Swagger HTML as part of the docs is that it is tightly coupled to the version of the code, so it will change frequently during development.\nThe benefit of packaging with the JAR file is that it should match the code version during the time that developers of clients of AAI will need to refer to new feature documentation.",
+        "patchset_number": 1
+      },
+      {
+        "id": "50e50c6651051b630d53673dff3608e0c8411e07",
+        "author": {
+          "account_id": 2731,
+          "name": "KK",
+          "display_name": null,
+          "email": "krzysztof.kurczewski@nokia.com",
+          "username": "kurczews"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-08 07:17:25.000000000",
+        "message": "Patch Set 1:\n\nOk, that makes sense",
+        "patchset_number": 1
+      },
+      {
+        "id": "446e1873c2eaba12b16f74630b8143f15836e850",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-08 07:20:44.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "44d449fbaafcb0b6ff5a8c4b59b2585858638924",
+        "author": {
+          "account_id": 33,
+          "name": "James Forsyth",
+          "display_name": null,
+          "email": "jf2512@att.com",
+          "username": "jimmydot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-15 14:16:22.000000000",
+        "message": "Patch Set 1:\n\n@Harish does this look ok to you?",
+        "patchset_number": 1
+      },
+      {
+        "id": "93954016b5444e0103a947070a0562d1ff9f17be",
+        "author": {
+          "account_id": 33,
+          "name": "James Forsyth",
+          "display_name": null,
+          "email": "jf2512@att.com",
+          "username": "jimmydot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-18 20:50:00.000000000",
+        "message": "Patch Set 1: Code-Review+2\n\nAssuming no objections, merging",
+        "patchset_number": 1
+      },
+      {
+        "id": "e9a89fb01466338205d4cb216c6a88a63c6daa76",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2019-01-18 20:50:02.000000000",
+        "message": "Change has been successfully merged by James Forsyth",
+        "patchset_number": 1
+      },
+      {
+        "id": "db45c8f4a60d2078edfc067b0374a7dac43f0204",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-18 20:52:40.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-merge-java/335/",
+        "patchset_number": 1
+      },
+      {
+        "id": "595ec5badb49719acda76bc16beef999811fb2db",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-18 21:02:57.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-merge-java/335/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-merge-java/335",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

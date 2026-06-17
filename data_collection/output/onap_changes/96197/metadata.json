@@ -1,0 +1,1672 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Iddba38157ddc5f7277656979c0e679e5489eb7b1",
+  "change_id": "Iddba38157ddc5f7277656979c0e679e5489eb7b1",
+  "_number": 96197,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-09-24 20:38:17.000000000",
+    "updated": "2019-10-22 15:19:51.000000000",
+    "submitted": "2019-10-22 13:33:44.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 811,
+      "name": "Jim Hahn",
+      "display_name": null,
+      "email": "jrh3@att.com",
+      "username": "jrh3"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Reimplement Lock API using Lock objects",
+  "commit_message": "Reimplement Lock API using Lock objects\n\nModified PolicyResourceLockManager to just return a feature, deferring\nthe lock() call/method to the feature, itself.  The manager was also\nmodified so that, if it can't find an enabled provider, it will return\na default provider, whose lock() methods always fail.  Once a feature\nhas been identified, the manager will cache it for use thereafter.\n\nModified the feature API to return lock objects and simplified the\ninterface to remove the beforeXxx and afterXxx methods.\nMoved the unlock and refresh methods from the feature API into the\nlock class, renaming them to free and extend, respectively.\nAdded a separate, feature-simple-locking project, which implements\na simple version of the locking feature, over a single JVM.\nExtensively revised the distributed locking feature to fit in with\nthe new API.\n\nAdded support for persistence so that the various LockImpl classes\ncan be serialized and still function correctly when they are\ndeserialized back into new feature instances\nAdded default implementations of free & extend to LockImpl.\nModified API to take the ownerKey string, instead of the owner object.\nRemoved Extractor as unneeded - may add via another review, if still useful.\n\nUpdates per review comments:\n- Updated licenses in feature-simple-locking\n- Added beforeCreateLock & afterCreateLock to feature API\n- Moved SimpleLockingFeature into policy-management so that it's\n  always available\n- Moved the executor service, \"exsvc\", into PolicyEngine\n- Moved Extrator into policy-utils\n- Changed Extractor logging level for exceptions\n- Fixed feature sequence numbers\n- Fixed mixing of seconds and milliseconds\n- Renamed exsvc\n- Modified to use property method with default value\n- Configured scheduled executor\n- Added suffix to Extractor.register()\n- Eliminated Feature Api and tied lock manager into engine\n- Added non-null checks to LockImpl parameters\n- Added non-null checks to createLock() parameters\n- Checked that lockManager is initialized\n\nChange-Id: Iddba38157ddc5f7277656979c0e679e5489eb7b1\nIssue-ID: POLICY-2113\nSigned-off-by: Jim Hahn <jrh3@att.com>\n",
+  "change_log": {
+    "entry_count": 117,
+    "entries": [
+      {
+        "id": "7fe9674673064e44c8be6b9208cf7211005e8227",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-24 20:38:17.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ef094a9fa61f5c995ed2bd5befe995a8eb2391c0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-24 20:41:03.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/926/",
+        "patchset_number": 1
+      },
+      {
+        "id": "049cb84b8af2b7d51e054db117f03bca33405ade",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-24 20:42:13.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/926/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/926/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/926",
+        "patchset_number": 1
+      },
+      {
+        "id": "2c5f45bdda70796d850c1145ff570be7bc6a367f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-24 21:02:54.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 1
+      },
+      {
+        "id": "a565c01b9099252bceee359b81f7fd3c94b823eb",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-24 22:41:51.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "86e9a7bdd4ec22a75dfbfaf1c093ec66dafd0308",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-24 22:44:46.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/927/",
+        "patchset_number": 2
+      },
+      {
+        "id": "53c9a314f9dbf874fd1ee04355929c108f2a14f7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-24 22:45:40.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/927/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/927/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/927",
+        "patchset_number": 2
+      },
+      {
+        "id": "498ef006d109a5cbc068cc4a025ded9f328a118d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-25 22:33:41.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "c9a9c76fddfcc4aeb2d09b8736dd17d9c8280447",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-25 22:35:25.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/928/",
+        "patchset_number": 3
+      },
+      {
+        "id": "33fe6f8135197d876e6f84cb9ebcc5bda654e433",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-25 22:35:38.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/928/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/928/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/928",
+        "patchset_number": 3
+      },
+      {
+        "id": "cd58c2d53aa9eb567d499ef04568ea1d4c909ed4",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-26 17:54:33.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "64356a5bd20696957c490e29b1100b58104e5f92",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-26 17:54:42.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/929/",
+        "patchset_number": 4
+      },
+      {
+        "id": "982ed49dfe4683002a8f6e0236fad346b2b02209",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-26 17:56:08.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/929/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/929/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/929",
+        "patchset_number": 4
+      },
+      {
+        "id": "838db8967e91d91aac3c68bdd9d9acb90678c8cb",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-26 21:59:25.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "0c9cf75570006b970235e52bf686a1ce5186553c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-26 22:03:42.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/930/",
+        "patchset_number": 5
+      },
+      {
+        "id": "2605ded498e6e5b7f4237a3572c4c2d4d4595955",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-26 22:05:38.000000000",
+        "message": "Patch Set 5: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/930/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/930/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/930",
+        "patchset_number": 5
+      },
+      {
+        "id": "9486ca7c6b8fb9adf22213f748f8e7dc7f796a77",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-27 22:05:05.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "51ec9ceb8d65b85157d9aed688f75e86ce3dd6bd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-27 22:08:03.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/931/",
+        "patchset_number": 6
+      },
+      {
+        "id": "ba1b6f638549a3a657aae5af7349cc4540ef2ec3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-27 22:10:04.000000000",
+        "message": "Patch Set 6: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/931/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/931/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/931",
+        "patchset_number": 6
+      },
+      {
+        "id": "9f71ca936deef7c247d5d1dcbaedacaa999f664e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-30 21:44:14.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "4e69f1933eb7043ca78f10bdd76506b19bfb8444",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-30 21:47:00.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/933/",
+        "patchset_number": 7
+      },
+      {
+        "id": "4e6e30a9d2aea1ed54f5b626492a691e2a825cfe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-30 21:48:20.000000000",
+        "message": "Patch Set 7: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/933/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/933/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/933",
+        "patchset_number": 7
+      },
+      {
+        "id": "57d76941a4c92f779034306d31701cb372159ad7",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-02 22:03:20.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "56bb1e85ca30fa2f8376556b1a798c9f4263d642",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-02 22:06:19.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/935/",
+        "patchset_number": 8
+      },
+      {
+        "id": "98dcc0e334c0a2e97d5523e6e70bebf715c39fbd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-02 22:11:04.000000000",
+        "message": "Patch Set 8: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/935/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/935/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/935",
+        "patchset_number": 8
+      },
+      {
+        "id": "36e75109eabf1c4293701cc67ab61bb7ffadcade",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-03 22:03:36.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "60114a444b1c744725c4a736add1e00da680af69",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-03 22:07:05.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/939/",
+        "patchset_number": 9
+      },
+      {
+        "id": "cb2f889eddc57d04d229230c2de5561db1feeb78",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-03 22:11:21.000000000",
+        "message": "Patch Set 9: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/939/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/939/ )\n\nSubmitted patch does not pass required checkstyle rules. Sub-project feature-distributed-locking has 2 violations. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/939/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/939",
+        "patchset_number": 9
+      },
+      {
+        "id": "a7a5f7be9de49fc3d95456e5cc256fcde04374f4",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-03 23:18:05.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "31b8e81bc45377dea53ceb18c763e9e8a894377c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-03 23:21:23.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/940/",
+        "patchset_number": 10
+      },
+      {
+        "id": "c9149ac3c33efc7b8c82fc17a1b4e59ec00c92b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-03 23:25:43.000000000",
+        "message": "Patch Set 10: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/940/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/940/ )\n\nSubmitted patch does not pass required checkstyle rules. Sub-project feature-distributed-locking has 2 violations. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/940/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/940",
+        "patchset_number": 10
+      },
+      {
+        "id": "c494d66333dc9677819924cf92d947984ab1de44",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-07 22:40:36.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "69188a6c2aed863493258de9feaf14723901ff55",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-07 22:42:51.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/943/",
+        "patchset_number": 11
+      },
+      {
+        "id": "0d4f16badd3fc0dbfff79c06cf8a8bc1c2b03790",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-07 22:47:51.000000000",
+        "message": "Patch Set 11: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/943/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/943/ )\n\nSubmitted patch does not pass required checkstyle rules. Sub-project feature-distributed-locking has 2 violations. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/943/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/943",
+        "patchset_number": 11
+      },
+      {
+        "id": "ff70d9753e8740259b51b5a6e573e83c0956ee91",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-08 15:48:22.000000000",
+        "message": "Uploaded patch set 12.",
+        "patchset_number": 12
+      },
+      {
+        "id": "e385194de4bf0439e350aeeea38637d81913b330",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 15:48:32.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/944/",
+        "patchset_number": 12
+      },
+      {
+        "id": "9c771ec83f06dc8f252603492aafaa2ea8131eb0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 15:53:56.000000000",
+        "message": "Patch Set 12: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/944/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/944/ )\n\nSubmitted patch does not pass required checkstyle rules. Sub-project feature-distributed-locking has 2 violations. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/944/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/944",
+        "patchset_number": 12
+      },
+      {
+        "id": "add87b0908d8845355005218d9e33c052860c7d5",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-08 18:53:48.000000000",
+        "message": "Uploaded patch set 13.",
+        "patchset_number": 13
+      },
+      {
+        "id": "4572b7f365ba8cd179c3eb73061aea3f7e866939",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 18:56:34.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/945/",
+        "patchset_number": 13
+      },
+      {
+        "id": "e43c054d2d763843a3a6c1ac91ed348bb69388ae",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-08 19:02:02.000000000",
+        "message": "Patch Set 13: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/945/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/945",
+        "patchset_number": 13
+      },
+      {
+        "id": "f72d05ee336cba787e2ff12d9e0e0c427472b2dc",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-08 19:05:29.000000000",
+        "message": "Patch Set 13: Code-Review+1\n\nSorry about the size of this, but I didn't see an obvious way to push this up in smaller chunks other than creating new classes with almost the same names as the old.",
+        "patchset_number": 13
+      },
+      {
+        "id": "464c71ede077f1988792b0a45a2a726162e5670e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-08 19:06:08.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 13
+      },
+      {
+        "id": "339ed88865086beb7b5a770b6470efe76249b979",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 11:13:29.000000000",
+        "message": "Patch Set 13: Code-Review+1",
+        "patchset_number": 13
+      },
+      {
+        "id": "0a51ee560c83938270d068c0c38962923a1adc2b",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 15:49:07.000000000",
+        "message": "Patch Set 13: Code-Review+1\n\n(6 comments)",
+        "patchset_number": 13
+      },
+      {
+        "id": "e70ad2632990df0159552fc1fddda86df9f38028",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-09 17:17:23.000000000",
+        "message": "Uploaded patch set 14.",
+        "patchset_number": 14
+      },
+      {
+        "id": "a19c056f14b25729db4fb4f1040609ddef225666",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-09 17:19:28.000000000",
+        "message": "Uploaded patch set 15.",
+        "patchset_number": 15
+      },
+      {
+        "id": "b9ad36520d067d4a66a42977a05e98cef5d2d81a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 17:19:31.000000000",
+        "message": "Patch Set 14:\n\nNo Builds Executed",
+        "patchset_number": 14
+      },
+      {
+        "id": "b8914144425fd6ee9301d8b4af01339bef36728e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 17:40:08.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/946/",
+        "patchset_number": 15
+      },
+      {
+        "id": "0182e6a22a839b01f2f88668791997d21f8637a8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 17:44:34.000000000",
+        "message": "Patch Set 15: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/946/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/946",
+        "patchset_number": 15
+      },
+      {
+        "id": "fe70cfa357ea8f386ee01dd73ebc83f4f6c2c4d6",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-09 17:46:31.000000000",
+        "message": "Patch Set 15: Code-Review+1",
+        "patchset_number": 15
+      },
+      {
+        "id": "cbc69261d2a56454ffd5e2a2e725ef1362da990c",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 19:08:42.000000000",
+        "message": "Patch Set 15: Code-Review+1",
+        "patchset_number": 15
+      },
+      {
+        "id": "c273159a96f2ca92d6628c12a7e85c9389a874ad",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 19:30:28.000000000",
+        "message": "Patch Set 15: Code-Review+1",
+        "patchset_number": 15
+      },
+      {
+        "id": "c92e8957e0a0b357f928a5e2b91169f0b4b469ab",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 21:26:34.000000000",
+        "message": "Patch Set 15:\n\nNeed an entry in this file for the new feature: packages/install/pom.xml",
+        "patchset_number": 15
+      },
+      {
+        "id": "c37ac0a3fce5a56f1a43591ef5f048058d471b14",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-09 23:38:08.000000000",
+        "message": "Patch Set 15:\n\n(20 comments)\n\nPlease bear with me with the questions Jim, I bet mostly trying to get a grasp on on my part, and trying to understand the basic workings, may be we can meet tomorrow and you can walk me through it so I understand the basics better.",
+        "patchset_number": 15
+      },
+      {
+        "id": "7a956a37d2f71409198e07c8c366a8bf284a922a",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-10 20:29:03.000000000",
+        "message": "Patch Set 15: -Code-Review\n\n> Need an entry in this file for the new feature: packages/install/pom.xml\n\nthx",
+        "patchset_number": 15
+      },
+      {
+        "id": "5a320c565cb0f9da8fce2815ae703a367f5fb9e6",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-10 22:01:33.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 15
+      },
+      {
+        "id": "99646c0a2243cae040cc7655da80e9175372cf09",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-10 22:04:49.000000000",
+        "message": "Uploaded patch set 16.",
+        "patchset_number": 16
+      },
+      {
+        "id": "48660cb189b5bd289f9d108b73d26cddc2b634ec",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-10 22:08:28.000000000",
+        "message": "Patch Set 16:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/950/",
+        "patchset_number": 16
+      },
+      {
+        "id": "7ae6b63de59e45c0d01cb9028a47664d34cd1d68",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-10 22:11:27.000000000",
+        "message": "Patch Set 16: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/950/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/950/ )\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/950/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/950",
+        "patchset_number": 16
+      },
+      {
+        "id": "ddd93c75d9bf78f42eb47eb800855b7c967f4b1c",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 13:09:42.000000000",
+        "message": "Patch Set 16: Code-Review-1\n\n(3 comments)",
+        "patchset_number": 16
+      },
+      {
+        "id": "c44552446d80be4001ca31ec4ea75bc86d19c803",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 13:24:06.000000000",
+        "message": "Uploaded patch set 17.",
+        "patchset_number": 17
+      },
+      {
+        "id": "c4bde3cfa87acd23f90ffb8ab0e122168146a99c",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-11 13:25:41.000000000",
+        "message": "Patch Set 17:\n\n(16 comments)\n\nStill working on Jorge's comment about using normal feature API standards, beforeLock & afterLock.",
+        "patchset_number": 17
+      },
+      {
+        "id": "973f24a203f66a205110e48b6a37b887de058c0d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 13:27:07.000000000",
+        "message": "Patch Set 17:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/951/",
+        "patchset_number": 17
+      },
+      {
+        "id": "1423fe96a99eba1beeb3b70a4bb33ce2e2c00848",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 13:32:32.000000000",
+        "message": "Patch Set 17: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/951/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/951",
+        "patchset_number": 17
+      },
+      {
+        "id": "95503ae5de8425d4818f784b825762f5a1eb9a1b",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 15:44:30.000000000",
+        "message": "Uploaded patch set 18.",
+        "patchset_number": 18
+      },
+      {
+        "id": "66fe184c7269686e4db4655b18373cc18e5bf8b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 15:48:05.000000000",
+        "message": "Patch Set 18:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/952/",
+        "patchset_number": 18
+      },
+      {
+        "id": "cd5288c7a4bc4f7967b7f81e16afbbac624d07ef",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 15:51:11.000000000",
+        "message": "Patch Set 18: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/952/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/952/ )\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/952/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/952",
+        "patchset_number": 18
+      },
+      {
+        "id": "5e5d1f748313cc0311f70f663cbb3cfbc2532088",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 16:14:14.000000000",
+        "message": "Uploaded patch set 19.",
+        "patchset_number": 19
+      },
+      {
+        "id": "ff2a364d980f11f1fc31280a4dab75304c2d0aa0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 16:17:30.000000000",
+        "message": "Patch Set 19:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/953/",
+        "patchset_number": 19
+      },
+      {
+        "id": "0928f0b8b5a399ee68a4be92fb752cf99176dba4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 16:22:29.000000000",
+        "message": "Patch Set 19: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/953/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/953",
+        "patchset_number": 19
+      },
+      {
+        "id": "b5e4cd73bddcbc44c57eb85f3a2efe131f8a610e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 18:20:50.000000000",
+        "message": "Uploaded patch set 20.",
+        "patchset_number": 20
+      },
+      {
+        "id": "73516eb28fdd4c596a676bd5a4eb7145b2bf7886",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 18:21:02.000000000",
+        "message": "Patch Set 20:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/954/",
+        "patchset_number": 20
+      },
+      {
+        "id": "ac3a77df73d5328317016e08e0c9be8e1c5a5fb6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 18:25:44.000000000",
+        "message": "Patch Set 20: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/954/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/954",
+        "patchset_number": 20
+      },
+      {
+        "id": "2e455ce52fe1f2cf574ddc6b5c55b93d5f40f2ea",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-11 18:51:30.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 20
+      },
+      {
+        "id": "96433980faf7cd1d8222e3f982c8151c6272eb1b",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-11 18:51:36.000000000",
+        "message": "Patch Set 20: Code-Review+1",
+        "patchset_number": 20
+      },
+      {
+        "id": "fc8f40a2eb66f707bd17e5dc357195ffe28a6b5c",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-11 22:48:28.000000000",
+        "message": "Patch Set 20: Code-Review+1",
+        "patchset_number": 20
+      },
+      {
+        "id": "9af7fa4267c2f1adf6011cc07fa71b229682759d",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-14 08:26:39.000000000",
+        "message": "Patch Set 20: Code-Review+1\n\nI'd love to get a run through of this sometime. Maybe at the Policy meeting Wednesday.",
+        "patchset_number": 20
+      },
+      {
+        "id": "dba26604d4c390d6808ff49da81f3d445fb4c7de",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-14 16:09:24.000000000",
+        "message": "Patch Set 20:\n\n(3 comments)",
+        "patchset_number": 20
+      },
+      {
+        "id": "ef0f6a2fcc7ff0223d3048d99a8b2c58452ecd55",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-15 00:54:37.000000000",
+        "message": "Patch Set 20: Code-Review-1\n\n(9 comments)\n\nThis is pretty tricky.  I tend to think that the design could be simplified though.  I am having trouble with having features under policy-management, but not being packaged individually or operated individually.   Another issue I have is the base core functionality being handled by services is a little obscured.   I tend to think the SimpleLocking feature does not need to be a feature, and then avoid some of the issues I have.    This is a proposal, we should probably and discuss at length, I think though it would simplify it:\n\n/* PolicyEngineManager - the code is simply to create a new method createLockManager \n * with hooks in PolicyEngineFeatureApi to intercept the before and after for this new method\n * DistributedLocking and ServerPooling will intercept and will provide a PolicyResourceLockManager\n * object to handle all system locks onwards that override the \"SimpleLockManager\" default implementation.\n */\n\nPolicyEngine:\n     @Getter\n   + PolicyResourceLockManager lockManager;\n   + configure(Properties) {\n       ...\n       createLockManager(properties) \n       ...\n     }\n   + createLockManager(properties) {\n       loop engineFeatures {\n          PolicyResourceLockManager manager = engineFeatures.beforeCreateLockManager(engine, properties);\n          if (manager != null) { this.lockManager = manager; return ..}\n       }\n       this.lockManager = new SimpleLockManager();\n       engineFeatures.afterCreateLockManager(engine, this.lockManager, properties);\n     }\n\n     /* As a replacement for other feature hooks, the engine will forward \n      * PolicyResourceLockManager implementation as it is done for others*/\n\n   + start/stop/shutdown/...() {\n     ..\n     lockManager.start/stop/shutdown()\n     }\n\n-------\n/* PolicyResourceManager will extend Startable/.. as needed to be aware of Engine lifecycle */\n\nPolicyResourceManager extends Startable, .. /* just for generality */ {\n  + createLock(<lock-parameters>)\n  + ... any others ..\n}\n-------\n\n/* All the implementations now DistributedLock and ServerPool, etc .. will \n * intercept the new hook:   PolicyEngineFeatureApi.beforeCreateLockManager(..)\n * they will return the DistributedLockManager or ServerPoolLockManager */\n\n/* From that point on the LockManager can be accessed on a singleton fashion \n * from the PolicyEngine: PolicyEngine.getManager().getResourceLockManager();\n * alternatively, the feature could cache it (I don't think there's a need\n * to make it a singleton */\n\n/* So the implementations with override the createLock(..) and will do all\n * their magic within their feature realm\n */\nie.\n\n\nSimpleLockManager implements PolicyResourceManager {\n   /* this is not a feature */\n   /* this would pretty much the content of \"SimpleLockingFeature\" with the audit */\n   createLock(..) { /* is pretty much the content of SimpleLockingFeature.beforeCreateLock */ }\n}\n\nDistributedLockManager implements PolicyResourceManager {\n   /* this would pretty much the content of \"SimpleLockingFeature\" with the audit */\n   createLock(..) { /* .. */ }\n}\n\nServerPoolLockManager implements PolicyResourceManager {\n   /* this would pretty much the content of \"SimpleLockingFeature\" with the audit */\n   createLock(..) { /* .. */ }\n}\n\n/* There are no changes in the Lock interface and derived classes */",
+        "patchset_number": 20
+      },
+      {
+        "id": "e72a837bbf043b6169019eb34e4d963ded3167c8",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-15 16:21:15.000000000",
+        "message": "Patch Set 20: -Code-Review\n\n(5 comments)\n\nIf there is a specific manager class for each feature implementation, then I don't see the value in defining a feature API at all, as manager class would do the work.\nNote: whatever approach is taken, the implementation must still be called when a controller is started so that it can configure itself with controller-specific properties.",
+        "patchset_number": 20
+      },
+      {
+        "id": "fbad3f8fe408c628f97222fb9fa98ce098a54ea3",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-15 16:55:25.000000000",
+        "message": "Patch Set 20:\n\n> (5 comments)\n > \n > If there is a specific manager class for each feature\n > implementation, then I don't see the value in defining a feature\n > API at all, as manager class would do the work.\n > Note: whatever approach is taken, the implementation must still be\n > called when a controller is started so that it can configure itself\n > with controller-specific properties.\n\nNever mind the comment about manager vs feature APIs; I think I know where you're going, after re-reading your suggested change.",
+        "patchset_number": 20
+      },
+      {
+        "id": "9936c75767e23e02cc2f44764672917092bf0750",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 01:19:49.000000000",
+        "message": "Uploaded patch set 21.",
+        "patchset_number": 21
+      },
+      {
+        "id": "4538409bb17d3e76c7d6904355a3b4ac522ed5c8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:21:32.000000000",
+        "message": "Patch Set 21:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/956/",
+        "patchset_number": 21
+      },
+      {
+        "id": "ad2c85c2a41cc87115e20e796bf0f00184323638",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:27:07.000000000",
+        "message": "Patch Set 21: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/956/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/956",
+        "patchset_number": 21
+      },
+      {
+        "id": "6557635ba1921513e2468375a1cf77729cd7bcf5",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 01:46:56.000000000",
+        "message": "Uploaded patch set 22.",
+        "patchset_number": 22
+      },
+      {
+        "id": "274e217254c55e38ee90062833859c33cd25fb00",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:49:49.000000000",
+        "message": "Patch Set 22:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/957/",
+        "patchset_number": 22
+      },
+      {
+        "id": "a681a6a9af2ebc6635481ba42656405dc41b7942",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 01:52:12.000000000",
+        "message": "Uploaded patch set 23.",
+        "patchset_number": 23
+      },
+      {
+        "id": "2cf5274600b6aa54adaacd622af15849ca39513b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:52:25.000000000",
+        "message": "Patch Set 22: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/957/ : ABORTED\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/957/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/957",
+        "patchset_number": 22
+      },
+      {
+        "id": "26c4af6adc65f993251aadecc1bc92311a271586",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:53:57.000000000",
+        "message": "Patch Set 23:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/958/",
+        "patchset_number": 23
+      },
+      {
+        "id": "040437d990a5cc316a39fe2a801fbfe79be2a946",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 01:59:02.000000000",
+        "message": "Uploaded patch set 24.",
+        "patchset_number": 24
+      },
+      {
+        "id": "009c6ebb84080c98814338314a5bebc90e46969d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 01:59:16.000000000",
+        "message": "Patch Set 23: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/958/ : ABORTED\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/958/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/958",
+        "patchset_number": 23
+      },
+      {
+        "id": "27d021cf51d3ed28f1e0d9aa8e0cdfdae8024a89",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 02:00:46.000000000",
+        "message": "Uploaded patch set 25.",
+        "patchset_number": 25
+      },
+      {
+        "id": "3eb86a00e97998f5f6455e344cb02456a4a61c28",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 02:00:49.000000000",
+        "message": "Patch Set 24:\n\nNo Builds Executed",
+        "patchset_number": 24
+      },
+      {
+        "id": "2fe8cac6d6e5078fbe281861d0f54b3015e3fd5a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 02:01:35.000000000",
+        "message": "Patch Set 25:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/959/",
+        "patchset_number": 25
+      },
+      {
+        "id": "430b6b2b5f24300fd8fce9dda28119b03e2b81f6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 02:07:09.000000000",
+        "message": "Patch Set 25: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/959/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/959",
+        "patchset_number": 25
+      },
+      {
+        "id": "4e31d4ba2fc5435adb81072c9264ad73b1124ca5",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-16 02:11:39.000000000",
+        "message": "Patch Set 25: Code-Review+1",
+        "patchset_number": 25
+      },
+      {
+        "id": "3502627838b67e275f53dd445b992859063ed225",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 16:22:41.000000000",
+        "message": "Patch Set 25:\n\n(4 comments)\n\nLooking good! :)",
+        "patchset_number": 25
+      },
+      {
+        "id": "9c0cbfecab1a4a2c8d476a34e4a98fdb39866626",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-16 17:39:34.000000000",
+        "message": "Uploaded patch set 26.",
+        "patchset_number": 26
+      },
+      {
+        "id": "34acde760b6c4e308b282123738c84bc88e926fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 17:41:25.000000000",
+        "message": "Patch Set 26:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/961/",
+        "patchset_number": 26
+      },
+      {
+        "id": "329648a87a98c8991aa79ff7a268e7cdeb6b1b49",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-16 17:44:41.000000000",
+        "message": "Patch Set 26: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/961/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/961/ )\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/961/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/961",
+        "patchset_number": 26
+      },
+      {
+        "id": "5260a924f53f35d812d53bb56f9d6d585061b91e",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 19:27:45.000000000",
+        "message": "Patch Set 26:\n\nFrom my end, and once it builds, the only comment pending for you to consider is:\n\npolicy-management/src/main/java/org/onap/policy/drools/system/PolicyEngineManager.java\nLine 780:\nI think we should move 776-780 above 771, since this may (should) trigger callbacks typically to drools-applications holding locks.",
+        "patchset_number": 26
+      },
+      {
+        "id": "cc12a80dd839b21963d6cf372faea3bca2bf8e4e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-17 19:35:36.000000000",
+        "message": "Patch Set 26:\n\n(4 comments)",
+        "patchset_number": 26
+      },
+      {
+        "id": "f0a98414f99b5e216146c5bee508185a94c99fc8",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-17 19:38:56.000000000",
+        "message": "Uploaded patch set 27.",
+        "patchset_number": 27
+      },
+      {
+        "id": "1043ec1be3b8d791f54ed1114272f392646d1093",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 19:41:28.000000000",
+        "message": "Patch Set 27:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/966/",
+        "patchset_number": 27
+      },
+      {
+        "id": "7b131f4fc5900d35469f4dd8202fd68084430c34",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 19:44:58.000000000",
+        "message": "Patch Set 25:\n\n(1 comment)",
+        "patchset_number": 25
+      },
+      {
+        "id": "8bfc89c67945f8e916d619674f4345203de78321",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 19:47:12.000000000",
+        "message": "Patch Set 27: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/966/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/966",
+        "patchset_number": 27
+      },
+      {
+        "id": "38bfaee9a5c81bae8b8204037038ae871ec12da7",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-17 20:02:44.000000000",
+        "message": "Patch Set 25:\n\n(1 comment)",
+        "patchset_number": 25
+      },
+      {
+        "id": "b61246100dc69824b4c0a1e2469877e0c3c18577",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-17 20:02:59.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "c26fe208a1cb4f17bbc4ce42d9778287a6f9b526",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 21:00:11.000000000",
+        "message": "Patch Set 27:\n\n> (1 comment)\n\nThe concern I have is with leaving resources hanging in the db preventing an operation when a pdp-d goes away.   The stop/shutdown operation is a graceful operation perform by an admin, where the liveness check for example would kill the container, in the latter saving existing transactions is relevant.\n\nIn ONAP, persistence feature is not enabled and would be wary to activate it due to its poor performance and other unknowns. Ralph's server pooling has its own more efficient persistence though.   For ONAP though there is this persistence epic thing to work across PDPs, so I think it is safe to  that assume persistence is just not there at this point, I would think this functionality will take quite a while to get  straight and mature.   In the meantime, I advocate to not leave in progress transactions.   Actually, the works that dcae works for us, as the alarms on the same resource are retransmitted in few millisecs batch, it would work best for the PDP going down to try to gracefully clean up before going away, so the next pdp available picks up that onset right away, and starts reprocessing it.\n\nIn any case, this is clearly out of scope for this work for sure, but good context to discuss.",
+        "patchset_number": 27
+      },
+      {
+        "id": "47e2aa335261e6fcb5fe0987ec3d5f31866f2bfd",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 21:01:01.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "513c6ddf9df805e549f028dd29cd185ef018d15e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-10-17 21:40:15.000000000",
+        "message": "Patch Set 27:\n\n> > (1 comment)\n > \n > The concern I have is with leaving resources hanging in the db\n > preventing an operation when a pdp-d goes away.   The stop/shutdown\n > operation is a graceful operation perform by an admin, where the\n > liveness check for example would kill the container, in the latter\n > saving existing transactions is relevant.\n > \n > In ONAP, persistence feature is not enabled and would be wary to\n > activate it due to its poor performance and other unknowns. Ralph's\n > server pooling has its own more efficient persistence though.   For\n > ONAP though there is this persistence epic thing to work across\n > PDPs, so I think it is safe to  that assume persistence is just not\n > there at this point, I would think this functionality will take\n > quite a while to get  straight and mature.   In the meantime, I\n > advocate to not leave in progress transactions.   Actually, the\n > works that dcae works for us, as the alarms on the same resource\n > are retransmitted in few millisecs batch, it would work best for\n > the PDP going down to try to gracefully clean up before going away,\n > so the next pdp available picks up that onset right away, and\n > starts reprocessing it.\n > \n > In any case, this is clearly out of scope for this work for sure,\n > but good context to discuss.\n\nFor simple locks, it doesn't matter - they don't survive the JVM.  For distributed locks, it would have to block the shutdown while it goes to the DB to delete the locks.\nAs far as invoking the callbacks to tell the session that the locks were lost, all of those will be executed via the executorService, which will likely be shut down before it completes all of them.\nNevertheless, I open to making that change in a subsequent review.",
+        "patchset_number": 27
+      },
+      {
+        "id": "dc10fc71c5ba1f137d018db601ac8381c4bb89e6",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-17 22:31:41.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "11922ca1e0a511816ba81366e4756e03d0427fa8",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-18 08:34:55.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "571af8b6b39882953369ef489a75e1a16d7354d9",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-21 12:57:41.000000000",
+        "message": "Patch Set 27: Code-Review+2",
+        "patchset_number": 27
+      },
+      {
+        "id": "c0ed7e7ea4ecac4b25d2c8b41723a2fa54aa5c43",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-22 11:55:04.000000000",
+        "message": "Patch Set 27: Code-Review+1\n\n(1 comment)",
+        "patchset_number": 27
+      },
+      {
+        "id": "f1eaa05e0fda80bfef01508d062cc71cdc2632e7",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-22 13:33:44.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 27
+      },
+      {
+        "id": "430582f226c252bfa1b535cdec876d0c5fcc161d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-10-22 15:19:51.000000000",
+        "message": "Patch Set 27:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/58/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-java/58",
+        "patchset_number": 27
+      }
+    ]
+  }
+}

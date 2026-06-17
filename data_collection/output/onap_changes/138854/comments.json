@@ -1,0 +1,173 @@
+{
+  "id": "cps~master~Iad7be43ae5bb909518f9f7d8e386a97c96c349e3",
+  "change_id": "Iad7be43ae5bb909518f9f7d8e386a97c96c349e3",
+  "_number": 138854,
+  "change_comments": [
+    {
+      "id": "17c1bc86_9df89316",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-27 16:31:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0bc31cd6_a03191de",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-08-28 07:50:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6356cfd7_94b48fd7",
+      "patchset_number": 1,
+      "message": "Still producing gigabytes of logs on failure",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-29 11:23:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "e3b832d2_b59d8f09",
+      "file_path": "k6-tests/ncmp/config/k6-error-log-rotate.conf",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "File format not correct, e.g. comments can only be at the start of the line, error.log needs to be quoted:\n\n    \"error.log\" {\n        # Rotate log if it exceeds 50MB\n        size 50M\n        ...\n    }\n    \nSee my other comments before implementing this though,  I don't think logrotate is a good solution.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-29 11:23:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4dd55008_6f39e4b1",
+      "file_path": "k6-tests/ncmp/run-all-tests.sh",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Can we just redirect to /dev/null for now? There are too many issues with the logrotate solution right now.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-29 11:23:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5d17a2ca_9a7d9605",
+      "file_path": "k6-tests/ncmp/run-all-tests.sh",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Solution doesn't work and still produces gigabytes of logs.\n\nI think issue here is that the error.log is not in this directory. Also, it can't rotate anything: since this script runs as a pipeline job, we are checking out a fresh repo each run. So the log rotation is just 'rotating' a single log file. Really this solution a very complicated way of compressing a single log file.\n\nI recommend just redirecting all errors to /dev/null, and revisit other solutions later if we need logging.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-29 11:23:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d6f73525_a21f844d",
+      "file_path": "k6-tests/ncmp/run-all-tests.sh",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Agree with this review since the job is a 'performance test' that runs once per hour and not functional, thus, no log-debugging is needed within created a huge logs. Since if an error occurs, it will be repetitively being printed for the same tests. it would be nice if the error logs redirected to /devll/null only. The function issues should have been captured by CSIT and unit tests.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-29 12:39:34.000000000",
+      "in_reply_to": "5d17a2ca_9a7d9605",
+      "unresolved": true
+    },
+    {
+      "id": "f64cbfe5_bdfd7f66",
+      "file_path": "k6-tests/ncmp/config/k6-error-log-rotate.conf",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-08-30 13:54:20.000000000",
+      "in_reply_to": "e3b832d2_b59d8f09",
+      "unresolved": false
+    },
+    {
+      "id": "7d4bb476_25a02fbc",
+      "file_path": "k6-tests/ncmp/run-all-tests.sh",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-08-30 13:54:20.000000000",
+      "in_reply_to": "4dd55008_6f39e4b1",
+      "unresolved": false
+    },
+    {
+      "id": "a0dc6b54_ac426d48",
+      "file_path": "k6-tests/ncmp/run-all-tests.sh",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-08-30 13:54:20.000000000",
+      "in_reply_to": "d6f73525_a21f844d",
+      "unresolved": false
+    }
+  ]
+}

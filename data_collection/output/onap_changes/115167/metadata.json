@@ -1,0 +1,532 @@
+{
+  "id": "policy%2Fapi~master~I28b634d5aa404f4536cfc54c6a2ddf38ff90aeee",
+  "change_id": "I28b634d5aa404f4536cfc54c6a2ddf38ff90aeee",
+  "_number": 115167,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2020-11-20 11:42:09.000000000",
+    "updated": "2020-12-07 13:27:29.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7010,
+      "name": "Gregory Hayes",
+      "display_name": null,
+      "email": "gregory.hayes@est.tech",
+      "username": "gregory.hayes"
+    },
+    "submitter": null
+  },
+  "subject": "Policy-API - Retry database on connection failure",
+  "commit_message": "Policy-API - Retry database on connection failure\n\nPAP and API should not exit on DB connection failure, but retry\nThis code creates an infinite loop to retry every 30s\n\nJira-Link: https://jira.onap.org/browse/POLICY-2855\nIssue-ID: POLICY-2855\nSigned-off-by: gregory.hayes <gregory.hayes@est.tech>\nChange-Id: I28b634d5aa404f4536cfc54c6a2ddf38ff90aeee\n",
+  "change_log": {
+    "entry_count": 36,
+    "entries": [
+      {
+        "id": "aa2ed2c55206da7dc4fc016193f288a6d7c201a0",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-20 11:42:09.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "37ac4070366477ba55447764684c22042359052d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 11:44:18.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-verify-java/487/",
+        "patchset_number": 1
+      },
+      {
+        "id": "07a9e73fb4f16f2820dd001445cbc45b18a4a247",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 11:48:19.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-api-master-verify-java/487/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-verify-java/487",
+        "patchset_number": 1
+      },
+      {
+        "id": "df60cf644980a5ca666641a903bc43ac3ec83df7",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 13:30:35.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "af66398b5cd0aea88f95f26ab27e4995f280abad",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 13:39:58.000000000",
+        "message": "Patch Set 1:\n\nJust looking at the API code, the only place where there is a problem with the database not coming up is in the initiation of the policy types and policies during API startup.\n\nIn the class org.onap.policy.api.main.startstop.Main at line 75, the code tries to read the predefined policy types and policies from the DB and if the DB read fails, it crashes out.\n\nHowever, the DB calls coming off the API in the ApiRestController do not bring down the JVM if they fail,t hey simply return a HTTP error code INTERNAL_SERVER_ERROR (500) but continues running.\n\nSo you only need to take care of the case at line 75 in Main. You can use a Sleep here or just spin off a thread to do the DB read in a loop and wait for it to return.\n\nOnce the DB is read int he startup you're good, the current code is fine.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9f3bbb9ac78550eb23f4c91e6226baff45b1be49",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 13:40:33.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> Just looking at the API code, the only place where there is a problem with the database not coming up is in the initiation of the policy types and policies during API startup.\n> \n> In the class org.onap.policy.api.main.startstop.Main at line 75, the code tries to read the predefined policy types and policies from the DB and if the DB read fails, it crashes out.\n> \n> However, the DB calls coming off the API in the ApiRestController do not bring down the JVM if they fail,t hey simply return a HTTP error code INTERNAL_SERVER_ERROR (500) but continues running.\n> \n> So you only need to take care of the case at line 75 in Main. You can use a Sleep here or just spin off a thread to do the DB read in a loop and wait for it to return.\n> \n> Once the DB is read int he startup you're good, the current code is fine.\n\nSo I think that all we need to do is to do something in the Main class.",
+        "patchset_number": 1
+      },
+      {
+        "id": "fb6d8450848d2b0ba49e75a43d6c7a97804a990d",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 13:40:46.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > Just looking at the API code, the only place where there is a problem with the database not coming up is in the initiation of the policy types and policies during API startup.\n> > \n> > In the class org.onap.policy.api.main.startstop.Main at line 75, the code tries to read the predefined policy types and policies from the DB and if the DB read fails, it crashes out.\n> > \n> > However, the DB calls coming off the API in the ApiRestController do not bring down the JVM if they fail,t hey simply return a HTTP error code INTERNAL_SERVER_ERROR (500) but continues running.\n> > \n> > So you only need to take care of the case at line 75 in Main. You can use a Sleep here or just spin off a thread to do the DB read in a loop and wait for it to return.\n> > \n> > Once the DB is read int he startup you're good, the current code is fine.\n> \n> So I think that all we need to do is to do something in the Main class.",
+        "patchset_number": 1
+      },
+      {
+        "id": "00e8b5b99e7ea556a27ed0cbabb73efe4801e834",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-20 14:01:43.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(7 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "47e5b72959c3aa54b449e4721f1e8bcba7c9506b",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-20 16:47:39.000000000",
+        "message": "Abandoned\n\nThis will need redesign",
+        "patchset_number": 1
+      },
+      {
+        "id": "b19aeed8592dc960bba59043f58c3faf14f7a593",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-11-23 17:33:57.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > Just looking at the API code, the only place where there is a problem with the database not coming up is in the initiation of the policy types and policies during API startup.\n> > \n> > In the class org.onap.policy.api.main.startstop.Main at line 75, the code tries to read the predefined policy types and policies from the DB and if the DB read fails, it crashes out.\n> > \n> > However, the DB calls coming off the API in the ApiRestController do not bring down the JVM if they fail,t hey simply return a HTTP error code INTERNAL_SERVER_ERROR (500) but continues running.\n> > \n> > So you only need to take care of the case at line 75 in Main. You can use a Sleep here or just spin off a thread to do the DB read in a loop and wait for it to return.\n> > \n> > Once the DB is read int he startup you're good, the current code is fine.\n> \n> So I think that all we need to do is to do something in the Main class.\n\nAgreed, but maybe push the change down to ApiDatabaseInitializer to keep Main clean",
+        "patchset_number": 1
+      },
+      {
+        "id": "fdc295ce3835b0b881d94a30781f622ac72d0d1d",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-24 08:39:26.000000000",
+        "message": "Restored",
+        "patchset_number": 1
+      },
+      {
+        "id": "be9b7f3ac7667e2662d8014e732c0f25d0f710dc",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-11-24 08:40:09.000000000",
+        "message": "Patch Set 1:\n\n(4 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "d5944cb35d17c76ca0369bb87c6d43040e02f386",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-24 11:25:43.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "203ab9bdf385baf4e10536712c1448b94a02a2bc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-24 11:28:43.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-verify-java/488/",
+        "patchset_number": 2
+      },
+      {
+        "id": "3a488e248039da0afbae977a693d8a91f714ad58",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-24 11:34:41.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-api-master-verify-java/488/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-verify-java/488",
+        "patchset_number": 2
+      },
+      {
+        "id": "e09559cf281d5cf43bc0f39eab9a69629ef06732",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-11-24 12:07:05.000000000",
+        "message": "Patch Set 2:\n\n(3 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "0400e088de30ba15ca0f0506a6cecf5d40f3a793",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-24 12:07:57.000000000",
+        "message": "Description of patch set 1 set to \"Refactor based on comments and to aid testing\"",
+        "patchset_number": 1
+      },
+      {
+        "id": "23a70993343a62a1f974891138b134e6868f626b",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-24 12:08:08.000000000",
+        "message": "Description \"Refactor based on comments and to aid testing\" removed from patch set 1",
+        "patchset_number": 1
+      },
+      {
+        "id": "f005920f2988791e8cb8dff44626937907cb0a7a",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-24 19:51:45.000000000",
+        "message": "Patch Set 2:\n\n(13 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "7b66f56621255b4374001e266d4159fc8cf82136",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-11-25 12:21:15.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "1415173b8ea89a59df59d3a68adc25130da4e43b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-25 12:23:12.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-verify-java/489/",
+        "patchset_number": 3
+      },
+      {
+        "id": "04509b2d66d6722b09cec4adab49e8f8fb4f2be4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-25 12:26:18.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-api-master-verify-java/489/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-verify-java/489",
+        "patchset_number": 3
+      },
+      {
+        "id": "098eafe6ea3d074dea9fb68858f9b9117bfe1b12",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-11-25 12:41:26.000000000",
+        "message": "Patch Set 3:\n\n(13 comments)\n\nStill outstanding for discussion:\nDo we keep this code here (in API and in PAP) or push it to policy.models?\nWhat test do we use to determine whether the connection should be retried? How do we parameterize the test if necessary?\n\nAlso need to decide how to parameterize delayPeriod",
+        "patchset_number": 3
+      },
+      {
+        "id": "00e227df8ec612a920930c838c589d6e5baa1946",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-25 15:37:22.000000000",
+        "message": "Patch Set 3: Code-Review+1\n\n> Patch Set 3:\n> \n> (13 comments)\n> \n> Still outstanding for discussion:\n> Do we keep this code here (in API and in PAP) or push it to policy.models?\n> What test do we use to determine whether the connection should be retried? How do we parameterize the test if necessary?\n> \n> Also need to decide how to parameterize delayPeriod\n\nperhaps, in policy/models, we could just add an additional method to the connection factory class, containing this retry logic.  If we do that, then an optional delayPeriod (or retryTime) could be added to the Param class, along with a field containing an array of strings to match",
+        "patchset_number": 3
+      },
+      {
+        "id": "29eb018196b382ed4202f9e0354577e5eea6d210",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-30 12:15:22.000000000",
+        "message": "Patch Set 3:\n\n(2 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "1775e45f313805b434a3076d13f97fb252251ac9",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-30 18:43:22.000000000",
+        "message": "Patch Set 3: -Code-Review\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "bc68cba3407161bcc11bc8f1d49724949fb24bc7",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-11-30 20:59:03.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "835b9d04a6b0bf653aa51d4a176287dca25718fe",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-11-30 21:09:44.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "5bc177d55b4228d52d96aa054103225ff5b47399",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-12-01 16:46:10.000000000",
+        "message": "Patch Set 3:\n\n(2 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "f39f91e6f72afc83236d51d6f4714456be7f39cd",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-01 16:55:31.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "b7483abd60459eccd72f893824786393eb62fe7e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-01 16:57:00.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-verify-java/492/",
+        "patchset_number": 4
+      },
+      {
+        "id": "2f66a8bcee6a237fbfbab04980e3a9820a97cd6d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-01 16:59:09.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-api-master-verify-java/492/ : FAILURE\n\nPatch failed to compile in component api-main ( https://jenkins.onap.org/job/policy-api-master-verify-java/492/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-verify-java/492",
+        "patchset_number": 4
+      },
+      {
+        "id": "d21a53e27ec7e9bb165e4229f08f506f8b8846f4",
+        "author": {
+          "account_id": 7010,
+          "name": "Gregory Hayes",
+          "display_name": null,
+          "email": "gregory.hayes@est.tech",
+          "username": "gregory.hayes"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-12-01 17:07:50.000000000",
+        "message": "Patch Set 4: Code-Review-1\n\n> Patch Set 4: Verified-1\n> \n> Build Failed \n> \n> https://jenkins.onap.org/job/policy-api-master-verify-java/492/ : FAILURE\n> \n> Patch failed to compile in component api-main ( https://jenkins.onap.org/job/policy-api-master-verify-java/492/ )\n> \n> Logs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-verify-java/492\n\nThis will not compile until Policy/Models is merged\nSee: https://gerrit.onap.org/r/c/policy/models/+/115510",
+        "patchset_number": 4
+      },
+      {
+        "id": "52849e0698405b5f9bccb5b92ba295fa3a086a78",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-02 14:55:55.000000000",
+        "message": "Patch Set 4:\n\nFollowing up on previous review, I don't think we should be doing this.",
+        "patchset_number": 4
+      },
+      {
+        "id": "958e782a046853680165ed4ed7b4a7ca8c514acb",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-02 14:56:01.000000000",
+        "message": "Patch Set 4: Code-Review-1",
+        "patchset_number": 4
+      },
+      {
+        "id": "e1cb37d778ec07c736d7459a1fc7219a27fff4af",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-07 13:27:29.000000000",
+        "message": "Abandoned",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

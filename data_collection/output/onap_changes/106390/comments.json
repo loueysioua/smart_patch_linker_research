@@ -1,0 +1,59 @@
+{
+  "id": "sdc~master~I88003de54aea6c28575fecf0f41b4c5ef36ef154",
+  "change_id": "I88003de54aea6c28575fecf0f41b4c5ef36ef154",
+  "_number": 106390,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c3e5f219_1f149a21",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/utils/PolicyTypeImportUtils.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "besides the fact it can work, logic is unclear,\nto improve it, I'd suggest to refactor like this:\n//////////////////////////////////////////////////////////////\n        if (!isPropertiesListSizesEquals(pt1Props, pt2Props)) {\n//////////////////////////////////////////////////////////////\n    private boolean isPropertiesListSizesEquals(final Collection<PropertyDefinition> pt1Props,\n                                                final Collection<PropertyDefinition> pt2Props) {\n        return (isEmpty(pt1Props) && isEmpty(pt2Props))\n            || (isNotEmpty(pt1Props) && isNotEmpty(pt2Props) && pt1Props.size() == pt2Props.size());\n    }\n//////////////////////////////////////////////////////////////\nwhat do you think?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-04-22 12:13:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "14dd7d86_65694b57",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/utils/PolicyTypeImportUtils.java",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "//////////////////////////////////////////////////////////////\n    private boolean isPropertiesListSizesEquals(final Collection<PropertyDefinition> pt1Props,\n                                                final Collection<PropertyDefinition> pt2Props) {\n        return (isEmpty(pt1Props) && isEmpty(pt2Props))\n            || (isNotEmpty(pt1Props) && isNotEmpty(pt2Props) && pt1Props.size() == pt2Props.size());\n    }\n//////////////////////////////////////////////////////////////",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-04-22 12:13:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1008086_7aba6931",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/utils/PolicyTypeImportUtils.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "`isEmpty` already checks for nulls so Vasyl's proposal should work. I would also add this:\n```\nif((pt1Props == pt2Props) || (isEmpty(pt1Props) && isEmpty(pt2Props)))\n  return true;\nelse if (isPropertiesListSizesEquals(pt1Props, pt2Props))\n  return false;\nelse {\n  // the rest of the code.\n}\n```\nBut overall, there is clearly a design issue that is screaming to be solved here. These \"optimizations\" seem to be here for performance purpose. What size are the lists passed in argument? If we are not talking about hundreds of elements, I would simplify this logic.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-22 12:27:39.000000000",
+      "in_reply_to": "c3e5f219_1f149a21",
+      "unresolved": true
+    }
+  ]
+}

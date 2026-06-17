@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fdrools-applications~casablanca~If1fefd3f57e417180c62a3849defbaa6ae83afc1",
+  "change_id": "If1fefd3f57e417180c62a3849defbaa6ae83afc1",
+  "_number": 71851,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_c7ac798f",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 133,
+      "message": "Should this now read something along the lines of \"called one and only once each time the parameters for this Closed Loop policy are changed\"?",
+      "author": {
+        "account_id": 423,
+        "name": "Joshua Reich",
+        "display_name": null,
+        "email": "jreich@research.att.com",
+        "username": "josh.reich"
+      },
+      "updated": "2018-11-05 19:38:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_c7c31937",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "Wouldn't this collect all of the param objects for every other Closed Loop with an active param? Shouldn't it instead be $params: Params( getClosedLoopControlName()== \"${closedLoopControlName} )",
+      "author": {
+        "account_id": 423,
+        "name": "Joshua Reich",
+        "display_name": null,
+        "email": "jreich@research.att.com",
+        "username": "josh.reich"
+      },
+      "updated": "2018-11-05 19:38:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_67ecadc8",
+      "file_path": "controlloop/templates/template.demo/src/test/java/org/onap/policy/template/demo/ControlLoopParamsCleanupTest.java",
+      "patchset_number": 1,
+      "line": 62,
+      "message": "move below line 71",
+      "author": {
+        "account_id": 423,
+        "name": "Joshua Reich",
+        "display_name": null,
+        "email": "jreich@research.att.com",
+        "username": "josh.reich"
+      },
+      "updated": "2018-11-05 19:38:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_673a6d38",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 133,
+      "message": "done (in master branch) - will cherry pick to casablanca afterward",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-11-05 20:03:37.000000000",
+      "in_reply_to": "9adffdf1_c7ac798f",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_67034d74",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "The intent is, indeed, to collect param objects for all closed loops.  However, the PARAMS.ACTIVE rule in the other closed loops will see to it that their respective Params objects are added to the ParamsCleaner.active set.  Consequently, line 1625 will be false and thus PARAMS.DELETE will not fire for those Params objects.\nThe clean-up rules are purposely intended to operate on Params objects across all closed loops.\nBTW: The junit test specifically inserts rules for two different control loops and then verifies that when the rules for the first control loop are updated, only the Params object associated with that control loop is replaced.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-11-05 20:03:37.000000000",
+      "in_reply_to": "9adffdf1_c7c31937",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_c7f1d996",
+      "file_path": "controlloop/templates/template.demo/src/test/java/org/onap/policy/template/demo/ControlLoopParamsCleanupTest.java",
+      "patchset_number": 1,
+      "line": 62,
+      "message": "done (in master branch) - will cherry pick to casablanca afterward",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-11-05 20:03:37.000000000",
+      "in_reply_to": "9adffdf1_67ecadc8",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_c776b906",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "What's still confusing me is that based on my reading of the code, there will be one ParamsCleaner generated for each closed loop, each time the SETUP rule is triggered. So won't a the instance of this rule for a given closed loop have an active list that only includes the (hopefully a single) up-to-date param entry for that same closed loop and nothing else? As a consequence, wouldn't all of the parameters for other closed loops be retracted? \n\nI agree the test is passing, but if I'm understanding your test correctly, what you are testing is \"that only the Params object associated with the control loop is modified\" not \"that only the Params object associated with that control loop is replaced\" (what I believe is happening is that the Params object associated with the other control loops have been deleted and replaced by identical Params objects---does that make sense?).",
+      "author": {
+        "account_id": 423,
+        "name": "Joshua Reich",
+        "display_name": null,
+        "email": "jreich@research.att.com",
+        "username": "josh.reich"
+      },
+      "updated": "2018-11-05 20:23:30.000000000",
+      "in_reply_to": "9adffdf1_67034d74",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e7a65d53",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "The $newPolicy.SETUP is only triggered when $newPolicy is added or its YAML is modified, thus it will only generate a cleaner for the new or modified policies.  Once that happens, the $eachActivePolicy.PARAMS.ACTIVE rule will fire, for each active policy, and it will fire against every cleaner, thus all cleaners will contain every active policy.\n\nThe test adds two control loops and then updates one.  It verifies that the Params for the first control loop is replaced, and that the Params for the second control loop is not replaced.  However, I did just realize that there's a hole in the test in that it compares string representations rather than the objects themselves.  I'll update that.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-11-05 22:05:54.000000000",
+      "in_reply_to": "9adffdf1_c776b906",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_a2528311",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-11-05 22:06:57.000000000",
+      "in_reply_to": "9adffdf1_e7a65d53",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_226f7394",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 1,
+      "line": 1624,
+      "message": "Okay, now I see: every rule triggers against every ParamsCleaner. You've convinced me the logic is correct. I think I have a way to simplify the ParamsCleaner code---will give my idea a shot after this is in and, if it works, submit a patch for you to review.\n\nYup, going from string representation to object changes what you'd been testing (\"that only the Params object associated with the control loop is modified\") to what you intended (\"that only the Params object associated with that control loop is replaced\")",
+      "author": {
+        "account_id": 423,
+        "name": "Joshua Reich",
+        "display_name": null,
+        "email": "jreich@research.att.com",
+        "username": "josh.reich"
+      },
+      "updated": "2018-11-06 00:31:58.000000000",
+      "in_reply_to": "9adffdf1_a2528311",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,1096 @@
+{
+  "id": "oom%2Foffline-installer~master~I0bf669442a5183efa20d44fb1cac823e7ce54348",
+  "change_id": "I0bf669442a5183efa20d44fb1cac823e7ce54348",
+  "_number": 85862,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "fe5afe7c_b7a39438",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "Ok, i do not understand that paragraph. Do you mean you cannot put control plane on more than one node, or cannot put a control plane on nodes with etcd if there is more than one control plane, or what? Any links/references?\nAlso, isn't it the case that etcd in general should not be put on workers, at least not on these running workloads, because of performance implications? That is what i've once heard/read in openshift docs, and openshift is indeed enhanced kubernetes. In that case we could go with one etcd on infra + control plane also on infra. Any clue?",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-23 10:52:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "65dc28c0_ae914bd7",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "Ok. not sure why rke is copied to user homedir as opposed to copying it just to /usr/local/bin? not every distribution has $HOME/bin in default $PATH so you cannot rely on that being true... I will probably change that behavior.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-23 10:52:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da21e914_b44cc2d4",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "About the last sentence, do you propose we run etcd on offline-infra node? Should't we still keep offline installer nodes (infra) out of Kubernetes nodes?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-04-23 11:35:46.000000000",
+      "in_reply_to": "fe5afe7c_b7a39438",
+      "unresolved": false
+    },
+    {
+      "id": "909e2899_6bf2eb85",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "is there a way to avoid there shell commands?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-04-23 11:53:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bb0271f7_911f3426",
+      "file_path": "ansible/roles/rke/tasks/rke_deploy.yml",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "Some follow up should be here, right? E.g. ensure with kubectl that deployment is working.\n\nkubectl --kubeconfig .kube_config_cluster.yml get all --all-namespaces",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-04-23 11:53:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "210df878_72123ba2",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 15,
+      "message": "I do not propose anything, I am just trying to understand this part of commit message.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-23 12:39:02.000000000",
+      "in_reply_to": "da21e914_b44cc2d4",
+      "unresolved": false
+    },
+    {
+      "id": "999df07c_280984da",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "nope. if you do not assume known_hosts for infra is already valid (note ansible is run from a different host so it is not necessarily valid) then you need ssh-keyscan.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-23 12:39:02.000000000",
+      "in_reply_to": "909e2899_6bf2eb85",
+      "unresolved": false
+    },
+    {
+      "id": "c5d99363_7c79163a",
+      "file_path": "ansible/roles/rke/tasks/rke_deploy.yml",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "Not sure. Actually what rke does is performing health checks on everything it runs, so I believe that if it finished normally, we have some kind of guarantee that the deployment is successful. The only thing is for example, that it doesn't quite fail if it fails to connect to some node, it just skips it, not sure if this can be changed.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-04-23 12:39:02.000000000",
+      "in_reply_to": "bb0271f7_911f3426",
+      "unresolved": false
+    },
+    {
+      "id": "39d2208a_7636d9f6",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "to contain rke stuff inside one intuitive place and not pollute the system",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": "65dc28c0_ae914bd7",
+      "unresolved": false
+    },
+    {
+      "id": "d1bc8c3f_2a23dee1",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "I strongly disagree with this change - having unpriviliged user was needed to run rke - so now it runs under root, or how?",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cd7993c3_3b08fc22",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 9,
+      "message": "on install server does not have to be any docker - this does not fix anything, rke user is for running rke and to deploy k8s on different hosts...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "176a06e9_e8f20fc1",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "the rke user has purpose to contain rke stuff inside...now it is polluted in user which ansible uses..why?",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5ebcd03d_9ef72d89",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 26,
+      "message": "yes, I am aware of that - it was the simplest solution and \"grow without bounds\" is kind of overstatement - how many times this playbook will be run? Once?",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3f7c58a2_65e47104",
+      "file_path": "ansible/roles/rke/tasks/rke_deploy.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "we now running this from what user exactly?",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "aa5b9713_a260028e",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 4,
+      "message": "why you removed the default gid? what is default now - it is platform specific, it could be users now or whatnot",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "209a8bfe_68b016b4",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "this: why? do we plan more infra servers or what is the reason to complicate it and hardwire one with index 0",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "47a66a7c_50f61f6b",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "wrong, since the beginning when I proposed to add cluster_ip, it was due to multiple network interfaces, asnible is connecting to some network interface and the cluster runs on another and both of them can be mutually unreachable...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "82242f58_fec0e841",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 123,
+      "message": "why? because onap is broken? rbac is standard k8s policy framework and it was said that we want to make onap more securish",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 08:45:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "88fae429_d592f29c",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "we never have fixed the amount of infra servers to one.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-02 08:59:52.000000000",
+      "in_reply_to": "209a8bfe_68b016b4",
+      "unresolved": false
+    },
+    {
+      "id": "3d7ecbcc_fc59d8de",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 123,
+      "message": "onap does not take any role for underlay Kubernetes cluster. It's totally upto onap users (vendors and operators) how thay want to deploy Kubernetes.\n\nI guess this is default value that can be overriden in any deployment?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-02 08:59:52.000000000",
+      "in_reply_to": "82242f58_fec0e841",
+      "unresolved": false
+    },
+    {
+      "id": "7459e248_934f730c",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "If I understood correctly then you DO use rke for ssh - it is in the cluster.yml (user: rke) - the reason for this artificial user was that on the CentOS/RHEL 7 ssh local-forwarding does not work for root - so rke is using unprivileged user for that. You are running rke up as root (or another ansible user) but the rke is internally using rke user for ssh and distribution its artefacts - so what was actually achieved with this change? Am I wrong? Please, correct me.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 11:21:13.000000000",
+      "in_reply_to": "d1bc8c3f_2a23dee1",
+      "unresolved": false
+    },
+    {
+      "id": "4c026acb_e4d82cac",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 9,
+      "message": "my bad, this is infra server, nevertheless it is still not needed - rke playbook does not use rke user to modify docker on infra, although it does not hurt and infra should have always docker, so I take this back",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 11:21:13.000000000",
+      "in_reply_to": "cd7993c3_3b08fc22",
+      "unresolved": false
+    },
+    {
+      "id": "87b7052e_f8ed0d2d",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "I dont have anything against mutiple of infra - but how would that work? And why we elevate the one with index 0 - if we do support configuration of multiple infra nodes, then fine - but this obviously is not that.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-02 11:21:13.000000000",
+      "in_reply_to": "88fae429_d592f29c",
+      "unresolved": false
+    },
+    {
+      "id": "06f6d4a5_f81d5e17",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "that should be changed in all places as there are many places in offline-installer where we index with first server in the group.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-02 11:45:36.000000000",
+      "in_reply_to": "87b7052e_f8ed0d2d",
+      "unresolved": false
+    },
+    {
+      "id": "cbc60f0a_f8151567",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "Well, considering that kubectl and helm are in /usr/local/bin, it is inconsistent if rke is suddenly placed somewhere else. We rather do not change more of the installer in similar ways.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "39d2208a_7636d9f6",
+      "unresolved": false
+    },
+    {
+      "id": "58a09d0c_f57236d2",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "Yes, the intention is for rke to run as root, but to ssh to stuff as rke. I left the rke user on infra mainly because we may want/will want? to move for example control plane to infra, so it will just work without having to do some unusual things.\nAs for why you would run rke as root: I believe we are not testing offline installer running as different users with become: yes, but we really shouldn't block this usage. In that case using become like in previous patchsets would introduce another hidden requirement that the user that ansible connects as must have sudo rights for root and also for rke, without a password. Another way would be to use sudo from root context, but that seems a bad idea/bad practice. So the most clean way to handle this was to just run rke as root, and create the rke user mostly just to distribute ssh keys and in case some components would be moved to infra. Also it would be consistent with all other roles that run everything as root (helm/etc).",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "7459e248_934f730c",
+      "unresolved": false
+    },
+    {
+      "id": "fb30bd84_e263b1a0",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "mostly consistency and, see comment for line #5 for why it is better for rke to run as root.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "176a06e9_e8f20fc1",
+      "unresolved": false
+    },
+    {
+      "id": "0bda8085_661d75c9",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 26,
+      "message": "let's not assume users will not do stupid things if fixing that is not difficult. :) generally you're right, but we should still try to make stuff idempotent and this wouldn't be quite idempotent if it didn't handle that case.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "5ebcd03d_9ef72d89",
+      "unresolved": false
+    },
+    {
+      "id": "6ad7c70d_7b96a31f",
+      "file_path": "ansible/roles/rke/tasks/rke_deploy.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "from root (either over become or normally/directly).",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "3f7c58a2_65e47104",
+      "unresolved": false
+    },
+    {
+      "id": "1d256cb5_e0dab098",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 4,
+      "message": "well i believe for all newer systems it is not users but the group named after the user, but the reason was:\n1- do we actually care about this group? we don't use it for anything.\n2-I don't remember what was the exact reason but I believe something has failed because of this...",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "aa5b9713_a260028e",
+      "unresolved": false
+    },
+    {
+      "id": "1214d974_0ce5a6f8",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "the reason is that you should not rely on name of hosts in inventory, only on names of groups. As in, using hostname directly would not work for cicdansible generated inventory without changing cicdansible.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "06f6d4a5_f81d5e17",
+      "unresolved": false
+    },
+    {
+      "id": "3f14af51_0f996b1e",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "Well, they may be mutually unreachable, but I am not sure if you are going to set up ssh not to run on the internal cluster network. I assumed it can run on internal cluster network too.\nThe reason for this change was molecule, because it doesn't use the ssh connection driver, it uses the docker connection driver, where ansible_host seems to be container name. So, using ansible_host had bad side effects, because it was invalid in molecule context.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "47a66a7c_50f61f6b",
+      "unresolved": false
+    },
+    {
+      "id": "5fedddb8_c0e92856",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 123,
+      "message": "1. I assumed it is better not to introduce additional problems because of rbac, and\n2. using rbac would require modifications to helm init usage, you would need a service account for helm, I once tried that when I was playing with kubeadm long ago (amsterdam times) and it needed permissions that it did not have by default. So using none here was just easier than doing more extensive changes (at least for this initial release of rke role).",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 09:11:03.000000000",
+      "in_reply_to": "3d7ecbcc_fc59d8de",
+      "unresolved": false
+    },
+    {
+      "id": "1a83a63c_8e139201",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "I'm glad someone else also fit this problem. I.e. in molecule context ansible_host is not used/filled as it's our own addition to inventory not there by default.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-06 10:49:17.000000000",
+      "in_reply_to": "3f14af51_0f996b1e",
+      "unresolved": false
+    },
+    {
+      "id": "0dfa3276_9d75ff3b",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "well actually ansible_host is used and it is the worst. if you set it then it is treated as container name.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 10:56:44.000000000",
+      "in_reply_to": "1a83a63c_8e139201",
+      "unresolved": false
+    },
+    {
+      "id": "2503eb70_cf8cebd3",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "Ok, that \"become\" point seems valid",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-06 11:24:24.000000000",
+      "in_reply_to": "58a09d0c_f57236d2",
+      "unresolved": false
+    },
+    {
+      "id": "a8d3ea27_5573365f",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "This maybe my insufficient knowledge of ansible but when I look at infrastructer-server in hosts.yaml then it does not look like name of the host but as a dictionary and host is defined below...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-06 11:24:24.000000000",
+      "in_reply_to": "1214d974_0ce5a6f8",
+      "unresolved": false
+    },
+    {
+      "id": "c354146f_5dcbf558",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "I dont follow at all. If this is needed for that molecule to work then that is sad, but ok then. Otherwise - this address is address which rke uses to connect over ssh...from install server/ansible and that can be special management network with restrictions. But I already explained this so many times before, that I dont want to repeat it again.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-06 11:24:24.000000000",
+      "in_reply_to": "0dfa3276_9d75ff3b",
+      "unresolved": false
+    },
+    {
+      "id": "23c82aa3_077f4ff7",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "it is the ansible visible name of the host (the dict key). but I believe normal ansible practice is to lookup hosts from groups. that previous version would force me to name this key \"infrastructure-server\". however in any case, infrastructure group does exist and there is one host there.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 12:28:10.000000000",
+      "in_reply_to": "a8d3ea27_5573365f",
+      "unresolved": false
+    },
+    {
+      "id": "b05a93aa_122a3750",
+      "file_path": "ansible/roles/rke/templates/cluster.yml.j2",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "sure. but I do not see any alternative, using ansible_host for ssh in case of molecule is asking for trouble, because the docker connection plugin will interpret it as a docker container name. Using cluster_ip would require ssh to be exposed also on the internal cluster network, but at least it works now. Not sure if we have any viable alternative. You rather cannot use docker container names as dns names to ssh to the containers, so...",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 12:28:10.000000000",
+      "in_reply_to": "c354146f_5dcbf558",
+      "unresolved": false
+    },
+    {
+      "id": "d3872785_15020ed3",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "Can't you just use native \"known_hosts\" ansible module to make it really idempotent and avoid using 'shell' module?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-06 13:29:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "22d35964_d254ae40",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Anyone using offline-installer is free to put arbitrary names in inventory that's why we can't fix those names in tasks and have to rely on indices.\n\nPetr: That dictionary element you mentioned is indeed host name, what you refer with \"host defined below\" is it's property and you either interpolate it by \"hostvars[groups['infrastructure']['infrastructure-server']['ansible_host']] by which you hardcode the host name or by index \"hostvars[groups['infrastructure'][0]['ansible_host']] where the host name doesn't matter.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-06 13:39:35.000000000",
+      "in_reply_to": "23c82aa3_077f4ff7",
+      "unresolved": false
+    },
+    {
+      "id": "c70f43f2_9d9ce5fd",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "I didn't even know that module exists, however it seems like it couldn't apply here. We don't only add known hosts entries, we also ask the respective hosts for their public keys. It seems like known_hosts module can only use predetermined public keys.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 13:46:56.000000000",
+      "in_reply_to": "d3872785_15020ed3",
+      "unresolved": true
+    },
+    {
+      "id": "0cd8f00e_3d100427",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "How come? Define two tasks: one that produces facts with gathered keys from relevant hosts and second one that uses 'known_hosts' module to inject them. Dead simple and idempotent TMK.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-06 14:06:06.000000000",
+      "in_reply_to": "c70f43f2_9d9ce5fd",
+      "unresolved": true
+    },
+    {
+      "id": "4a2f402a_ff1f92e4",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 27,
+      "message": "'with_items' is deprecated, 'loop' is the future-proof.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-06 14:06:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "902fcf41_9cd9b2c0",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "May be doable, except that ssh-keyscan still needs to be used to get keys and save them into facts, so command module is unavoidable. Anyway, point taken, will investigate.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 14:09:19.000000000",
+      "in_reply_to": "0cd8f00e_3d100427",
+      "unresolved": true
+    },
+    {
+      "id": "15eefa64_1e2c8381",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 27,
+      "message": "oh didn't notice, you're right.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 14:09:19.000000000",
+      "in_reply_to": "4a2f402a_ff1f92e4",
+      "unresolved": true
+    },
+    {
+      "id": "7455281c_0471c019",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "I dont get it. In ansible parlance it may be called host, but when I say host I mean it :) Host \"infrastructure-server\" is not resolvable - that means we must subtitute it with a real host or an ip address.\n\nSo why:\n\ninfrastructure: <<<<< This is predetermined\n      hosts:\n        infrastructure-server: <<<<<<<<< and this is arbitrary\n\nInfrastructure-server here is not a hostname nor a variable containing a hostname or an ip. It is just dict with, as you wrote, properties...\n\nI just dont get your point guys...both of them are just dicts - with only one difference - one is inside the other. Why one name is hardwired and other is volatile.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-06 14:09:40.000000000",
+      "in_reply_to": "22d35964_d254ae40",
+      "unresolved": false
+    },
+    {
+      "id": "e3b5d986_9d6b356c",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "No need to use keyscan via shell module IMO, 'slurp' or something similar for getting remote file could suffice.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-06 14:12:17.000000000",
+      "in_reply_to": "902fcf41_9cd9b2c0",
+      "unresolved": true
+    },
+    {
+      "id": "c11dc300_c90de408",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "Well, may be done. keyscan seems easier, but... will see",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 14:15:44.000000000",
+      "in_reply_to": "e3b5d986_9d6b356c",
+      "unresolved": true
+    },
+    {
+      "id": "96fc0ee5_1b377b3f",
+      "file_path": "ansible/roles/rke/tasks/rke_config.yml",
+      "patchset_number": 6,
+      "line": 25,
+      "message": "Ok. It seems that you cannot easily get /etc/ssh/*.pub because it has a different format, known_hosts module expects keys with known_hosts format. also keyscan works by getting keys of all types, and you need one known_hosts call per specific key per host. Of course doable, just a note.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-06 14:23:18.000000000",
+      "in_reply_to": "c11dc300_c90de408",
+      "unresolved": true
+    },
+    {
+      "id": "03f5e67f_4ddbf3c0",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "'infrastructure-server' here is ansible_hostname which is a property set up at inventory level, it doesn't even have to resemble real hostname. And whether we allow to change ansible_hostname and not group name is just a matter of convention not a technical limitation. Currently documented convention is that user can set arbitrary ansible_hostname but not group name so the code has to align with it.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-07 06:21:05.000000000",
+      "in_reply_to": "7455281c_0471c019",
+      "unresolved": false
+    },
+    {
+      "id": "3a5d91da_8ed398e4",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "infrastructure-server here can be also called as host alias and as mentioned it can be any string.\nYes the main point is that in code we use group names.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-07 07:51:12.000000000",
+      "in_reply_to": "03f5e67f_4ddbf3c0",
+      "unresolved": false
+    },
+    {
+      "id": "036b8d73_51558b36",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Ok, so instead of a nice reference (like name/label) we are using a number, an index and the code is aligned to expect precisely one only with number zero :) great stuff",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-07 08:12:49.000000000",
+      "in_reply_to": "3a5d91da_8ed398e4",
+      "unresolved": false
+    },
+    {
+      "id": "81ebed6b_243dba90",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Normally only group name used everywhere i.e. all actions always done for all hosts in the group. But there are few places where code needs to point only to one host in the group. In that case it should not matter which one it is, first one, last one or randomly selected host in the group. We mostly have just used the first host in the group.\n\nAny proposal to do it differently/better?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-07 08:31:10.000000000",
+      "in_reply_to": "036b8d73_51558b36",
+      "unresolved": false
+    },
+    {
+      "id": "bdae5a8f_b27592cb",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Since the dark times, the great forefathers gave us means to abstract values via variables :) So yeah, intuitive name is always better than some random number. And if we consistently set that number to zero, then we elevated that one \"infra\" server to be something more, right? As of now we pretend we support multiple of infra servers, but we actually dont and what would that actually meant? One infra will be solely nexus server, for example? So why not call it nexus-server and not the index 1, 3 or whatnot? And ansible may call \"infrastructer-server\" a hostname, but it is not, period. It is just a label and if we forced upon the user the group infrastructure, then we can force on him the \"infrastructure-server\" name. It is just label for his machine with actual hostname and ip address, which he will manage. I just try to find some love to ansible, you are making it hard for me :)",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-07 08:41:03.000000000",
+      "in_reply_to": "81ebed6b_243dba90",
+      "unresolved": false
+    },
+    {
+      "id": "0e8c1e85_fbe785b4",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "yes intermediate variables we can create, but it will be still same solution. I meant if there's some other solution.\n\nI agree with solution where we instantiate a variable from \"hostvars[groups['infrastructure'][0]]\" and use that variable everywhere and indexing is only one line in the whole codebase. And we do not need to pretend that we support multiple infra servers in the places where it will be visible. Now it's very clearly visible there's only one.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-07 08:57:05.000000000",
+      "in_reply_to": "bdae5a8f_b27592cb",
+      "unresolved": false
+    },
+    {
+      "id": "06aa66df_a1108203",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "well the convention is probably to *always* use group names even if you really intent to have only one host in a group and don't support more. especially that in inventory files, all hosts are in groups, like you actually cannot declare a top level host. you could do something similar if you declare it in the \"all\" group, but still...",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-07 11:05:30.000000000",
+      "in_reply_to": "0e8c1e85_fbe785b4",
+      "unresolved": false
+    },
+    {
+      "id": "9d21d93d_37d368db",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Oh, also note that... if you do not set ansible_host, then this... host alias is used as actual hostname to connect to. imagine you would require users to have their host named infrastructure-server. if they didn't set ansible_host (in cases we didn't use ansible_host ourselves for other purposes), then ansible would try to connect to host named infrastructure-server. It looks a little weird.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-07 11:10:00.000000000",
+      "in_reply_to": "06aa66df_a1108203",
+      "unresolved": false
+    },
+    {
+      "id": "e26ccd33_9b8530f4",
+      "file_path": "ansible/roles/rke/tasks/rke_node.yml",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "I did not proposed any such thing... This is obviously just yet another dumb ansible stuff, that some key in inventory is overloaded. So instead of using that key as hostname we use its property and we expect that from the user - if we did not provide these properties then ansible and kubernetes and everything would have to do with one address.\n\nWe are using ansible_host and cluster_ip so we dont force one interface on users machines (I am repeating myself again). And that is fine, that is sensible. We drew line what user cannot change - what must be there: infrastructure group, ansible_host (property), cluster_ip (property) etc. But because for some completely elusive reason to me, we are giving the user option to change the name of this parent key...so we can hardwire number zero everywhere...\n\nMy point since the beginning of this thread is: why we are depending on some names (which we do) and yet leave other name to whatever and because of that we must keep referencing by index?? Does that make sense to you? It seems it does. For me it does not at all. Howgh, I am leaving this matter.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-05-07 11:56:27.000000000",
+      "in_reply_to": "9d21d93d_37d368db",
+      "unresolved": false
+    },
+    {
+      "id": "0c2eeb19_4f037277",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "can you mention also rancher here?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-14 17:23:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8f0fd61f_e2076d26",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "can it be added when rancher role will start using that? othervise it may become a bit confusing.\nDo we even know how to set a different control plane nodes for rancher?\nAlso in case rancher roles would be removed from master, then this is not needed.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-14 17:32:30.000000000",
+      "in_reply_to": "0c2eeb19_4f037277",
+      "unresolved": false
+    },
+    {
+      "id": "3e099b4d_0f885ff2",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "would not like to remove rancher. People may be using it, like Italian guys from where the separation of rancher to own group request came.\n\nAnd btw. does rancher playbook break when all your RKE commits are merged? At the moment we do not molecule play-level test for rancher playbook (that would tell it already now in CI).",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-14 17:39:26.000000000",
+      "in_reply_to": "8f0fd61f_e2076d26",
+      "unresolved": false
+    },
+    {
+      "id": "7c266189_3fe09591",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "Well I didn't test that. but it shouldn't affect it.\nStill I believe mentions of rancher should be added when rancher role will be updated accordingly to comply. And only if we know how to do it, but this is another task.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-14 17:44:30.000000000",
+      "in_reply_to": "3e099b4d_0f885ff2",
+      "unresolved": false
+    }
+  ]
+}

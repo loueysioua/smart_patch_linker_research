@@ -1,0 +1,756 @@
+{
+  "id": "aai%2Ftraversal~master~I921e6e10741f9c6f2d61faf77f865a2fde244398",
+  "change_id": "I921e6e10741f9c6f2d61faf77f865a2fde244398",
+  "_number": 140548,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d12ece27_f607a42f",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/GenericQueryProcessorTest.java",
+      "patchset_number": 1,
+      "line": 107,
+      "message": "This test only deals with the 'if query shorter than dsl query end, return query' bit:\n```java\nString end = \".cap('x').unfold().dedup()\";\nif (query.length() <= end.length()) {\n    return query;\n}\n```\nCan you add another test that tests `String dslQuery = \"some dsl query.cap('x').unfold().dedup()\";`?\nI think the test method name should be adjusted then too, to something like `testAsTreeParameterWithDslQueryShorterThanQueryEnd` and `testAsTreeParameterWithDslQueryLongerThanQueryEnd` maybe",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 07:20:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a0d0946e_e31a9fe7",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 202,
+      "message": "Please don't assert what you are NOT expecting. That doesn't make any sense at all.\nRather assert here that you are expecting a `Response.Status.BAD_REQUEST.getStatusCode()` here and also the specific response body:\n```java\nassertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());\nString expectedResponseEntity = \"\"\"\n        {\"requestError\":{\"serviceException\":{\"messageId\":\"SVC3000\",\"text\":\"Invalid input performing %1 on %2 (msg=%3) (ec=%4)\",\"variables\":[\"POST Search\",\"getModelQueryResponse\",\"Required Field not passed.:Could not determine the top-node nodeType for this request. modelInfo: []\",\"ERR.5.4.6118\"]}}}\"\"\";\nassertEquals(expectedResponseEntity,response.getEntity());\n```",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 07:43:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "50c21795_22a71495",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 216,
+      "message": "Please assert the response entity here.\nAlso your method is called ``...InvalidHeaders`, while what you are testing here is rather that `RuntimeExceptions` are caught and mapped to error responses.\n\nI would suggest that you either rename the test message to something like `testModelQueryRuntimeExceptionsAreCaught`, or if it is specifically about testing that the `xFromAppId` header may not be `null`, then adjust this testcase to `when(httpHeaders.getRequestHeader(\"X-FromAppId\")).thenReturn(null)` and assert the `AAIException` that is caught and mapped to some error response",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:07:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e1fdb3dc_beb77bbe",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 230,
+      "message": "The assertion doesn't match the test name. I would suggest to change this to `assertEquals(...)` (instead of `assertNotEquals(...)`) and resolve the exception that would make it fail:\n```json\n{\n  \"requestError\": {\n    \"serviceException\": {\n      \"messageId\": \"SVC3000\",\n      \"text\": \"Invalid input performing %1 on %2 (msg=%3) (ec=%4)\",\n      \"variables\": [\n        \"POST Search\",\n        \"getModelQueryResponse\",\n        \"Required Field not passed.:Could not determine the top-node nodeType for this request. modelInfo: []\",\n        \"ERR.5.4.6118\"\n      ]\n    }\n  }\n}\n\n```",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:07:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8e08eab7_f1b42655",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 244,
+      "message": "Please also assert the response entity",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:07:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "580d68bd_cd9f0945",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 274,
+      "message": "This variable is not used. Can you remove it?",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:07:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cdbbbb68_b969c0c0",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 281,
+      "message": "PLease replace this with an `assertEquals` here that asserts the response entity",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:07:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5db2faa3_d32dc7be",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 298,
+      "message": "This variable is not used. Can you remove it?",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:08:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ebde9055_4ad49ab3",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 303,
+      "message": "Please replace this with an `assertEquals` here that asserts the response entity",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:08:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0f8dc7a7_9e534c03",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "The `@BeforeEach` block here is not needed. You are using `@ExtendWith(MockitoExtension.class)` to initialize the mocks, which is an alternative to `MockitoAnnotations.openMocks(this)`",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:41:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e9ba050d_d60b3fe1",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "This test doesn't make sense to me at all. You are invoking `schemaServiceCQConfig.retrieveCustomQueries();` which will throw a `NullPointerException`. So `fail(...)` is never reached, right now. Then you are catching it and asserting `NotEquals` with some random message.\n\nIf you want to explicitly assert the `NullPointer` (even though I don't know how that relates to the `_EmptyResponse` in the test method), then do something like:\n```java\nNullPointerException exception = assertThrows(NullPointerException.class, () -> {\n    schemaServiceCQConfig.retrieveCustomQueries();\n});\n\nString expectedMessage = \"...\";\nString actualMessage = exception.getMessage();\n\nassertEquals(expectedMessage, actualMessage);\n```",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:41:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "090a42d1_c00038e5",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 67,
+      "message": "This test case is exactly the same as the one before",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:41:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "38253733_65d2ca16",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "Since we are on Java 17, we can use [text blocks](https://www.baeldung.com/java-text-blocks) here, which would be a bit nicer to read",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:41:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "68e97495_672be1c3",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "Please remove this mock here. It is not involved in the logic you are testing here",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 08:41:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b9169f06_27854cf6",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "Please add assertions for `result` to make sure it is\n- successful\n- it has a certain value",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:01:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c351a09d_8c16a57c",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 233,
+      "message": "This variable is not used, please remove it",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a4b278ec_82361128",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 238,
+      "message": "The same comment as with the other test that is asserting `500` for missing headers.\nPlease assert the response body here too. Also your test method naming indicates that you want to test the aai exception catching.\nYour method body asserts based on the RuntimeException, which is the other catch-all in the code",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0d1a7ffb_0d49b17c",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 248,
+      "message": "Please assert the response body here",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06ee8c3e_4832f995",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 254,
+      "message": "The `aaiException` field is not used here, please remove it",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9d5b88ae_6a0ffeea",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 259,
+      "message": "Please assert the response body here",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "510a3484_e87f0f60",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 269,
+      "message": "Please assert the response body here",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 09:24:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f676b96c_a91b4b8c",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/GenericQueryProcessorTest.java",
+      "patchset_number": 1,
+      "line": 107,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:42:55.000000000",
+      "in_reply_to": "d12ece27_f607a42f",
+      "unresolved": false
+    },
+    {
+      "id": "e26563b1_e2ccc598",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 202,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:42:55.000000000",
+      "in_reply_to": "a0d0946e_e31a9fe7",
+      "unresolved": false
+    },
+    {
+      "id": "f26f8272_2faf4d14",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 244,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:42:55.000000000",
+      "in_reply_to": "8e08eab7_f1b42655",
+      "unresolved": false
+    },
+    {
+      "id": "032765b3_5c0b7af4",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 274,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:42:55.000000000",
+      "in_reply_to": "580d68bd_cd9f0945",
+      "unresolved": false
+    },
+    {
+      "id": "c3cb31f1_64891e93",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 2,
+      "line": 265,
+      "message": "Please remove this leftover",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9cd24bf7_8e487f4e",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 281,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "cdbbbb68_b969c0c0",
+      "unresolved": false
+    },
+    {
+      "id": "e276649d_72240d6f",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 298,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "5db2faa3_d32dc7be",
+      "unresolved": false
+    },
+    {
+      "id": "d1ca44f5_f1955a03",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 303,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "ebde9055_4ad49ab3",
+      "unresolved": false
+    },
+    {
+      "id": "a38da960_639d75fe",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "0f8dc7a7_9e534c03",
+      "unresolved": false
+    },
+    {
+      "id": "ad36033c_cab600dc",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 254,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "06ee8c3e_4832f995",
+      "unresolved": false
+    },
+    {
+      "id": "72224260_e07c793f",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 259,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "9d5b88ae_6a0ffeea",
+      "unresolved": false
+    },
+    {
+      "id": "9ca690f2_a8a23038",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 269,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-24 13:45:39.000000000",
+      "in_reply_to": "510a3484_e87f0f60",
+      "unresolved": false
+    },
+    {
+      "id": "6a9a283a_38fd9da5",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 2,
+      "line": 265,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 07:50:23.000000000",
+      "in_reply_to": "c3cb31f1_64891e93",
+      "unresolved": false
+    },
+    {
+      "id": "15ad25dd_169b839a",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 216,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "50c21795_22a71495",
+      "unresolved": false
+    },
+    {
+      "id": "ed018f38_c1941990",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/ModelAndNamedQueryRestProviderTest.java",
+      "patchset_number": 1,
+      "line": 230,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "e1fdb3dc_beb77bbe",
+      "unresolved": false
+    },
+    {
+      "id": "5ad80834_fa576715",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "e9ba050d_d60b3fe1",
+      "unresolved": false
+    },
+    {
+      "id": "66dad29c_80bcbe34",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 67,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "090a42d1_c00038e5",
+      "unresolved": false
+    },
+    {
+      "id": "b0eb386a_1596174e",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "38253733_65d2ca16",
+      "unresolved": false
+    },
+    {
+      "id": "70983dcb_60252ad7",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "b9169f06_27854cf6",
+      "unresolved": false
+    },
+    {
+      "id": "b75e2ba6_dcea953e",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 233,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "c351a09d_8c16a57c",
+      "unresolved": false
+    },
+    {
+      "id": "5ae43f61_491b33c9",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 238,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "a4b278ec_82361128",
+      "unresolved": false
+    },
+    {
+      "id": "df6b361a_9fcd01bc",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SearchProviderTest.java",
+      "patchset_number": 1,
+      "line": 248,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 10:48:57.000000000",
+      "in_reply_to": "0d1a7ffb_0d49b17c",
+      "unresolved": false
+    },
+    {
+      "id": "ef797095_20d92110",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/search/SchemaServiceCQConfigTest.java",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-25 12:22:23.000000000",
+      "in_reply_to": "68e97495_672be1c3",
+      "unresolved": false
+    }
+  ]
+}

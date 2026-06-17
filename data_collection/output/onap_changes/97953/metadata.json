@@ -1,0 +1,160 @@
+{
+  "id": "oom~master~I0087487fba715b4b0804de51544238f08fed1d3c",
+  "change_id": "I0087487fba715b4b0804de51544238f08fed1d3c",
+  "_number": 97953,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-11-05 10:59:41.000000000",
+    "updated": "2019-11-06 12:34:41.000000000",
+    "submitted": "2019-11-06 11:57:40.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2319,
+      "name": "Sylvain Desbureaux",
+      "display_name": null,
+      "email": "sylvain.desbureaux@orange.com",
+      "username": "sdesbure"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "[POMBA] Move Data Router logs PVC to RWO",
+  "commit_message": "[POMBA] Move Data Router logs PVC to RWO\n\nData Router pods writes logs directly in the PVC within generic name\nfiles:\n\ndebian@control01-onap-master:~$ ls -l /dockerdata-nfs/onap-pomba/pomba/data-router/logs/application.log\n-rw-r--r-- 1 root root 125 Nov  5 09:56 /dockerdata-nfs/onap-pomba/pomba/data-router/logs/application.log\ndebian@control01-onap-master:~$ ls -l /dockerdata-nfs/onap-pomba/pomba/data-router/logs/\ntotal 4\ndrwxr-xr-x 2 root root  76 Nov  5 09:56 AAI-DR\n-rw-r--r-- 1 root root 125 Nov  5 09:56 application.log\ndrwxr-xr-x 3 root root  18 Nov  5 09:54 data-router\ndebian@control01-onap-master:~$ ls -l /dockerdata-nfs/onap-pomba/pomba/data-router/logs/data-router/\ntotal 0\ndrwxrwxrwx 2 root root 6 Nov  5 09:54 logs\ndebian@control01-onap-master:~$ ls -l /dockerdata-nfs/onap-pomba/pomba/data-router/logs/data-router/logs/\ntotal 0\ndebian@control01-onap-master:~$ ls -l /dockerdata-nfs/onap-pomba/pomba/data-router/logs/AAI-DR/\ntotal 12\n-rw-r--r-- 1 root root    0 Nov  5 09:56 audit.log\n-rw-r--r-- 1 root root    0 Nov  5 09:56 debug.log\n-rw-r--r-- 1 root root 7519 Nov  5 09:56 error.log\n-rw-r--r-- 1 root root  666 Nov  5 09:56 metrics.log\n\nThus if two pods were writing, there would be issue as each one would\nwant to write.\nThen this PVC must be used by one POD only and RWO is sufficent\n\nChange-Id: I0087487fba715b4b0804de51544238f08fed1d3c\nIssue-ID: LOG-1114\nSigned-off-by: Sylvain Desbureaux <sylvain.desbureaux@orange.com>\n",
+  "change_log": {
+    "entry_count": 9,
+    "entries": [
+      {
+        "id": "5bdc3fc8955f367606400daa6286af07afd4203d",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-11-05 10:59:41.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "a21b29056a6ff13922c3f5283cafc6cdd2493a98",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 10:59:43.000000000",
+        "message": "Patch Set 1:\n\nGitlab controller: Deployment put on queue, number 2 on the queue.",
+        "patchset_number": 1
+      },
+      {
+        "id": "c4acd8e20fcf4c987c410cf4374d121f2a1ff2e7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 11:26:30.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/3025/",
+        "patchset_number": 1
+      },
+      {
+        "id": "7239d53a04cec9310bebecd49acb0f09f2c9d062",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 11:36:37.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/3025/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/3025",
+        "patchset_number": 1
+      },
+      {
+        "id": "a1f40077084c138084b95a74b1e02fe064ff418b",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 12:35:10.000000000",
+        "message": "Patch Set 1:\n\nGitlab Orange 1: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 1
+      },
+      {
+        "id": "7b0269cc052f0afeafcade652ebfe42699a0f50b",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 12:37:38.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "9a30c25e4ea3b16a31e947492659ee4c2ac8a21b",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-05 14:15:49.000000000",
+        "message": "Patch Set 1:\n\nGitlab Orange 1: \nFull results can be seen here: https://orange-opensource.gitlab.io/lfn/onap/xtesting-onap-view/results//97953-1/index.html\n______________ Results _____________\n******** Kubernetes Results ********\n * Nb Pods: 245\n * Nb Failed Pods: 2\n * List of Failed Pods: [\n   - onap-aai-aai-data-router-7cd8669b68-hfx5l\n   - onap-aai-aai-graphgraph-5875c7ffdb-s4b7v]\n*********** Helm Results ***********\n * Nb Helm Charts: 32\n * Nb Failed Helm Charts: 0\n * List of Failed Helm Charts: []\n******** Healthcheck Results *******\n2019-11-05 14:09:10,415 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | PASS |\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | PASS |\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | PASS |\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | PASS |\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | FAIL |\nSSLError: HTTPSConnectionPool(host='so-vnfm-adapter.onap', port=9092): Max retries exceeded with url: /manage/health (Caused by SSLError(SSLError(1, u'[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:727)'),))\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | PASS |\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | FAIL |\nTest timeout 20 seconds exceeded.\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | PASS |\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 57 passed, 4 failed\n61 tests total, 57 passed, 4 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n******** healthdist Results *******\n____________________________________",
+        "patchset_number": 1
+      },
+      {
+        "id": "cd647bb131a66790c3e01b803887d4d5df07ad18",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-11-06 11:57:40.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 1
+      },
+      {
+        "id": "9b19b34de0f5a40d830ac6d067cb5d4bb16f78d3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-11-06 12:34:41.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-merge-helm/1141/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-merge-helm/1141",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

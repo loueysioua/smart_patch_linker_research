@@ -1,0 +1,450 @@
+{
+  "id": "oom~master~If3297184564a8e763110a79ff89eb07dfbc9e630",
+  "change_id": "If3297184564a8e763110a79ff89eb07dfbc9e630",
+  "_number": 107748,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "359f3a98_9e4bfa11",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "After I did the certInitializer work I tend to believe that we should provide a fully fledged chart not just template.\n\nWhy?\nJust to not copy paste number of times the same values that easily get out of sync between charts",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-15 16:32:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a3283269_2be36c11",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Well here it’s just global values and a list for containers. I don’t see what would get out of sync. \n\nBut I agree on other templates we should move to a regular chart",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-15 18:12:36.000000000",
+      "in_reply_to": "359f3a98_9e4bfa11",
+      "unresolved": true
+    },
+    {
+      "id": "a9567f72_0dace7f0",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Global values are tricky. Let's take aaf_agent image as an example. It's set in number of different projects but then finally overwritten in the ONAP chart. So depending on which chart do you render you will get a different version of aaf_agent being used.\n\nThe same is with pullPolicy and all repos. Instead of having them in one place we copy paste it from chart to chart and this gets out of sync when we update version",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-15 18:18:44.000000000",
+      "in_reply_to": "a3283269_2be36c11",
+      "unresolved": true
+    },
+    {
+      "id": "151a5517_62e4de03",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Ok, I tried to move to a chart but the way I did doesn't solve anything:\n\nJust to explain, I may have several \"wait for\" in the same chart (VID is a good example for that and that's why I've chosen it).\n\nSo I need to be able to give the \"right\" list to the template.\nAnd as it's a template and not a full deployment, I cannot require several times the template (one per wait list) because the name of the template is always the same.\n\nSo I need to give a list and \"dot\", which will be vid \"dot\" and not \"readinessCheck dot\".\nSo I'll need to provide global values on VID just as before (I cannot leave blanck readinessRepo/readinessImage blank).\n\nYou actually have the same issue with certInitializer ($dot.Values.global.readinessRepository L46 of your template will be rendered by global of parent chart and not global of certInitializer).\n\nIt won't change nothing at the end (global will be onap global) but you'll still have the same issue as having the template in common.\nAnd as readiness is just a template, I don't see the point to put it into it's own chart, at least with the way I'm doing it...",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-18 09:11:45.000000000",
+      "in_reply_to": "a9567f72_0dace7f0",
+      "unresolved": true
+    },
+    {
+      "id": "0373fea2_d6acab13",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "> Ok, I tried to move to a chart but the way I did doesn't solve anything:\n> \n> Just to explain, I may have several \"wait for\" in the same chart (VID is a good example for that and that's why I've chosen it).\n> \n> So I need to be able to give the \"right\" list to the template.\n> And as it's a template and not a full deployment, I cannot require several times the template (one per wait list) because the name of the template is always the same.\n> \n> So I need to give a list and \"dot\", which will be vid \"dot\" and not \"readinessCheck dot\".\n> So I'll need to provide global values on VID just as before (I cannot leave blanck readinessRepo/readinessImage blank).\n> \n> You actually have the same issue with certInitializer ($dot.Values.global.readinessRepository L46 of your template will be rendered by global of parent chart and not global of certInitializer).\n> \n\nHmm good catch I need to fix this xD",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-18 10:54:27.000000000",
+      "in_reply_to": "151a5517_62e4de03",
+      "unresolved": true
+    },
+    {
+      "id": "a61398c4_5467aa5c",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "you need to fix on your or my patch ? :P\nseriously, do you have any idea on how I could achieve it with a chart?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-18 11:42:26.000000000",
+      "in_reply_to": "0373fea2_d6acab13",
+      "unresolved": true
+    },
+    {
+      "id": "f43a5bdf_a842dd0f",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "> you need to fix on your or my patch ? :P\n\nMine;)\n\n> seriously, do you have any idea on how I could achieve it with a chart?\n\nYup, I've an idea but I don't want to spread stupid ideas that are not working so first I'll try on certInitializer and then point you to that if it works;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-18 12:35:10.000000000",
+      "in_reply_to": "a61398c4_5467aa5c",
+      "unresolved": true
+    },
+    {
+      "id": "a2da1f16_b753b98f",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Now I'm sure. It's doable;)\nhttps://gerrit.onap.org/r/c/oom/+/107824",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-18 22:50:21.000000000",
+      "in_reply_to": "f43a5bdf_a842dd0f",
+      "unresolved": true
+    },
+    {
+      "id": "1968da60_4901bcf1",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 5,
+      "line": 44,
+      "message": "oh it's my fault again We should make a helper template out of it to not copy-paste it over and over again;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-19 21:21:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b062b6a3_5dfd0fa3",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "do we really need to tpl the container name?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-19 21:21:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1745cc44_ccb9bbef",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 5,
+      "line": 44,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 07:04:13.000000000",
+      "in_reply_to": "1968da60_4901bcf1",
+      "unresolved": false
+    },
+    {
+      "id": "b22583d0_dd555740",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "I guess yes (see https://gerrit.onap.org/r/c/oom/+/107749 where I use it for VID)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 07:04:13.000000000",
+      "in_reply_to": "b062b6a3_5dfd0fa3",
+      "unresolved": true
+    },
+    {
+      "id": "8dc3b7b8_94ca6714",
+      "file_path": "kubernetes/common/certInitializer/templates/_certInitializer.yaml",
+      "patchset_number": 6,
+      "line": 44,
+      "message": "I'm not 100% proud of this (the fromJson part) but \"functions\" in tpl returns strings so...",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 07:08:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7a7ffc57_6401e273",
+      "file_path": "kubernetes/common/certInitializer/templates/_certInitializer.yaml",
+      "patchset_number": 6,
+      "line": 44,
+      "message": "No worries;) it has to be this way because include can return only a string",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 12:15:50.000000000",
+      "in_reply_to": "8dc3b7b8_94ca6714",
+      "unresolved": true
+    },
+    {
+      "id": "6167b379_a90c090a",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 40,
+      "message": "you have such a weird style of putting the indentation inside {{ }} that parser in my eyes feel lost;D",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 12:15:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eb064fe4_0c95213a",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "nope. Actually this one should use $dot and also append sth as the identifier of \"wait_for\"",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 12:15:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dca4f118_ddcef963",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 40,
+      "message": "I prefer this way than yours but I'm well educated so I don't complain :P",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 12:35:38.000000000",
+      "in_reply_to": "6167b379_a90c090a",
+      "unresolved": true
+    },
+    {
+      "id": "abf31a04_1593fdaa",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "ok for $dot but I'm not sure to understand the \"appends sth as the identifier of 'wait_for'\" as we already have '-readiness' ?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 12:35:38.000000000",
+      "in_reply_to": "eb064fe4_0c95213a",
+      "unresolved": true
+    },
+    {
+      "id": "b44b442b_eaf0bcb7",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "Yup but as you said we want to allow multiple instances of this init container right? Then we need to make sure that every instance has a unique name.\nOne example of such would be a separate aaf-readiness container generated by certInitializer and additional readiness container added by component itself",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 12:38:11.000000000",
+      "in_reply_to": "abf31a04_1593fdaa",
+      "unresolved": true
+    },
+    {
+      "id": "115f83ae_6932c291",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "why do you want uniqueness of container name? You can access them only from the POD?\nI __can__ understand for main container (although I think it's a bad practice) but for init container, who cares?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 12:40:01.000000000",
+      "in_reply_to": "b44b442b_eaf0bcb7",
+      "unresolved": true
+    },
+    {
+      "id": "9e5e8195_6bf3ea3b",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "Well kubernetes cares:\nError: release test64 failed: Deployment.apps \"test64-nbi\" is invalid: [spec.template.spec.initContainers[2].name: Duplicate value: \"nbi-aaf-readiness\", spec.template.spec.initContainers[3].name: Duplicate value: \"nbi-aaf-config\"]",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 12:46:07.000000000",
+      "in_reply_to": "115f83ae_6932c291",
+      "unresolved": true
+    },
+    {
+      "id": "b1722487_79e7890b",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "but who is this kubernetes anyway? :P\nno sh*t, I was pretty sure we already add name collision...\napparently not so let's change that!",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 12:54:05.000000000",
+      "in_reply_to": "9e5e8195_6bf3ea3b",
+      "unresolved": true
+    },
+    {
+      "id": "ba27eb03_47440f90",
+      "file_path": "kubernetes/common/certInitializer/templates/_certInitializer.yaml",
+      "patchset_number": 6,
+      "line": 44,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 13:00:34.000000000",
+      "in_reply_to": "7a7ffc57_6401e273",
+      "unresolved": false
+    },
+    {
+      "id": "3c7ef767_2cb353de",
+      "file_path": "kubernetes/common/common/templates/_pod.tpl",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 13:00:34.000000000",
+      "in_reply_to": "a2da1f16_b753b98f",
+      "unresolved": false
+    },
+    {
+      "id": "1349c6c0_410bf511",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 40,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 13:00:34.000000000",
+      "in_reply_to": "dca4f118_ddcef963",
+      "unresolved": false
+    },
+    {
+      "id": "1a469100_e152d331",
+      "file_path": "kubernetes/common/readinessCheck/templates/_readinessCheck.tpl",
+      "patchset_number": 6,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-20 13:00:34.000000000",
+      "in_reply_to": "b1722487_79e7890b",
+      "unresolved": false
+    }
+  ]
+}

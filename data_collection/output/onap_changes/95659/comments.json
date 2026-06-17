@@ -1,0 +1,161 @@
+{
+  "id": "policy%2Fxacml-pdp~master~Ied8630020e8a737c33b1484db953df133c89398f",
+  "change_id": "Ied8630020e8a737c33b1484db953df133c89398f",
+  "_number": 95659,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "35a0be3d_2d7bd893",
+      "file_path": "applications/common/src/main/java/org/onap/policy/pdp/xacml/application/common/std/StdMatchableTranslator.java",
+      "patchset_number": 3,
+      "line": 169,
+      "message": "BTW - I'm looking at these hacks I had to put in to remove sonar squid rule.\n\"Preconditions\" and logging arguments should not require evaluation (squid:S2629)\n\nHere is an example in another file that particular sonar was raised:\n               logger.info(\"get attribute error retrieving {}: {}\", pipRequest.getAttributeId().stringValue(),\n                                pipResponse.getStatus());\n\nand another example:\n                logger.info(\"No value for {}\", pipRequest.getAttributeId().stringValue());",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-09-13 16:26:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "261e0277_d8e078d6",
+      "file_path": "applications/common/src/main/java/org/onap/policy/pdp/xacml/application/common/std/StdMatchableTranslator.java",
+      "patchset_number": 3,
+      "line": 169,
+      "message": "yes, sometimes you just have to wrap it in an \"if\".  MIGHT be able to fix some of them by adding a toString() method, to the attribute-id, that simply invokes stringValue()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-09-13 17:40:22.000000000",
+      "in_reply_to": "35a0be3d_2d7bd893",
+      "unresolved": true
+    },
+    {
+      "id": "145c72b5_4d82ead8",
+      "file_path": "applications/common/src/main/java/org/onap/policy/pdp/xacml/application/common/std/StdMatchableTranslator.java",
+      "patchset_number": 3,
+      "line": 169,
+      "message": "Well if we have to wrap, we have to. Using .toString() raises another sonar, don't use toString(). I'll play with it.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-09-13 18:01:29.000000000",
+      "in_reply_to": "261e0277_d8e078d6",
+      "unresolved": true
+    },
+    {
+      "id": "07629b06_0c010982",
+      "file_path": "applications/common/src/main/java/org/onap/policy/pdp/xacml/application/common/std/StdMatchableTranslator.java",
+      "patchset_number": 3,
+      "line": 169,
+      "message": "you wouldn't use toString() in the logger statement, you'd just use:\n\n  logger.info(\"get attribute error retrieving {}: {}\",\n    pipRequest.getAttributeId(), pipResponse.getStatus());\n\nAs long as attribute-id's toString() returns the same thing as stringValue(), then it should work AND satisfy sonar.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-09-13 18:06:07.000000000",
+      "in_reply_to": "145c72b5_4d82ead8",
+      "unresolved": true
+    },
+    {
+      "id": "aac51615_7276599d",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "Hold on - this creates a new sonar issue.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-09-13 18:24:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a2628f28_d44a4dd7",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/parameters/XacmlPdpParameterHandler.java",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "Now I get a different sonar: either log or rethrow this exception.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-09-13 18:32:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c0e95c18_db582124",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/parameters/XacmlPdpParameterHandler.java",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "Oh, just change it to (i.e., leave off the \",e\"):\n\n  LOGGER.error(\"{}\", errorMessage);\n\nSince \"e\" is already passed in the re-thrown exception, sonar doesn't want you to log it here, figuring it will be logged by whatever catches the re-thrown exception.\n\nHowever, simply removing the LOGGER line as you did, works too, since the message will likely by logged by the catcher anyway.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-09-13 18:38:14.000000000",
+      "in_reply_to": "a2628f28_d44a4dd7",
+      "unresolved": true
+    },
+    {
+      "id": "f15dbe6e_7f611110",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 5,
+      "line": 55,
+      "message": "You could choose to catch RuntimeException, if you think makeDecision() might throw one",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-09-13 21:50:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7d382ae9_b71e87dc",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "What's interesting is sonarlint identifies this as \"either log or rethrow\", but sonar.onap.org doesn't flag it all.\nWondering if I should just leave it.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-09-13 22:03:11.000000000",
+      "in_reply_to": "aac51615_7276599d",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "logging-analytics~master~I10ece8eadd9172e893809f04c603f7d8621dbf8a",
+  "change_id": "I10ece8eadd9172e893809f04c603f7d8621dbf8a",
+  "_number": 121255,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5b729da5_74dd81ea",
+      "file_path": "reference/logging-filter/logging-filter-base/src/main/java/org/onap/logging/filter/base/MDCSetup.java",
+      "patchset_number": 5,
+      "line": 248,
+      "message": "Why throw IllegalArgumentException instead of returning Constants.DefaultValues.UNKNOWN?",
+      "author": {
+        "account_id": 1219,
+        "name": "Kevin Smokowski",
+        "display_name": null,
+        "email": "kevin.smokowski@att.com",
+        "username": "nullop"
+      },
+      "updated": "2021-05-11 17:00:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2d47cd2b_0bd6ee44",
+      "file_path": "reference/logging-filter/logging-filter-base/src/main/java/org/onap/logging/filter/base/MDCSetup.java",
+      "patchset_number": 5,
+      "line": 248,
+      "message": "if you throw the exception you are enforced to add the fix for any unknown code hit, if we use UNKNOWN, then the unknown code can go unnoticed and no one adding those status code to be handled correctly.\nI like more to enforce to implement the correct solution to consumer, but if you consider that UNKNOWN is the way to go, I can do it. Just leave another message with the approach you want",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-05-11 17:47:23.000000000",
+      "in_reply_to": "5b729da5_74dd81ea",
+      "unresolved": true
+    },
+    {
+      "id": "b0746b7c_bcf0c7cd",
+      "file_path": "reference/logging-filter/logging-filter-base/src/main/java/org/onap/logging/filter/base/MDCSetup.java",
+      "patchset_number": 5,
+      "line": 248,
+      "message": "When this is actually running in production and IllegalArgumentException is thrown there will be no log record in the metric log correct? It is now gone forever?\n\nIf someone checks the logs and they see description set to UNKNOWN they should be able to back track and realize some additional mapping code might be needed. Maybe we should call it UNMAPPED instead of UNKNOWN.\n\nI think it is better to not lose log records.",
+      "author": {
+        "account_id": 1219,
+        "name": "Kevin Smokowski",
+        "display_name": null,
+        "email": "kevin.smokowski@att.com",
+        "username": "nullop"
+      },
+      "updated": "2021-05-11 21:08:05.000000000",
+      "in_reply_to": "2d47cd2b_0bd6ee44",
+      "unresolved": true
+    },
+    {
+      "id": "fdbe4898_4355c56e",
+      "file_path": "reference/logging-filter/logging-filter-base/src/main/java/org/onap/logging/filter/base/MDCSetup.java",
+      "patchset_number": 5,
+      "line": 248,
+      "message": "I understand your point, but people do not tend to provide fix unless they see error or are forced to.\nIf the exception is thrown it will follow the same process follow for this fix caused by the NPE, being logged by the exception catch, and yes, metric logs will loose this information in case of IAE.\nAt any rate, I will provide the change as requested.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-05-12 07:50:26.000000000",
+      "in_reply_to": "b0746b7c_bcf0c7cd",
+      "unresolved": true
+    }
+  ]
+}

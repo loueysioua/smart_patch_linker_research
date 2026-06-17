@@ -1,0 +1,161 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Ib5dd109457049ac30269d68fcb803cb4a0426c92",
+  "change_id": "Ib5dd109457049ac30269d68fcb803cb4a0426c92",
+  "_number": 126786,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "475d567a_d39e95eb",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "The approach we are following in other components (distribution, apex-pdp) is to have separate counters for total, success & failure. I see that you are registering a single counter and using the labels instead.\nMay be we should align to one way.\n\nOne benefit of having them separate will be the ease of reading and creating dashboards in Grafana or similar tools.\n\n@Rashmi & @Ajith feel free to add your thoughts.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2022-01-26 20:59:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "693b7d25_0952b89c",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "IMO it seems unnecessary to have the 6 prom. counters in distribution/apex just for deploy/undeploy:\n\nI took this approach with labels (with limited cardinality), to align with how I understood \nbest practices from here (source code gets less bulky too):\n\nhttps://prometheus.io/docs/practices/instrumentation/#use-labels\n\nQuote:\n> When you have multiple metrics that you want to add/average/sum, they should usually be \n> one metric with labels rather than multiple metrics.\n> \n> For example, rather than http_responses_500_total and http_responses_403_total, create a \n> single metric > called http_responses_total with a code label for the HTTP response code. \n> You can then process the entire metric as one in rules and graphs\n> \n\nIn theory I think it should allow aggregation of all labels or any combination subset of them with promql.\n\nI seem to understand the same from here:\n\nhttps://prometheus.io/docs/practices/naming/\n\nQuote:\n> Use labels to differentiate the characteristics of the thing that is being measured:\n>\n> api_http_requests_total - differentiate request types: operation=\"create|update|delete\"\n> api_request_duration_seconds - differentiate request stages: > stage=\"extract|transform|load\"\n> Do not put the label names in the metric name, as this introduces redundancy and will \n> cause confusion if the respective labels are aggregated away.\n\nI also want to provide on drools side, state information of when the policy was deployed (state) label \nthat probably won't be expected in the distribution/apex side, so I don't think we'll have all components\nfully aligned on exact metric.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2022-01-26 22:25:14.000000000",
+      "in_reply_to": "475d567a_d39e95eb",
+      "unresolved": true
+    },
+    {
+      "id": "3b43906b_b3365de7",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Indeed we cannot fully align on the metrics across all components, for instance only operation and acceptance apply to apex/distribution. However, I do think we can align on the label key/values e.g. \"operation:deploy/undeploy\", \"acceptance/status:accepted/declined or success/failure\" and name of the metrics themselves wherever applicable (mainly deployment stats and policy execution stats). I was not comfortable defining my own strings for labels in the first pass and let them evolve as we extend metrics supports across the FWK. What do you think?\n\nOtherwise the changes LGTM.",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-01-27 03:35:54.000000000",
+      "in_reply_to": "693b7d25_0952b89c",
+      "unresolved": true
+    },
+    {
+      "id": "4d9c0213_38e8371e",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Sounds good to me.\n@Jorge: Thanks, that is informative. One comment though, wouldn't \"status: success/failure\" suit better than \"acceptance: accepted/declined\"?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-01-27 13:00:20.000000000",
+      "in_reply_to": "3b43906b_b3365de7",
+      "unresolved": true
+    },
+    {
+      "id": "60c163fd_2fc1fc87",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Nice explanation Jorge!\n\nI agree with your point, we can use labels. It's never too late to correct ourselves 😊\n\nAs said by Rashmi & Ajith, it will be good to define constants (probably enum in policy/common) and use the same everywhere. Would you mind raising the review for the same?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2022-01-27 23:06:19.000000000",
+      "in_reply_to": "4d9c0213_38e8371e",
+      "unresolved": true
+    },
+    {
+      "id": "7cdb1188_b218d0b2",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "That's good, I'll make this constants below ..\n\nIt seems to me a little bit more models oriented this type of data.   Thoughts?\n\n// cannot have \"-\" in the namespace\n// this I am not sure we should fix in a enum.  \n// Thoughts?\nPROMETHEUS_NAMESPACE = enum { \"api\", \"pap\", \"distribution\", \"pdpa\", \"pdpx\", \"pdpd\" }   \n\n// prometheus library will generate for counters of the form:\n// <PROMETHEUS_NAMESPACE>_<PROMETHEUS_COUNTER_DEPLOY_REQUESTS>_total\n\nPROMETHEUS_DEPLOY_METRIC = \"policy_deploy_requests\"\n\n// these labels can be applied to any object\nPROMETHEUS_OPERATION_LABEL = \"operation\"\nPROMETHEUS_STATE_LABEL = \"state\"  \nPROMETHEUS_STATUS_LABEL = \"status\"    \n\n// The operation values not need to be defined and can be retrieve \n// from policy/models:\n\norg.onap.policy.models.pdp.enums.PdpResponseStatus\norg.onap.policy.models.pdp.enums.PdpState\n\nPROMETHEUS_OPERATION_VALUES = enum { \"deploy\", \"undeploy\" }\n\nLet's just focus on metrics deploy/undeploy oriented for this exercise.\nComments?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2022-01-28 15:43:40.000000000",
+      "in_reply_to": "60c163fd_2fc1fc87",
+      "unresolved": true
+    },
+    {
+      "id": "a446e5f9_bbb963e0",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Thank you Jorge, those are very good suggestions! One nitpick, wondering of scenarios where state as a label for deploy/undeploy metrics could be used. Mostly the monitoring systems would want to monitor failure rate by the pdp type (or over all PDPs), so on Grafana we would mostly be aggregating.\n\nOn a side note for execution counters, we would need to also capture total counters. For instance, in APEX PDP the total counters may not always be the sum of success and total e.g. timeout scenarios, and helpful in catching anomalies. That likely means a new label value \"total\" under status label key? We can address that when we get there.",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-01-28 16:25:04.000000000",
+      "in_reply_to": "7cdb1188_b218d0b2",
+      "unresolved": true
+    },
+    {
+      "id": "54a8f332_902532c9",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Thanks Rashmi!   With regards to state, I think in terms of selection, you can leave in or out in a query to narrow the query down by it or not.   In some cases, it may provide important information as deploying policies in PASSIVE state is not the same as in ACTIVE in the sense that they are not functional yet, so that would be there if anybody needs more granularity in the selection.    To make it clear, the state is no mandatory and can be omitted, it may not make much sense for example in distribution.\n\nI think for the policy execution counters, the state values would be up to PDP to choose the right values for the labels, I don't think we need to standardize on it.  I think though querying the execution counter aggregating all labels should give the total (can apply the sum or rate for that). In the drools pdp, we'll peg transactions and operations, under some category but I still need to look at that based on the information available.\n\nAs an FYI, this is how the prometheus folks defined their http requests counter with at least 4 labels:\n\nprometheus_http_requests_total{code=\"200\", handler=\"/api/v1/alertmanagers\", instance=\"localhost:9090\", job=\"prometheus\"}\n\t1\nprometheus_http_requests_total{code=\"200\", handler=\"/api/v1/label/:name/values\", instance=\"localhost:9090\", job=\"prometheus\"}\n\t16\nprometheus_http_requests_total{code=\"200\", handler=\"/api/v1/metadata\", instance=\"localhost:9090\", job=\"prometheus\"}\n\t7",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2022-01-29 14:54:14.000000000",
+      "in_reply_to": "a446e5f9_bbb963e0",
+      "unresolved": true
+    },
+    {
+      "id": "386a9163_fd2911cc",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleFsm.java",
+      "patchset_number": 1,
+      "line": 106,
+      "message": "Thanks for the explanation Jorge. Makes sense.",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2022-02-01 15:01:45.000000000",
+      "in_reply_to": "54a8f332_902532c9",
+      "unresolved": false
+    }
+  ]
+}

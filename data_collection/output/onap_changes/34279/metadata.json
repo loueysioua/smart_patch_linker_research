@@ -1,0 +1,112 @@
+{
+  "id": "oom~master~If2288ba14e5f74a7f7ba4c2f9bf46eecc36feca7",
+  "change_id": "If2288ba14e5f74a7f7ba4c2f9bf46eecc36feca7",
+  "_number": 34279,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-03-06 14:47:14.000000000",
+    "updated": "2018-03-07 20:35:02.000000000",
+    "submitted": "2018-03-07 20:35:02.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1881,
+      "name": "Karen Joseph",
+      "display_name": null,
+      "email": "keren.joseph@amdocs.com",
+      "username": "kerenj"
+    },
+    "submitter": {
+      "account_id": 131,
+      "name": "Mandeep Khinda",
+      "display_name": null,
+      "email": "Mandeep.Khinda@gmail.com",
+      "username": "mkhinda"
+    }
+  },
+  "subject": "make so chart one namespace compatible",
+  "commit_message": "make so chart one namespace compatible\n\nchanged namespace to be nsPrefix only\nadded component name as prefix to chart name\nchanged all templated to use name instead of fullname\n\nIssue-ID: OOM-784\n\nChange-Id: If2288ba14e5f74a7f7ba4c2f9bf46eecc36feca7\nSigned-off-by: kerenj <keren.joseph@amdocs.com>\n",
+  "change_log": {
+    "entry_count": 6,
+    "entries": [
+      {
+        "id": "07bfd70c667ad7a60642785aa020e6f522bf16bc",
+        "author": {
+          "account_id": 1881,
+          "name": "Karen Joseph",
+          "display_name": null,
+          "email": "keren.joseph@amdocs.com",
+          "username": "kerenj"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-06 14:47:14.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b143a6e8558bf8ca1208cddcf5bfbfc44ec01834",
+        "author": {
+          "account_id": 1881,
+          "name": "Karen Joseph",
+          "display_name": null,
+          "email": "keren.joseph@amdocs.com",
+          "username": "kerenj"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-06 14:48:33.000000000",
+        "message": "Topic set to soOneNS",
+        "patchset_number": 1
+      },
+      {
+        "id": "6dc02718db116eb24c4f2c07cfbb370d3a5d9ad3",
+        "author": {
+          "account_id": 2903,
+          "name": "Vaibhav Chopra",
+          "display_name": null,
+          "email": "vaibhav.chopra@amdocs.com",
+          "username": "vaibhav_16dec"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-07 14:51:09.000000000",
+        "message": "Patch Set 1:\n\nLooks Okay to me.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2795988a3e9ebb4a4706460ea020352c5ebe5a37",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-07 19:11:19.000000000",
+        "message": "Patch Set 1: Code-Review-1 Verified-1\n\nI did something similar myself but with a few differences.  I tested out this solution and found that it works for 1 instance but not for multiple...\nhelm install so -n instance1\n\nhelm install so -n instance2 --set global.nodePortPrefix=303\nError: release instance2 failed: persistentvolumes \"so-mariadb\" already exists\n\nhelm list\nNAME     \tREVISION\tUPDATED                 \tSTATUS  \tCHART   \tNAMESPACE\ninstance1\t1       \tWed Mar  7 19:05:53 2018\tDEPLOYED\tso-2.0.0\tdefault\ninstance2\t1       \tWed Mar  7 19:07:00 2018\tFAILED  \tso-2.0.0\tdefault\n\nget pv --show-all\nNAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                  STORAGECLASS   REASON    AGE\nso-mariadb   2Gi        RWX            Retain           Bound     instance1/so-mariadb                            10s\n\n\n\nThe strange part is that you can delete the failed instance, create it again and it will come up but it will steal the volume mount from instance1!\n\nkubectl get pvc --show-all --all-namespaces\nNAMESPACE   NAME         STATUS    VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   AGE\ninstance1   so-mariadb   Lost      so-mariadb   0                                        4m\ninstance2   so-mariadb   Bound     so-mariadb   2Gi        RWX                           2m",
+        "patchset_number": 1
+      },
+      {
+        "id": "3b9b6a1c237ac2d7fc734f9c5a067aef22cbcf3d",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-07 20:34:46.000000000",
+        "message": "Patch Set 1: Code-Review+2 Verified+1\n\nI've back tracked on my thinking here!  This works for a single instance.  Lets merge it in and I have raised another issue to fix multiple instances: OOM-786",
+        "patchset_number": 1
+      },
+      {
+        "id": "36e5dd6a760ab4200ccb6116debfa70d579de6af",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-03-07 20:35:02.000000000",
+        "message": "Change has been successfully merged by Mandeep Khinda",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

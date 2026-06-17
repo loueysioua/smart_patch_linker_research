@@ -1,0 +1,161 @@
+{
+  "id": "sdc%2Fsdc-workflow-designer~master~Ia57e7b3c7208df962fcc7305822a055984aafe0b",
+  "change_id": "Ia57e7b3c7208df962fcc7305822a055984aafe0b",
+  "_number": 60901,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_5ba01b43",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/SpringBootWebApplication.java",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "I'd recommend to declare the bean in a configuration file, where you can also inject the headers as constructor arguments.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 11:53:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_1b8aa3bf",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/SpringBootWebApplication.java",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "You could also inject configuration using Spring Boot configuration capabilities. E.g.\n\n@Value(\"${onap.logging.requestIdHeaders}\")\nprivate String[] requestIdHeaders;\n\n@Value(\"${onap.logging.partnerNameHeaders}\")\nprivate String[] partnerNameHeaders;\n\nand then\n\nreturn new LoggingInterceptor(new HttpHeader(partnerNameHeaders), new HttpHeader(requestIdHeaders));",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 11:59:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_fef79557",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/server/config/WorkflowBEConfig.java",
+      "patchset_number": 2,
+      "line": 11,
+      "message": "Why do you need two separate classes for configuration? This one and ApplicationConfigurer?",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_3efe6d39",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/server/config/WorkflowBEConfig.java",
+      "patchset_number": 2,
+      "line": 12,
+      "message": "Please rename to WorkflowConfig.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_1e8a91bf",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/server/config/WorkflowBEConfig.java",
+      "patchset_number": 2,
+      "line": 13,
+      "message": "What's wrong with much simpler @Value(\"${requestIdHeader}\") ? Doesn't it work? Also, I would rename this config parameter to clarify what is't used for.\n\nhttps://stackoverflow.com/questions/6212898/spring-properties-file-get-element-as-an-array",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_be991d21",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/server/config/WorkflowBEConfig.java",
+      "patchset_number": 2,
+      "line": 15,
+      "message": "Please add an empty line between the two fields - it will be more readable.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_de93b9f8",
+      "file_path": "workflow-designer-be/src/main/resources/application-dev.properties",
+      "patchset_number": 2,
+      "line": 32,
+      "message": "I don't see any value in parameterizing these properties. They will unlikely to change between environments, but probably between releases (Workflow doesn't decide what values to use, it's a cross-component, ONAP-wide decision).\n\nrequestIdHeader=X-ECOMP-RequestID,X-ONAP-RequestID\npartnerNameHeader=USER_ID",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_9ebd416b",
+      "file_path": "workflow-designer-be/src/main/resources/application.properties",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "requestIdHeader=X-ECOMP-RequestID,X-ONAP-RequestID\npartnerNameHeader=USER_ID\n\nThis is how they are defined in SDC Onboarding. I don't see a point in doing it differently. Let's keep it simple.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-08-16 15:13:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_f506d01f",
+      "file_path": "workflow-designer-be/src/main/java/org/onap/sdc/workflow/server/config/WorkflowBEConfig.java",
+      "patchset_number": 2,
+      "line": 11,
+      "message": "Actually I thought in a way we should have 2 separate file one for initializing beans and other for configuring all kind of Spring framework capabilities like for now we are using interceptor in future we might use other as well like request response formatter.",
+      "author": {
+        "account_id": 1879,
+        "name": "Siddharth Singh",
+        "display_name": null,
+        "email": "siddharth.singh4@amdocs.com",
+        "username": "siddharth0905"
+      },
+      "updated": "2018-08-17 12:07:33.000000000",
+      "in_reply_to": "1a76adc5_fef79557",
+      "unresolved": false
+    }
+  ]
+}

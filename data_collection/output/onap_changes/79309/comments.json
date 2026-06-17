@@ -1,0 +1,331 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I97fdd72324495b4c838e44c306cbcacac6b11bc1",
+  "change_id": "I97fdd72324495b4c838e44c306cbcacac6b11bc1",
+  "_number": 79309,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "fd749aa8_90b7df0f",
+      "file_path": "sources/hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/model/routing.kt",
+      "patchset_number": 6,
+      "line": 70,
+      "message": "This builder methods can be implemented in a more \"kotlinish\" way:\n    fun fromDomain(domain: String): RouteBuilder = apply {\n        this.domain = domain\n    }",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d6167db5_37d23312",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/ConfigFactory.kt",
+      "patchset_number": 6,
+      "line": 36,
+      "message": "Change this field name to gson and apply \"create\" method at the end of building chain, instead of calling \"create\" on every \"loadConfig\" call",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b3091a52_2be908d5",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/PartialConfiguration.kt",
+      "patchset_number": 6,
+      "line": 43,
+      "message": "These names can be misleading. Use PartialCbsConfig or something similar, to indicate that its config class, not actual Cbs or Kafka or w/e",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e37817da_238655c4",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/AddressAdapter.kt",
+      "patchset_number": 6,
+      "line": 33,
+      "message": "This should be defined as \"const\" inside companion object. I'm not sure though if we should use default port in this case at all. It can bring confusion at runtime. I would opt for just failing if the port is not provided.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0ce49f5c_31b78a95",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/AddressAdapter.kt",
+      "patchset_number": 6,
+      "line": 38,
+      "message": "This ifelse statement can be simplified eg like this:\n\noverride fun deserialize(\n            json: JsonElement?,\n            typeOfT: Type?,\n            context: JsonDeserializationContext?): InetSocketAddress =\n\n            json?.let {\n                val address = it.asString\n                val parts = address.split(\":\")\n                when {\n                    parts.size == 2 -> InetSocketAddress(parts[0], parts[1].toInt())\n                    parts.size == 1 -> InetSocketAddress(parts[0], defaultPort)\n                    else -> throw InvalidAddressException(\"Cannot parse '$address' to address\")\n                }\n            } ?: throw InvalidAddressException(\"Missing address\")\n\nAlso \"when\" statement is probably redundant - look at the comment about default port",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c9a7abac_b60d5a0b",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/SecurityKeysAdapter.kt",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "You can skip local variable declaration",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:02:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c2a2692c_c217bfe9",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/SecurityKeysAdapter.kt",
+      "patchset_number": 6,
+      "line": 41,
+      "message": "You can create extension function for JsonElement that would return key value as string, since its called 3 times in this method",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6c5699bd_955f19c6",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "Use \"val\" everywhere",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "443efdbe_e5aa9eb5",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 6,
+      "line": 72,
+      "message": "You can change this assertion as follows, if you find it for readable:\n\nassertThat(addresses)\n                .isEqualTo(arrayOf(\n                        InetSocketAddress(\"192.168.255.1\", 5005),\n                        InetSocketAddress(\"192.168.255.26\", 5006)\n                ))",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ab4938b7_5d85b07c",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 6,
+      "line": 95,
+      "message": "Rename to \"routing\"",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a01e7656_ea443897",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "You can use \"run\" extension function to get rid of some duplication:\n\n routing.run {\n            assertThat(routes.size).isEqualTo(1)\n            assertThat(routes[0].domain).isEqualTo(\"perf3gpp\")\n            assertThat(routes[0].targetTopic).isEqualTo(\"HV_VES_PERF3GPP\")\n        }\n\nConsider using this method in all other assertions",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d19462e2_415f3339",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 6,
+      "line": 102,
+      "message": "Rename this \"result\" variable to \"config\" in all places. I guess it will be more readable",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 15:28:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b210699e_df98d37f",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 7,
+      "line": 38,
+      "message": "One more thing. We established with Piotr that we will be using new spek test specification style in new tests basing on \"describe\" and \"it\": https://spekframework.org/specification/",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 17:44:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "dcd188f4_dad32c19",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ConfigFactoryTest.kt",
+      "patchset_number": 7,
+      "line": 108,
+      "message": "Using run method on config object can create some confusion on calls like \"val server = server.orNull() as PartialConfiguration.PartialServerConfig\" i meant to use it on partial objects \"security\", \"cbs\" etc like u did on \"server\" here and \"routing\" in previous method. Sorry for confusion.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-03-07 17:44:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "49ad2c2f_699d2b24",
+      "file_path": "sources/hv-collector-main/pom.xml",
+      "patchset_number": 9,
+      "line": 139,
+      "message": "version should be defined in top-level pom in dependencyManagement section.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-11 09:29:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a637f800_2a9af16d",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/PartialConfiguration.kt",
+      "patchset_number": 9,
+      "line": 38,
+      "message": "Lets put theses classes on same level so we avoid calls to them as `PartialConfig.PartialSomething`. \n\nOr if we want to keep them nested, then we could omit \"Partial\" prefix (it's implicit) - the calls would then\nbe `PartialConfig.Something`",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-11 09:29:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d72e6f4a_2cf5487a",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/SecurityKeysAdapter.kt",
+      "patchset_number": 9,
+      "line": 37,
+      "message": "Check in GSON JavaDoc if these parameters can be null. If not then remove '?' from method declaration + remove coresponding '?.' usages. Applies to all *Adapter's.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-03-11 09:42:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "df64067a_3668d5e4",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/AddressAdapter.kt",
+      "patchset_number": 9,
+      "line": 39,
+      "message": "I believe Java's URL/URI class could be used instead (which would later provide nice `.host` and `.port` methods)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-11 09:46:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "424ab74a_c6ed5463",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/config/adapters/AddressAdapter.kt",
+      "patchset_number": 9,
+      "line": 39,
+      "message": "URI/URL requires protocol at the beginning. I'll just improve that to better support IPv6",
+      "author": {
+        "account_id": 3175,
+        "name": "Pawel Biniek",
+        "display_name": null,
+        "email": "pawel.biniek@nokia.com",
+        "username": "pbiniek"
+      },
+      "updated": "2019-03-11 11:43:19.000000000",
+      "in_reply_to": "df64067a_3668d5e4",
+      "unresolved": false
+    }
+  ]
+}

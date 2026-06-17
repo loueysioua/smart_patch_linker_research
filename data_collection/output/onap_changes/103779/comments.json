@@ -1,0 +1,331 @@
+{
+  "id": "oom~master~Icbcf075dd2dd8588aa9f14d23974a122bde38ae7",
+  "change_id": "Icbcf075dd2dd8588aa9f14d23974a122bde38ae7",
+  "_number": 103779,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ccf82390_ccaf6044",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "what's the goal of this line and why cannot you specify bash in line 48?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-26 19:32:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "438650b1_6963b44c",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "well that's because it's how it's done on aafTemplates and on other places ^_^\nNot sure exactly how to do it differently",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-26 22:03:21.000000000",
+      "in_reply_to": "ccf82390_ccaf6044",
+      "unresolved": true
+    },
+    {
+      "id": "7c1c35c8_15acf11c",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "why not just use bash instead of sh as a command?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-26 22:21:48.000000000",
+      "in_reply_to": "438650b1_6963b44c",
+      "unresolved": true
+    },
+    {
+      "id": "b980a17c_253d1779",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-26 22:24:07.000000000",
+      "in_reply_to": "7c1c35c8_15acf11c",
+      "unresolved": false
+    },
+    {
+      "id": "3f6a22bb_538fdd6f",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "actually I think sh is sufficient so I remove the bash shebang and let's see",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-27 09:02:25.000000000",
+      "in_reply_to": "b980a17c_253d1779",
+      "unresolved": false
+    },
+    {
+      "id": "7169c9c1_2c1b79b0",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 59,
+      "message": "My personal opinion is that it's a terrible practice as the cmd line is world readable but let's don't bother too much with it now as I don't have a ready alternative solution yet\n\nWe'll fix this globally in G (hopefully by removing AAF;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-27 11:06:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b642f2e8_1186f3a1",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "@Fiachra in this review https://gerrit.onap.org/r/c/oom/+/104168 made me think about one thing:\n\nif there's a CrashLoopBackoff and we restart the main container, as mycreds.prop is empty, we won't be able to restart it no?\n\n@krzysztof, @christophe, any thoughts?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-01 10:01:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e36c2b1c_9aee9234",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "mmmh yes I see what you mean in that case, there is a risk.\nMaybe that cat /dev/null is too much; it would have been be nice to decode passwords only when needed, or maybe have an elegant way to ask k8s to rerun the init containers (or some of them) when main container(s) fail. \nIn fact, I've found that others are asking for this : https://github.com/kubernetes/kubernetes/issues/52345",
+      "author": {
+        "account_id": 5,
+        "name": "Christophe Closset",
+        "display_name": null,
+        "email": "christophe.closset@intl.att.com",
+        "username": "ChrisC"
+      },
+      "updated": "2020-04-01 13:33:13.000000000",
+      "in_reply_to": "b642f2e8_1186f3a1",
+      "unresolved": true
+    },
+    {
+      "id": "aca4cda0_b630d6a8",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "yes but it seems to be stale :-/\nSo we should remove the rm part (especially if we do it in memory and not on a PV)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-01 15:12:46.000000000",
+      "in_reply_to": "e36c2b1c_9aee9234",
+      "unresolved": true
+    },
+    {
+      "id": "bae08d8b_db49a06b",
+      "file_path": "kubernetes/nbi/templates/configmap-aaf-add-config.yaml",
+      "patchset_number": 21,
+      "line": 21,
+      "message": "I think it's more common to \"eat\" whitespaces at the beginning, not in the end",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-01 21:44:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6ef2ac14_61c2cbf3",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "+1 for Sylvain suggestion",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-01 21:44:35.000000000",
+      "in_reply_to": "aca4cda0_b630d6a8",
+      "unresolved": true
+    },
+    {
+      "id": "dbe41f9a_3c3c34ce",
+      "file_path": "kubernetes/nbi/templates/configmap-aaf-add-config.yaml",
+      "patchset_number": 21,
+      "line": 21,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:16:07.000000000",
+      "in_reply_to": "bae08d8b_db49a06b",
+      "unresolved": false
+    },
+    {
+      "id": "d0a93391_5ee6b54f",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:16:34.000000000",
+      "in_reply_to": "6ef2ac14_61c2cbf3",
+      "unresolved": false
+    },
+    {
+      "id": "7329bb3f_5de8f6f0",
+      "file_path": "kubernetes/nbi/templates/configmap-aaf-add-config.yaml",
+      "patchset_number": 21,
+      "line": 21,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:37:51.000000000",
+      "in_reply_to": "dbe41f9a_3c3c34ce",
+      "unresolved": false
+    },
+    {
+      "id": "dac4b537_6d8ced47",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:37:51.000000000",
+      "in_reply_to": "3f6a22bb_538fdd6f",
+      "unresolved": false
+    },
+    {
+      "id": "bf6078bd_cfa4ce34",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 59,
+      "message": "Ack",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:37:51.000000000",
+      "in_reply_to": "7169c9c1_2c1b79b0",
+      "unresolved": false
+    },
+    {
+      "id": "0a127a78_6eba29ed",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 21,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:37:51.000000000",
+      "in_reply_to": "d0a93391_5ee6b54f",
+      "unresolved": false
+    },
+    {
+      "id": "d84e3ace_3cf7fea3",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 28,
+      "line": 119,
+      "message": "why we switch back dmaap from https to http?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-06 09:34:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4431c884_f1982d15",
+      "file_path": "kubernetes/nbi/templates/deployment.yaml",
+      "patchset_number": 28,
+      "line": 119,
+      "message": "cause it was not working (maybe because of truststore) and it's not mandatory to have encrypted communication within the cluster in Frankfurt.\n\nWe'll retry when this one is merged.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-06 09:43:15.000000000",
+      "in_reply_to": "d84e3ace_3cf7fea3",
+      "unresolved": true
+    }
+  ]
+}

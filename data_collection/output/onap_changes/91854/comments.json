@@ -1,0 +1,76 @@
+{
+  "id": "sdc~master~I72218a41ec6a0fdf0b1f008e895ffe51cd23d1ca",
+  "change_id": "I72218a41ec6a0fdf0b1f008e895ffe51cd23d1ca",
+  "_number": 91854,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4b96ad00_a397bc28",
+      "file_path": "asdctool/src/test/java/org/openecomp/sdc/asdctool/impl/validator/utils/ReportManagerHelper.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Using of pure reflection is even worse than using PowerMock itself. Generally most problems of powermock refers to the fact that powermock is based on the dedicated class-loaders and bytecode manipulations to enable mocking of static content. Please consider bigger refactor to avoid use of reflection in any kind.",
+      "author": {
+        "account_id": 3663,
+        "name": "Tomasz Golabek",
+        "display_name": null,
+        "email": "tomasz.golabek@nokia.com",
+        "username": "golabek"
+      },
+      "updated": "2019-07-23 10:50:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "92921275_fc610575",
+      "file_path": "asdctool/src/test/java/org/openecomp/sdc/asdctool/impl/validator/utils/ReportManagerHelper.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Yes, you have point here, using pure reflection can cause many errors in the production code.\nOne is that you can't capture errors in the compilation time, and the code is very sensitive to modification. But in this case reflection is used in the tests suits, so this modification is easier to track and based on working code.\n\nThe main goal of this commit is getting rid of powermock and use only one mocking framework (mockito) - topic start by Ofir in SDC weekly. So I investigated this issue and I see only three-way of clean the static content in the tests suits (to achieve that the tests did not affect to each other):\n1. Using powermock annotation - another framework to use (current solution).\n2. Using reflection - mention errors (this commit).\n3. Have the method in the tested class to clean these variables (future refactoring) - but this assumes changes in production code only for tests and this is in my opinion not a good idea.\n\nBut the task SDC-2473 assumes investigation the options of removes powermock, and this is my proposition.\n\nWhat do you think?",
+      "author": {
+        "account_id": 5335,
+        "name": "Krystian  Kedron",
+        "display_name": null,
+        "email": "k.kedron@partner.samsung.com",
+        "username": "krystian"
+      },
+      "updated": "2019-07-23 11:52:28.000000000",
+      "in_reply_to": "4b96ad00_a397bc28",
+      "unresolved": false
+    },
+    {
+      "id": "35e746f4_0ff4cfc6",
+      "file_path": "asdctool/src/test/java/org/openecomp/sdc/asdctool/impl/validator/utils/ReportManagerHelper.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Well your point of view seems to be reasonable but I still dont want to agree for such solution. I understand that You try to do small-step here but IMO it looks like we are trying to sidestep of changing bad architecture. I understand that You dont want to modify existing approach but it could be the right and only time to fix these problems (I suppose that fixing bad-designed ValidationConfigManager and ReportManager will be improvement not only for unit tests but also for future refactoring).",
+      "author": {
+        "account_id": 3663,
+        "name": "Tomasz Golabek",
+        "display_name": null,
+        "email": "tomasz.golabek@nokia.com",
+        "username": "golabek"
+      },
+      "updated": "2019-07-23 13:11:43.000000000",
+      "in_reply_to": "92921275_fc610575",
+      "unresolved": false
+    },
+    {
+      "id": "d666c867_3065f8c0",
+      "file_path": "asdctool/src/test/java/org/openecomp/sdc/asdctool/impl/validator/utils/ReportManagerHelper.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "Ok, so we should approach to it using option 3 (was I described) and do the refactor ValidationConfigManager and ReportManager.\nI created the SDC-2499 jira task to handle this issue.\nThis change was abandoned and powermockito should be removed solving this task.",
+      "author": {
+        "account_id": 5335,
+        "name": "Krystian  Kedron",
+        "display_name": null,
+        "email": "k.kedron@partner.samsung.com",
+        "username": "krystian"
+      },
+      "updated": "2019-08-07 11:05:59.000000000",
+      "in_reply_to": "35e746f4_0ff4cfc6",
+      "unresolved": false
+    }
+  ]
+}

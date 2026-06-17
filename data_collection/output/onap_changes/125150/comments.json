@@ -1,0 +1,280 @@
+{
+  "id": "oom~master~I7039c4ab53b80a96f05bcf3fa8ef30224f15a96b",
+  "change_id": "I7039c4ab53b80a96f05bcf3fa8ef30224f15a96b",
+  "_number": 125150,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "49485eb5_6f0ab3c3",
+      "file_path": "kubernetes/sdnc/resources/config/conf/devicemanager.properties",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "I think we have to replace also this with env vars like e.g.\n${SDNR_DCAE_USERNAME}:${SDNR_DCAE_PASSWORD}",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-20 11:14:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3f0760e0_d4ccddb9",
+      "file_path": "kubernetes/sdnc/resources/config/conf/devicemanager.properties",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "These configs are the values of the file deployed by the current SDNC installation. Also it seems that this feature is currently disabled by default. \n\nIf I change these values to be configurable secrets, I'll probably have to add some flags to enable/disable this feature as well (Could be interesting for pm/dcae/aai as well ?)",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-10-20 12:41:02.000000000",
+      "in_reply_to": "49485eb5_6f0ab3c3",
+      "unresolved": true
+    },
+    {
+      "id": "2a39d580_0b5af041",
+      "file_path": "kubernetes/sdnc/resources/config/conf/devicemanager.properties",
+      "patchset_number": 4,
+      "line": 35,
+      "message": "This section should be part of sdnc-image and not overwritten by helm deployment.\n--> Part of CCSDK-3503\nall required variables should be passed by env variables.\nVES_COLLECTOR_ENABLED=${SDNR_VES_COLLECTOR_ENABLED}\nVES_COLLECTOR_TLS_ENABLED=${SDNR_VES_COLLECTOR_TLS_ENABLED}\nVES_COLLECTOR_TRUST_ALL_CERTS=${SDNR_VES_COLLECTOR_TRUST_ALL_CERTS}\nVES_COLLECTOR_USERNAME=${SDNR_VES_COLLECTOR_USERNAME}\nVES_COLLECTOR_PASSWORD=${SDNR_VES_COLLECTOR_PASSWORD}\nVES_COLLECTOR_IP=${SDNR_VES_COLLECTOR_IP}\nVES_COLLECTOR_PORT=${SDNR_VES_COLLECTOR_PORT}\nVES_COLLECTOR_VERSION=${SDNR_VES_COLLECTOR_VERSION} # default v7\nREPORTING_ENTITY_NAME=${SDNR_VES_COLLECTOR_REPORTING_ENTITY_NAME} # default ONAP SDN-R\nEVENTLOG_MSG_DETAIL=${SDNR_VES_COLLECTOR_EVENTLOG_MSG_DETAIL} # default SHORT",
+      "author": {
+        "account_id": 6355,
+        "name": "Alexander Dehn",
+        "display_name": null,
+        "email": "alexander.dehn@highstreet-technologies.com",
+        "username": "demskeq8"
+      },
+      "updated": "2021-10-25 08:29:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ca688a7e_0299d5e2",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 4,
+      "line": 372,
+      "message": "please remove mounted file.\nCCSDK-3503 will provide devicemanager.properties with mapped env variables, see comment to devicemanager.properties",
+      "author": {
+        "account_id": 6355,
+        "name": "Alexander Dehn",
+        "display_name": null,
+        "email": "alexander.dehn@highstreet-technologies.com",
+        "username": "demskeq8"
+      },
+      "updated": "2021-10-25 08:29:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "47d6580d_f6ebdd7f",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 507,
+      "message": "Since this is a functionality of SDNR and is not working independently of sdnr, please move this section to \nconfig.sdnr.vesCollector....",
+      "author": {
+        "account_id": 6355,
+        "name": "Alexander Dehn",
+        "display_name": null,
+        "email": "alexander.dehn@highstreet-technologies.com",
+        "username": "demskeq8"
+      },
+      "updated": "2021-10-25 08:29:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0112e2bf_c5d3d0bc",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 511,
+      "message": "per default it should be false",
+      "author": {
+        "account_id": 6355,
+        "name": "Alexander Dehn",
+        "display_name": null,
+        "email": "alexander.dehn@highstreet-technologies.com",
+        "username": "demskeq8"
+      },
+      "updated": "2021-10-25 08:29:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dc7ba4a3_4c9f97ae",
+      "file_path": "kubernetes/sdnc/resources/config/conf/devicemanager.properties",
+      "patchset_number": 4,
+      "line": 35,
+      "message": "OK, I have seen your changes on ccsdk/features repo,this could be useful for docker-compose ok.\nSo if you want me to remove the K8S resource file, we need to update the devicemanager.properties bundled by default in the SDNC image, any idea where to change it  (which repo ?)",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-10-25 11:49:10.000000000",
+      "in_reply_to": "2a39d580_0b5af041",
+      "unresolved": true
+    },
+    {
+      "id": "9bf70ca8_82ef1d10",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 507,
+      "message": "Sure, makes sense",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-10-25 11:49:10.000000000",
+      "in_reply_to": "47d6580d_f6ebdd7f",
+      "unresolved": true
+    },
+    {
+      "id": "38c4fa3f_ad9cc23f",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 511,
+      "message": "yep indeed, sorry",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-10-25 11:49:10.000000000",
+      "in_reply_to": "0112e2bf_c5d3d0bc",
+      "unresolved": true
+    },
+    {
+      "id": "f4ed4b4c_857c7e79",
+      "file_path": "kubernetes/sdnc/resources/config/conf/devicemanager.properties",
+      "patchset_number": 4,
+      "line": 35,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-11-16 08:22:37.000000000",
+      "in_reply_to": "dc7ba4a3_4c9f97ae",
+      "unresolved": false
+    },
+    {
+      "id": "5e8d5017_53f22101",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 4,
+      "line": 372,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-11-16 08:22:37.000000000",
+      "in_reply_to": "ca688a7e_0299d5e2",
+      "unresolved": false
+    },
+    {
+      "id": "43957fb8_c9e34199",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 507,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-11-16 08:22:37.000000000",
+      "in_reply_to": "9bf70ca8_82ef1d10",
+      "unresolved": false
+    },
+    {
+      "id": "0e01b2fc_e5a463c9",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 4,
+      "line": 511,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-11-16 08:22:37.000000000",
+      "in_reply_to": "38c4fa3f_ad9cc23f",
+      "unresolved": false
+    },
+    {
+      "id": "dc6e24da_ac437690",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 8,
+      "line": 365,
+      "message": "Are you a client or a server in the ctx or this password? I mean will someone else use this password to connect to you or you use this pwd to connect to some other service?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-11-17 13:45:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1b148b8d_68f5b5cf",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 8,
+      "line": 365,
+      "message": "Client of the ves collector.\nWe have a common way to access these now may be ?",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-11-18 08:10:58.000000000",
+      "in_reply_to": "dc6e24da_ac437690",
+      "unresolved": true
+    },
+    {
+      "id": "9c565ce1_3505fdb0",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 8,
+      "line": 365,
+      "message": "As it's between 2 different components putting this in values is fine for now as those will not be needed when we have service mesh in place. I just wanted to be sure that I understand the context here properly. Thanks for the clarification!",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-11-18 08:49:45.000000000",
+      "in_reply_to": "1b148b8d_68f5b5cf",
+      "unresolved": true
+    }
+  ]
+}

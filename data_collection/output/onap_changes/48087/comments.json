@@ -1,0 +1,25 @@
+{
+  "id": "oom~master~I6904fe7c4dd894725b7febcceab07a80e348a69e",
+  "change_id": "I6904fe7c4dd894725b7febcceab07a80e348a69e",
+  "_number": 48087,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_ff86f2b9",
+      "file_path": "kubernetes/portal/charts/portal-mariadb/values.yaml",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "I think increasing readiness delay is a mistake.\nThe pod will not be in ready state for 7.5 minutes. dependent pods will also wait.\nOnly liveness pod needs to be increased. Readiness pod needs to be 10 sec.\nFrom https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/:\nThe kubelet uses liveness probes to know when to restart a Container. For example, liveness probes could catch a deadlock, where an application is running, but unable to make progress. Restarting a Container in such a state can help to make the application more available despite bugs.\n\nThe kubelet uses readiness probes to know when a Container is ready to start accepting traffic. A Pod is considered ready when all of its Containers are ready. One use of this signal is to control which Pods are used as backends for Services. When a Pod is not ready, it is removed from Service load balancers.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-05-23 12:13:48.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

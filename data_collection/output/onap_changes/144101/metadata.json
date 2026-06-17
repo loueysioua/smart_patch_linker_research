@@ -1,0 +1,916 @@
+{
+  "id": "so~spring-boot-3-0~I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5",
+  "change_id": "I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5",
+  "_number": 144101,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2026-04-23 08:12:58.000000000",
+    "updated": "2026-04-24 11:36:12.000000000",
+    "submitted": "2026-04-24 11:10:08.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    },
+    "submitter": {
+      "account_id": 2701,
+      "name": "Lukasz Rajewski",
+      "display_name": null,
+      "email": "lukasz.rajewski@t-mobile.pl",
+      "username": "rajewluk"
+    }
+  },
+  "subject": "Enable Java 17 build: POM, tooling, test fixes",
+  "commit_message": "Enable Java 17 build: POM, tooling, test fixes\n\nFoundation commit on the spring-boot-3-0 branch that\nenables the SO reactor to build and test cleanly under\nJava 17 (Temurin 17.0.18), still on Spring Boot 2.7.18.\nFramework bumps (Spring Boot 3, Spring Cloud 2022.0,\nCamunda 7.20, CXF 4, Hibernate 6) are NOT in this CR —\nthey land in subsequent phase CRs alongside per-module\nJakarta migration work.\n\nValidated locally by `mvn clean install -Dformat.skipValidate=true`\n(BUILD SUCCESS across all 47 modules; all tests pass).\n\n- java.version: 11 -> 17\n- maven-compiler-plugin: 3.8.0 -> 3.11.0\n- source/target switched to ${java.version}; <release>\n  flag omitted because groovy-eclipse-batch:3.0.8-01 (the\n  latest available under org.codehaus.groovy) rejects\n  \"release version 17\" but accepts source/target at 17\n- maven-surefire-plugin: 3.0.0-M9 -> 3.1.2; adds argLine\n  with --add-opens flags required by tests running on\n  Java 17 (ModelMapper, JAXB runtime, Mockito)\n- jacoco-maven-plugin: 0.8.5 (oparent default) -> 0.8.12\n  (required for Java 17 bytecode class file major 61)\n- maven-plugin-plugin pinned at 3.11.0 in pluginManagement\n  (oparent default 3.6.0 fails on Java 17 bytecode)\n- New `openrewrite` opt-in profile wiring\n  rewrite-maven-plugin:5.31.0. Recipe artifacts are NOT\n  preloaded; phase CRs that run recipes pass GAVs via\n  -Drewrite.recipeArtifactCoordinates at invocation time.\n\n- project-configs/code-tools/onap-eclipse-format.xml:\n  Eclipse JDT compiler compliance/source/targetPlatform\n  bumped from 1.8 to 17\n- graph-inventory/fluent-builder-maven-plugin/pom.xml:\n  maven-plugin-plugin 3.6.0 -> 3.11.0 (explicit version\n  overrides oparent)\n- common/utils/pom.xml: jaxb-core 2.3.0 -> 2.3.0.1\n  (latest 2.3.x; no 2.3.9 exists for jaxb-core) and\n  jaxb-impl 2.3.0 -> 2.3.9 (2.3.0 throws NPE on\n  Injector.defineClass under Java 17)\n- common/common/pom.xml: modelmapper 2.3.2 -> 3.2.6\n  (2.3.2 fails to create ByteBuddy subclass proxies\n  under Java 17)\n\n- JsonUtils.jsonElementExist (MSOCoreBPMN): explicit null\n  handling to preserve contract. Under Java 11 a chained\n  NPE accidentally produced true; Java 14+ helpful NPEs\n  (JEP 358) broke that chain.\n- ExceptionBuilder (MSOCommonBPMN): stack-trace walker now\n  also skips jdk.internal.reflect, sun.reflect, Method,\n  and org.mockito frames. Previously these were\n  transparent under Java 11, now visible under Java 17\n  stricter reflection.\n- ExceptionBuilderUnitTest: updated two expected-message\n  strings to match the corrected caller identification\n  (was relying on accidental proxy class naming of\n  Mockito 4.x subclass spies).\n- MSOCommonBPMN: test-resource extension\n  mockito-extensions/org.mockito.plugins.MockMaker =\n  mock-maker-inline. BBInputSetupTest's\n  Mockito.spy(new ArrayList<>()) fails under the default\n  subclass-based maker on Java 17 (constructor bypass\n  leaves elementData null); inline maker fixes it.\n- NetworkAdapterObjectMapper: anonymous PropertyMap inner\n  class refactored to a named static nested class\n  (SubnetPropertyMap). Purely a readability improvement;\n  the anonymous form also works with modelmapper 3.2.6.\n- NetworkAdapterObjectMapperTest: Mockito.spy(Class) ->\n  Mockito.spy(new ...) for consistency (no functional\n  change after modelmapper 3.2.6).\n\n- Spring Boot 2.7.18 -> 3.0.x (requires Jakarta\n  namespace migration across ~2000 javax imports and\n  framework migration; not feasible as a root-POM\n  only change)\n- Spring Cloud, Camunda, Apache CXF, Hibernate bumps\n- Jakarta namespace sweep of module source\n- APPC client removal (SO-4310; appc.client.version\n  property retained here so module POMs keep resolving\n  until that CR lands)\n- Module-level Spring Security 6, Hibernate 6, CXF 4\n  migration (Phases 2-6)\n\nPart of: SO-4307\n\nIssue-ID: SO-4309\nChange-Id: I7a29fff06fa0d23fc9c6a4a532ece4c1602f3be5\nSigned-off-by: Fiete Ostkamp <fiete.ostkamp@telekom.de>\n",
+  "change_log": {
+    "entry_count": 63,
+    "entries": [
+      {
+        "id": "f1ae4ac303e9da230e494a0f69073d0ded7640cf",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:12:58.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5afa6a445f1f041e9dd7f3d3293ef2baaa546a11",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:13:10.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24824478543",
+        "patchset_number": 1
+      },
+      {
+        "id": "8fa942b49c53970848fc4bb83ccd270b52cb9c1c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:13:11.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24824479781",
+        "patchset_number": 1
+      },
+      {
+        "id": "2e159d5a72acf34db6caeb7d063799c09c2efaa2",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:13:39.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24824479781",
+        "patchset_number": 1
+      },
+      {
+        "id": "e7cd881be43419d7e9ddfe00a6bc248c865a0e5d",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:14:21.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24824478543",
+        "patchset_number": 1
+      },
+      {
+        "id": "280891ff55db5ae08d1c728c5e622524936bb8d6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 08:15:28.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/1/",
+        "patchset_number": 1
+      },
+      {
+        "id": "75a5a375942e862914717e7ef0b7768e0339b5e5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 08:17:49.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/1/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/1/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/1",
+        "patchset_number": 1
+      },
+      {
+        "id": "eb55be3d8c9b168d158e4a8e871bccdf40e71c0b",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:26:17.000000000",
+        "message": "Uploaded patch set 2.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 2
+      },
+      {
+        "id": "cd34dd40499f6bc251914c8f93d2d0da9bb55b5b",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:26:27.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24825035857",
+        "patchset_number": 2
+      },
+      {
+        "id": "d99f793d1ec174cb56ef63d2ad815b585ab76a8b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:26:30.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24825036982",
+        "patchset_number": 2
+      },
+      {
+        "id": "ae8657a9f7a53358e7bf90252389c3bedac6f955",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:27:02.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24825036982",
+        "patchset_number": 2
+      },
+      {
+        "id": "0ebfa1de1ee5de833dd51260489c70a69de18fe3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 08:27:27.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/2/",
+        "patchset_number": 2
+      },
+      {
+        "id": "398115d0b83273fc82075f80923e78ea176da188",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 08:27:43.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24825035857",
+        "patchset_number": 2
+      },
+      {
+        "id": "fb2cc76a91daca4bfe56db2b93102e6a76b00f23",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 08:30:20.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/2/ : FAILURE\n\nPatch failed to compile in component utils: Compilation failure ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/2/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/2",
+        "patchset_number": 2
+      },
+      {
+        "id": "ddb64d9789eb8ffcc936c3ae9f4008bf8ccbddfc",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 09:10:14.000000000",
+        "message": "Uploaded patch set 3.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 3
+      },
+      {
+        "id": "e7cee99b2e42ae21ad200d1da943586bc1a6ae37",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 09:10:26.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24826900294",
+        "patchset_number": 3
+      },
+      {
+        "id": "b9c95cab70297639d24c8236a46a22bc5c58bac9",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 09:10:29.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24826901407",
+        "patchset_number": 3
+      },
+      {
+        "id": "cee59418101b625d166d529161da6419ccd54cd2",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 09:10:59.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24826901407",
+        "patchset_number": 3
+      },
+      {
+        "id": "c272f9b52901492f784ffdf4dd177ce1673d133c",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 09:11:38.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24826900294",
+        "patchset_number": 3
+      },
+      {
+        "id": "78b1a759ce159d3a101de44a184fb7b84fc63a3c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 09:11:50.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/3/",
+        "patchset_number": 3
+      },
+      {
+        "id": "d5f4c6d87f279e806407336aa42e98a8c104eb3c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 09:14:08.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/3/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/3/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/3",
+        "patchset_number": 3
+      },
+      {
+        "id": "ee143b8d375be3c31ec444fcbd07d1200782880f",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 12:24:47.000000000",
+        "message": "Uploaded patch set 4.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 4
+      },
+      {
+        "id": "f53969d6096a2eedd4a570bd6e6f88dc88f76e67",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 12:25:00.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24835046576",
+        "patchset_number": 4
+      },
+      {
+        "id": "8ac29652918c3349b061a32b0b71d6a957a11b10",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 12:25:02.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24835047698",
+        "patchset_number": 4
+      },
+      {
+        "id": "d37d9d9f9ffc12fe4d21f7584c55d02b7d8fa5be",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 12:25:32.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24835047698",
+        "patchset_number": 4
+      },
+      {
+        "id": "2fbf6bfe014cbed93c728806860c2e855c2f03b0",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-23 12:26:19.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24835046576",
+        "patchset_number": 4
+      },
+      {
+        "id": "033dbb83bdf87c1dc1026ac1e6afdd9d957a3467",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 12:27:14.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/4/",
+        "patchset_number": 4
+      },
+      {
+        "id": "e23fc15eb33780f477c5a427351db2ac0921cf25",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-23 12:42:43.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/4/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/4/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/4",
+        "patchset_number": 4
+      },
+      {
+        "id": "3f94e8416c4eaf42e754d46327e7f3852eb2361d",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:28:05.000000000",
+        "message": "Uploaded patch set 5.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 5
+      },
+      {
+        "id": "32436edc722c52abf74b48c3903f75007cafd281",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:28:18.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24880017056",
+        "patchset_number": 5
+      },
+      {
+        "id": "f9bd819eaa51a5db08e5dddd6d8fab50ced5859b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:28:18.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24880018147",
+        "patchset_number": 5
+      },
+      {
+        "id": "8d8a8397e1a355882688e617d55177d555bedef2",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:28:48.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24880018147",
+        "patchset_number": 5
+      },
+      {
+        "id": "5e309b71f09d8bd5a1552c1979d6ab09dc1f39d7",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 08:29:57.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24880017056",
+        "patchset_number": 5
+      },
+      {
+        "id": "e1528c2fdd5688dfb921a9f63182058fc512b909",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 08:30:07.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/5/",
+        "patchset_number": 5
+      },
+      {
+        "id": "b35064459b76cb78622e78690d7560e8337905a3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 08:56:32.000000000",
+        "message": "Patch Set 5: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/5/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/5/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/5",
+        "patchset_number": 5
+      },
+      {
+        "id": "1f3cc05fa1afbcd5b04172b9dc096c584f7cd7b3",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:04:24.000000000",
+        "message": "Uploaded patch set 6.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 6
+      },
+      {
+        "id": "8bdda927b431ee5bad7159f2dbc3935528804824",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:04:37.000000000",
+        "message": "Patch Set 6:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24881489871",
+        "patchset_number": 6
+      },
+      {
+        "id": "040302ddc4949d1a7fb468277388e8c2fc7a280b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:04:37.000000000",
+        "message": "Patch Set 6:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24881491023",
+        "patchset_number": 6
+      },
+      {
+        "id": "9500f7b4f74b51f404d9ea83b470310de086985d",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:05:05.000000000",
+        "message": "Patch Set 6: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24881491023",
+        "patchset_number": 6
+      },
+      {
+        "id": "fdfcffba4478de92a749c964c522aecd272e3461",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 09:05:22.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/6/",
+        "patchset_number": 6
+      },
+      {
+        "id": "3aa146025780b6f4a03f35062b7750b97c4bfe9c",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:05:50.000000000",
+        "message": "Patch Set 6: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24881489871",
+        "patchset_number": 6
+      },
+      {
+        "id": "4287a97a74dca021e79e2f10dc382e843be20024",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 09:09:35.000000000",
+        "message": "Patch Set 6: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/6/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/6/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/6",
+        "patchset_number": 6
+      },
+      {
+        "id": "a58b4c249a2c63517a9e088899b14a79d63b5ac0",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:23:21.000000000",
+        "message": "Uploaded patch set 7.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 7
+      },
+      {
+        "id": "3d1cd4b67528c11b5b95febf95098f4ce6bf8e4f",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:23:33.000000000",
+        "message": "Patch Set 7:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24882254540",
+        "patchset_number": 7
+      },
+      {
+        "id": "ee0f1e0d303bdff3b41a94f60b5438b7e8bde70c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:23:35.000000000",
+        "message": "Patch Set 7:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24882255624",
+        "patchset_number": 7
+      },
+      {
+        "id": "d57c16a57533d61ea76222d386b9d92bf919f6b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 09:24:10.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/7/",
+        "patchset_number": 7
+      },
+      {
+        "id": "89fb8da17982365880a77461c57151e5603d5eae",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:24:10.000000000",
+        "message": "Patch Set 7: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24882255624",
+        "patchset_number": 7
+      },
+      {
+        "id": "14e2b5d51d084a9ea98753f4e2cd4c089a7fae45",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:24:55.000000000",
+        "message": "Patch Set 7: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24882254540",
+        "patchset_number": 7
+      },
+      {
+        "id": "3b4226c729796d9c60e21b0a11571b9b91b63266",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 09:40:24.000000000",
+        "message": "Patch Set 7: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/7/ : FAILURE\n\nSyntax error in markdown file ( https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/7/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/7",
+        "patchset_number": 7
+      },
+      {
+        "id": "8a70f026f336b23559bd46a324666742afb63ce5",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:49:01.000000000",
+        "message": "Uploaded patch set 8.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 8
+      },
+      {
+        "id": "db74c406267d81b83ae8418c2a5035ee4ce91246",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:49:13.000000000",
+        "message": "Patch Set 8:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24883299122",
+        "patchset_number": 8
+      },
+      {
+        "id": "816ab689cb5b70194199aba7fe660dc8e62a11b5",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:49:13.000000000",
+        "message": "Patch Set 8:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24883298042",
+        "patchset_number": 8
+      },
+      {
+        "id": "359023d145a06d05e7dd5c79938244a2ab72af33",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:49:43.000000000",
+        "message": "Patch Set 8: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24883299122",
+        "patchset_number": 8
+      },
+      {
+        "id": "3069986025fee0e3c14f06905cca5a437807748e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 09:50:05.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/8/",
+        "patchset_number": 8
+      },
+      {
+        "id": "2db02653e098fbe7252dfca235559f92d6079c90",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 09:50:28.000000000",
+        "message": "Patch Set 8: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24883298042",
+        "patchset_number": 8
+      },
+      {
+        "id": "e5287cc15fe0cc83464404e38ebe0c515f569a43",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 10:12:46.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-verify-java/8/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-verify-java/8",
+        "patchset_number": 8
+      },
+      {
+        "id": "14d3bae32cdac0c37501a570c2556b22a1228bfe",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 11:10:07.000000000",
+        "message": "Patch Set 8: Code-Review+2\n\nCode-Review +2",
+        "patchset_number": 8
+      },
+      {
+        "id": "f4e74902a10ed5ea9cdfdae851bc3539f4b0deff",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 11:10:08.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 8
+      },
+      {
+        "id": "39a197535b0e3181de3654ebe6db49e5ee388fa6",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 11:10:19.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24886457244",
+        "patchset_number": 1
+      },
+      {
+        "id": "4a7355f1a03e6cf7f34963506655834ab843fcaf",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-24 11:11:59.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24886457244",
+        "patchset_number": 1
+      },
+      {
+        "id": "8368ba5e0671a68384baebaeb7f2de2e691149de",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-04-24 11:12:28.000000000",
+        "message": "Patch Set 8:\n\n(1 comment)",
+        "patchset_number": 8
+      },
+      {
+        "id": "b772b5438936abb76dfff01f9322f9c7aad36a22",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 11:29:06.000000000",
+        "message": "Patch Set 8:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-maven-docker-stage-spring-boot-3-0/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-maven-docker-stage-spring-boot-3-0/1",
+        "patchset_number": 8
+      },
+      {
+        "id": "4468aac71805c01e73bbac5dba6b2dbfbb197666",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-24 11:36:12.000000000",
+        "message": "Patch Set 8:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-spring-boot-3-0-merge-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-spring-boot-3-0-merge-java/1",
+        "patchset_number": 8
+      }
+    ]
+  }
+}

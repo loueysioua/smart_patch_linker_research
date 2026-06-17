@@ -1,0 +1,112 @@
+{
+  "id": "sdnc%2Fcore~master~I948e67c6b5e350076e7f0681f32527e5b1d69ace",
+  "change_id": "I948e67c6b5e350076e7f0681f32527e5b1d69ace",
+  "_number": 3791,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2017-05-01 23:11:55.000000000",
+    "updated": "2017-08-03 20:24:28.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 667,
+      "name": "Marcus Williams",
+      "display_name": null,
+      "email": "marcus.williams@intel.com",
+      "username": "mgkwill"
+    },
+    "submitter": null
+  },
+  "subject": "Throw specific InterruptedException",
+  "commit_message": "Throw specific InterruptedException\n\nFix sonar exception issue by throwing specific error\nhttps://sonar.onap.org/issues/search#issues=AVvDtnXjtgRA9ZMwY7qw\n\nChange-Id: I948e67c6b5e350076e7f0681f32527e5b1d69ace\nSigned-off-by: Marcus G K Williams <marcus.williams@intel.com>\n",
+  "change_log": {
+    "entry_count": 6,
+    "entries": [
+      {
+        "id": "d038e21dd7e42746bf3a225640397e8631f57439",
+        "author": {
+          "account_id": 667,
+          "name": "Marcus Williams",
+          "display_name": null,
+          "email": "marcus.williams@intel.com",
+          "username": "mgkwill"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-05-01 23:11:55.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "77be987436af7831a357fd53a0f55d898bfbc9b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-05-01 23:14:20.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/sdnc-core-master-verify-java-skip-tests/65/",
+        "patchset_number": 1
+      },
+      {
+        "id": "71355cdc9e2e81174d7f693ffcaea533057cbc3c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-05-01 23:18:18.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdnc-core-master-verify-java-skip-tests/65/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdnc-core-master-verify-java-skip-tests/65",
+        "patchset_number": 1
+      },
+      {
+        "id": "0c526e880194ca5a0a103d257c0478ea91861a74",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-05-15 14:35:10.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nConcerned that this could open door to uncaught exception",
+        "patchset_number": 1
+      },
+      {
+        "id": "2960f8a545a086e474438a4d86865fdfb1da5acc",
+        "author": {
+          "account_id": 667,
+          "name": "Marcus Williams",
+          "display_name": null,
+          "email": "marcus.williams@intel.com",
+          "username": "mgkwill"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-05-16 22:59:42.000000000",
+        "message": "Abandoned\n\nOnce projects are formed I will update this to better handle specific errors.",
+        "patchset_number": 1
+      },
+      {
+        "id": "03804fd3474546196d8b63e062010d0423d6dbe2",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-03 20:24:28.000000000",
+        "message": "Patch Set 1:\n\n> Concerned that this could open door to uncaught exception\n\nThread.sleep(long) API defines only two thrown Exception(s):\n\nhttps://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html#sleep-long-\n\n1) IllegalArgumentException: if the value of millis is negative, or the value of nanos is not in the range 0-999999\nThis obviously won't happen since it is hardcoded to a positive value in that range here.\n2) InterruptedException: if any thread has interrupted the current thread. The interrupted status of the current thread is cleared when this exception is thrown.\n\nOnly the latter needs to be caught.  In fact, most sonar analysis tools will yell at you for catching Throwable or Exception!  It is considered bad practice to throw these base class implementations anyway.",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "oom~master~Ifff4f3b8163c5f1d057b6a59129aa3aa4dbdc382",
+  "change_id": "Ifff4f3b8163c5f1d057b6a59129aa3aa4dbdc382",
+  "_number": 44735,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_2b40eea3",
+      "file_path": "kubernetes/consul/charts/consul-server/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 40,
+      "message": "Trying to join the consul-server Service is a problem, I think.  I've tried this with replicas set to 1, and I still crash loop behavior for consul-server.  When I've tried it with replicas set to 1 and the join command removed, the single consul-server instance comes up smoothly.\n\nEven with >1 replicas, I think the join to the Service is a problem.  Each replica should directly contact another replica to establish the cluster.  Going through the Service does not give any control over where the join request will land.  It may not land on any working replica (as we see in the logs when the join attempts fail due to a connection timeout.)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-26 01:13:16.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_17975591",
+      "file_path": "kubernetes/consul/charts/consul-server/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "This is a reasonable change for the case of a single replica, where the join is unnecessary.\n\nFor multiple replicas, a join is necessary, but directing a join to a Service IP rather than directly to one of the other consul-server pods more often than not results in a failure.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-26 20:00:12.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_17de756d",
+      "file_path": "kubernetes/consul/charts/consul-server/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Agreed. There is work being done now to convert the consul server helm chart to use a statefulset. This is where a 'proper' solution will be implemented. If this current change is executable to you, could you please give it a +1 and we can get this merged in. Good news, DCAE health check PASSED in my environment. I will be pushing a robot fix in a few.",
+      "author": {
+        "account_id": 127,
+        "name": "Mike Elliott",
+        "display_name": null,
+        "email": "mike.elliott@amdocs.com",
+        "username": "melliott"
+      },
+      "updated": "2018-04-26 20:12:17.000000000",
+      "in_reply_to": "5a93c517_17975591",
+      "unresolved": false
+    }
+  ]
+}

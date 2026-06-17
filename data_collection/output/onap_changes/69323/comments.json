@@ -1,0 +1,161 @@
+{
+  "id": "aai%2Fvalidation~master~I80c1a0cade46ef623fce91921449642d8eafb2f6",
+  "change_id": "I80c1a0cade46ef623fce91921449642d8eafb2f6",
+  "_number": 69323,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_911f9d5b",
+      "file_path": "bundleconfig/etc/rules/poa-event/default-rules.groovy",
+      "patchset_number": 1,
+      "line": null,
+      "message": "This file has been moved to OOM for POMBA specific deployments.",
+      "author": {
+        "account_id": 2965,
+        "name": "Pierre Rioux",
+        "display_name": null,
+        "email": "pierre.rioux@amdocs.com",
+        "username": "prioux"
+      },
+      "updated": "2018-09-27 13:51:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_3119e979",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/RuleDrivenValidator.java",
+      "patchset_number": 1,
+      "line": 179,
+      "message": "Refer to https://gerrit.onap.org/r/#/c/69311/ for rule example.",
+      "author": {
+        "account_id": 2965,
+        "name": "Pierre Rioux",
+        "display_name": null,
+        "email": "pierre.rioux@amdocs.com",
+        "username": "prioux"
+      },
+      "updated": "2018-09-27 13:51:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_39e25304",
+      "file_path": "src/main/java/org/onap/aai/validation/config/TopicConfig.java",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "Please remove empty lines",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-01 15:15:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_d9a2279a",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/RuleDrivenValidator.java",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "I am very much against the idea of introducing Groovy language specific types into the Rule interface. The code was designed to be implementation independent: GroovyRule (using Groovy language features) implements Rule (a Java-based interface). We are now enforcing a dependency that is not warranted. Anyone implementing the Rule interface will need to import Groovy libraries.\n\nThe execute method's return type is now Tuple2<Boolean, List<String> which looks very clumsy, especially given that we are passing null values into constructors.\n\nIt would make a lot more sense to create a new Result class (e.g. RuleResult.java) which would simplify calling code and provide a mechanism for extending the Result behaviour in the future. What if we want to return 3 things in the next update?",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-01 15:15:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_b9a9637d",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/rule/GroovyRule.java",
+      "patchset_number": 1,
+      "line": 160,
+      "message": "This looks like a maintenance headache. I can't tell at a glance what this code is doing.\nSomething like return new ResultBuilder().numeric(result).build() is much easier to understand.",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-01 15:15:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_59b637de",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/rule/Rule.java",
+      "patchset_number": 1,
+      "line": 72,
+      "message": "This is not very object-oriented. We can replace this with a specific Result object.",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-01 15:15:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_79bbfbc4",
+      "file_path": "src/test/java/org/onap/aai/validation/ruledriven/rule/RuleHelper.java",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "Why getFirst() ? \nSomething like getExecutionResult() or getSuccess() or isValid() would be a lot clearer.",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-01 15:15:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_0574c0cd",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/rule/RuleResult.java",
+      "patchset_number": 3,
+      "line": null,
+      "message": "The reason I decided to handle groovy.lang.Tuple2 here is because I believe it's better to encapsulate groovy object handling in 1 spot than to force users to import validation code within a rule's groovy code. Importing \"org.onap.aai.validation.ruledriven.rule.RuleResult\" is very cryptic and doesn't help the legibility of the rule.\nI don't think users who create rules for their deployments should learn implementation details of validation code.",
+      "author": {
+        "account_id": 2965,
+        "name": "Pierre Rioux",
+        "display_name": null,
+        "email": "pierre.rioux@amdocs.com",
+        "username": "prioux"
+      },
+      "updated": "2018-10-02 16:29:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bada0100_42ce345c",
+      "file_path": "src/main/java/org/onap/aai/validation/ruledriven/rule/RuleResult.java",
+      "patchset_number": 3,
+      "line": null,
+      "message": "As a side note, it is not strictly necessary to have the import statement explicitly in the rule definition. It should be possible to inject the import at the point that the Groovy Rule is created. The user would still be exposed to the new Class of course. But is this much different to having to document that the rule can return the Tuple<> class?\nAnother point is that using generics causes some headaches with type erasure.\nIt might help with future-proofing to use builder methods (possibly statically imported) in the rules rather than directly constructing Java objects.",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2018-10-08 12:01:23.000000000",
+      "in_reply_to": "bada0100_0574c0cd",
+      "unresolved": false
+    }
+  ]
+}

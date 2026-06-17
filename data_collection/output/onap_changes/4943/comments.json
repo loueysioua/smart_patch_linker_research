@@ -1,0 +1,93 @@
+{
+  "id": "policy%2Fcommon~master~I7aa175673c22490909ae6b40a911a03931961ae3",
+  "change_id": "I7aa175673c22490909ae6b40a911a03931961ae3",
+  "_number": 4943,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "da141535_2f0639cf",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Didn't this code serve a needed function? The method 'FlexLogger.getLogger()' would typically be called during static initialization -- are we guaranteed that 'FlexLogger' static initialization would always occur before the static initialization of classes referencing 'FlexLogger.getLogger()'?",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-06-09 16:29:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da141535_af77e9d3",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "The class static section I believe it to be executed when class is loaded/initialized, before any instances or static methods can be invoked (so it is thread safe).   Under this belief, the code removed is ok as it is unnecessary.   Based on my tests, it seems to be working as I expected.\n\nThere were/are multiple issues with previous logging code, and in fact what that removed code was trying to achieve, it didn't.  I've seeing output from the PolicyLogger.init() being hit more than once in junits.  So, it didn't guarantee one single invokation. Further, the previous initLogger() may never initialize the flag, and may be calling initLogger() every single time there is a getLogger() invocation, under the right set of conditions, such as absence of policyLogger.properties, or with parameters missing in the properties files (nullpointerexception issues).   Note in previous version, the flag was updated at the very end of initLogger() and there were paths for abortion.\n\nI think overall this improves several issues.\nI would hope we move away from FlexLogger in the future, so we can deprecate it at some point.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-06-09 18:34:27.000000000",
+      "in_reply_to": "da141535_2f0639cf",
+      "unresolved": false
+    },
+    {
+      "id": "da141535_ca49eb8c",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Note the output from running the following class:\n\n============================================================\npublic class Junk\n{\n  static String str1 = initString(\"Initializing 'str1'\");\n  static String str2;\n  static\n  {\n\tstr2 = \"Initializing 'str2'\";\n\tSystem.out.println(str2);\n  }\n  static String str3 = initString(\"Initializing 'str3'\");\n\n  private static String initString(String value)\n  {\n\tSystem.out.println(value);\n\treturn(value);\n  }\n\n  static public void main(String args[])\n  {\n\tSystem.out.println(\"Running 'main'\");\n  }\n}\n============================================================\n$ java Junk\nInitializing 'str1'\nInitializing 'str2'\nInitializing 'str3'\nRunning 'main'\n============================================================\n\nNote that 'str2', is initialized after 'str1', even though 'str1' initialization is through a method, and 'str2' using a static block. Java does try to initialize dependencies before dependents, but I don't know if that always works as expected, particularly when there is the possibility of a dependency loop between classes.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-06-12 08:17:46.000000000",
+      "in_reply_to": "da141535_af77e9d3",
+      "unresolved": false
+    },
+    {
+      "id": "da141535_fe26b4b9",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Is this a singleton? I would recommend looking into using 'synchronized' during initialization even if you think it is thread-safe and works in your environment.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-06-12 14:49:44.000000000",
+      "in_reply_to": "da141535_ca49eb8c",
+      "unresolved": false
+    },
+    {
+      "id": "da141535_9e7338b1",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "I think it is all ok as it is.  There is only one single call to initLogger() now, all other ones have been removed including the shared static data in this class.\n\nCheck this out: \n\nhttps://stackoverflow.com/questions/32976943/java-static-initialization-thread-safety-guarantee-in-language-spec \n\nand the reference to the section in the Java Language Specification that details the synchronized static initialization.\n\nI also corroborated it with this little multithreaded test program:\n\njh1730@newton:~/dev/open/LF/tmp$ cat StaticTest.java\nimport java.util.Date;\n\npublic class StaticTest {\n\n  public static volatile int count = 0;\n\n  static {\n    count(\"start-static-block\", count);\n    System.out.println(\".... start 30 sec. sleep within static block ..\");\n    try {Thread.sleep(30000);} catch(Exception e) {e.printStackTrace();}\n    System.out.println(\".... end 30 sec. sleep within static block ..\");\n    count(\"end-static-block\", 1);\n  }\n\n  public StaticTest() {\n\tcount(\"constructor\",999);\n  }\n\n  public static void count(String m, int c) {\n    count=c;\n    System.out.println(new Date() + \": \" + m + \" count=\" + count);\n  }\n}\njh1730@newton:~/dev/open/LF/tmp$ \njh1730@newton:~/dev/open/LF/tmp$ cat Main.java\npublic class Main {\n\n  public static void main(String[] args) {\n    for (int i=100; i<110; i++) {\n      final int t=i;\n      new Thread() {\n      \t  public void run() {System.out.println(\".. thread-\" + t + \" ready to set count ...\"); StaticTest.count(\"thread-\"+t, t);}\n      }.start();\n    }\n\n    try {Thread.sleep(60000);} catch(Exception e) {e.printStackTrace();}\n  }\n}\njh1730@newton:~/dev/open/LF/tmp$ \njh1730@newton:~/dev/open/LF/tmp$ java Main\n.. thread-100 ready to set count ...\n.. thread-101 ready to set count ...\n.. thread-102 ready to set count ...\n.. thread-103 ready to set count ...\n.. thread-104 ready to set count ...\n.. thread-105 ready to set count ...\n.. thread-106 ready to set count ...\n.. thread-107 ready to set count ...\n.. thread-108 ready to set count ...\n.. thread-109 ready to set count ...\nMon Jun 12 11:49:32 CDT 2017: start-static-block count=0\n.... start 30 sec. sleep within static block ..\n.... end 30 sec. sleep within static block ..\nMon Jun 12 11:50:02 CDT 2017: end-static-block count=1\nMon Jun 12 11:50:02 CDT 2017: thread-102 count=102\nMon Jun 12 11:50:02 CDT 2017: thread-103 count=103\nMon Jun 12 11:50:02 CDT 2017: thread-101 count=101\nMon Jun 12 11:50:02 CDT 2017: thread-104 count=105\nMon Jun 12 11:50:02 CDT 2017: thread-105 count=105\nMon Jun 12 11:50:02 CDT 2017: thread-109 count=109\nMon Jun 12 11:50:02 CDT 2017: thread-108 count=108\nMon Jun 12 11:50:02 CDT 2017: thread-106 count=106\nMon Jun 12 11:50:02 CDT 2017: thread-100 count=100",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-06-12 16:53:39.000000000",
+      "in_reply_to": "da141535_fe26b4b9",
+      "unresolved": false
+    }
+  ]
+}

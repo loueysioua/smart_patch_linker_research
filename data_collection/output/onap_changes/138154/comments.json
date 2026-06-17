@@ -1,0 +1,335 @@
+{
+  "id": "cps~master~I40b4efc8326068ab9ae1f31b77f46b2fe8579431",
+  "change_id": "I40b4efc8326068ab9ae1f31b77f46b2fe8579431",
+  "_number": 138154,
+  "change_comments": [
+    {
+      "id": "7f4d94f1_aa97c046",
+      "patchset_number": 1,
+      "message": "The change is ok to me. Just want to clarify some points for my understanding.\n\n\nI don't understand \"why\" we have two package signatures (paths) for the model classes in different locations:\n\n1- cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/models\n2- cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models\n\nSpecifically for those package paths.\n\nIn wiki page, it was mentioned like for impl packages:\n\n\"impl all classes that are NOT exposed on the northbound interface and are unique to just one feature\"\n\nThen, my question \"how do we ensure\" the classes inside impl package will not be consumed by northbound interfaces since all have public modifiers?",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-06-10 14:40:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e223e85e_24b23d62",
+      "patchset_number": 1,
+      "message": "impl/models are dat object NOT exposed on the API. these will be quite common and it is good to separate them from those needed for the northbound interface. \nIt is technically possible to enforce dependencies and this has nothing to do with teh 'public' modifier. But I think this is (a discussion) for another time. For now we simply need to do proper reviews and make sure developer put new stuff in the right places. Historically we haven't been great at this we simply need to get better but I do not want to enforce this trough technical solutions....",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-10 14:45:45.000000000",
+      "in_reply_to": "7f4d94f1_aa97c046",
+      "unresolved": false
+    },
+    {
+      "id": "20f53390_7dd56117",
+      "patchset_number": 2,
+      "message": "fine for me as well.\nAs discussed that TrustLevelCacheConfig can be removed from the controller layer.\nProbably as part of a separate patchset.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-06-10 14:56:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "de5177d6_81c0461e",
+      "patchset_number": 2,
+      "message": "I created a new Jira to address the trustlevel usage in te REST layer: https://jira.onap.org/browse/CPS-2261",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-10 16:38:03.000000000",
+      "in_reply_to": "20f53390_7dd56117",
+      "unresolved": false
+    },
+    {
+      "id": "437ed502_65cec0ed",
+      "patchset_number": 3,
+      "message": "NO Code changes, just moved files. 1 or 2 files I have tried to give better names. So just focus on the renamed/moved filed all other files just have import statements updated (automatically) ...\nAgain I have NOT and do NOT intend to update copyright years...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-24 13:59:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a34db55b_c837d43d",
+      "patchset_number": 3,
+      "message": "You were right. It looks a lot, but it's all moving and renaming packages 😊",
+      "author": {
+        "account_id": 7617,
+        "name": "David McWeeney",
+        "display_name": null,
+        "email": "david.mcweeney@est.tech",
+        "username": "david.mcweeney"
+      },
+      "updated": "2024-06-25 09:51:31.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b6f092bf_1e966315",
+      "patchset_number": 3,
+      "message": "just one minor comment.\nAlso we have to re-strategize our LayeredArchitectureTest rules.\nThe violations are increasing now.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-06-25 10:19:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "de95185b_dd5031c6",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "NB: I would be more specific on jira ticket: CPS-2258",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-06-10 14:40:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c5ce4b8_cbbe3b8f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "move to sync feature in next story",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-11 11:02:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e1c6b24_1afb36ae",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CmHandleState.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "move to sync feature in next story",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-11 11:02:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1c6e98e6_c0db78d5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CompositeStateBuilder.java",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "not a Model!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-11 11:02:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2fa27662_b6c5e8ae",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CompositeStateBuilder.java",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "unfortunately the builder depends on inner static classes from CompositeState which cannot be made public and only be accessed when in the same package.\nUI tried to extract out teh inner classes but that lead to other conflict and decide to give up on that idea and accept that builder(s) live in the models package too...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-24 13:59:55.000000000",
+      "in_reply_to": "1c6e98e6_c0db78d5",
+      "unresolved": true
+    },
+    {
+      "id": "50476d07_800b9d66",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "moved 'sync' with inventory for now",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-24 14:02:13.000000000",
+      "in_reply_to": "7c5ce4b8_cbbe3b8f",
+      "unresolved": true
+    },
+    {
+      "id": "664ce7c0_ec4e90e3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CmHandleState.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "moved to inventory.models",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-24 14:02:13.000000000",
+      "in_reply_to": "9e1c6b24_1afb36ae",
+      "unresolved": true
+    },
+    {
+      "id": "377d1df4_7c355c55",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/NcmpRestInputMapper.java",
+      "patchset_number": 3,
+      "line": 40,
+      "message": "NB: can we move this to org.onap.cps.ncmp.rest.mapper ???",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-06-25 10:19:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "60d50898_88756a14",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/NcmpRestInputMapper.java",
+      "patchset_number": 3,
+      "line": 40,
+      "message": "I Priyank I can but the scope of this refactor is the service layer only. So If you dont mind I wont do it as part of this commit",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-06-25 10:25:53.000000000",
+      "in_reply_to": "377d1df4_7c355c55",
+      "unresolved": false
+    },
+    {
+      "id": "6d187ac3_413f0bd9",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-06-25 10:39:19.000000000",
+      "in_reply_to": "de95185b_dd5031c6",
+      "unresolved": false
+    },
+    {
+      "id": "71f9d4d3_a22e03d3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CompositeStateUtils.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-06-25 10:39:45.000000000",
+      "in_reply_to": "50476d07_800b9d66",
+      "unresolved": false
+    },
+    {
+      "id": "f9a6d8c9_44bffe96",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CompositeStateBuilder.java",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-06-25 10:39:45.000000000",
+      "in_reply_to": "2fa27662_b6c5e8ae",
+      "unresolved": false
+    },
+    {
+      "id": "b02d4e93_6a2cc375",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/models/CmHandleState.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-06-25 10:40:05.000000000",
+      "in_reply_to": "664ce7c0_ec4e90e3",
+      "unresolved": false
+    }
+  ]
+}

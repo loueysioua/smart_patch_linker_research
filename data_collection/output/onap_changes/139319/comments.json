@@ -1,0 +1,139 @@
+{
+  "id": "cps~master~Ic25608a5772c0873fe0d0f8aca8d70bcda51d94a",
+  "change_id": "Ic25608a5772c0873fe0d0f8aca8d70bcda51d94a",
+  "_number": 139319,
+  "change_comments": [
+    {
+      "id": "1dfb39b8_edb71eeb",
+      "patchset_number": 1,
+      "message": "fine for me.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-04 16:12:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "548b38c7_27c11d76",
+      "patchset_number": 1,
+      "message": "NB: You can simplify the method performModuleSync by extracting some part of it into a private method like below:\n\npublic CompletableFuture<Void> performModuleSync(final Collection<DataNode> cmHandlesAsDataNodes, final AtomicInteger batchCounter) {\n        final Map<YangModelCmHandle, CmHandleState> cmHandleStatePerCmHandle =\n            new HashMap<>(cmHandlesAsDataNodes.size());\n        try {\n            cmHandlesAsDataNodes.forEach(cmHandleAsDataNode -> {\n                final YangModelCmHandle yangModelCmHandle = YangDataConverter.toYangModelCmHandle(cmHandleAsDataNode);\n                final CompositeState compositeState = inventoryPersistence.getCmHandleState(yangModelCmHandle.getId());\n                final boolean inUpgrade = ModuleOperationsUtils.inUpgradeOrUpgradeFailed(compositeState);\n                processCmHandle(yangModelCmHandle, compositeState, inUpgrade, cmHandleStatePerCmHandle);\n            });\n        } finally {\n            batchCounter.getAndDecrement();\n            lcmEventsCmHandleStateHandler.updateCmHandleStateBatch(cmHandleStatePerCmHandle);\n            log.info(\"Processing module sync batch finished. {} batch(es) active.\", batchCounter.get());\n        }\n        return CompletableFuture.completedFuture(null);\n    }\n    \nprivate void processCmHandle(final YangModelCmHandle yangModelCmHandle,\n                                 final CompositeState compositeState,\n                                 final boolean inUpgrade,\n                                 final Map<YangModelCmHandle, CmHandleState> cmHandleStatePerCmHandle) {\n        try {\n            if (inUpgrade) {\n                moduleSyncService.syncAndUpgradeSchemaSet(yangModelCmHandle);\n            } else {\n                moduleSyncService.deleteSchemaSetIfExists(yangModelCmHandle.getId());\n                moduleSyncService.syncAndCreateSchemaSetAndAnchor(yangModelCmHandle);\n            }\n            yangModelCmHandle.getCompositeState().setLockReason(null);\n            cmHandleStatePerCmHandle.put(yangModelCmHandle, CmHandleState.READY);\n        } catch (final Exception e) {\n            log.warn(\"Processing of {} module failed due to reason {}.\", yangModelCmHandle.getId(), e.getMessage());\n            final LockReasonCategory lockReasonCategory = inUpgrade ? LockReasonCategory.MODULE_UPGRADE_FAILED\n                : LockReasonCategory.MODULE_SYNC_FAILED;\n            moduleOperationsUtils.updateLockReasonWithAttempts(compositeState,\n                lockReasonCategory, e.getMessage());\n            setCmHandleStateLocked(yangModelCmHandle, compositeState.getLockReason());\n            cmHandleStatePerCmHandle.put(yangModelCmHandle, CmHandleState.LOCKED);\n        }\n    }",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-04 17:16:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "40cab8e8_6031e4a0",
+      "patchset_number": 1,
+      "message": "Sorry it was a bit longer for Gerrit and un-indented but still is the only way to review it.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-04 17:17:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "1614c009_12dbf6b1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncTasks.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "do u think we should flip #89 and 90 ??\nfirst let it update and then only mark the batch as done.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-04 14:52:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "728dc4ae_a96fd3f3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncTasks.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "No. If an exception occurred while updating the state (e.g. DB timeout), then the counter would not decrement, meaning that worker thread would not process any more batches.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-11-04 15:45:26.000000000",
+      "in_reply_to": "1614c009_12dbf6b1",
+      "unresolved": true
+    },
+    {
+      "id": "511d0125_96e2603c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncTasks.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "FYI, the batchCounter is used for controlling the multi-threaded workers. I will be posting another patch that gets rid of the counter using Semaphore instead.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-11-04 15:51:34.000000000",
+      "in_reply_to": "728dc4ae_a96fd3f3",
+      "unresolved": true
+    },
+    {
+      "id": "f04e5f81_85589a90",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncTasks.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "alright if we are getting rid of this then lets see in the other patch.thnx.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-04 16:12:54.000000000",
+      "in_reply_to": "511d0125_96e2603c",
+      "unresolved": true
+    },
+    {
+      "id": "de0fa2e7_2199cb80",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncTasks.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-11-04 17:21:24.000000000",
+      "in_reply_to": "f04e5f81_85589a90",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fdatafile~master~I913b887833e412dd9c0093936a9231d37f63e7d1",
+  "change_id": "I913b887833e412dd9c0093936a9231d37f63e7d1",
+  "_number": 110488,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3defd531_40dc3f1f",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 221,
+      "message": "I would add mehthod 'contains' to publishedFileCache, and than rewrite this logic a bit, like in this (pseudo) code.\n\nconsider following logic:\n\n        Path localFilePath = fileData.fileData.getLocalFilePath();\n        boolean shouldBePublished = !cache.contains(localFilePath);\n        if (shouldBePublished) {\n            try {\n                shouldBePublished = checkIfFileWasNotPublishedYet();\n            } catch (DatafileTaskException e) {\n                log();\n            }\n        } \n        if(!shouldBePublished) log();\n        return shouldBePublished;",
+      "author": {
+        "account_id": 6714,
+        "name": "Jan Malkiewicz",
+        "display_name": null,
+        "email": "jan.malkiewicz@nokia.com",
+        "username": "jmalkiewicz"
+      },
+      "updated": "2020-07-23 11:22:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "60c18832_6badd88c",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 221,
+      "message": "I added method to check if file was not published.\nDidn't want to create method for:\n publishedFilesCache.put(localFilePath) == null\nbecause I couldn't think of any non-confusing way/name, while this behaviour is 'java styled' and one can lookup publishedFilesCache in a single click. Also didn't want to split put and contains to avoid doubling map lookup.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-07-24 05:53:23.000000000",
+      "in_reply_to": "3defd531_40dc3f1f",
+      "unresolved": false
+    },
+    {
+      "id": "eace2298_457e83e9",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 3,
+      "line": 228,
+      "message": "Good job removing all returns.\n1. Community (I also) don't like one liners could you add brackets {}?\n2. Can this 2 if's be if else?",
+      "author": {
+        "account_id": 3793,
+        "name": "Marek Kukulski",
+        "display_name": null,
+        "email": "marek.kukulski@nokia.com",
+        "username": "mkukulski"
+      },
+      "updated": "2020-07-27 07:09:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6c53190b_9b18d503",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 3,
+      "line": 228,
+      "message": "1. Done\n2. First if can change the value of shouldBePublished so the second can't be else case.\nThe logic here works like that:\n (publishedFilesCache.put(localFilePath) == null) - checks if file was put into cache\n- if it is in cache, then dmaap check is skipped and file is not published\n- it it is not in cache, dmaap check determines if the file should be published",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-07-27 07:46:23.000000000",
+      "in_reply_to": "eace2298_457e83e9",
+      "unresolved": true
+    },
+    {
+      "id": "354cb686_63de00d1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 4,
+      "line": 229,
+      "message": "Should this really be on info level? Since file ready messages often will contain a lot of files that are already published, there will be a lot of these entries in the log.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2020-07-27 08:37:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1f896282_51e4ea1b",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 4,
+      "line": 229,
+      "message": "Base on what you assume file ready will contain information about already publish files?\nIn error cases device may send notification about all files in ftp but normally I would expect notification only about new files.",
+      "author": {
+        "account_id": 3793,
+        "name": "Marek Kukulski",
+        "display_name": null,
+        "email": "marek.kukulski@nokia.com",
+        "username": "mkukulski"
+      },
+      "updated": "2020-07-27 09:58:14.000000000",
+      "in_reply_to": "354cb686_63de00d1",
+      "unresolved": true
+    },
+    {
+      "id": "40e4c902_b0e82b30",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 4,
+      "line": 229,
+      "message": "I cannot find it on the wiki now, but at least last year the recommendation was that all files available on the node should be sent in every message, see this quote:\n\"The FileReady notification will send information on files that are available on the node to collect every ROP, the files are ordered in descending chronological order (latest files a top of the message). Files on the node older than 24 hours are not sent in the FileReady notification.\"\nThis is because the node have no idea wether the DFC has been able to collect the files or not. This is also the whole reason why DFC queries the DataRouter to see if a file has already been published.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2020-07-27 11:03:49.000000000",
+      "in_reply_to": "1f896282_51e4ea1b",
+      "unresolved": true
+    },
+    {
+      "id": "097d4688_d563c9e8",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 4,
+      "line": 229,
+      "message": "Ok, Then we can move it to DEBUG.",
+      "author": {
+        "account_id": 3793,
+        "name": "Marek Kukulski",
+        "display_name": null,
+        "email": "marek.kukulski@nokia.com",
+        "username": "mkukulski"
+      },
+      "updated": "2020-07-28 08:26:38.000000000",
+      "in_reply_to": "40e4c902_b0e82b30",
+      "unresolved": true
+    },
+    {
+      "id": "d007d2c5_4d00e0ce",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 4,
+      "line": 229,
+      "message": "Done",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-07-28 09:08:48.000000000",
+      "in_reply_to": "097d4688_d563c9e8",
+      "unresolved": false
+    },
+    {
+      "id": "7c19d76a_5f30be2f",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 5,
+      "line": 234,
+      "message": "I would mark here that we are checking it in dmaap DR since it's not obvious.",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2020-07-28 11:08:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "95908e0c_add96a17",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 5,
+      "line": 234,
+      "message": "Done",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-07-28 13:03:06.000000000",
+      "in_reply_to": "7c19d76a_5f30be2f",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "ci-management~master~Ib750c099dabfb6556223ac6ea3c452d9a24427d6",
+  "change_id": "Ib750c099dabfb6556223ac6ea3c452d9a24427d6",
+  "_number": 108098,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "359ebe14_b4bf5790",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 36,
+      "message": "needed to remove \"elalto\" here since it is triggering 2 jobs one good with openjdk8 and one bad with openjdk11,",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-05-21 19:02:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a2715990_8c8d3724",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "removing this is OK as the {stream} (set to elalto in this case) from line 57 I think will make them unique.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-05-21 19:02:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9efee448_c645a828",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 54,
+      "message": "The issue is here as this is a global identifier (note that there is no stream) so the project from the top of the file, and this one collides in this name, since it is not distinguished by stream.   This is the error in general for any container:\n\njenkins_jobs.errors.JenkinsJobsException: Duplicate definitions for job 'policy-xacml-pdp-release-merge' specified\n\nNow the question, what are the side effects of this?\n\nAre there any side effects for gerry-maven-stage and gerrit-maven-docker-stage repeated across this project and the one on top for master/frankfurt?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-05-21 19:02:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a38e6ad_dc987212",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 54,
+      "message": "I don't know where these jobs are defined, can't seem to find them. Would be good if there was:\n{project-name}-{stream}-gerrit-release-jobs\n\nBut doesn't seem that there is - maybe what we do is delete this temporarily and point frankfurt to elalto and change back to jdk8. Then revert it when we are doing updating the certs on elalto.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-05-21 19:55:12.000000000",
+      "in_reply_to": "9efee448_c645a828",
+      "unresolved": true
+    },
+    {
+      "id": "569ef5c2_fb2062cc",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 54,
+      "message": "We do not have a \"{project-name}-{stream}-gerrit-release-jobs\", the only way would be to have this under another project block with a specific project-name and stream",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2020-05-21 20:08:51.000000000",
+      "in_reply_to": "1a38e6ad_dc987212",
+      "unresolved": true
+    },
+    {
+      "id": "ac49e2f6_919bf210",
+      "file_path": "jjb/policy/policy-engine.yaml",
+      "patchset_number": 3,
+      "line": 54,
+      "message": "the release job was designed to work with all branches 😞 https://github.com/lfit/releng-global-jjb/blob/master/jjb/lf-release-jobs.yaml",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2020-05-21 20:11:02.000000000",
+      "in_reply_to": "569ef5c2_fb2062cc",
+      "unresolved": true
+    }
+  ]
+}

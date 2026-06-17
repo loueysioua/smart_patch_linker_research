@@ -1,0 +1,229 @@
+{
+  "id": "cps~master~Ia907af77d2037309f1bbb73ea671679b788bab9e",
+  "change_id": "Ia907af77d2037309f1bbb73ea671679b788bab9e",
+  "_number": 139227,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a226b590_42825435",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncWatchdog.java",
+      "patchset_number": 3,
+      "line": 64,
+      "message": "Nb. should end in -ms to be consistent: initial-time-ms",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-23 16:03:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e8d3b18b_c89bdd2b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncWatchdog.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "Out of scope, but busy waiting is a code smell.\nWe should be using Semaphore(maxWorkers) instead of AtomicInteger + busy waiting.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-23 16:03:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c3c1bcc2_2ae516e1",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/CmHandleCreateSpec.groovy",
+      "patchset_number": 3,
+      "line": 210,
+      "message": "Looking at the populateWorkQueueIfNeeded() code, it does indeed take two runs to reset locked handles AND get them into the queue:\n\n    if (moduleSyncWorkQueue.isEmpty()) {\n        populateWorkQueue();  // Nothing in first run, will be SECOND run\n        if (moduleSyncWorkQueue.isEmpty()) {\n            setPreviouslyLockedCmHandlesToAdvised(); // FIRST run\n            // locked are now advised, but not yet in the queue\n        }\n\nThe 2 times makes sense when you think this used to be two separate scheduled tasks.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-23 16:03:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fc7532cf_22be00a8",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "timers now disabled",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 08:01:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "581b612b_744b4be4",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncWatchdog.java",
+      "patchset_number": 3,
+      "line": 64,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 08:01:43.000000000",
+      "in_reply_to": "a226b590_42825435",
+      "unresolved": false
+    },
+    {
+      "id": "3b0e317b_5b18103d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/sync/ModuleSyncWatchdog.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "will consider when we revisit this again",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 08:01:43.000000000",
+      "in_reply_to": "e8d3b18b_c89bdd2b",
+      "unresolved": true
+    },
+    {
+      "id": "16adfd9d_f2f471aa",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/CmHandleCreateSpec.groovy",
+      "patchset_number": 3,
+      "line": 210,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 08:01:43.000000000",
+      "in_reply_to": "c3c1bcc2_2ae516e1",
+      "unresolved": false
+    },
+    {
+      "id": "631fe642_daf9080c",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/ModuleSyncWatchdogSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "NB:  try {\n            deregisterSequenceOfCmHandles(DMI1_URL, SYNC_SAMPLE_SIZE)\n            moduleSyncWorkQueue.clear()\n        } finally {\n            // Shutdown executor service gracefully\n            executorService.shutdownNow()\n        }",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-24 10:08:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ab13a00d_3cf446f3",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/ModuleSyncWatchdogSpec.groovy",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "NB: moduleSyncWorkQueue.isEmpty()",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-24 10:08:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "688b68e3_e96c7ead",
+      "file_path": "integration-test/src/test/resources/application-module-sync-delayed.yml",
+      "patchset_number": 5,
+      "line": 2,
+      "message": "2024",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-24 10:08:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "df019d3b_357cea44",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/ModuleSyncWatchdogSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 11:40:39.000000000",
+      "in_reply_to": "631fe642_daf9080c",
+      "unresolved": false
+    },
+    {
+      "id": "cf78444d_ae7eddca",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/ModuleSyncWatchdogSpec.groovy",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 11:40:39.000000000",
+      "in_reply_to": "ab13a00d_3cf446f3",
+      "unresolved": false
+    },
+    {
+      "id": "a05b7357_1a5b2001",
+      "file_path": "integration-test/src/test/resources/application-module-sync-delayed.yml",
+      "patchset_number": 5,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-24 11:40:39.000000000",
+      "in_reply_to": "688b68e3_e96c7ead",
+      "unresolved": false
+    }
+  ]
+}

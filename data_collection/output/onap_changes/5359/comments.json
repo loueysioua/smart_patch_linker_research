@@ -1,0 +1,110 @@
+{
+  "id": "so~master~Ieed47a282636eafd0556242f56dc0b4d3596ea29",
+  "change_id": "Ieed47a282636eafd0556242f56dc0b4d3596ea29",
+  "_number": 5359,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a014df3_e1c4f060",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "1. please keep the naming convention to define maven variable. Something like \"mso.git.url\", etc ...\n2. Do not hard-code the value to https://gerrit.openecomp.org/r, please keep the ${env.GIT_NO_PROJECT}. This variable is defined on the LF environment for jenkins",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2017-03-07 10:42:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a014df3_6187c010",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "When compiling locally, build is failing because it can't resolve ${env.GIT_NO_PROJECT}, so how should I proceed to fix local build if I can't hard-code the value in a maven property?",
+      "author": {
+        "account_id": 137,
+        "name": "Alexis de Talhouet",
+        "display_name": null,
+        "email": "adetalhouet89@gmail.com",
+        "username": "adetalhouet"
+      },
+      "updated": "2017-03-07 12:55:25.000000000",
+      "in_reply_to": "1a014df3_e1c4f060",
+      "unresolved": false
+    },
+    {
+      "id": "1a014df3_41ca8450",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "As is, you must set the env variable \"GIT_NO_PROJECT\" before starting the mvn command.\n\nNow, I understand that you want to provide it as a maven param (with -Dmso.git.url=<GitRepoUrl> in argument).\n\nTherefore what I suggest is:\n1. Rename GERRIT_URL to mso.git.url (to stay in line with the naming convention)\n2. The default value for this new variable must be set to \"${env.GIT_NO_PROJECT}\". Because this env var is defined in the jenkins jobs to do the release/staging builds.",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2017-03-07 13:21:59.000000000",
+      "in_reply_to": "1a014df3_6187c010",
+      "unresolved": false
+    },
+    {
+      "id": "1a014df3_21ce585b",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "> Now, I understand that you want to provide it as a maven param (with -Dmso.git.url=<GitRepoUrl> in argument).\n\nNo, this is not really what I'm saying. This would mean each time one wants to compile the mso/package/docker project, one will have to pass as argument the `mso.git.url`. This doesn't make sense as this url will/should never change, so it should be fine hard-coding it.\nI'm still not sure to understand the benefit of this env.GIT_NO_PROJECT variable that Jenkins populate.\n\nI understand this URL might change in the near future to reflect onap instead of ecomp, but this change shouldn't be the driver of not hard-coding a value that will be sealed in stone afterward.\n\nAm I missing something?\n\n> 1. Rename GERRIT_URL to mso.git.url (to stay in line with the naming convention)\n\nAck.",
+      "author": {
+        "account_id": 137,
+        "name": "Alexis de Talhouet",
+        "display_name": null,
+        "email": "adetalhouet89@gmail.com",
+        "username": "adetalhouet"
+      },
+      "updated": "2017-03-07 13:54:08.000000000",
+      "in_reply_to": "1a014df3_41ca8450",
+      "unresolved": false
+    },
+    {
+      "id": "1a014df3_21f53883",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "This would mean each time one wants to compile the mso/package/docker project, one will have to pass as argument the `mso.git.url`. This doesn't make sense as this url will/should never change, so it should be fine hard-coding it.\n\n--> Yes and I understand very well, that's annoying :-(\nBut what you are missing is: \nYou break our jenkins build with this(Docker profile enabled). We need to change the jenkins job template if we go there. Currently the var GIT_NO_PROJECT defines a SSH gerrit link with a specific user for jenkins.\nNote that: \n- The jenkins job executed in the Pull Request DOES not execute the docker profile so your change can't be validated.\n- Openecomp gerrit is not yet public and requires creds to access the code over HTTPS\n\nSo unless we change the jenkins templates for all ECOMP components, the default value must be set to ${env.GIT_NO_PROJECT}\n\nWe could probably add a comment in the pom description:\nIf the maven profile \"docker\" is specified the parameter \n-Dmso.git.url=<MsoGitRepo> must be provided !\ne.g:\nmvn clean install -P docker -Dmso.git.url=https://gerrit.openecomp.org/r",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2017-03-07 14:47:54.000000000",
+      "in_reply_to": "1a014df3_21ce585b",
+      "unresolved": false
+    },
+    {
+      "id": "1a014df3_e1ee30b4",
+      "file_path": "packages/docker/pom.xml",
+      "patchset_number": 1,
+      "line": 21,
+      "message": "Done",
+      "author": {
+        "account_id": 137,
+        "name": "Alexis de Talhouet",
+        "display_name": null,
+        "email": "adetalhouet89@gmail.com",
+        "username": "adetalhouet"
+      },
+      "updated": "2017-03-07 15:53:31.000000000",
+      "in_reply_to": "1a014df3_21f53883",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "cps%2Fncmp-dmi-plugin~master~I9c89f168cb3cc98ad27cd0022adbf81452717a76",
+  "change_id": "I9c89f168cb3cc98ad27cd0022adbf81452717a76",
+  "_number": 128097,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7a2c2b92_ad6b371e",
+      "file_path": "csit/tests/ncmp-dmi-passthrough/ncmp-dmi-passthrough.robot",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "You first need to register a node before you can retrieve the modules for that node however CSIT passes... it is just asserting a 200 which would happen but there would be no modules yet. Switch these tests around and perhaps assert some info on a returned module to ensure it works.",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-03-25 12:09:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b556025d_ab5b01a8",
+      "file_path": "csit/tests/ncmp-dmi-passthrough/ncmp-dmi-passthrough.robot",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Actually this is the continuation of https://gerrit.onap.org/r/c/cps/ncmp-dmi-plugin/+/127687\n\nSetup related code is present here.\nhttps://gerrit.onap.org/r/c/cps/ncmp-dmi-plugin/+/127687/14/csit/plans/dmi/setup.sh\n\nWere you looking for this? Or something else?",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-03-25 12:28:52.000000000",
+      "in_reply_to": "7a2c2b92_ad6b371e",
+      "unresolved": true
+    },
+    {
+      "id": "06b0f532_4e73e550",
+      "file_path": "csit/tests/ncmp-dmi-passthrough/ncmp-dmi-passthrough.robot",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "You need to register a node first and only then as part of the sync are the modules added for that cm handle. Fetching the modules needs to be done after it. I would also suggest you check for an expected returned module as done in other tests like:\n\nGet modules for registered data node\n  ...\n    ${responseJson}=     Set Variable       ${response.json()}\n    Should Be Equal As Strings              ${response.status_code}   200\n    FOR   ${item}   IN  @{responseJson}\n            IF   \"${item['moduleName']}\" == \"stores\"\n                Should Be Equal As Strings              \"${item['revision']}\"   \"2020-09-15\"\n            END\n        END",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-03-29 15:49:21.000000000",
+      "in_reply_to": "b556025d_ab5b01a8",
+      "unresolved": true
+    },
+    {
+      "id": "1b0eb6c5_360e4107",
+      "file_path": "csit/tests/ncmp-dmi-passthrough/ncmp-dmi-passthrough.robot",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "See here for more information on model sync: https://wiki.onap.org/display/DW/CPS+User+Story+Demos (#8)",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-03-29 16:10:24.000000000",
+      "in_reply_to": "06b0f532_4e73e550",
+      "unresolved": true
+    },
+    {
+      "id": "2779b263_9afc1957",
+      "file_path": "csit/tests/dmi-integration/dmi-ncmp.robot",
+      "patchset_number": 3,
+      "line": 38,
+      "message": "Actually in the CSITs we are just testing the integration points and not looking at the returned data.\nWe are just relying on the response codes , as long as it is 2XX we are good that the integration is fine and would work. So I have explicitly added it in the description just to eliminate confusion.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-03-29 16:32:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e82f7267_313c9ac3",
+      "file_path": "csit/tests/dmi-integration/dmi-ncmp.robot",
+      "patchset_number": 3,
+      "line": 38,
+      "message": "Ack",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-03-30 09:29:00.000000000",
+      "in_reply_to": "2779b263_9afc1957",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "aai%2Fbabel~master~Ie0ddda41f6895ff0ce8e97ad065fb935462e643a",
+  "change_id": "Ie0ddda41f6895ff0ce8e97ad065fb935462e643a",
+  "_number": 84751,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "95a17a41_d120ad7d",
+      "file_path": "src/main/java/org/onap/aai/babel/xml/generator/ModelGenerator.java",
+      "patchset_number": 1,
+      "line": 143,
+      "message": "We are missing a test case for an Exception parsing the Integer value (i.e. for the new code where a WARNING message is logged).\nWe should either create a new test CSAR file (perhaps modify an existing file) or simply make getServiceVersion() a package-private method and test it directly.",
+      "author": {
+        "account_id": 1313,
+        "name": "Mark Leonard",
+        "display_name": null,
+        "email": "mark.j.leonard@gmail.com",
+        "username": "mark.j.leonard"
+      },
+      "updated": "2019-04-10 13:38:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a25ee158_7f434a3d",
+      "file_path": "src/main/java/org/onap/aai/babel/xml/generator/ModelGenerator.java",
+      "patchset_number": 3,
+      "line": 145,
+      "message": "I think this whole block can be simplified. Do we really need to check both parts of the version separately?\n\nI suggest that we use parseFloat to validate the version number, and if a NumberFormatException is generated, revert to using the default version. E.g.\n\n    private static String getServiceVersion(String artifactVersion) {\n        logger.debug(\"Artifact version=\" + artifactVersion);\n        try {\n            return String.valueOf(Float.parseFloat(artifactVersion));\n        } catch (NumberFormatException e) {\n            logger.warn(ApplicationMsgs.DISTRIBUTION_EVENT,\n                    \"Error generating service version from artifact version: \" + artifactVersion\n                            + \". Using default service version of: \" + DEFAULT_SERVICE_VERSION + \". Error details: \"\n                            + e);\n            return DEFAULT_SERVICE_VERSION;\n        }\n    }",
+      "author": {
+        "account_id": 703,
+        "name": "Tian Lee",
+        "display_name": null,
+        "email": "TianL@amdocs.com",
+        "username": "TianL"
+      },
+      "updated": "2019-04-11 09:32:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

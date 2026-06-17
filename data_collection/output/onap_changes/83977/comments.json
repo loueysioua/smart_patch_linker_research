@@ -1,0 +1,93 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I7981ff388ff1264a79d722727ef3005cf39e9f0d",
+  "change_id": "I7981ff388ff1264a79d722727ef3005cf39e9f0d",
+  "_number": 83977,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "87f43b3e_f86fc42f",
+      "file_path": "sources/hv-collector-ct/src/test/kotlin/org/onap/dcae/collectors/veshv/tests/fakes/sink.kt",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "This TODO is most likely resolved with these changes (and for sure outdated) :)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-03 05:44:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6b236c50_cb7f6019",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/main.kt",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "I believe we can move `doOnNext` to flatten this function a little:\n```\nprivate fun startServer(config: HvVesConfiguration): Mono<ServerHandle> =\n        stopRunningServer()\n                .timeout(maxCloseTime)\n                .then(deferredVesServer(config))\n                .doOnNext {\n                    registerShutdownHook { shutdownGracefully(it) }\n                    hvVesServer.set(it)\n                }\n\nprivate fun deferredVesServer(config: HvVesConfiguration) = Mono.defer {\n    Logger.setLogLevel(VES_HV_PACKAGE, config.logLevel)\n    logger.debug(ServiceContext::mdc) { \"Configuration: $config\" }\n    VesServer.start(config)\n}\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-03 05:44:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "965de543_fd853308",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/main.kt",
+      "patchset_number": 2,
+      "line": 92,
+      "message": "We might want to log something here",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-03 05:44:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bc8fb1ab_0d191a8b",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/server_handle.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Maybe `onCloseAction` or similar for more Reactor-like naming?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-03 05:44:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "357d0ac4_e652ca96",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/main.kt",
+      "patchset_number": 2,
+      "line": 92,
+      "message": "We have plenty of logs regarding closing the server elsewhere.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-03 06:39:07.000000000",
+      "in_reply_to": "965de543_fd853308",
+      "unresolved": false
+    }
+  ]
+}

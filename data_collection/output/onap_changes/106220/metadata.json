@@ -1,0 +1,882 @@
+{
+  "id": "sdc~master~Ibe61f3fd5f6fb663ba326bb5c60d83e069173590",
+  "change_id": "Ibe61f3fd5f6fb663ba326bb5c60d83e069173590",
+  "_number": 106220,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2020-04-17 21:37:52.000000000",
+    "updated": "2020-04-29 12:32:36.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 6614,
+      "name": "Francis Toth",
+      "display_name": null,
+      "email": "francis.toth@yoppworks.com",
+      "username": "francistoth"
+    },
+    "submitter": null
+  },
+  "subject": "Add a Try data structure to replace Either",
+  "commit_message": "Add a Try data structure to replace Either\n\nSigned-off-by: Francis Toth <francis.toth@yoppworks.com>\nChange-Id: Ibe61f3fd5f6fb663ba326bb5c60d83e069173590\nIssue-ID: SDC-2812\n",
+  "change_log": {
+    "entry_count": 61,
+    "entries": [
+      {
+        "id": "0517ea4929ff827d8c6653e3a7762e2d90f007e2",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-17 21:37:52.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "807bc217170fc73b049266760422a2262b7852ae",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 21:40:43.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5821/",
+        "patchset_number": 1
+      },
+      {
+        "id": "9ce8abfb64f446343cc55aab52fef8059ccddd3b",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-17 22:06:10.000000000",
+        "message": "Patch Set 1:\n\nHi,\n\nThis change aims to introduce a new data structure called `Try` to replace `Either`. As some of you mentioned it, `Either` is currently pretty confusing, with an API that is hard to read.\n\nIn contrast with `Either`, `Try` relies on exception handling and is designed to encapsulate computations resulting in an exception. The advantage compared to `Either` is that the indication of the line of code throwing the exception is preserved, which eases debugging while minimizing the stack trace. On the other hand, it also provides a higher level of composition, so it is pretty much the best of both worlds:\n```\nString unsafe() throws RuntimeException { /* ... */ }\nTry<String> safe = Try.make(() -> unsafe());\n```\nIn order to get the value resulting from a `Try`, one has to call `get`. `get` takes two callbacks, one that is called in case of success, one that is called in case of errors:\n```\nTry<String> safe = Try.make(() -> unsafe());\nsafe.consume(s -> System.out.println(s), exception -> { throw exception; })\n```\nA safer option is to provide an exception handler:\n```\nsafe.get(s -> s), exception -> { /*  handle the exception and return a fallback value */ })\n```\n`Try` could provide other interesting combinators, but before going forward, I wanted to know what you guys think about it. As of today, I have only refactored a small piece of code allowing to go from an `Either` to a `Try` and vice-versa.\n\nThank you in advance for your help and suggestions.\n\nFrancis.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e4f786f89b98df2467f1fb3bb9d0d8cbc627479b",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-17 22:07:01.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "7f630292c07847f2ee586c8c12a539232a847f00",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 22:07:03.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5821/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/sdc-master-verify-java/5821/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5821",
+        "patchset_number": 1
+      },
+      {
+        "id": "991da97a687a619ebc84384a957cc6451aa8038a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 22:11:55.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5822/",
+        "patchset_number": 2
+      },
+      {
+        "id": "a11a043b8932f2a5b007543d3fa4cc4e1cd9d764",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 22:32:15.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5822/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project catalog-be has 6 violations. ( https://jenkins.onap.org/job/sdc-master-verify-java/5822/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5822",
+        "patchset_number": 2
+      },
+      {
+        "id": "cbb14d8e68908c2250927655b99c4fbb0e8c6691",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-17 23:11:44.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "c72e73e00c5072095984ff373dae48fbd85594e2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 23:15:01.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5823/",
+        "patchset_number": 3
+      },
+      {
+        "id": "d0dad3f3874aacab77875a73c647ad85c75db74e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 23:32:56.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5823/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project catalog-be has 4 violations. ( https://jenkins.onap.org/job/sdc-master-verify-java/5823/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5823",
+        "patchset_number": 3
+      },
+      {
+        "id": "8d2b6b38e94c15c473c088dc1dc9796f78d82fe2",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-17 23:44:37.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "96493c9d0e79b4393c629b4df488c4fbe87043de",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-17 23:47:43.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5825/",
+        "patchset_number": 4
+      },
+      {
+        "id": "23bb79aa61eca26e2d3692710d8e2faf0ca7ab14",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-18 00:28:56.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5825/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5825",
+        "patchset_number": 4
+      },
+      {
+        "id": "0e4743f01652d7870d4c985a0603019da4473a47",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-18 00:59:18.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 4
+      },
+      {
+        "id": "94677133fc1b66aa84c800089c83fd0f8f13c0ef",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-18 18:51:06.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "f7edfa2be7794c6730ede9f1dae40801db8261a8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-18 18:54:28.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5826/",
+        "patchset_number": 5
+      },
+      {
+        "id": "6faada4543663ef8417d079d405e31e588bb99f7",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-18 18:55:06.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "0a381e4bccec7fee2f8f8e5654c2775c78a9424a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-18 18:55:13.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5827/",
+        "patchset_number": 6
+      },
+      {
+        "id": "b9d66c2be7dc835baca3fd4d82fe2536b1fb9880",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-18 18:56:41.000000000",
+        "message": "Patch Set 5: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5826/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/sdc-master-verify-java/5826/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5826",
+        "patchset_number": 5
+      },
+      {
+        "id": "21d4efd13ce28faafe2d948fbb07bd5e34ea58df",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-18 19:22:33.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5827/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5827",
+        "patchset_number": 6
+      },
+      {
+        "id": "f9467f9c7e2584e1abe5963e57464da8ad13b27b",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-19 04:51:34.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "ffb4e3f3c7b37c82aab10cddd6e56fc0f06e2fe7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-19 04:54:51.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5828/",
+        "patchset_number": 7
+      },
+      {
+        "id": "fff7c748f0513f0ec72443e8cfd95942cc93afd3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-19 05:38:03.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5828/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5828",
+        "patchset_number": 7
+      },
+      {
+        "id": "1fba2ed7f620a671e36c066d94f7c8228f0b872b",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-20 12:38:09.000000000",
+        "message": "Uploaded patch set 8: Patch Set 7 was rebased.",
+        "patchset_number": 8
+      },
+      {
+        "id": "6d7dd471d20b585a5b2a89493ac6fbc0fd5533b9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-20 12:41:18.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5837/",
+        "patchset_number": 8
+      },
+      {
+        "id": "0099146bb82a72eb3600078f8da47b77f92ff813",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-20 13:18:03.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5837/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5837",
+        "patchset_number": 8
+      },
+      {
+        "id": "595204504de469c18dd8cc5aaac40272d2b5581f",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 03:06:44.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "2ba25f0a3d67798699c83fe50094c02c30f43da6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 03:10:04.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5847/",
+        "patchset_number": 9
+      },
+      {
+        "id": "7b1265f58b0009321e61511b78599f31cebf8371",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 03:48:01.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5847/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5847",
+        "patchset_number": 9
+      },
+      {
+        "id": "9263d3ac6846b140138ed0206c0ebfb2c338e449",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 14:01:10.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "4392fac70b81f43de474ae32fdf98f8a6ec2865e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 14:05:21.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5853/",
+        "patchset_number": 10
+      },
+      {
+        "id": "59608ef00438fe82774a5bd965067d2cc8d07afd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 14:28:29.000000000",
+        "message": "Patch Set 10: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5853/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project catalog-dao has 2 violations. ( https://jenkins.onap.org/job/sdc-master-verify-java/5853/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5853",
+        "patchset_number": 10
+      },
+      {
+        "id": "be7d4fc1558e6c04f7695d830f441992d173d28b",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 15:45:51.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "df4fd885f2da16f07b4756ccce12d2566610d2da",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-21 15:48:45.000000000",
+        "message": "Patch Set 11:\n\nHi,\n\nI have just pushed the last fixes and modifications and removed all the noise in order to make this change focused on adding `Try`. The remaining code will be pushed with another change once this one is validated.\n\nKeep in mind that the goal here is to replace `Either` by a data-structure that is easier to reason about and which provides the same semantic than exception handling.\n\nThank you in advance for your help,\n\nFrancis.",
+        "patchset_number": 11
+      },
+      {
+        "id": "d9e0929e9d844353f41d171f9be669327d42e286",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 15:48:46.000000000",
+        "message": "Removed reviewer Tomasz Golabek.",
+        "patchset_number": 11
+      },
+      {
+        "id": "2945dcfc9bfaa20fb69a3458b1cf1fb2aad35ce9",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 15:48:46.000000000",
+        "message": "Removed reviewer Einav Keidar.",
+        "patchset_number": 11
+      },
+      {
+        "id": "2f23b9fa5e43b882d39729987517a8a8ac4ca075",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 15:48:46.000000000",
+        "message": "Removed reviewer Inna Manzon.",
+        "patchset_number": 11
+      },
+      {
+        "id": "8ff5918d8880d3f5379bef20bcda62ac1bf745d3",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 15:48:46.000000000",
+        "message": "Removed reviewer Tal  Gitelman.",
+        "patchset_number": 11
+      },
+      {
+        "id": "5426f415a334840799631930f42b4e9eccf1828f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 15:48:54.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5860/",
+        "patchset_number": 11
+      },
+      {
+        "id": "7288704472cdeb8bd16e452979e7080950f97f25",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 16:03:58.000000000",
+        "message": "Patch Set 11: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5860/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/sdc-master-verify-java/5860/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5860",
+        "patchset_number": 11
+      },
+      {
+        "id": "ae8104de3c56ab51cf43aeb4874885d0822e4e50",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 17:15:35.000000000",
+        "message": "Patch Set 12: Patch Set 11 was rebased",
+        "patchset_number": 12
+      },
+      {
+        "id": "340abfd4d8d16fde671566cc3fe677064dfc11b2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 17:18:25.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5863/",
+        "patchset_number": 12
+      },
+      {
+        "id": "4fc2e538aaf17d08096264880203fe441e594d45",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 17:38:54.000000000",
+        "message": "Patch Set 12: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5863/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project catalog-dao has 2 violations. ( https://jenkins.onap.org/job/sdc-master-verify-java/5863/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5863",
+        "patchset_number": 12
+      },
+      {
+        "id": "590346282db449617d4f35c9358dece6d70a8e13",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-21 17:55:56.000000000",
+        "message": "Uploaded patch set 13.",
+        "patchset_number": 13
+      },
+      {
+        "id": "99346c1e59a6874313091950ac321d6157cbebce",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 18:00:44.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5866/",
+        "patchset_number": 13
+      },
+      {
+        "id": "c09da3442e0bf0d0b3b003bdaf7dc7bf466c3433",
+        "author": {
+          "account_id": 6625,
+          "name": "rodrigo lima",
+          "display_name": null,
+          "email": "rodrigo.lima@yoppworks.com",
+          "username": "rodrigoYoppworks"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 18:05:53.000000000",
+        "message": "Patch Set 13: Code-Review+1\n\nLGTM",
+        "patchset_number": 13
+      },
+      {
+        "id": "1d4a6a040348322f7cf0d84ab14f1d43c6ac6993",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-21 18:32:08.000000000",
+        "message": "Patch Set 13: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5866/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5866",
+        "patchset_number": 13
+      },
+      {
+        "id": "a8283a76312c9ad730efb1ea2a98177e8d486646",
+        "author": {
+          "account_id": 6597,
+          "name": "Chris Andre",
+          "display_name": null,
+          "email": "chris.andre@yoppworks.com",
+          "username": "Chris.Andre"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 11:09:30.000000000",
+        "message": "Patch Set 13: Code-Review+1",
+        "patchset_number": 13
+      },
+      {
+        "id": "cd1933675e9a1b3853918e47cab3d2178bdc469a",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-22 14:45:39.000000000",
+        "message": "Patch Set 14: Patch Set 13 was rebased",
+        "patchset_number": 14
+      },
+      {
+        "id": "6a3562b045b9d3fe00bb6ba5680f4783728247b5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 14:48:47.000000000",
+        "message": "Patch Set 14:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5878/",
+        "patchset_number": 14
+      },
+      {
+        "id": "292d30300487bb8ad97f4dec97d11cc7b265f0c6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:06:24.000000000",
+        "message": "Patch Set 14: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5878/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/sdc-master-verify-java/5878/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5878",
+        "patchset_number": 14
+      },
+      {
+        "id": "2c4297c12a73aaa8a234b97a126bc70a34a72a34",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-22 15:20:06.000000000",
+        "message": "Uploaded patch set 15.",
+        "patchset_number": 15
+      },
+      {
+        "id": "dc380df328777da0edea38b9635f0934742e3426",
+        "author": {
+          "account_id": 6625,
+          "name": "rodrigo lima",
+          "display_name": null,
+          "email": "rodrigo.lima@yoppworks.com",
+          "username": "rodrigoYoppworks"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:22:23.000000000",
+        "message": "Patch Set 15: Code-Review+1\n\nLGTM",
+        "patchset_number": 15
+      },
+      {
+        "id": "69fed259685f408f38f305a1c5b3b97b00cdac12",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:22:36.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/sdc-master-verify-java/5879/",
+        "patchset_number": 15
+      },
+      {
+        "id": "8c006979ac0d586fb8f8c81eaee1109da9e238b1",
+        "author": {
+          "account_id": 6597,
+          "name": "Chris Andre",
+          "display_name": null,
+          "email": "chris.andre@yoppworks.com",
+          "username": "Chris.Andre"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:25:01.000000000",
+        "message": "Patch Set 15: Code-Review+1",
+        "patchset_number": 15
+      },
+      {
+        "id": "be57eec3a013c704f39aa5133dda1aa2fc95bfd0",
+        "author": {
+          "account_id": 6627,
+          "name": "Yoonsoon Jahng",
+          "display_name": null,
+          "email": "yoonsoon.jahng@yoppworks.com",
+          "username": "YoonsoonJahng"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:38:21.000000000",
+        "message": "Patch Set 15: Code-Review+1\n\nTests look sufficient to cover Either / Try case",
+        "patchset_number": 15
+      },
+      {
+        "id": "aded2b0386942595ca2799783b6a31bbaa5164fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 15:55:28.000000000",
+        "message": "Patch Set 15: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/sdc-master-verify-java/5879/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/sdc-master-verify-java/5879",
+        "patchset_number": 15
+      },
+      {
+        "id": "e7f41b813643106b4861a8f577cf49987f94fca3",
+        "author": {
+          "account_id": 6617,
+          "name": "Neil Derraugh",
+          "display_name": null,
+          "email": "neil.derraugh@yoppworks.com",
+          "username": "neil.derraugh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-22 16:28:29.000000000",
+        "message": "Patch Set 15: Code-Review+1",
+        "patchset_number": 15
+      },
+      {
+        "id": "576df88cf50bb71fb6434728f5dc90cd5ad62de1",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-23 12:18:56.000000000",
+        "message": "Removed reviewer Oren  Kleks.",
+        "patchset_number": 15
+      },
+      {
+        "id": "4d0fd40eb1b732d8ae385a59d3e2bfe6a4809be2",
+        "author": {
+          "account_id": 653,
+          "name": "Ofir Sonsino",
+          "display_name": null,
+          "email": "ofirson@gmail.com",
+          "username": "os0695"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-27 07:58:47.000000000",
+        "message": "Patch Set 15: Code-Review-2\n\nBetter use existing solutions than write it ourself",
+        "patchset_number": 15
+      },
+      {
+        "id": "074cea0be94f56bfc3541f570aa24f36c780bcc4",
+        "author": {
+          "account_id": 6614,
+          "name": "Francis Toth",
+          "display_name": null,
+          "email": "francis.toth@yoppworks.com",
+          "username": "francistoth"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-29 12:32:36.000000000",
+        "message": "Abandoned\n\nThe comitter comity finally decided to keep Either and to favor Vavr.",
+        "patchset_number": 15
+      }
+    ]
+  }
+}

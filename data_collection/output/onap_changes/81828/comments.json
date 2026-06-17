@@ -1,0 +1,399 @@
+{
+  "id": "aai%2Ftraversal~master~Ia8580a1a53259fd69128b3a83c0c8fc743672fa7",
+  "change_id": "Ia8580a1a53259fd69128b3a83c0c8fc743672fa7",
+  "_number": 81828,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f958db17_7ab68518",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/DslConsumerTest.java",
+      "patchset_number": 2,
+      "line": 110,
+      "message": "shouldn't there still be a test for invalid characters which triggers INTERNAL_SERVER_ERROR?",
+      "author": {
+        "account_id": 4341,
+        "name": "Keong Lim",
+        "display_name": null,
+        "email": "keong.lim+onap@gmail.com",
+        "username": "keong"
+      },
+      "updated": "2019-03-08 07:11:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7db67ee0_10d01154",
+      "file_path": "aai-traversal/src/test/java/org/onap/aai/rest/DslConsumerTest.java",
+      "patchset_number": 2,
+      "line": 110,
+      "message": "I was confused here because the text said \"expects 400\" but then the test was looking for a 500. I'll look again about where that 500 was coming from in the code. I couldn't find it before. The exceptions thrown by the DSL section all see to resolve to 404 on the HTTP side.\n\nI removed the exception I threw and this is what is in the log,\n\n Reloading config from ./\\src/main/resources/\\etc\\appprops\\aaiconfig.properties\n A&AI Server Node Name = aai.config.nodename\n QUERY-interim(aaiquery (dslStatement (singleNodeStep (node xserver))))\n AAIException in DslListener Unrecognized AAI object xserver\n Final QUERYbuilder.cap('x').unfold().dedup()\n Converted to gremlin query\n g.V().cap('x').unfold().dedup()\n Query requires iterating over all vertices [()]. For better performance, use indexes\nMethodName- next\nMethodName- next\n 500\n\n\nI modified the DslListener to exit when there was an exception  which prevents this full graph traversal. That's why this test was changed.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-08 14:42:14.000000000",
+      "in_reply_to": "f958db17_7ab68518",
+      "unresolved": false
+    },
+    {
+      "id": "7848f84b_50984e70",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslContext.java",
+      "patchset_number": 5,
+      "line": null,
+      "message": "1)This class is required in my opinion (More explanation in DSLQueryBuilder comments)\n\n2) DSLQueryBuilder's job is to translate every clause, every subquery  and it would use the DSLContext to determine certain rules\n\n3) DSLContext would store the state of the query like start, end (startUnion, endUnion if needed)\n\n4)DSlContext should have certain enable/disable flags like validation. Again imo that does not belong in DSLQueryBuilder",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "901d7749_6c66e2d2",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslErrorListener.java",
+      "patchset_number": 5,
+      "line": 20,
+      "message": "I'm glad that you incorporated ErrorListener interface. I did have plans for using the BaseErrorListener for redirecting the error messages.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a3213cd0_f0820bad",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslListener.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "I like the fact that you used the getParent() to identify the start of a Union query. However if the grammar rule changes to make the union query part of the start-node or any other rule, this will have to be changed.\nAs opposed to having the union query logic and union start logic localised within the enterUnionQuery() method.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "80a43b35_fcfb8f84",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslListener.java",
+      "patchset_number": 5,
+      "line": 116,
+      "message": "You have store logic at 2 places. In the exitWhere() and here. You should have it in the exitSingleNodeQuery() .That is where it belongs.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "909280ab_5ed1f8c3",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslListener.java",
+      "patchset_number": 5,
+      "line": 133,
+      "message": "For the current validation and any in the future the question is which class should include the logic to invoke validation?  In the DslQueryBuilder or DslListener. I believe it should be in the DslListener. Any feature enable/disable should be here and not in the querybuilder.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "33633736_2faabac0",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslQueryBuilder.java",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "1. Overall, When I designed DSLQueryBuilder I wanted this class to not use Antlr generated classes but that was not possible in some scenarios\n\n2. I don't like the idea of passing Antlr generated context classes in the method definitions.\n\n3. For example createNode does not have to be tied to the SingleNodeStep. Thats why the DSLContext is useful.\n\nDSLListener populates the DSLContext with all the contexts it needs for that step and calls queryBuilder with the DSLContext\n\n4. In your changes you have made start, end part of DSLQueryBuilder. That should not be part of DSLQueryBuilder in my opinion. It should be in the DSLContext class.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f19e22e5_4dcfbd3e",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslQueryBuilder.java",
+      "patchset_number": 5,
+      "line": 249,
+      "message": "I don't believe the ValidationFlag should be set part of the DSLQueryBuilder. That was one of the reasons having DSLContext class - That would store all context in terms of the entire query.",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "52b3febc_4cd32c94",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 7,
+      "message": "I would love the limit to be allowed for every singleNodeStep  and then you could limit each vertex that you store (only for store), however I do not know if that is allowed in gremlin",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9df14bca_a7f08ae5",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 9,
+      "message": "Please see my comments below(Line13) on why I would prefer the original definition of dslStatement\nIn the future I would like the startnode to be a union-query as well .\n\ndslStatement: (singleNode|unionQuery) (traverseStep )* limitStep*\n\nExample:\n[ pserver('hostname', 'abc'),  \n  pserver('hostname', 'xyz')] > vserver*",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a811471f_8061f8b0",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 13,
+      "message": "I believe you got the concept of singleNodeStep wrong. Examples of a singleNodeStep would be the below\na) customer\nb) customer('subscriber-name','abc')\nc) customer(> service-subscription('service-type','xyz'))\n\nA dslStatement on the other hand is a set of subqueries which could be just a singleNodeQuery or a traversal query (to another singleNode or a unioon of queries)\na) customer > service-subscription\nb) customer > [service-subscription, vpn-binding]\n\nI don't understand the reason why you changed the definition of the singleNodeStep",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8b3b5141_9fe0e620",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 15,
+      "message": "I do not understand why you changed the lexer tokens .\nI actually would like splitting the Lexer and Parsers in 2 different files. But having LPAREN, COMMA , TRAVERSE(>) is more readable in my opinion.\nI like the below antlr grammar written for cassandra cql3 where lexer and parsers are split\nhttps://github.com/antlr/grammars-v4/tree/master/cql3",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b5b288e3_2c702b96",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "NODE in your rule only takes lowercase and no digits. Is that the documented convention for aai-node-types in ONAP?",
+      "author": {
+        "account_id": 3799,
+        "name": "SoumyaNaik",
+        "display_name": null,
+        "email": "sn207c@att.com",
+        "username": "SoumyaNaik"
+      },
+      "updated": "2019-03-09 14:15:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fda9fedc_c1e84ae5",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslContext.java",
+      "patchset_number": 5,
+      "line": null,
+      "message": "You can see my other comments to gain more insight into why I think this class is flawed. The structure of the antlr grammar and the Listener it creates are what should be used for determining state. That's the benefit of using antlr. Correctly creating a parse tree with it provides all the state indicators you need. This class cannot maintain node states through recursive nesting of where and union queries because it uses single a boolean to determine \"am I in a where\", \"am I in a union\".\n\nTry running my existing overlyNestedQueryTest or this query against the current implementation:\nInput:\n\"generic-vnf*('vnf-id','vnfId') (> [pserver('hostname','hostname1'),vserver (> [pserver('hostname','hostname1'), pserver('hostname','hostname1')])]) > vserver\"\n\nExpected Output:\n\"builder.getVerticesByProperty('aai-node-type', 'generic-vnf').getVerticesByProperty('vnf-id','vnfId').where(builder.newInstance().union(builder.newInstance().createEdgeTraversal(EdgeType.COUSIN, 'generic-vnf','pserver').getVerticesByProperty('hostname','hostname1'),builder.newInstance().createEdgeTraversal(EdgeType.COUSIN, 'generic-vnf','vserver').where(builder.newInstance().union(builder.newInstance().createEdgeTraversal(EdgeType.COUSIN, 'vserver','pserver').getVerticesByProperty('hostname','hostname1'),builder.newInstance().createEdgeTraversal(EdgeType.COUSIN, 'vserver','pserver').getVerticesByProperty('hostname','hostname1'))))).store('x').createEdgeTraversal(EdgeType.COUSIN, 'generic-vnf','vserver').cap('x').unfold().dedup()\"",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "7848f84b_50984e70",
+      "unresolved": false
+    },
+    {
+      "id": "fd7bcafa_eca2f968",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslListener.java",
+      "patchset_number": 5,
+      "line": 133,
+      "message": "Why? The DslQueryBuilder should be independent of DslListener it should be able to be toggled into a validation mode by itself if you wanted to call it somewhere else. What if someone made another grammar that used it? They would then have to reimplement validation?\n\nThe DslListener exists to track state, not control features of the DslQueryBuilder.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "909280ab_5ed1f8c3",
+      "unresolved": false
+    },
+    {
+      "id": "3ced7195_fda41fdf",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslQueryBuilder.java",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "started and ended are there because the grammar is still not 100% correct. Any states should be completely handled by how the antlr grammar builds the parse tree and not by some other class.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "33633736_2faabac0",
+      "unresolved": false
+    },
+    {
+      "id": "77c61d63_3a1bfef9",
+      "file_path": "aai-traversal/src/main/java/org/onap/aai/rest/dsl/DslQueryBuilder.java",
+      "patchset_number": 5,
+      "line": 249,
+      "message": "I don't see a technical reason why another class would be required to store this information. The builder was \"toggled\" into validation mode by reading this boolean from DslContext anyway.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "f19e22e5_4dcfbd3e",
+      "unresolved": false
+    },
+    {
+      "id": "248b7f77_1ea5be8f",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 7,
+      "message": "That is outside the scope of this change. I can investigate that in another code review.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "52b3febc_4cd32c94",
+      "unresolved": false
+    },
+    {
+      "id": "f3837de6_0ae253e8",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 9,
+      "message": "I can re-enable this functionality. I did not see a unit test for this case.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "9df14bca_a7f08ae5",
+      "unresolved": false
+    },
+    {
+      "id": "3683b649_f1f1def3",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 13,
+      "message": "The single node step was changed to allow for infinite storage of the \"previous\" node type. By tracking the entry and exit of a \"singeNodeStepContext\" we know when to push and pop a node, even through multiple union and where nestings.\n\nWith the previous implementation DslContext could only support single nesting of where and unions because of how it stored boundary information in booleans. The idea behind the restructure of the parser tokens was to make antlr do the heavy lifting of determining entry and exit of states rather than constructing a custom solution to perform the same task.\n\nIf there are additional cases which have now been missed, I can only say that I've supported all cases demonstrated in the unit tests. If there are additional cases you'd like covered I can add them to the unit test.\n\nIf I added extra an extra feature which you would not like, such as being able to start from a node type with no filters, I can modify the grammar to prevent this.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "a811471f_8061f8b0",
+      "unresolved": false
+    },
+    {
+      "id": "a3d931c5_d87b43de",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 15,
+      "message": "I would agree for a more complicated grammar, but in this case I preferred the less verbose symbols. Only those symbols which require logic on the builder side have been converted to parsaeble elements (not and store).",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "8b3b5141_9fe0e620",
+      "unresolved": false
+    },
+    {
+      "id": "3ee7fa58_3ed9346a",
+      "file_path": "aai-traversal/src/main/resources/antlr4/org/onap/aai/AAIDsl.g4",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "I can add numbers here. I was not aware of any code types which include numbers in their names.",
+      "author": {
+        "account_id": 97,
+        "name": "Max Benjamin",
+        "display_name": null,
+        "email": "max.benjamin@att.com",
+        "username": "mfour"
+      },
+      "updated": "2019-03-09 17:03:39.000000000",
+      "in_reply_to": "b5b288e3_2c702b96",
+      "unresolved": false
+    }
+  ]
+}

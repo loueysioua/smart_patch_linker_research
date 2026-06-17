@@ -1,0 +1,212 @@
+{
+  "id": "so~master~I1bdb8a77223aef6855e4e1c9aa80dd026892e6f6",
+  "change_id": "I1bdb8a77223aef6855e4e1c9aa80dd026892e6f6",
+  "_number": 83867,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bd27422d_ae8f4fae",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowAction.java",
+      "patchset_number": 6,
+      "line": 346,
+      "message": "I don't understand this logic? where do this numbers come from\nSame above and bellow - also, I think you can create constant for the strings that you re-use",
+      "author": {
+        "account_id": 137,
+        "name": "Alexis de Talhouet",
+        "display_name": null,
+        "email": "adetalhouet89@gmail.com",
+        "username": "adetalhouet"
+      },
+      "updated": "2019-04-10 17:24:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "75e91f6c_bf279235",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowAction.java",
+      "patchset_number": 6,
+      "line": 346,
+      "message": "I would prefer to do change in DB and WorkflowActionBBTasks.java, this code i have committed in patch 4. However as per Steve's comments on patch 4, DB changes are not recommended and to have backward compatibility of the code,  instead of editing the existing flow in orchestration flow table, I am reading the data from orchestration table and appending custom flows to the list based on the SkipConfig flag retrieved from TOSCA.",
+      "author": {
+        "account_id": 4695,
+        "name": "Sunil Kumar Biradar",
+        "display_name": null,
+        "email": "SB00577584@techmahindra.com",
+        "username": "SunilB"
+      },
+      "updated": "2019-04-11 05:55:08.000000000",
+      "in_reply_to": "bd27422d_ae8f4fae",
+      "unresolved": false
+    },
+    {
+      "id": "15478169_3f0f0174",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowAction.java",
+      "patchset_number": 6,
+      "line": 346,
+      "message": "I am not following why you need to use the numbering sequences?  If you wanted to modify DB that would be fine as long as its backwards compatible.  I gave you the choice of solution.  You could insert it to the database then add additional logic to \"remove\" it from execution if the flag is not set.  Either way you have to do dynamic manipulation of the list with your current design choice.",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-11 11:43:35.000000000",
+      "in_reply_to": "75e91f6c_bf279235",
+      "unresolved": false
+    },
+    {
+      "id": "d90fc4af_db33de92",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowAction.java",
+      "patchset_number": 6,
+      "line": 346,
+      "message": "We have similar logic that manipulates the list, all we do is call:\n flowsToExecute.add(assignConfigBB);\n                    flowsToExecute.add(activateConfigBB);\n\nI had pointed you toward this method of where we had done this previously",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-11 11:46:42.000000000",
+      "in_reply_to": "15478169_3f0f0174",
+      "unresolved": false
+    },
+    {
+      "id": "e310eaad_372b631b",
+      "file_path": "adapters/mso-catalog-db-adapter/src/main/resources/db/migration/V5.8__AddConfiguration_VNF_MacroData.sql",
+      "patchset_number": 8,
+      "line": 1,
+      "message": "You must use the repeatable macro script this data will just get wiped out.",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-12 14:00:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b81d4e57_36eec9d3",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowActionBBTasks.java",
+      "patchset_number": 8,
+      "line": 92,
+      "message": "This is not really a safe query as the customization uuid is not unique any more, you should query with a combination of service and then customization uuid if you want to go directly.",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-12 14:00:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da705338_02cd026c",
+      "file_path": "adapters/mso-catalog-db-adapter/src/main/resources/db/migration/V5.8__AddConfiguration_VNF_MacroData.sql",
+      "patchset_number": 8,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 4695,
+        "name": "Sunil Kumar Biradar",
+        "display_name": null,
+        "email": "SB00577584@techmahindra.com",
+        "username": "SunilB"
+      },
+      "updated": "2019-04-15 10:05:42.000000000",
+      "in_reply_to": "e310eaad_372b631b",
+      "unresolved": false
+    },
+    {
+      "id": "bd3bdc01_26a40f2b",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/bpmn/infrastructure/workflow/tasks/WorkflowActionBBTasks.java",
+      "patchset_number": 8,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 4695,
+        "name": "Sunil Kumar Biradar",
+        "display_name": null,
+        "email": "SB00577584@techmahindra.com",
+        "username": "SunilB"
+      },
+      "updated": "2019-04-15 10:05:42.000000000",
+      "in_reply_to": "b81d4e57_36eec9d3",
+      "unresolved": false
+    },
+    {
+      "id": "36461d45_2643406a",
+      "file_path": "mso-catalog-db/src/main/java/org/onap/so/db/catalog/data/repository/VnfCustomizationRepository.java",
+      "patchset_number": 13,
+      "line": 52,
+      "message": "this table no longer exists",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-15 12:46:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6d88abe8_e8dab626",
+      "file_path": "mso-catalog-db/src/main/java/org/onap/so/db/catalog/data/repository/VnfCustomizationRepository.java",
+      "patchset_number": 13,
+      "line": 52,
+      "message": "select * from vnf_resource_customization where SERVICE_MODEL_UUID = ?",
+      "author": {
+        "account_id": 63,
+        "name": "Steve Smokowski",
+        "display_name": null,
+        "email": "ss835w@att.com",
+        "username": "SteveSmokowski"
+      },
+      "updated": "2019-04-15 12:48:08.000000000",
+      "in_reply_to": "36461d45_2643406a",
+      "unresolved": false
+    },
+    {
+      "id": "5e7f8e47_026dee80",
+      "file_path": "mso-catalog-db/src/main/java/org/onap/so/db/catalog/data/repository/VnfCustomizationRepository.java",
+      "patchset_number": 13,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 4695,
+        "name": "Sunil Kumar Biradar",
+        "display_name": null,
+        "email": "SB00577584@techmahindra.com",
+        "username": "SunilB"
+      },
+      "updated": "2019-04-15 14:23:29.000000000",
+      "in_reply_to": "36461d45_2643406a",
+      "unresolved": false
+    },
+    {
+      "id": "d985be69_c342e4b0",
+      "file_path": "mso-catalog-db/src/main/java/org/onap/so/db/catalog/data/repository/VnfCustomizationRepository.java",
+      "patchset_number": 13,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 4695,
+        "name": "Sunil Kumar Biradar",
+        "display_name": null,
+        "email": "SB00577584@techmahindra.com",
+        "username": "SunilB"
+      },
+      "updated": "2019-04-15 14:23:29.000000000",
+      "in_reply_to": "6d88abe8_e8dab626",
+      "unresolved": false
+    }
+  ]
+}

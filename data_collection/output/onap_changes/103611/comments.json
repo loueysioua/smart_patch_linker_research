@@ -1,0 +1,229 @@
+{
+  "id": "aaf%2Fcertservice~master~I04e10fd6e4ab619124b93db7193c94f54b4b08ef",
+  "change_id": "I04e10fd6e4ab619124b93db7193c94f54b4b08ef",
+  "_number": 103611,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3dcbadd6_e4dc85e9",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/adapter/CSRMetaBuilder.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Why did u inline that method here?",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-13 09:10:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8eafa2a0_ffdf3fba",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/RDN.java",
+      "patchset_number": 1,
+      "line": 102,
+      "message": "I think there should be a unit test to check if it still works as expected",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-13 09:10:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "481d8153_129d6b83",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/adapter/CSRMetaBuilder.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "I didn't inline whole method. To create RDN we need just 'tag' and 'value'. These were used to create string (that format: \"tag=value\"), which was later parsed to get tag and value from it.\n\nIt was unnecessary conversion, so I just made new constructor and passed these values.",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-13 09:16:25.000000000",
+      "in_reply_to": "3dcbadd6_e4dc85e9",
+      "unresolved": true
+    },
+    {
+      "id": "47d53d25_e7999dd9",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/adapter/CSRMetaBuilder.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "OK, I See. Looks good, but I recommend extracting the content of try block to a sperate method. You also call rdn.getFirst() twice. You can consider assigning it to a variable and then just call getType() and getValue() method on that.",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-13 09:31:39.000000000",
+      "in_reply_to": "481d8153_129d6b83",
+      "unresolved": true
+    },
+    {
+      "id": "6b13a73c_a5ae164e",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/adapter/CSRMetaBuilder.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-13 11:05:32.000000000",
+      "in_reply_to": "47d53d25_e7999dd9",
+      "unresolved": false
+    },
+    {
+      "id": "5ba2c428_50944f10",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/RDN.java",
+      "patchset_number": 1,
+      "line": 102,
+      "message": "Done",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-13 11:05:32.000000000",
+      "in_reply_to": "8eafa2a0_ffdf3fba",
+      "unresolved": false
+    },
+    {
+      "id": "ca248c26_85f4ad44",
+      "file_path": "certService/src/test/java/org/onap/aaf/certservice/cmpv2client/external/RDNTest.java",
+      "patchset_number": 3,
+      "line": 34,
+      "message": "I was thinking about testing the constructor which you refactored.\n\nSo sample test could look like\n\nRDN rdn = new RDN(\"CN=ManagmentCA\");\nassertEquals(BCStyle.CD, rdn.getAoi());\nassertEquals(\"ManagmentCA, rdn.getValue());\n\nAnd other tests which will cover the case when RDN needs trimming like new RDN(\" CN = ManagmentCA \");",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-13 11:26:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "723c5cca_382d88c6",
+      "file_path": "certService/src/test/java/org/onap/aaf/certservice/cmpv2client/external/RDNTest.java",
+      "patchset_number": 3,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-16 01:33:11.000000000",
+      "in_reply_to": "ca248c26_85f4ad44",
+      "unresolved": false
+    },
+    {
+      "id": "3ad774bb_b8d894d4",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/StringUtils.java",
+      "patchset_number": 4,
+      "line": 1,
+      "message": "I think we should update licence when we modify/add file",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2020-03-16 06:48:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "231587d7_b8267d3d",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/StringUtils.java",
+      "patchset_number": 4,
+      "line": 1,
+      "message": "yes we should",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-03-16 06:53:04.000000000",
+      "in_reply_to": "3ad774bb_b8d894d4",
+      "unresolved": true
+    },
+    {
+      "id": "e4452977_599051a2",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/StringUtils.java",
+      "patchset_number": 4,
+      "line": 27,
+      "message": "do not use \"And\" in method name. Method must describe a single action. If you want to add an additional information for developers then use the javadoc",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-03-16 06:53:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bcda94be_18a92a87",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/StringUtils.java",
+      "patchset_number": 4,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-16 11:22:53.000000000",
+      "in_reply_to": "231587d7_b8267d3d",
+      "unresolved": false
+    },
+    {
+      "id": "46dbb78a_91b120a1",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/cmpv2client/external/StringUtils.java",
+      "patchset_number": 4,
+      "line": 27,
+      "message": "Done",
+      "author": {
+        "account_id": 5234,
+        "name": "Micha? Ba?ka",
+        "display_name": "Michal Banka",
+        "email": "michal.banka@nokia.com",
+        "username": "michal.banka"
+      },
+      "updated": "2020-03-16 11:22:53.000000000",
+      "in_reply_to": "e4452977_599051a2",
+      "unresolved": false
+    }
+  ]
+}

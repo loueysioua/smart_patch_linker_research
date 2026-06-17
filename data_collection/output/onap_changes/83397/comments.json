@@ -1,0 +1,280 @@
+{
+  "id": "policy%2Fengine~master~I06718526382b424eab991f39a7dac1b5cf4f1b74",
+  "change_id": "I06718526382b424eab991f39a7dac1b5cf4f1b74",
+  "_number": 83397,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "79782cca_25d263a4",
+      "file_path": "PolicyEngineUtils/src/main/java/org/onap/policy/utils/PeCryptoUtils.java",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "adding \"synchronized\" here just prevents two threads from invoking initAesKey() at the same time; it does not prevent one thread from changing the key while another decrypts().  Seems like the whole problem would be solved by changing the \"static\" methods to regular methods, and passing the AES key to the constructor.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-26 20:22:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1794fd0b_f1df03d6",
+      "file_path": "PolicyEngineUtils/src/main/java/org/onap/policy/utils/PeCryptoUtils.java",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "Maybe im missing something but the key is only used to init CryptoUtils once. A change to key later will not reinit CryptoUtils. Assumption is one key per app. If different keys are needed later, we can instantiate CryptoUtils directly.\nIf the apps were modified to decrypt all the reqd passwords once at init and make it accessible throughout the app, there would be no need for this class and caching.",
+      "author": {
+        "account_id": 2757,
+        "name": "Praveen Augustus",
+        "display_name": null,
+        "email": "pa834y@att.com",
+        "username": "pa834y"
+      },
+      "updated": "2019-03-26 21:59:21.000000000",
+      "in_reply_to": "79782cca_25d263a4",
+      "unresolved": false
+    },
+    {
+      "id": "dd05b7d4_130b9290",
+      "file_path": "PolicyEngineUtils/src/main/java/org/onap/policy/utils/PeCryptoUtils.java",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "That's what I thought, but then I saw a number of places where the code does init & decrypt, so left me skeptical.  (In addition, I tend to dislike static methods, as a general rule, because they're generally not object-oriented.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-26 22:03:00.000000000",
+      "in_reply_to": "1794fd0b_f1df03d6",
+      "unresolved": false
+    },
+    {
+      "id": "fb7bf80e_dc646e4b",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/CheckPDP.java",
+      "patchset_number": 3,
+      "line": 7,
+      "message": "is this correct?\n\nsame comment for other files",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c1c2b7cc_02178b34",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 695,
+      "message": "create and populate \"el\" inside the \"if\" block below",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "148aa1b6_59165829",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 752,
+      "message": "why bother with the \"contains()\" check?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "76ebcc8a_eeee02aa",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 757,
+      "message": "looks to me like we're cloning much of this block of code over and over.  Any way to extract a common method?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "77a988b1_091e64af",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 1593,
+      "message": "need to check for !name.isEmpty() still?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a78e0402_adc888aa",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 1616,
+      "message": "could eliminate this variable, make line 1620 a return, delete lines 1623-1624 & 1627, and change line 1630 to a return.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ab4affde_d2159bb3",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/RESTfulPAPEngine.java",
+      "patchset_number": 3,
+      "line": 343,
+      "message": "more efficient to append \"&\" and \"p\" separately",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4f36d82f_7fccf9db",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/controller/PolicyController.java",
+      "patchset_number": 3,
+      "line": 464,
+      "message": "more efficient to do separate appends for each item",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8ac47741_8331c29d",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/controller/PolicyController.java",
+      "patchset_number": 3,
+      "line": 500,
+      "message": "use constants for these?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9714af25_99e7af10",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/controller/PolicyController.java",
+      "patchset_number": 3,
+      "line": 502,
+      "message": "use constants for these?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d931f44a_7060ba89",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/controller/PolicyController.java",
+      "patchset_number": 3,
+      "line": 655,
+      "message": "could uValue appear more than once?  If so, maybe replace lastIndexOf() with indexOf(indexOf(uv)+1, uv)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-04-01 13:30:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c531873c_f4af7d2a",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/CheckPDP.java",
+      "patchset_number": 3,
+      "line": 7,
+      "message": "yes, changes were made in 2018.",
+      "author": {
+        "account_id": 2757,
+        "name": "Praveen Augustus",
+        "display_name": null,
+        "email": "pa834y@att.com",
+        "username": "pa834y"
+      },
+      "updated": "2019-04-01 14:38:08.000000000",
+      "in_reply_to": "fb7bf80e_dc646e4b",
+      "unresolved": false
+    },
+    {
+      "id": "95a017d5_dda81386",
+      "file_path": "BRMSGateway/src/main/java/org/onap/policy/brms/api/BrmsPush.java",
+      "patchset_number": 3,
+      "line": 188,
+      "message": "what happens if this property is null as in onap?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-04-02 03:28:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

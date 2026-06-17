@@ -1,0 +1,739 @@
+{
+  "id": "policy%2Fengine~master~Ied02b7838b5e4839a4906f79ff37c4fd6afeccfe",
+  "change_id": "Ied02b7838b5e4839a4906f79ff37c4fd6afeccfe",
+  "_number": 56717,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a9dcd25_3d8302ce",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 10,
+      "message": "Please note, not all refactoring is done. because of complexity of the code. It would be better to do small chunks",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-18 11:09:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a9dcd25_dd73fe13",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/CreateNewMicroServiceModel.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "I have purposefully not handled all the issues about 3 or more nested for/try/if blocks in this class. lot of complexity, hence handled only few. it might be difficult for review as well such large chunk of code.\nplease let me know your opinion",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-18 11:09:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_3c147df4",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 1967,
+      "message": "You don't need the configData string, Replace with:\npolicy.policyAdapter.setConfigBodyData(getConfigData(configPath));",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_dcf8e1c6",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2034,
+      "message": "I prefer:\nprivate String getConfigData(String configPath) {\n    try {\n\tString newConfigPath = processConfigPath(configPath);\n\treturn readConfigFile(newConfigPath);\n    } catch (ExceptionReturnedFromProcessConfigPath e){\n\tlogger.error(\"Could not process config path: \" + configPath, e);\n    }\n    catch(ExceptionReturnedFromReadsConfigFile e){\n\tlogger.error(\"Could not read config body data for \" + configPath,e);\n    }\n    return \"\";\n}",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_dcdc6177",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2039,
+      "message": "This method is deprecated on the latest 2.6 version of Apache commons. It recommends you use the version that specifies the character set.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_9ce6e943",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2045,
+      "message": "This method is also deprecated. It says to use try with resources or handle the exceptions.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_bce3ad32",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2047,
+      "message": "It might be better to use a try-with resources, bring the definition of the input stream and the opening of the input stream into this method. Would something like this work better?\nprivate String getPolicyDataString(PolicyType policyType) {\n\n    try (InputStream policyXmlStream  = XACMLPolicyWriter.getXmlAsInputStream(policyType)) {\n\treturn getPolicyDataString(policyXmlStream);\n    } catch (IOException e) {\n\tpolicyDataString = \"could not read\";\n\tPolicyLogger.error(MessageCodes.EXCEPTION_ERROR, e, policyDBDaoVar, \"Caught IOException on IOUtils.toString(\"+policyXmlStream+\")\");\n\tthrow new IllegalArgumentException(\"Cannot parse the policy xml from the PolicyRestAdapter.\");\n    }\n}",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_9c0269b3",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2193,
+      "message": "Take outside try/catch and replace with\nif (scopeAndName == null) {\n    return;\n}",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_7c3195a1",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "indentation and tabs",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_1c265969",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 2,
+      "line": 217,
+      "message": "tabs",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-19 10:20:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_5912a3b5",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/CreateNewMicroServiceModel.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "created smaller methods : reducing nested loops count",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_791767a4",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 1949,
+      "message": "defined a new method",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_190c2b94",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 1966,
+      "message": "defined a new method",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_d925530b",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/CheckPDP.java",
+      "patchset_number": 2,
+      "line": 61,
+      "message": "tabs to space conversion and ..\nline 128 : try-wth-res construct",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_3911efac",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/CheckPDP.java",
+      "patchset_number": 2,
+      "line": 128,
+      "message": "using try-with-resources construct",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_991fdbb7",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 68,
+      "message": "created a new method for this",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_b91c1fc3",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "this check is not needed because, policyNameValue cannot be null",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_597943fb",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 106,
+      "message": "created a new method for this set of if-else stmts",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_797e87e6",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 69,
+      "message": "okay, i see that some tabs managed to stay on...",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_1983cbcd",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "tabs -> space conversion\nline \n217 : refactor to a new method\n344 : refactor to a new method\n352 : refactor to a new method\n397 : new method added parsePolicyList\n421 : new method addScope",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_39880fe7",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyRestController.java",
+      "patchset_number": 2,
+      "line": 282,
+      "message": "refactor to smaller methods for nested try/catch blocks and reduce nested loops",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-19 13:24:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_4d1179ab",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 1967,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_3c147df4",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_5f4da371",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2034,
+      "message": "wow ! that was very good comment, I didnt think this way, thanks. \nexception returned by both methods is same, so, its even better.. IllegalArgumentException",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_dcf8e1c6",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_4d5f3973",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2039,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_dcdc6177",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_2d5a0584",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2045,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_9ce6e943",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_6d60fd35",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2047,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_bce3ad32",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_bfe39f32",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 2,
+      "line": 2193,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_9c0269b3",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_6dc79d13",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 3,
+      "line": 496,
+      "message": "this is already initialized",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_0d514162",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 3,
+      "line": 103,
+      "message": "these variables are not used outside",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_ad4db5c6",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 3,
+      "line": 426,
+      "message": "unused outside , hence private",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_2dd1a5cd",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 3,
+      "line": 1367,
+      "message": "i used this method in CreateNewMicroServiceModel in the same package for checking null or empty.\nearlier in that class(line 158), it was compared using !=\n\"\" != <strval>",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_eddacde8",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/PolicyDBDao.java",
+      "patchset_number": 3,
+      "line": 1945,
+      "message": "as per your comments",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_0dd861ee",
+      "file_path": "ONAP-XACML/src/main/java/org/onap/policy/xacml/util/XACMLPolicyWriter.java",
+      "patchset_number": 3,
+      "line": 145,
+      "message": "Ah., i forgot to run tabs -> space here\n\nif no other comment in this class, i will handle conversion in another subtask,",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_ade4d5ac",
+      "file_path": "ONAP-XACML/src/main/java/org/onap/policy/xacml/util/XACMLPolicyWriter.java",
+      "patchset_number": 3,
+      "line": 150,
+      "message": "here null was returned and down the line, Illegal Arg exception thrown by java library, so i just throw it from here. \nAlso., throwing null here would cause null ptr exception or need to handle null check, \nto prevent it i throw illegal arg exception here",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_ffc0377e",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_7c3195a1",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_cde1099c",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 3,
+      "line": 49,
+      "message": "ok, conversions here as well., i will handle this in separate subtask",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_9fbd7b05",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 2,
+      "line": 217,
+      "message": "Done",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": "da7095c5_1c265969",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_6deebd8d",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyManagerServlet.java",
+      "patchset_number": 3,
+      "line": 93,
+      "message": "changes in 217, 352, 383, 398, 421",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 04:14:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_08104f4d",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/PolicyAdapter.java",
+      "patchset_number": 3,
+      "line": 49,
+      "message": "That's fine.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-20 08:10:42.000000000",
+      "in_reply_to": "da7095c5_cde1099c",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_cd8fc9cb",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/CreateNewMicroServiceModel.java",
+      "patchset_number": 3,
+      "line": 148,
+      "message": "the string comparison is done incorrectly using != \ni have changed it to use an existing method , i just changed that method to make it public",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 09:53:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_6dbc7d6d",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/Policy.java",
+      "patchset_number": 3,
+      "line": 225,
+      "message": "i have not changed the tabs here., may be i will do it in another subtask ?",
+      "author": {
+        "account_id": 2543,
+        "name": "Krishnakumar Jinka",
+        "display_name": null,
+        "email": "kris.jinka@samsung.com",
+        "username": "krisjinka"
+      },
+      "updated": "2018-07-20 09:53:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_a86b6384",
+      "file_path": "ONAP-PAP-REST/src/main/java/org/onap/policy/pap/xacml/rest/components/Policy.java",
+      "patchset_number": 3,
+      "line": 225,
+      "message": "OK",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-07-20 09:57:17.000000000",
+      "in_reply_to": "da7095c5_6dbc7d6d",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_08e4cf0b",
+      "file_path": "POLICY-SDK-APP/src/main/java/org/onap/policy/admin/CheckPDP.java",
+      "patchset_number": 3,
+      "line": 5,
+      "message": "Please add Modified Copyright (C) 2018 TechMahindra",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-07-20 11:09:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

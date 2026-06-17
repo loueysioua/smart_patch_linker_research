@@ -1,0 +1,127 @@
+{
+  "id": "oom~master~I27a70c0cc7e3184bb89333b129797fbc0a83caca",
+  "change_id": "I27a70c0cc7e3184bb89333b129797fbc0a83caca",
+  "_number": 43719,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_eb89b96f",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 1,
+      "line": 8,
+      "message": "The nsPrefix is no longer being used. Please replace with {{ include \"common.namespace\" . }}",
+      "author": {
+        "account_id": 127,
+        "name": "Mike Elliott",
+        "display_name": null,
+        "email": "mike.elliott@amdocs.com",
+        "username": "melliott"
+      },
+      "updated": "2018-04-19 21:37:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_284c7441",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "I will have to find time to confirm, but I don't think you can escape the quotes here.  Helm may not like it.\nDid you run make at the kubernetes directory level?\ndo a helm install with --debug --dry-run to see if it renders properly.\n\nYou can try .Release.Namespace or even drop the namespace completely since we are in a single namespace.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-04-25 17:41:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2b0d4e3e",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "Dear Mandeep, I have not run these testing and will do it.\n\nshall i modify like \"http://cli.{{ include \\\"Release.Namespace\\\" . }}:8080\" \n?",
+      "author": {
+        "account_id": 741,
+        "name": "Kanagaraj Manickam",
+        "display_name": null,
+        "email": "kanagaraj.manickam@huawei.com",
+        "username": "mkr1481"
+      },
+      "updated": "2018-04-26 06:08:39.000000000",
+      "in_reply_to": "5a93c517_284c7441",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e756a9cd",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "Hi Kanagaraj,\nYou can drop the backslash and spaces.  \n\nThis works for me: \n\"http\": \"http://cli.{{include \"common.namespace\" .}}:8080\",\n\nWhat you have currently does result in an error:\n: parse error in \"aaa_template\": template: aaa_template:263: unexpected \"\\\\\" in operand",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-05-01 19:46:44.000000000",
+      "in_reply_to": "5a93c517_2b0d4e3e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_135c377c",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "Unfortunately, it is still not valid.  You need quotes here as I showed in my previous comment.  \"common.namespace\"",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-05-02 18:22:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_16e3c4a4",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "If i put quote arroud, its not an valid json and am getting json error. so i have removed the double quotes completely as there is no space char init.",
+      "author": {
+        "account_id": 741,
+        "name": "Kanagaraj Manickam",
+        "display_name": null,
+        "email": "kanagaraj.manickam@huawei.com",
+        "username": "mkr1481"
+      },
+      "updated": "2018-05-03 12:06:34.000000000",
+      "in_reply_to": "5a93c517_135c377c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e7c1c0e4",
+      "file_path": "kubernetes/consul/resources/config/consul-agent-config/cli-health-check.json",
+      "patchset_number": 3,
+      "line": 8,
+      "message": "The chart doesn't care that it is invalid JSON.  Once it is processed by helm and the tiller pod the {{}} is replaced with a real string.  If then it is invalid JSON you have a problem.  Right now the problem is that this is an invalid yaml helm syntax.\nI am guessing you are using an IDE that lint's JSON?  If so you can ignore the warnings about invalid JSON.  I have the same situation and ignoring/disabling the linter is the only way at this point.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-05-03 21:02:50.000000000",
+      "in_reply_to": "5a93c517_16e3c4a4",
+      "unresolved": false
+    }
+  ]
+}

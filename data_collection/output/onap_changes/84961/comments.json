@@ -1,0 +1,263 @@
+{
+  "id": "so~master~I8f0e474405db7f0c23266208cee89df12ac6c0a2",
+  "change_id": "I8f0e474405db7f0c23266208cee89df12ac6c0a2",
+  "_number": 84961,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8cd80fe5_b0391818",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClient.java",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "Why is this moved to separate setter?",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 09:08:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0910b2e8_25db58fb",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClient.java",
+      "patchset_number": 2,
+      "line": 154,
+      "message": "So this flag is used to use different code in production and different code in integration test? That's outrageous! We shouldn't have test code in production!",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 09:08:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "17534def_1ffe9e3c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 2,
+      "line": 190,
+      "message": "Why times(2)? This particular Pnf is registered only once - json that is send indeed have 2 pnf registration, but only one is relevant, other one have different correlationId and should be ignored.\n\nThis also shows that this class will inform all waiting workflows when any pnf is registered, not the one with correct correlationId. This implementation is broken.",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 09:08:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "834bee88_ce1e2b94",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClient.java",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "so I don't need to change the constructor.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-11 09:16:17.000000000",
+      "in_reply_to": "8cd80fe5_b0391818",
+      "unresolved": false
+    },
+    {
+      "id": "e0490068_0744bfda",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClient.java",
+      "patchset_number": 2,
+      "line": 154,
+      "message": "I don't understand what your mean by this. It's the same code can be used by both production and testing. You have the flag to choose which one you want to use.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-11 09:16:17.000000000",
+      "in_reply_to": "0910b2e8_25db58fb",
+      "unresolved": false
+    },
+    {
+      "id": "d23bc37c_48387178",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 2,
+      "line": 190,
+      "message": "Please take a look at PnfNotificationEventHandler, it will decide which pnfCorrelationId is of interested. This class PnfEventReadyDmaapClient just publish whatever pnfCorrelationId is received.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-11 09:16:17.000000000",
+      "in_reply_to": "17534def_1ffe9e3c",
+      "unresolved": false
+    },
+    {
+      "id": "46b74073_db598453",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClient.java",
+      "patchset_number": 2,
+      "line": 154,
+      "message": "Why would we want to use different one? User shouldn't care about implementation details to be set in configuration.\n\nAlso this creates super-complicated API for simple task. Instead of simply registering in dmaap client you must register in 2 different places (or read config and register in correct one).",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 09:33:28.000000000",
+      "in_reply_to": "e0490068_0744bfda",
+      "unresolved": false
+    },
+    {
+      "id": "0638ca29_e910fae0",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 2,
+      "line": 190,
+      "message": "I just noticed it. I stand corrected.\n\nHowever it's quite counter-intuitive that this class does two different things depending on configuration - that's violation of Single Responsibility Principle.",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 09:33:28.000000000",
+      "in_reply_to": "d23bc37c_48387178",
+      "unresolved": false
+    },
+    {
+      "id": "2e468bdf_b62f9e74",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "test class should be reverted, not deleted",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-04-11 13:55:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "66d9a0c1_5a82df72",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 5,
+      "line": 61,
+      "message": "I think this file shouldn't be deleted",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 13:57:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d6fdeb58_9cc3cea0",
+      "file_path": "bpmn/so-bpmn-infrastructure-flows/src/test/java/org/onap/so/bpmn/infrastructure/process/CreateVcpeResCustServiceSimplifiedTest.java",
+      "patchset_number": 5,
+      "line": 139,
+      "message": "Actually this trenary operator can be skipped:\n\nreturn runtime.... == null;",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 13:57:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "925784c2_6d2d11cc",
+      "file_path": "bpmn/so-bpmn-infrastructure-flows/src/test/java/org/onap/so/bpmn/infrastructure/process/CreateVcpeResCustServiceSimplifiedTest.java",
+      "patchset_number": 5,
+      "line": 168,
+      "message": "I think all those .matches() should be .isEqualTo()",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 13:57:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f7308a71_66fc8753",
+      "file_path": "bpmn/so-bpmn-infrastructure-flows/src/test/java/org/onap/so/bpmn/infrastructure/process/CreateVcpeResCustServiceSimplifiedTest.java",
+      "patchset_number": 5,
+      "line": 134,
+      "message": "remove catch and make test method throw Exception",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2019-04-11 14:17:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0e914208_20cf7ed0",
+      "file_path": "bpmn/so-bpmn-infrastructure-flows/src/test/java/org/onap/so/bpmn/infrastructure/process/CreateVcpeResCustServiceSimplifiedTest.java",
+      "patchset_number": 6,
+      "line": 126,
+      "message": "pi.isEnded does not mean exactly that process instance is ended. Here you have info:\n\nhttps://groups.google.com/forum/#!topic/camunda-bpm-users/d0qntahqqXI\n\nplease use the method that I sent you in mail",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-04-11 15:19:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7b2c1e77_2e93d0ae",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 5,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-11 15:27:58.000000000",
+      "in_reply_to": "66d9a0c1_5a82df72",
+      "unresolved": false
+    }
+  ]
+}

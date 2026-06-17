@@ -1,0 +1,42 @@
+{
+  "id": "policy%2Fdrools-pdp~master~If7e887b99fa44dac5ac5fa6f8c8cfe677238576d",
+  "change_id": "If7e887b99fa44dac5ac5fa6f8c8cfe677238576d",
+  "_number": 109433,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b9205983_6207834a",
+      "file_path": "feature-server-pool/src/main/java/org/onap/policy/drools/serverpool/Server.java",
+      "patchset_number": 1,
+      "line": 215,
+      "message": "Code seems OK to me, but check with Ralph to make sure that there is nothing special for the equals and hashcode below, as I see that this class is using this Util.uuidComparator object (vs. the UUID one, https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html#compareTo(java.util.UUID)).",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-06-23 03:26:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "98e71af9_45673dcb",
+      "file_path": "feature-server-pool/src/main/java/org/onap/policy/drools/serverpool/Server.java",
+      "patchset_number": 1,
+      "line": 215,
+      "message": "The standard UUID comparator does a signed comparison, which results in a strange ordering for UUIDs -- UUIDs beginning with 8 through F occur before UUIDs beginning with 0 through 7. This ordering affects the first and seventeenth hex digit, with the rest of the digits occurring in the natural order. When you do unsigned comparison, as 'Util.uuidComparator' does, you get the expected natural ordering.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2020-06-23 08:18:26.000000000",
+      "in_reply_to": "b9205983_6207834a",
+      "unresolved": false
+    }
+  ]
+}

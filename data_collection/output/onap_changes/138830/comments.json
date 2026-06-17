@@ -1,0 +1,441 @@
+{
+  "id": "cps~master~I605ed78f164d7534069de8352dc3b0a81a4ce22c",
+  "change_id": "I605ed78f164d7534069de8352dc3b0a81a4ce22c",
+  "_number": 138830,
+  "change_comments": [
+    {
+      "id": "38de0f19_6954710b",
+      "patchset_number": 1,
+      "message": "I ll set a review call to go through the commit. Thanks",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 08:07:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f680bd3f_b73dfc0d",
+      "patchset_number": 1,
+      "message": "Solution will be discussed internally in a meeting.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 09:16:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "118dc35f_e83a3032",
+      "patchset_number": 2,
+      "message": "Upon internal tech. discussion decided to handle the bug around getEffectiveTrustLevel will be hanldled in a seprate ticket.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 10:33:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f433d931_2be842f8",
+      "patchset_number": 3,
+      "message": "recheck",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 12:52:12.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f6826915_871637de",
+      "patchset_number": 4,
+      "message": "fine by me.\ndiscussed on the comment that I made previously on the default trust level.\nIt will eventually be corrected by the watchdog.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-08-26 15:37:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "c6971347_7912d274",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/models/NcmpServiceCmHandle.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "It's not a good idea to change the public API without consulting stakeholders.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-22 16:16:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7b0ddadb_821c5e6d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "The YangModelCmHandle here has the info we need, so pass it to the applyCurrentTrustLevel method:\n\n    final YangModelCmHandle inventoryPersistence.getYangModelCmHandle(cmHandleId);\n    final NcmpServiceCmHandle ncmpServiceCmHandle = YangDataConverter.toNcmpServiceCmHandle(yangModelCmHandle);\n    final String dmiServiceName = yangModelCmHandle.resolveDmiServiceName(DATA);\n    applyCurrentTrustLevel(ncmpServiceCmHandle, dmiServiceName);",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-22 16:37:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bf059692_6ace61ba",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 210,
+      "message": "Just wondering, why has this changed to effective trust level where it wasn't before? Was that a bug? If so, it should really be done in a different Jira ticket.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-22 16:39:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1ec6b17_c166f940",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Correct, but this is not the only place which applies currentTrustLevel. There is also a method in the same which used by query cm handle APIs on line 139:\n    \n    public Collection<NcmpServiceCmHandle> executeCmHandleSearch(\n        final CmHandleQueryApiParameters cmHandleQueryApiParameters)",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 08:07:36.000000000",
+      "in_reply_to": "7b0ddadb_821c5e6d",
+      "unresolved": true
+    },
+    {
+      "id": "e74ba7a8_e73cfeaa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 210,
+      "message": "Good question, yes it was a bug. Since cm handle and dmi plugin relating to each other was considered in the epic in a way that either one was down, should make effective (resulting) trust level of cm handle 'NONE (untrusted)'\n\nPreviously when doing get cm handle or query cm hanlde was returning only cm hanlde trust level without considering the latest health of dmi plugin.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 08:07:36.000000000",
+      "in_reply_to": "bf059692_6ace61ba",
+      "unresolved": true
+    },
+    {
+      "id": "73d28cbf_0627cf33",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/models/NcmpServiceCmHandle.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Agree we can discuss with both internally and customer. Since, this can be a good optimization for cps other than going to db to get dmiServiceName. Because, there are a couple of place makes a db call to retrieve the dmiServiceName.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 08:07:36.000000000",
+      "in_reply_to": "c6971347_7912d274",
+      "unresolved": true
+    },
+    {
+      "id": "18efb05b_4148185f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Okay, some refactoring may be needed then. Once possibly solution is to call applyCurrentTrustLevel from inside YangDataConvertor.toNcmpServiceCmHandle(yangModelCmHandle)\n\nThat should catch all cases.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 09:06:17.000000000",
+      "in_reply_to": "b1ec6b17_c166f940",
+      "unresolved": true
+    },
+    {
+      "id": "954f7d3b_b121769a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 210,
+      "message": "In that case we should not fix it here, but have a separate Jira ticket for returning effective trust level.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 09:06:17.000000000",
+      "in_reply_to": "e74ba7a8_e73cfeaa",
+      "unresolved": true
+    },
+    {
+      "id": "5f5e151c_dd5227e9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Ack",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 09:16:18.000000000",
+      "in_reply_to": "18efb05b_4148185f",
+      "unresolved": false
+    },
+    {
+      "id": "7c886fa3_a78d2c5c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/NetworkCmProxyInventoryFacade.java",
+      "patchset_number": 1,
+      "line": 210,
+      "message": "Ack",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 09:16:18.000000000",
+      "in_reply_to": "954f7d3b_b121769a",
+      "unresolved": false
+    },
+    {
+      "id": "ccf635c8_0f099b4f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/models/NcmpServiceCmHandle.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Ack",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 09:16:18.000000000",
+      "in_reply_to": "73d28cbf_0627cf33",
+      "unresolved": false
+    },
+    {
+      "id": "5c022369_5c589d6e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "NB: u are going to use that resolve dmi plugin logic in a different patch ?",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-08-23 11:04:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "73a9ec5c_8624e663",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 146,
+      "message": "Don't change the test to reflect broken behaviour, it would be better to put @Ignore on this test, and leave a TODO comment with new ticket number",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 11:08:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "83dd3f91_eb151f16",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "Probably okay to leave it for now, not to make this patch too complicated. I just realized the 'resolveDmiServiceName' method belongs to YangModelCmHandle, so a bit of refactoring would be needed to use that.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 11:20:03.000000000",
+      "in_reply_to": "5c022369_5c589d6e",
+      "unresolved": true
+    },
+    {
+      "id": "d8940540_c1990365",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "If we were to refactor, I propose having the resolveDmiServiceName method in both DmiPluginRegistration and YangModelCmHandle, and have both use a common helper method.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 11:22:29.000000000",
+      "in_reply_to": "83dd3f91_eb151f16",
+      "unresolved": true
+    },
+    {
+      "id": "bf8013b0_7f443bf9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "Ack",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 12:37:56.000000000",
+      "in_reply_to": "d8940540_c1990365",
+      "unresolved": false
+    },
+    {
+      "id": "78235df6_301757ae",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 146,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-23 12:37:56.000000000",
+      "in_reply_to": "73a9ec5c_8624e663",
+      "unresolved": false
+    },
+    {
+      "id": "86b64dba_2d6c033e",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 14,
+      "message": "This was split to other bug ticket, right?",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-23 16:58:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "834159d2_a3c876f5",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 14,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-26 09:20:51.000000000",
+      "in_reply_to": "86b64dba_2d6c033e",
+      "unresolved": false
+    },
+    {
+      "id": "6debdc7d_e4d5e91b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleRegistrationService.java",
+      "patchset_number": 4,
+      "line": 96,
+      "message": "probably legacy issue , but we are registering the dmi service as the first step.\nwhat if the other steps fail after this and maybe we are unable to remove, create, update or upgrade ( in short contact the DMI plugin ) . We dont want the trust level to be complete in that scenario. right ??\n\nso do we register the DMI as the last step by checking if we are able to contact the DMI and DMI is able to perform the operations.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-08-26 10:30:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c5ebcf0a_623f9ac5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleRegistrationService.java",
+      "patchset_number": 4,
+      "line": 96,
+      "message": "As this review being discussed in a call, decided to keep the patch-set as-is.\n\nSince, there is another bean scheduled to check if the dmi is accessible or not (DmiPluginWatchDog).\n\nFor the point of adding dmi-plugin to the cache regardless of waiting crate, update, upgrade, and remove is seems also ok. Since there is a re-try mechanism for the operations. It is very less probability to get fail over all the CRUD operations for entire cm handles. Nevertheless, the trust level of a cm handle is being decided by effective trust level that looking for both caches.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-26 11:30:49.000000000",
+      "in_reply_to": "6debdc7d_e4d5e91b",
+      "unresolved": false
+    }
+  ]
+}

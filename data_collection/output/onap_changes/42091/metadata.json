@@ -1,0 +1,140 @@
+{
+  "id": "oom~master~Ieb9ce34ed15077e45680fe9ceef5957a05732936",
+  "change_id": "Ieb9ce34ed15077e45680fe9ceef5957a05732936",
+  "_number": 42091,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-04-10 23:12:16.000000000",
+    "updated": "2018-04-12 11:52:28.000000000",
+    "submitted": "2018-04-12 11:52:28.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "update nexus image references",
+  "commit_message": "update nexus image references\n\nChange-Id: Ieb9ce34ed15077e45680fe9ceef5957a05732936\nIssue-ID: OOM-904\nSigned-off-by: Jorge Hernandez <jh1730@att.com>\n",
+  "change_log": {
+    "entry_count": 8,
+    "entries": [
+      {
+        "id": "be05e02afadcec0e44dae1d5554abb7af4bbbe74",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-10 23:12:16.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ab31fe95409d52a8a8e3fd88a663b575f8f4d801",
+        "author": {
+          "account_id": 2763,
+          "name": "Mahendra Raghuwanshi",
+          "display_name": null,
+          "email": "mahendra.raghuwanshi@amdocs.com",
+          "username": "mahendrr"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-11 03:03:11.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nHope K8s was able to pull this image.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9e971752e57acaad58b728f3564b1c167779606d",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-11 10:33:03.000000000",
+        "message": "Patch Set 1:\n\nHi,\n\nSeems like k8s is able to pull the image.\nHowever, nexus restarted 7 times before stabilizing. Can it be due to the removed readiness check?\nOn another env, without this patch it does not restart.\n\n[root@kubernetes-master-borislavto-12968-03-28-18 kubernetes]# kgpa | grep nexus\nonap          aaa-nexus-2691535987-cqgnz                                            1/1       Running             7          2h\n[root@kubernetes-master-borislavto-12968-03-28-18 kubernetes]# k describe po -n onap          aaa-nexus-2691535987-cqgnz\nName:           aaa-nexus-2691535987-cqgnz\nNamespace:      onap\nNode:           kubernetes-node4-borislavto-12968-03-28-18/10.247.21.15\nStart Time:     Wed, 11 Apr 2018 11:17:03 +0300\nLabels:         app=nexus\n                pod-template-hash=2691535987\n                release=aaa\nAnnotations:    kubernetes.io/created-by={\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"onap\",\"name\":\"aaa-nexus-2691535987\",\"uid\":\"bed4cfaf-3d60-11e8-83bd-fa163e983a8e\",...\nStatus:         Running\nIP:             10.244.3.120\nCreated By:     ReplicaSet/aaa-nexus-2691535987\nControlled By:  ReplicaSet/aaa-nexus-2691535987\nContainers:\n  nexus:\n    Container ID:       docker://19887fcd392a9019366d06e8acf3bc19d63ec9e89ef4bb2ad72534d172f8e571\n    Image:              nexus3.onap.org:10001/sonatype/nexus:2.14.8-01\n    Image ID:           docker-pullable://nexus3.onap.org:10001/sonatype/nexus@sha256:90f8ec0dadf5fef6bab1269a96f4e71583dadb366dde3cc664c599da5e1421e7\n    Port:               8081/TCP\n    State:              Running\n      Started:          Wed, 11 Apr 2018 11:31:30 +0300\n    Last State:         Terminated\n      Reason:           Error\n      Exit Code:        1\n      Started:          Wed, 11 Apr 2018 11:28:17 +0300\n      Finished:         Wed, 11 Apr 2018 11:28:44 +0300\n    Ready:              True\n    Restart Count:      7\n    Liveness:           tcp-socket :8081 delay=10s timeout=1s period=10s #success=1 #failure=3\n    Readiness:          http-get http://:8081/nexus/service/local/status delay=10s timeout=1s period=10s #success=1 #failure=3\n    Environment:        <none>\n    Mounts:\n      /etc/localtime from localtime (ro)\n      /var/run/secrets/kubernetes.io/serviceaccount from default-token-j4wxm (ro)\nConditions:\n  Type          Status\n  Initialized   True\n  Ready         True\n  PodScheduled  True\nVolumes:\n  localtime:\n    Type:       HostPath (bare host directory volume)\n    Path:       /etc/localtime\n  default-token-j4wxm:\n    Type:       Secret (a volume populated by a Secret)\n    SecretName: default-token-j4wxm\n    Optional:   false\nQoS Class:      BestEffort\nNode-Selectors: <none>\nTolerations:    node.alpha.kubernetes.io/notReady:NoExecute for 300s\n                node.alpha.kubernetes.io/unreachable:NoExecute for 300s\nEvents:         <none>",
+        "patchset_number": 1
+      },
+      {
+        "id": "45a15171f4cedc80e1cd41fa82bf79262ca3d03f",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-11 17:18:03.000000000",
+        "message": "Patch Set 1:\n\nThanks Borislav.   Some more info, this image is an \"standard\" one from the dockerhub registry, as the mariadb one is.   I think the configuration for this container mimics the mariadb one and comes from the same source, which in theory should be correct.\n\nThe nexus container does not have dependencies with any other container, therefore the removal of that section.   Similar to the mariadb that does not depend on any other container to be ready.\n\nI also noticed in my lab the long times you mentioned, the container being in the \"running\" state, although in my observation does not seem to be specific to this container itself, but more a general issue with several policy and non-policy containers.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b2ada8c0ca31d0b1a802d8d0cafed66db7046ef8",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-11 18:16:39.000000000",
+        "message": "Patch Set 1:\n\nbtw, I think the time has to do between some interactions problems between the actual download of the image (or images) such as the new one in use, nexus, and the kubernates operations reviving containers.   I restarted (with the image already being downloaded) and comes up running relatively fast.",
+        "patchset_number": 1
+      },
+      {
+        "id": "cf2258f4104e034774adcc32ccaf9b7590cea746",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-12 11:50:53.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "3e4f1b45ac262cb419779982da70bd0b76760274",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-12 11:52:25.000000000",
+        "message": "Patch Set 1: Code-Review+2 Verified+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "110fc36e827d21b080dcc556e1a4cafaa7c8bdb1",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-04-12 11:52:28.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

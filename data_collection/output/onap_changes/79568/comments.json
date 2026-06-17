@@ -1,0 +1,416 @@
+{
+  "id": "oom%2Foffline-installer~master~Ie0a4b543b40314dc5a7772dd4667b1ad218d3543",
+  "change_id": "Ie0a4b543b40314dc5a7772dd4667b1ad218d3543",
+  "_number": 79568,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ab233ab1_a2880ae0",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 2,
+      "message": "temporary",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-04 08:42:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "af5cfc14_b3dc93f3",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "if you do this please remove certs mount from run_playbook.sh. also another thing to remember is that although certificates are regenerated everytime this role runs (see last task) this will definitely force everything to be regenerated all over again because you will lose \"originals\". Copies will be on infra node but ansible won't see them.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-04 09:30:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "33691313_8292de49",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "Yes, I noticed already this and also application play has reference to certs that needs to be included into this commit.\n\nAlso noticed that this role is not idempotent. Should idenpotence fix the above problem you refer?\n\nWe could which now to newer ansible as commented in this module it could solve something.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 11:20:03.000000000",
+      "in_reply_to": "af5cfc14_b3dc93f3",
+      "unresolved": false
+    },
+    {
+      "id": "06995fb0_5cf4697d",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "if this will be somehow idempotent then you have to generate certs in some persistent place for Ansible container/chroot to keep idempotency. In currenst state you will loose them with default /tmp/certs after ansible execution ends.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-04 12:46:36.000000000",
+      "in_reply_to": "33691313_8292de49",
+      "unresolved": false
+    },
+    {
+      "id": "a84f6e06_ee825e07",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "Ok at the same time realized that one.\nActually I think we should change our mounting in run_playbook.sh etc. to mount this to current dir and not to absolute path /certs which is maybe fine when running through container/chroot but totally insane path when running with normal ansible like molecule.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 13:51:18.000000000",
+      "in_reply_to": "06995fb0_5cf4697d",
+      "unresolved": false
+    },
+    {
+      "id": "d3ac768b_03881f5f",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "I agree it's not good outside container/chroot. Mounts in run_playbook.sh were set for simplicity with only container in mind.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-04 13:57:06.000000000",
+      "in_reply_to": "a84f6e06_ee825e07",
+      "unresolved": false
+    },
+    {
+      "id": "caedc18b_896bf56a",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "just noticed missing delegate_to on tasks",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-06 14:28:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ee9fc86d_1a62083e",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "what do you mean?\ndelegate_to: localhost \nis on the caller.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-07 07:27:13.000000000",
+      "in_reply_to": "caedc18b_896bf56a",
+      "unresolved": false
+    },
+    {
+      "id": "89dbcd25_c1a35dcb",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "we want these tasks to be performed in container/chroot because of dependency on python-pyOpenSSL which at least on RHEL isn't available in correct version.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-07 08:55:11.000000000",
+      "in_reply_to": "ee9fc86d_1a62083e",
+      "unresolved": false
+    },
+    {
+      "id": "df54cc2f_eab29c1d",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "are you saying the delegate_to: localhost in main.yml is not working when importing this module?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-07 09:40:57.000000000",
+      "in_reply_to": "89dbcd25_c1a35dcb",
+      "unresolved": false
+    },
+    {
+      "id": "130f1f3a_094253eb",
+      "file_path": "ansible/roles/certificates/tasks/generate-certificates.yml",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "I am saying that I haven't noticed delegate_to there because of how is diff shown there. sorry my bad looks good.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-07 09:59:33.000000000",
+      "in_reply_to": "df54cc2f_eab29c1d",
+      "unresolved": false
+    },
+    {
+      "id": "b11e8588_9eb0c4a6",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "\"certificates_tmp_dir\" might be a bit confusing name, because this is dir where we generate and also use our certificates, tmp sounds to me like something what can be removed, what about \"keystore_dir\" or \"certificates_dir\" ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-08 08:56:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c7b9a1ac_cd474d3a",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 2,
+      "message": "idempotence",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-08 08:56:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7176f7db_c460e188",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 3,
+      "message": "this must be always \"ansible/certs\" dir as we mounting just this one into ansible container, why to use variable for something which is static ? the only reason I can imagine would be that we would like it to be more readable, is it your intention ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-08 08:56:09.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9e13f259_a2db5351",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "yes can be changed.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-08 09:11:56.000000000",
+      "in_reply_to": "b11e8588_9eb0c4a6",
+      "unresolved": false
+    },
+    {
+      "id": "9b85f439_516908a9",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 2,
+      "message": "ok",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-08 09:11:56.000000000",
+      "in_reply_to": "c7b9a1ac_cd474d3a",
+      "unresolved": false
+    },
+    {
+      "id": "ec288a06_1999cc76",
+      "file_path": "ansible/roles/certificates/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 3,
+      "message": "it's not static.\nWe could change it possible just to \"certs\".\nWhen running in container/chroot our workdir is ansible and then the local dir there is certs (not ansible/certs) and that is mounted in this same commit.\nWhen running with molecule or general without docker/chroot, plain certs may also work? not sure that will be the current run dir. Anyway is feels much more safer to use playbook_dir to force it to be exactly where it supposed to be and the user in application-install role (in this same commit) can also safely use same location.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-08 09:11:56.000000000",
+      "in_reply_to": "7176f7db_c460e188",
+      "unresolved": false
+    },
+    {
+      "id": "5fc8b359_d0d09f79",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 2,
+      "line": 4,
+      "message": "this breaks infrastructure playbook part that is executed on kubernetes nodes. \n\"The task includes an option with an undefined variable. The error was: 'certificates_tmp_dir' is undefined\\n\\nThe error appears to have been in '/ansible/roles/certificates/tasks/upload_root_ca.yml': line 2, column 3, but may\\nbe elsewhere in the file depending on the exact syntax problem.\\n\\nThe offending line appears to be:\\n\\n---\\n- name: Copy root certificate\\n  ^ here\\n\"",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-08 09:50:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d25d2444_8991481d",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 2,
+      "line": 4,
+      "message": "ou yes, that was/is the only part did not yet included to my molecule test i.e. the kube node.\nYes, have to check that, thanks.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-08 10:56:24.000000000",
+      "in_reply_to": "5fc8b359_d0d09f79",
+      "unresolved": false
+    },
+    {
+      "id": "b5e8c1a1_981088ce",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 2,
+      "line": 4,
+      "message": "unfortunately the feedback loop time is still this huge as we do not have tests yet in place. In which case such simple errors should not be even ever pushed here.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-08 10:59:38.000000000",
+      "in_reply_to": "d25d2444_8991481d",
+      "unresolved": false
+    },
+    {
+      "id": "42d4c160_095d7e16",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "what about RHEL?",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-11 13:04:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "70d8a927_9dad62bb",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "uups.\nDone.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-11 17:31:33.000000000",
+      "in_reply_to": "42d4c160_095d7e16",
+      "unresolved": false
+    },
+    {
+      "id": "4065e1bb_16fd1bfc",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 4,
+      "line": null,
+      "message": "What's the point of checking in the second task if the distro is redhat like if you're not doing it in the first task? If we want to have real interoperability between distros of various kind let's implement it for real straight from the beginning and do not only pretend that we actually do. \n\nThe first task will fail as in Debian like distros the actual dir is \"/etc/ca-certificates\".\n\nI say we either support both Debian/RedHat role wide or we actually do not and not pretend in single tasks that we do.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-12 07:48:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "708ea6cc_9e2faf3a",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 4,
+      "line": null,
+      "message": "yes no point. It was an ad hoc addition to just underline this is really a OS specific.\nShould be handled anyway completely different way when really doing the other OS supports.\n\nWill remove it completely as don't want to copy same condition to other task or make block of this now.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-12 08:45:54.000000000",
+      "in_reply_to": "4065e1bb_16fd1bfc",
+      "unresolved": true
+    }
+  ]
+}

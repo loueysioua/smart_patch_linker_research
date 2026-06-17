@@ -9,27 +9,56 @@
  *        b. GET /revisions/{sha}/files/{f}/diff → unified diff per file
  *   3. GET /revisions/current/commit        → full commit message
  *   4. GET /comments                        → inline comments
- *   5. Map raw data → ChangeMetadata → write JSON
+ *   5. Map raw data → ChangeMetadata → write as <_number>.json in output dir
+ *
+ * Interruption recovery:
+ *   On restart the CheckpointManager scans the output directory for existing
+ *   `<_number>.json` files, validates each one, and builds two sets:
+ *     - cleanIds   → skip (already correctly written)
+ *     - corruptIds → re-fetch (file exists but failed integrity validation;
+ *                              the bad file is deleted automatically)
+ *   No tmp file or streaming state needed — each file is written atomically.
+ *
+ * Concurrency model:
+ *   A true sliding-window pool keeps exactly `concurrency` enrichment tasks
+ *   running at all times (not batch-at-a-time), and the GerritClient's built-in
+ *   RateLimiter serialises the actual HTTP calls within each task so we never
+ *   exceed Gerrit's quota.
  *
  * Usage:
  *   npx ts-node src/index.ts [options]
  *
  * Options:
- *   --query   <string>   Gerrit search expression (default: "is:open")
- *   --limit   <number>   Maximum number of changes to retrieve
- *   --output  <path>     Destination JSON file (default: ./output/gerrit_changes.json)
- *   --concurrency <n>    Max parallel per-change enrichment requests (default: 3)
+ *   --query          <string>   Gerrit search expression (default: "is:open")
+ *   --limit          <number>   Maximum number of changes to retrieve
+ *   --output         <path>     Output directory for per-change JSON files
+ *                               (default: ./output/changes)
+ *   --concurrency    <n>        Max parallel per-change enrichment tasks (default: 6)
+ *   --rate-max       <n>        Max HTTP requests per rate window (default: 30)
+ *   --rate-window    <ms>       Rate-limiter rolling window in ms (default: 10000)
+ *   --rate-interval  <ms>       Min gap between consecutive requests in ms (default: 200)
+ *   --timeout        <ms>       Per-request HTTP timeout in ms (default: 30000)
  *
  * Example:
- *   npx ts-node src/index.ts --query "is:merged" --limit 50 --output ./data/merged.json
+ *   npx ts-node src/index.ts --query "is:merged" --limit 50 \
+ *     --rate-max 20 --rate-window 10000 --rate-interval 300
  */
 
 import { GerritClient } from "./gerrit-client";
-import { mapChangeToMetadata } from "./mapper";
-import { StreamingJsonWriter } from "./writer";
-import * as fs from "fs";
-import * as path from "path";
-import type { GerritDataOutput, ChangeMetadata } from "./types";
+import {
+  mapChangeToMetadata,
+  mapChangePatchsets,
+  mapChangeDiffs,
+  mapChangeComments,
+} from "./mapper";
+import { ChangeWriter } from "./writer";
+import { CheckpointManager } from "./checkpoint";
+import type {
+  ChangeMetadata,
+  PatchsetInfo,
+  PatchsetDiff,
+  ChangeComments,
+} from "./types";
 import type {
   RawCommentsResponse,
   RawCommitInfo,
@@ -41,7 +70,7 @@ import type { ChangeInfo } from "@gerritcodereview/typescript-api/rest-api";
 // ─── Configuration ────────────────────────────────────────────────────────────
 
 const GERRIT_BASE_URL = "https://gerrit.onap.org/r" as const;
-const DEFAULT_OUTPUT = "./output/gerrit_changes.json" as const;
+const DEFAULT_OUTPUT = "./output/changes" as const;
 const DEFAULT_QUERY = "is:open" as const;
 const DEFAULT_CONCURRENCY = 6;
 
@@ -52,96 +81,197 @@ interface CliArgs {
   limit?: number;
   output: string;
   concurrency: number;
+  rateMax: number;
+  rateWindowMs: number;
+  rateIntervalMs: number;
+  timeoutMs: number;
+  mode: "metadata" | "patchsets" | "diffs" | "comments" | "all";
 }
 
 function parseArgs(argv: string[]): CliArgs {
   const args = argv.slice(2);
+
   let query: string = DEFAULT_QUERY;
   let limit: number | undefined;
   let output: string = DEFAULT_OUTPUT;
   let concurrency = DEFAULT_CONCURRENCY;
+  let rateMax = 30;
+  let rateWindowMs = 10_000;
+  let rateIntervalMs = 200;
+  let timeoutMs = 30_000;
+  let mode: CliArgs["mode"] = "all";
+
+  const requireInt = (value: string | undefined, flag: string): number => {
+    const n = parseInt(value ?? "", 10);
+    if (!Number.isFinite(n) || n <= 0)
+      throw new Error(`${flag} must be a positive integer, got: ${value}`);
+    return n;
+  };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case "--query":
         query = args[++i] ?? DEFAULT_QUERY;
         break;
-      case "--limit": {
-        const raw = parseInt(args[++i] ?? "", 10);
-        if (!Number.isFinite(raw) || raw <= 0)
-          throw new Error(
-            `--limit must be a positive integer, got: ${args[i]}`,
-          );
-        limit = raw;
+      case "--limit":
+        limit = requireInt(args[++i], "--limit");
         break;
-      }
       case "--output":
         output = args[++i] ?? DEFAULT_OUTPUT;
         break;
-      case "--concurrency": {
-        const raw = parseInt(args[++i] ?? "", 10);
-        if (!Number.isFinite(raw) || raw <= 0)
-          throw new Error(
-            `--concurrency must be a positive integer, got: ${args[i]}`,
-          );
-        concurrency = raw;
+      case "--concurrency":
+        concurrency = requireInt(args[++i], "--concurrency");
         break;
-      }
+      case "--rate-max":
+        rateMax = requireInt(args[++i], "--rate-max");
+        break;
+      case "--rate-window":
+        rateWindowMs = requireInt(args[++i], "--rate-window");
+        break;
+      case "--rate-interval":
+        rateIntervalMs = requireInt(args[++i], "--rate-interval");
+        break;
+      case "--timeout":
+        timeoutMs = requireInt(args[++i], "--timeout");
+        break;
+      case "--mode":
+        const m = args[++i];
+        if (
+          m !== "metadata" &&
+          m !== "patchsets" &&
+          m !== "diffs" &&
+          m !== "comments" &&
+          m !== "all"
+        ) {
+          throw new Error(
+            `--mode must be one of: metadata, patchsets, diffs, comments, all. Got: ${m}`,
+          );
+        }
+        mode = m;
+        break;
       default:
         console.warn(`[index] Unknown argument: ${args[i]}`);
     }
   }
 
-  return { query, limit, output, concurrency };
+  return {
+    query,
+    limit,
+    output,
+    concurrency,
+    rateMax,
+    rateWindowMs,
+    rateIntervalMs,
+    timeoutMs,
+    mode,
+  };
 }
 
-// ─── Concurrency helper ───────────────────────────────────────────────────────
+// ─── Sliding-window concurrency pool ─────────────────────────────────────────
 
 /**
- * Executes a list of Promise-returning functions with a maximum concurrency limit.
- * Instead of accumulating all results in memory, it invokes a callback for each
- * completed batch to allow streaming.
+ * Runs `tasks` with at most `concurrency` running at any instant (true sliding
+ * window — a new task starts as soon as any running one finishes).
+ *
+ * Unlike the previous batch-at-a-time approach, this keeps all concurrency
+ * slots occupied for the entire duration of the run instead of waiting for
+ * the slowest task in each batch before launching the next group.
+ *
+ * `onComplete` is called with each result in completion order (not submission
+ * order) so the writer can stream results immediately.
  */
-async function runWithConcurrencyStreaming<T>(
+async function runWithSlidingWindow<T>(
   tasks: (() => Promise<T>)[],
   concurrency: number,
-  onBatchDone: (results: T[]) => void,
+  onComplete: (result: T) => void,
 ): Promise<void> {
-  for (let i = 0; i < tasks.length; i += concurrency) {
-    const batch = tasks.slice(i, i + concurrency).map((t) => t());
-    const resolvedBatch = await Promise.all(batch);
-    onBatchDone(resolvedBatch);
-  }
+  let nextIndex = 0;
+  let inFlight = 0;
+
+  return new Promise((resolve, reject) => {
+    const tryLaunch = (): void => {
+      // Launch as many tasks as available slots allow.
+      while (inFlight < concurrency && nextIndex < tasks.length) {
+        const taskFn = tasks[nextIndex++];
+        inFlight++;
+
+        taskFn()
+          .then((result) => {
+            inFlight--;
+            onComplete(result);
+            if (nextIndex < tasks.length) {
+              tryLaunch();
+            } else if (inFlight === 0) {
+              resolve();
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
+
+      // All tasks submitted and nothing running → done.
+      if (inFlight === 0 && nextIndex >= tasks.length) {
+        resolve();
+      }
+    };
+
+    tryLaunch();
+  });
 }
 
 // ─── Per-change enrichment ────────────────────────────────────────────────────
 
-/**
- * Fetches all supplementary data required to fully populate a ChangeMetadata
- * record for a single change.
- */
-async function enrichChange(
+async function enrichMetadata(
   client: GerritClient,
   change: ChangeInfo,
 ): Promise<ChangeMetadata> {
   const changeId = Number(change._number);
-  const revisions = change.revisions ?? {};
-  const revShas = Object.keys(revisions);
-
-  // ── 1. Commit message (current patchset) ───────────────────────────────────
   let commitInfo: RawCommitInfo = {};
   try {
     commitInfo = await client.fetchCommitInfo(changeId, "current");
   } catch (err) {
     console.warn(`  [enrich] commit fetch failed for #${changeId}:`, err);
   }
+  return mapChangeToMetadata(change, commitInfo);
+}
 
-  // ── 2. File lists + diffs per patchset ────────────────────────────────────
+async function enrichPatchsets(
+  client: GerritClient,
+  change: ChangeInfo,
+): Promise<PatchsetInfo[]> {
+  const changeId = Number(change._number);
+  const revisions = change.revisions ?? {};
+  const revShas = Object.keys(revisions);
+  const filesPerRevision = new Map<string, RawFilesResponse>();
+
+  for (const sha of revShas) {
+    let rawFiles: RawFilesResponse = {};
+    try {
+      rawFiles = await client.fetchFiles(changeId, sha);
+    } catch (err) {
+      console.warn(
+        `  [enrich] files fetch failed for #${changeId}@${sha.slice(0, 7)}:`,
+        err,
+      );
+    }
+    filesPerRevision.set(sha, rawFiles);
+  }
+
+  return mapChangePatchsets(change, filesPerRevision);
+}
+
+async function enrichDiffs(
+  client: GerritClient,
+  change: ChangeInfo,
+): Promise<PatchsetDiff[]> {
+  const changeId = Number(change._number);
+  const revisions = change.revisions ?? {};
+  const revShas = Object.keys(revisions);
   const filesPerRevision = new Map<string, RawFilesResponse>();
   const diffsPerRevision = new Map<string, Map<string, RawDiffInfo>>();
 
   for (const sha of revShas) {
-    // File list for this patchset
     let rawFiles: RawFilesResponse = {};
     try {
       rawFiles = await client.fetchFiles(changeId, sha);
@@ -153,10 +283,8 @@ async function enrichChange(
     }
     filesPerRevision.set(sha, rawFiles);
 
-    // Diff per file (skip /COMMIT_MSG virtual file)
     const diffMap = new Map<string, RawDiffInfo>();
-
-    for (const [filePath, fileInfo] of Object.entries(rawFiles)) {
+    for (const filePath of Object.keys(rawFiles)) {
       if (filePath === "/COMMIT_MSG") continue;
       try {
         const diff = await client.fetchFileDiff(changeId, sha, filePath);
@@ -168,148 +296,141 @@ async function enrichChange(
         );
       }
     }
-
     diffsPerRevision.set(sha, diffMap);
   }
 
-  // ── 3. Inline comments ────────────────────────────────────────────────────
+  return mapChangeDiffs(change, diffsPerRevision, filesPerRevision);
+}
+
+async function enrichComments(
+  client: GerritClient,
+  change: ChangeInfo,
+): Promise<ChangeComments> {
+  const changeId = Number(change._number);
   let rawComments: RawCommentsResponse = {};
   try {
     rawComments = await client.fetchComments(changeId);
   } catch (err) {
     console.warn(`  [enrich] comments fetch failed for #${changeId}:`, err);
   }
-
-  // ── 4. Map everything ─────────────────────────────────────────────────────
-  return mapChangeToMetadata(
-    change,
-    commitInfo,
-    filesPerRevision,
-    diffsPerRevision,
-    rawComments,
-  );
+  return mapChangeComments(change, rawComments);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  const { query, limit, output, concurrency } = parseArgs(process.argv);
+  const {
+    query,
+    limit,
+    output,
+    concurrency,
+    rateMax,
+    rateWindowMs,
+    rateIntervalMs,
+    timeoutMs,
+    mode,
+  } = parseArgs(process.argv);
 
   console.log("═".repeat(60));
-  console.log("  Gerrit Data Collection (extended)");
+  console.log("  Gerrit Data Collection");
   console.log("═".repeat(60));
-  console.log(`  Source      : ${GERRIT_BASE_URL}`);
-  console.log(`  Query       : ${query}`);
-  console.log(`  Limit       : ${limit ?? "none (all results)"}`);
-  console.log(`  Concurrency : ${concurrency}`);
-  console.log(`  Output      : ${output}`);
-  console.log("─".repeat(60));
+  console.log(`  Source          : ${GERRIT_BASE_URL}`);
+  console.log(`  Query           : ${query}`);
+  console.log(`  Limit           : ${limit ?? "none (all results)"}`);
+  console.log(`  Concurrency     : ${concurrency}`);
+  console.log(`  Rate limit      : ${rateMax} req / ${rateWindowMs}ms`);
+  console.log(`  Min interval    : ${rateIntervalMs}ms`);
+  console.log(`  Request timeout : ${timeoutMs}ms`);
+  console.log(`  Output dir      : ${output}`);
+  console.log(`  Mode            : ${mode}`);
+  console.log("═".repeat(60));
 
-  const client = new GerritClient(GERRIT_BASE_URL);
-
-  const tmpFile = path.join(
-    path.dirname(path.resolve(output)),
-    path.basename(output) + ".tmp",
-  );
-
-  if (!fs.existsSync(tmpFile)) {
-    const dir = path.dirname(path.resolve(output));
-    const basename = path.basename(output);
-    if (fs.existsSync(dir)) {
-      const files = fs.readdirSync(dir);
-      const pidTmpFiles = files.filter(
-        (f) =>
-          f.startsWith(basename + ".") &&
-          f.endsWith(".tmp") &&
-          f !== basename + ".tmp",
-      );
-      if (pidTmpFiles.length > 0) {
-        const latestPidTmp = pidTmpFiles.sort(
-          (a, b) =>
-            fs.statSync(path.join(dir, b)).mtimeMs -
-            fs.statSync(path.join(dir, a)).mtimeMs,
-        )[0];
-        fs.renameSync(path.join(dir, latestPidTmp), tmpFile);
-        console.log(
-          `[index] Renamed old temp file ${latestPidTmp} to ${path.basename(tmpFile)}`,
-        );
-      }
-    }
-  }
-
-  let isResume = false;
-  let lastProcessedId: number | null = null;
-
-  if (fs.existsSync(tmpFile)) {
-    console.log(`[index] Found previous tmp file, preparing to resume...`);
-    const content = fs.readFileSync(tmpFile, "utf8");
-    const regex = /"_number":\s*(\d+)/g;
-    let match;
-    while ((match = regex.exec(content)) !== null) {
-      lastProcessedId = Number(match[1]);
-    }
-    if (lastProcessedId !== null) {
-      isResume = true;
-    }
-  }
-
-  // 1. Fetch all matching changes (already includes revisions + messages).
-  const allRawChanges = await client.fetchAllChanges(query, limit);
-  let rawChanges = allRawChanges;
-
-  if (isResume && lastProcessedId !== null) {
-    const lastIndex = allRawChanges.findIndex(
-      (c) => Number(c._number) === lastProcessedId,
-    );
-    if (lastIndex !== -1) {
-      rawChanges = allRawChanges.slice(lastIndex + 1);
-      console.log(
-        `[index] Resuming... Skipping ${lastIndex + 1} already processed changes (last ID: ${lastProcessedId}).`,
-      );
-    }
-  }
-
-  console.log(`\n[index] Changes fetched: ${allRawChanges.length}`);
-  if (isResume) {
-    console.log(`[index] Changes left to enrich: ${rawChanges.length}`);
-  }
-
-  // 2. Initialise the streaming writer
-  const headerData: Omit<GerritDataOutput, "changes"> = {
-    collected_at: new Date().toISOString(),
-    source_url: GERRIT_BASE_URL,
-    total_changes: allRawChanges.length,
-  };
-
-  const writer = new StreamingJsonWriter(output, headerData, isResume);
-
-  // 3. Enrich each change (commit, files, diffs, comments) concurrently,
-  //    appending them to the file as batches complete.
-  console.log(`\n[index] Enriching changes (concurrency=${concurrency})…`);
-
-  const tasks = rawChanges.map((change, idx) => async () => {
-    console.log(
-      `[index] Enriching [${idx + 1}/${rawChanges.length}] ` +
-        `#${change._number} – ${change.subject.slice(0, 60)}`,
-    );
-    return enrichChange(client, change);
+  const client = new GerritClient(GERRIT_BASE_URL, {
+    rateLimiter: {
+      maxRequests: rateMax,
+      windowMs: rateWindowMs,
+      minIntervalMs: rateIntervalMs,
+      requestTimeoutMs: timeoutMs,
+    },
   });
 
-  try {
-    await runWithConcurrencyStreaming(tasks, concurrency, (batchResults) => {
-      for (const changeMetadata of batchResults) {
-        writer.writeChange(changeMetadata);
+  // Fetch the full change list once for the entire run
+  console.log(`[index] Fetching change list from Gerrit…`);
+  const allRawChanges = await client.fetchAllChanges(query, limit);
+  console.log(`[index] Found ${allRawChanges.length} change(s) matching query.`);
+
+  const modesToRun: ("metadata" | "patchsets" | "diffs" | "comments")[] =
+    mode === "all"
+      ? ["metadata", "patchsets", "diffs", "comments"]
+      : [mode];
+
+  const writer = new ChangeWriter(output);
+
+  for (const activeMode of modesToRun) {
+    console.log("\n" + "─".repeat(60));
+    console.log(`  Processing Mode: ${activeMode.toUpperCase()}`);
+    console.log("─".repeat(60));
+
+    // ── Checkpoint: scan output directory for active mode ───────────────────
+    const checkpoint = new CheckpointManager(output, activeMode);
+    const { cleanIds, corruptIds } = checkpoint.analyse();
+
+    // Decide which changes need enrichment for this mode
+    const changesToEnrich = allRawChanges.filter(
+      (c) => !cleanIds.has(Number(c._number)),
+    );
+
+    console.log(
+      `[index] [${activeMode}] Already written (skip): ${cleanIds.size}`,
+    );
+    console.log(
+      `[index] [${activeMode}] To enrich             : ${changesToEnrich.length}`,
+    );
+    if (corruptIds.size > 0) {
+      console.log(
+        `[index] [${activeMode}] Re-fetching corrupt   : ${corruptIds.size} (IDs: ${[...corruptIds].join(", ")})`,
+      );
+    }
+
+    if (changesToEnrich.length === 0) {
+      console.log(`[index] [${activeMode}] All files up-to-date. Skipping.`);
+      continue;
+    }
+
+    let enriched = 0;
+    const total = changesToEnrich.length;
+
+    const tasks = changesToEnrich.map((change) => async () => {
+      const num = Number(change._number);
+      const label = `#${num} – ${String(change.subject).slice(0, 50)}`;
+      const tag = corruptIds.has(num) ? " [RE-FETCH]" : "";
+      console.log(
+        `[index] [${activeMode}] Enriching [${++enriched}/${total}]${tag} ${label}`,
+      );
+
+      let result: unknown;
+      if (activeMode === "metadata") {
+        result = await enrichMetadata(client, change);
+      } else if (activeMode === "patchsets") {
+        result = await enrichPatchsets(client, change);
+      } else if (activeMode === "diffs") {
+        result = await enrichDiffs(client, change);
+      } else {
+        result = await enrichComments(client, change);
       }
+
+      return { num, result };
     });
 
-    // 4. Finalise output file
-    await writer.end();
-  } catch (err) {
-    writer.cleanup();
-    throw err;
+    await runWithSlidingWindow(tasks, concurrency, ({ num, result }) => {
+      writer.write(num, activeMode, result);
+    });
+
+    console.log(`[index] [${activeMode}] Completed ✓`);
   }
 
-  console.log("\n[index] Done ✓");
+  console.log("\n" + "═".repeat(60));
+  console.log(`  Gerrit Data Collection Complete ✓`);
   console.log("═".repeat(60));
 }
 

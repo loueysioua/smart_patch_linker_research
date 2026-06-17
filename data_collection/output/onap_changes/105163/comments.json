@@ -1,0 +1,297 @@
+{
+  "id": "sdc~master~I3160c5089979757628f31a44b01836236563b770",
+  "change_id": "I3160c5089979757628f31a44b01836236563b770",
+  "_number": 105163,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ec97cb60_4112c878",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 1,
+      "line": 628,
+      "message": "This function could be refactored to:\n```\nprivate String fetchGenericTypeToscaNameFromConfigForCategory() {\n    option1(this.getCategories()).map(c ->\n        option1(c.getSubcategories())\n            .map(sb -> c.getName() + \".\" + sb.getName())\n            .orElse(c.getName()));\n}\n\nprivate <A> Optional<A> option1(List<A> as) {\n  return as == null || as.size() < 1 ? Optional.empty() : Optional.of(as.get(0));\n}\n```\nIn which case it would return an Optional instead of a potential null. `fetchGenericTypeToscaNameFromConfig` could then be refactored to:\n```\npublic String fetchGenericTypeToscaNameFromConfig() {\n    fetchGenericTypeToscaNameFromConfigForCategory()\n        .map(Component::fetchGenericTypeToscaNameFromConfig)\n        .orElse(null); // Bad practice but required here to prevent any API change\n}\n```\nNote that `.orElse(null)` is a bad practice. We should not return nulls as it implies increasing the cyclomatic complexity of the caller. In other words, it is better to return an Optional.\n\nWhat do you think?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-17 15:01:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "833f57ef_51ddef7e",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 1,
+      "line": 628,
+      "message": "Done",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-04-20 16:23:57.000000000",
+      "in_reply_to": "ec97cb60_4112c878",
+      "unresolved": false
+    },
+    {
+      "id": "857389eb_68c239f1",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 2,
+      "line": 630,
+      "message": "Sorry about that, but I have just realized that `Optional.of` could throw a NullPointerException if the passed argument is null. We can fix that with `Optional.ofNullable(list.get(0))`.\n\nSorry again for the inconvenience.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-20 17:13:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ec0f41fe_43532b37",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 2,
+      "line": 630,
+      "message": "It is checked for null though  (list == null || ...) and if it is, Optional.empty() is returned and Optional.of(list.get(0)) is not executed, so cannot get NPE get",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-04-21 00:42:15.000000000",
+      "in_reply_to": "857389eb_68c239f1",
+      "unresolved": true
+    },
+    {
+      "id": "b74585b1_8d8b56a3",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 2,
+      "line": 630,
+      "message": "You are right but it wouldn't hurt use `Optional.ofNullable`. If someone changes the condition without taking care, an NPE could slip in.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-04-21 03:10:10.000000000",
+      "in_reply_to": "ec0f41fe_43532b37",
+      "unresolved": true
+    },
+    {
+      "id": "747c73ec_49bfe4fb",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 4,
+      "line": 625,
+      "message": "Usually, this kind of function is called `getHeadOption`. The `head` being the first item of the collection.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 19:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6fcd2603_105d049a",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Resource.java",
+      "patchset_number": 4,
+      "line": 173,
+      "message": "A minor comment, but as far as I remember, we use spaces not tabs (https://wiki.onap.org/display/DW/Java+code+style)",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 19:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7b6311fd_3eb13c52",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ResourceTest.java",
+      "patchset_number": 4,
+      "line": 318,
+      "message": "You should reformat this code according the standards (same for any code you added or modified).",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 19:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5a3d4e8b_6bbdf33b",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ServiceTest.java",
+      "patchset_number": 4,
+      "line": 323,
+      "message": "The declaration of a variable should be done as close as possible as to where it is used (as explained by Effective Java and Clean Code). Therefore, we could clean this a bit like following:\n```\nService testSubject = createTestSubject();\n// ...\nString result = testSubject.fetchGenericTypeToscaNameFromConfig();\n// ...\n```",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 19:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bfbe1ce7_0f9cd1fa",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ServiceTest.java",
+      "patchset_number": 4,
+      "line": 345,
+      "message": "You should reformat the code according the coding standards.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 19:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "93d25d75_d9c5ca3b",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Component.java",
+      "patchset_number": 4,
+      "line": 625,
+      "message": "Done",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 20:50:36.000000000",
+      "in_reply_to": "747c73ec_49bfe4fb",
+      "unresolved": false
+    },
+    {
+      "id": "60cde292_e513b0fb",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Resource.java",
+      "patchset_number": 4,
+      "line": 173,
+      "message": "Done",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 20:50:36.000000000",
+      "in_reply_to": "6fcd2603_105d049a",
+      "unresolved": false
+    },
+    {
+      "id": "3e356dcf_ae9d646c",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ResourceTest.java",
+      "patchset_number": 4,
+      "line": 318,
+      "message": "Done - formatted all edited file with onap formatter",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 20:50:36.000000000",
+      "in_reply_to": "7b6311fd_3eb13c52",
+      "unresolved": false
+    },
+    {
+      "id": "15ec855c_dea9d701",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ServiceTest.java",
+      "patchset_number": 4,
+      "line": 323,
+      "message": "Done",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 20:50:36.000000000",
+      "in_reply_to": "5a3d4e8b_6bbdf33b",
+      "unresolved": false
+    },
+    {
+      "id": "65fb3e87_5fb4877b",
+      "file_path": "catalog-model/src/test/java/org/openecomp/sdc/be/model/ServiceTest.java",
+      "patchset_number": 4,
+      "line": 345,
+      "message": "Done",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 20:50:36.000000000",
+      "in_reply_to": "bfbe1ce7_0f9cd1fa",
+      "unresolved": false
+    },
+    {
+      "id": "5b22631c_a59bc336",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Resource.java",
+      "patchset_number": 5,
+      "line": 178,
+      "message": "You could refactor this one and avoid the `if` block like following:\n```\nreturn getHeadOption(this.getCategories()).flatMap(category -> \n    getHeadOption(category.get().getSubcategories())\n        .map(subCategory -> \n            fetchToscaNameFromConfigBasedOnCategory(category.get().getName(), subCategory.getName())\n));\n```\nI hope you don't mind me making these comments. If these do not sound relevant or are too picky, please tell me :) In any case the rest is ok to me.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 21:11:13.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "11385ac7_f32a83dd",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/Resource.java",
+      "patchset_number": 5,
+      "line": 178,
+      "message": "Not at all, tidies the method up nicely",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2020-05-01 22:24:26.000000000",
+      "in_reply_to": "5b22631c_a59bc336",
+      "unresolved": false
+    }
+  ]
+}

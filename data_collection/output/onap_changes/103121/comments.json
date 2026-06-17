@@ -1,0 +1,110 @@
+{
+  "id": "aaf%2Fcertservice~master~Icb978fd7d4ac59d2b2968e5c0b861fba5eb616bf",
+  "change_id": "Icb978fd7d4ac59d2b2968e5c0b861fba5eb616bf",
+  "_number": 103121,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5f02f078_1e8db812",
+      "file_path": "certService/helm/aaf-cert-service/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Maybe we should change property name also here, to .Values.liveness.path?",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2020-03-05 12:06:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b2c744cd_de8a6c62",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/configuration/CmpServersConfig.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "This kind of implementation can be tricky, cause race condition may happen between K8s and manual configuration reload, which could end up in not desired setting pod in NotReady state during configuration reloading. This of course can happen if readiness probe failureThreshold is set to 1, but because we are not allowing to change failureThreshold via helm chart value and default value is 3 - such implementation has no side effects.\n\n\"failureThreshold: When a Pod starts and the probe fails, Kubernetes will try failureThreshold times before giving up. Giving up in case of liveness probe means restarting the container. In case of readiness probe the Pod will be marked Unready. Defaults to 3. Minimum value is 1.\"",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2020-03-05 12:06:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9330f790_28a37615",
+      "file_path": "certService/helm/aaf-cert-service/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Done",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-05 12:49:37.000000000",
+      "in_reply_to": "5f02f078_1e8db812",
+      "unresolved": false
+    },
+    {
+      "id": "5044c2ad_b2a58fec",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/configuration/CmpServersConfig.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "I was considering that, but I came to a conclusion that while reloading, the application is actually Unready, am I wrong?",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-05 12:49:37.000000000",
+      "in_reply_to": "b2c744cd_de8a6c62",
+      "unresolved": true
+    },
+    {
+      "id": "7450f6e7_7fcfd7e2",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/configuration/CmpServersConfig.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "use AtomicBoolean to synchronize threads\n\nhttps://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-03-05 13:11:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f6b1614b_9b13270b",
+      "file_path": "certService/src/main/java/org/onap/aaf/certservice/certification/configuration/CmpServersConfig.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "According to Nam San's comment from https://stackoverflow.com/questions/3786825/volatile-boolean-vs-atomicboolean\n\n\"The memory effects of reading/writing to volatile boolean are identical to the get and set methods of AtomicBoolean respectively.\"\n\nSo I will make this variable volatile. That solution is minimalistic and does not require refactoring :)",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-03-05 13:48:53.000000000",
+      "in_reply_to": "7450f6e7_7fcfd7e2",
+      "unresolved": false
+    }
+  ]
+}

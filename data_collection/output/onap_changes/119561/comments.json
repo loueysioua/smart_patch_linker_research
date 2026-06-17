@@ -1,0 +1,246 @@
+{
+  "id": "ccsdk%2Fcds~master~Idf56465eff6fa42b523bccfca56f84e93496a8d2",
+  "change_id": "Idf56465eff6fa42b523bccfca56f84e93496a8d2",
+  "_number": 119561,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a67b30dc_b000ef43",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 5,
+      "line": 20,
+      "message": "I noticed that this directory will still be owned by root in this image. Is this the issue you are trying to address? If so i think this VOLUME instruction is the problem. The docs says\n\n\"if any build steps change the data within the volume after it has been declared, those changes will be discarded.\"\nhttps://docs.docker.com/engine/reference/builder/#volume\n\nThat means chown in line 25 will have no on that directory.\n\nThink we can remove this line, volume bindings will still work without it.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-22 12:06:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2e6c816f_534f136d",
+      "file_path": "ms/py-executor/docker/Dockerfile",
+      "patchset_number": 5,
+      "line": 15,
+      "message": "Another thing that can cause issues is if the UID and GID don't match between BP and executor. \n\nHere it is set explicitly to 1000:1000\n\ni checked onap/ccsdk-alpine-j11-image:1.1.0\nthe UID for onap is 1000 but GID is 101\n\n/etc/passwd\n...\nonap:x:1000:101:Linux User,,,:/home/onap:/bin/ash",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-22 12:31:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e8f4d39f_bb6de72d",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 5,
+      "line": 20,
+      "message": "Exactly same I was trying to solve.. got java.io.IOException while uploading a CBA as /opt was owned by root user with permission 755\n\nI couldn't find a proper solution, so added chmod statement !",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-22 12:54:53.000000000",
+      "in_reply_to": "a67b30dc_b000ef43",
+      "unresolved": true
+    },
+    {
+      "id": "0502191c_21e4d80a",
+      "file_path": "ms/py-executor/docker/Dockerfile",
+      "patchset_number": 5,
+      "line": 15,
+      "message": "I just moved this line to combine with exisitng RUN statement, didn't realize exsting had issue !",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-22 12:54:53.000000000",
+      "in_reply_to": "2e6c816f_534f136d",
+      "unresolved": true
+    },
+    {
+      "id": "b3484bf3_adabc181",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 6,
+      "line": 1,
+      "message": "Base image should be onap/integration-python:8.0.0",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2021-03-24 15:07:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a13eb03b_1066fd3e",
+      "file_path": "ms/py-executor/docker/Dockerfile",
+      "patchset_number": 6,
+      "line": 1,
+      "message": "Base image should be onap/integration-python:8.0.0 (not currently enforced, but will be in Istanbul most likely)",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2021-03-24 15:07:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e731219a_aaac3328",
+      "file_path": "ms/py-executor/docker/Dockerfile",
+      "patchset_number": 8,
+      "line": 25,
+      "message": "I still don't think chmod 777 is the right solution here. Please move this line above VOLUME or remove VOLUME. Same for the others.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-25 11:37:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "25e54ef7_844a51e1",
+      "file_path": "ms/py-executor/docker/Dockerfile",
+      "patchset_number": 8,
+      "line": 25,
+      "message": "Removed Volume",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-28 15:42:38.000000000",
+      "in_reply_to": "e731219a_aaac3328",
+      "unresolved": true
+    },
+    {
+      "id": "9939fd40_d40bab08",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "Setting 777 recursively on all files in /opt is a bit excessive. All we really need is to add permission to execute the start script file. Please consider replacing with \n\n&& find /opt/app/onap/command-executor -name \"*.sh\" -exec chmod +x {} \\;",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-29 12:41:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "545b6b81_366a82b6",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "I agree.. but I am not understanding one part even that when chown -R onap:onap /opt is being done so by default everything inside will be owned by ONAP user including the start.sh or other scripts too !\n\nDockerFile has USER onap at #23 and entry point running the start.sh, if I remove #18 still it #24 fails with permission issues, which shouldn't be case !\n\nThat's where I added 777 on /opt -> as \n1) /opt contains project related files \n2) it creates new files or directories within some subfolder of /opt directory during runtime\n\nSo to avoid any issue during runtime, changing /opt directory permission helps !",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-29 13:29:23.000000000",
+      "in_reply_to": "9939fd40_d40bab08",
+      "unresolved": true
+    },
+    {
+      "id": "5522be9b_f294b5fb",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "There is a difference between ownership and permission to execute. You can own a file and still not have permission to execute it. You do need to change permission for script files which need to be executed, but most other files only need read and write permissions.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-29 13:56:18.000000000",
+      "in_reply_to": "545b6b81_366a82b6",
+      "unresolved": true
+    },
+    {
+      "id": "fcb8b0e4_5bf807b3",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "I get it, and I can check directories are being created with default permissions as drwxr-xr-x (where onap user has access to) but start.sh file has permissions as -rw-r--r-- and that can be fixed by committing file with correct permissions (git update-index --chmod=+x start.sh) .\n\nBut not only start.sh but other python scripts needs permissions too, so instead fixing permission in git for each file, there, I can have 755 on /opt instead of 777 as onap user owns /opt !",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-29 14:29:15.000000000",
+      "in_reply_to": "5522be9b_f294b5fb",
+      "unresolved": true
+    },
+    {
+      "id": "b9102078_24573ac1",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "Are the python scripts executed from the shell? As long as python can read them it should be fine. Otherwise how did it work before?",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-03-29 15:13:17.000000000",
+      "in_reply_to": "fcb8b0e4_5bf807b3",
+      "unresolved": true
+    },
+    {
+      "id": "b3233d51_04235d8d",
+      "file_path": "ms/command-executor/src/main/docker/Dockerfile",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "by mentioning python scripts I meant to give an example, but there may be more to add !\nFor now, I don't think 755 is excessive as it gives user 'onap' full control on directory /opt, it owns!",
+      "author": {
+        "account_id": 865,
+        "name": "KAPIL SINGAL",
+        "display_name": null,
+        "email": "ks220y@att.com",
+        "username": "ks220y"
+      },
+      "updated": "2021-03-29 15:16:56.000000000",
+      "in_reply_to": "b9102078_24573ac1",
+      "unresolved": true
+    }
+  ]
+}

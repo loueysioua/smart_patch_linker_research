@@ -1,0 +1,224 @@
+{
+  "id": "oom~master~I8bbc165a6f23c31b372320c3a94181c689f1baef",
+  "change_id": "I8bbc165a6f23c31b372320c3a94181c689f1baef",
+  "_number": 72598,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-11-14 02:29:22.000000000",
+    "updated": "2018-11-14 15:36:57.000000000",
+    "submitted": "2018-11-14 14:38:20.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 35,
+      "name": "Gary Wu",
+      "display_name": null,
+      "email": "gary.wu@gmail.com",
+      "username": "gwu"
+    },
+    "submitter": {
+      "account_id": 137,
+      "name": "Alexis de Talhouet",
+      "display_name": null,
+      "email": "adetalhouet89@gmail.com",
+      "username": "adetalhouet"
+    }
+  },
+  "subject": "Revert use of DaemonSet for logstash",
+  "commit_message": "Revert use of DaemonSet for logstash\n\nUsing a DaemonSet for logstash is problematic for HA k8s\nbecause pods are being scheduled on etcd and orchestration\nnodes where we do not want them.  Reverting back to a\nDeployment with a default of 5 replicas instead.\n\nIssue-ID: LOG-181\nChange-Id: I8bbc165a6f23c31b372320c3a94181c689f1baef\nSigned-off-by: Gary Wu <gary.i.wu@huawei.com>\n",
+  "change_log": {
+    "entry_count": 14,
+    "entries": [
+      {
+        "id": "1e13eec7df70afc44895611d7e17f61349c282e4",
+        "author": {
+          "account_id": 35,
+          "name": "Gary Wu",
+          "display_name": null,
+          "email": "gary.wu@gmail.com",
+          "username": "gwu"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-11-14 02:29:22.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e864e59cbc21563ebed42530e72fae8df3308638",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 02:30:59.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/1273/",
+        "patchset_number": 1
+      },
+      {
+        "id": "409c846bd491b46725714e8652f77961aade91ed",
+        "author": {
+          "account_id": 35,
+          "name": "Gary Wu",
+          "display_name": null,
+          "email": "gary.wu@gmail.com",
+          "username": "gwu"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-11-14 02:31:07.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nVerified on SB02 that this deploys.  Did not check logstash performance.",
+        "patchset_number": 1
+      },
+      {
+        "id": "74f3069a4db7199bef5f41ae31c13316ba9aa5fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 02:37:23.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/1273/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/1273",
+        "patchset_number": 1
+      },
+      {
+        "id": "8ab7d6e4c9c0a1aafb03b09c550bc0cce3d79a81",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 12:44:38.000000000",
+        "message": "Patch Set 1:\n\nMichael, please review",
+        "patchset_number": 1
+      },
+      {
+        "id": "2247a6103a6b5fc7971797532e937c47c0010e80",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 13:41:17.000000000",
+        "message": "Patch Set 1:\n\nCould we not instead address this with node labels?",
+        "patchset_number": 1
+      },
+      {
+        "id": "671754174a4d7c40323e04e2b25c1cb50e882bd3",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 13:55:46.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nYes, the workaround was originally for saturation of logstash - after looking into it post the Daemonset change - it turned out the CPU saturation is only when AAI is on the same node - in this case the secondary workaround is to limit the vCPU to 3 until I fix the root cause.  We will revisit the daemonset when we bring in a file instead of beats plugin to get the logs directly from docker.  For now yes we should revert this because the daemonset is not being used correctly anyways for traffic - I like the labels idea better",
+        "patchset_number": 1
+      },
+      {
+        "id": "eb0d931cc4be58556c4f3108eadbf53d24d81918",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 13:57:43.000000000",
+        "message": "Patch Set 1:\n\nupdated AAI issue https://jira.onap.org/browse/LOG-376",
+        "patchset_number": 1
+      },
+      {
+        "id": "c92b2560f422e46569f5307fb3ce742b690cc471",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 13:57:50.000000000",
+        "message": "Patch Set 1:\n\nREADY for MERGE",
+        "patchset_number": 1
+      },
+      {
+        "id": "7f4889dac4e9deea4870c3b9a961e156db7aeef2",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 14:38:18.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "9a823f5cf4c304da5cbd4ab7b12a875f25c75b81",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-11-14 14:38:20.000000000",
+        "message": "Change has been successfully merged by Alexis de Talhouët",
+        "patchset_number": 1
+      },
+      {
+        "id": "dc3ae98895b080e841e8316548af4c30ba0503fe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 14:39:57.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-merge-helm/424/",
+        "patchset_number": 1
+      },
+      {
+        "id": "13dde307386e433ef570de8f71b23ecd9f315871",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 14:48:01.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-merge-helm/424/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-merge-helm/424",
+        "patchset_number": 1
+      },
+      {
+        "id": "5a4b4123436117d4b4cfae5fd7d65e867a118d00",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-11-14 15:36:57.000000000",
+        "message": "Patch Set 1:\n\nepic for the long term fix - using labels\nhttps://jira.onap.org/browse/LOG-841",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

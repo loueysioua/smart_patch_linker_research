@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fpap~master~Ie48726bcb36d7304eb60807fbaabbee8245e9c70",
+  "change_id": "Ie48726bcb36d7304eb60807fbaabbee8245e9c70",
+  "_number": 111036,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "41aa2ec0_c04a91bd",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "occurs to me - it could just throw an exception.  That would cause a non-zero exit without causing sonar complaints or hassles in junit tests.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-07 14:56:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "83a02614_f73bc3cc",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/startstop/TestMain.java",
+      "patchset_number": 2,
+      "line": 107,
+      "message": "maybe move this to an @After method",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-07 14:56:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3e31c8a6_eee50fd8",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/startstop/TestMain.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Another option is to add the below dependancy\n       <dependency>\n            <groupId>com.github.stefanbirkner</groupId>\n            <artifactId>system-rules</artifactId>\n            <version>1.19.0</version>\n            <scope>test</scope>\n        </dependency>\nmaybe to parent pom since we will need this in all repos, and then in test classes,\ndefine a Rule:\n    @Rule\n    public final ExpectedSystemExit exit = ExpectedSystemExit.none();\nand in each test case where System.exit is expected,add\n    exit.expectSystemExitWithStatus(1);\n\nI defined the SecurityManager and did the current way to avoid adding these kind of dependencies.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-08-07 14:58:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ed3a3755_8b842476",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "One thought is that we could differentiate error codes depending on the type of issue.   For example for DB errors, do a System.exit(1), for the configuration issue above, System.exit(2).  The application error codes themselves can be standardize across policy projects in policy/common in an enumeration or constants class, to try to have consistency on their meaning.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-08-07 15:19:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0228f944_6e9e0bf7",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/startstop/TestMain.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "and yet another option is to wrap System.exit() in a method and then override the method in the junits so that it doesn't actually invoke exit().  The dummy method could set a flag with the exit status so that the tests could verify the value.  This avoids the permission manager altogether",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-07 15:23:15.000000000",
+      "in_reply_to": "3e31c8a6_eee50fd8",
+      "unresolved": true
+    },
+    {
+      "id": "5218cd00_910b26b7",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "Ok, I didn't know that. I can test that and verify and then do it that way. I agree System.exit is not the right choice for sure if we are not concerned about specific exitCodes.\nHow about Jorge's comment about specific exitCodes  specific to error types? If that is needed, then we will have to stick to System.exit I think.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-08-07 17:34:44.000000000",
+      "in_reply_to": "41aa2ec0_c04a91bd",
+      "unresolved": true
+    },
+    {
+      "id": "9e057cc0_3a34e7f2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "We could have a specific exception in policy/common that has the enumeration in it.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-08-07 18:28:19.000000000",
+      "in_reply_to": "5218cd00_910b26b7",
+      "unresolved": true
+    },
+    {
+      "id": "d8acc833_a97c8f09",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "Usage of System.exit is avoided in the latest patch by just throwing an exception. This also returns exitCode as 1.\nIf we are not returning exitCodes specifically, then should we really go with defining specific exceptions? Because, whatever exceptions we throw, the container will just return exitCode as 1, and then to know the error in detail we have to anyway go to the logs.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-08-10 11:54:11.000000000",
+      "in_reply_to": "9e057cc0_3a34e7f2",
+      "unresolved": true
+    },
+    {
+      "id": "36b10bdb_a824a747",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 4,
+      "line": 86,
+      "message": "maybe just use string concatenation?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-10 12:33:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e6b2663b_e0668847",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/startstop/Main.java",
+      "patchset_number": 4,
+      "line": 86,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-08-10 12:47:59.000000000",
+      "in_reply_to": "36b10bdb_a824a747",
+      "unresolved": false
+    }
+  ]
+}

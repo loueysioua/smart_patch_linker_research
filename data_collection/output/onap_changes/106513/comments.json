@@ -1,0 +1,144 @@
+{
+  "id": "oom~master~I16a3c9b7de1ff74e4c6b208d49ab25664e580fbb",
+  "change_id": "I16a3c9b7de1ff74e4c6b208d49ab25664e580fbb",
+  "_number": 106513,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4552653f_1ac349f6",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "i would look into SecurityContext instead of this. SecurityContext allows you to define the groupid of all mounted volume of a pod.https://kubernetes.io/docs/tasks/configure-pod-container/security-context/.",
+      "author": {
+        "account_id": 5732,
+        "name": "Sebastien Premont-Tendland",
+        "display_name": null,
+        "email": "sebastien.premont@bell.ca",
+        "username": "spremont"
+      },
+      "updated": "2020-04-23 22:10:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "470c84f7_0bb1ae5d",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Security context is for the entire pod, which would include initcontainers too. And Initcontainer currently contain ready.py that is not non-root. Also in container level security context, there is no fsGroup or usergroup allowed, so I cannot use security context here in container level. I referred other modules like, dcae, aaf, dmaap, multicloud and they seem to have fixed this in the same way. The pod level security context is blocking initcontainers.",
+      "author": {
+        "account_id": 2091,
+        "name": "Janani B",
+        "display_name": null,
+        "email": "janani.b@huawei.com",
+        "username": "janani"
+      },
+      "updated": "2020-04-23 23:32:56.000000000",
+      "in_reply_to": "4552653f_1ac349f6",
+      "unresolved": false
+    },
+    {
+      "id": "2aa2fe6f_d2cb1082",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Are you sure for 100:101? it’s usually 1000:1001",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-24 16:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2eaa3806_dd1b8ae0",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Sébastien solution is better and you’re right Janani we never really used it in ONAP (but we should). \nYou can do it per deployment / sts but you can override per pod if needed. \nI would prefer that you try this if it’s not too long\n\nI believe we could also try ready.py as non root as there’s nothing but a python script in it.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-24 16:23:19.000000000",
+      "in_reply_to": "470c84f7_0bb1ae5d",
+      "unresolved": false
+    },
+    {
+      "id": "2945d3d6_4594605c",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "I was investigating a little bit and it seems like fsGroup SecurityContext doesn't work with NFS volume which is problematic for most of ONAP user i think (at least it is for Bell since we only use NFS). https://github.com/kubernetes/examples/issues/260.",
+      "author": {
+        "account_id": 5732,
+        "name": "Sebastien Premont-Tendland",
+        "display_name": null,
+        "email": "sebastien.premont@bell.ca",
+        "username": "spremont"
+      },
+      "updated": "2020-04-28 13:58:04.000000000",
+      "in_reply_to": "2eaa3806_dd1b8ae0",
+      "unresolved": false
+    },
+    {
+      "id": "f029bb2b_eb2c8070",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "@Janani, can you see if it's correct?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-29 08:03:32.000000000",
+      "in_reply_to": "2aa2fe6f_d2cb1082",
+      "unresolved": true
+    },
+    {
+      "id": "e0d0be8d_c7ffbb21",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "100:101 resolves into the allocated user and group, onap:onap. 1000:1001 does not. This should be fine.",
+      "author": {
+        "account_id": 2091,
+        "name": "Janani B",
+        "display_name": null,
+        "email": "janani.b@huawei.com",
+        "username": "janani"
+      },
+      "updated": "2020-04-29 11:10:29.000000000",
+      "in_reply_to": "f029bb2b_eb2c8070",
+      "unresolved": true
+    },
+    {
+      "id": "911b43cf_582a9fbc",
+      "file_path": "kubernetes/cds/charts/cds-blueprints-processor/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "OK, good! let's merge then",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-29 11:32:57.000000000",
+      "in_reply_to": "e0d0be8d_c7ffbb21",
+      "unresolved": true
+    }
+  ]
+}

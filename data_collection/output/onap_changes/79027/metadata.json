@@ -1,0 +1,146 @@
+{
+  "id": "demo~master~Ieaf86e0ef4bc84d4a5162834709e8428dc05cd8a",
+  "change_id": "Ieaf86e0ef4bc84d4a5162834709e8428dc05cd8a",
+  "_number": 79027,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-02-22 15:55:39.000000000",
+    "updated": "2019-03-04 13:13:34.000000000",
+    "submitted": "2019-03-04 13:06:46.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 5066,
+      "name": "Prakash H",
+      "display_name": null,
+      "email": "pbhandar@techmahindra.com",
+      "username": "PrakashH"
+    },
+    "submitter": {
+      "account_id": 55,
+      "name": "Marco Platania",
+      "display_name": null,
+      "email": "platania@research.att.com",
+      "username": "platania"
+    }
+  },
+  "subject": "VES5.4.1 EVEL Library enhancements",
+  "commit_message": "VES5.4.1 EVEL Library enhancements\n\nFix Batch memory leak Issue-ID: CERT-17\n\nChange-Id: Ieaf86e0ef4bc84d4a5162834709e8428dc05cd8a\nSigned-off-by: PrakashH <pbhandar@techmahindra.com>\n",
+  "change_log": {
+    "entry_count": 8,
+    "entries": [
+      {
+        "id": "e3a79840dd8aa6ade2ce6832ec31639fc82665e4",
+        "author": {
+          "account_id": 5066,
+          "name": "Prakash H",
+          "display_name": null,
+          "email": "pbhandar@techmahindra.com",
+          "username": "PrakashH"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-22 15:55:39.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e0f6941e9e2b6b67c0eebfc2e872d8b35363e47d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-22 15:58:08.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/demo-master-verify-java/1051/",
+        "patchset_number": 1
+      },
+      {
+        "id": "ead2aeb582947c0abc99f072cfc2fb2c3791077b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-22 16:02:22.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/demo-master-verify-java/1051/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/demo-master-verify-java/1051",
+        "patchset_number": 1
+      },
+      {
+        "id": "16a6b803857f7b7fc36efcf7b9b6057f93561fdb",
+        "author": {
+          "account_id": 55,
+          "name": "Marco Platania",
+          "display_name": null,
+          "email": "platania@research.att.com",
+          "username": "platania"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-25 14:17:05.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nCan you please review the code? evel.c calls evel_batch.c with this piece of code:\n\n    case EVEL_DOMAIN_BATCH:\n      EVEL_DEBUG(\"Event is a Batch at %lp\", evt_ptr);\n      evel_free_batch((EVENT_HEADER *)evt_ptr);\n      memset(evt_ptr, 0, sizeof(EVENT_HEADER));\n      free(evt_ptr);\n      break;\n\nthe pointer is freed twice, which will cause an issue",
+        "patchset_number": 1
+      },
+      {
+        "id": "b8d37282057b024b51a330918abaf8b6db7d674d",
+        "author": {
+          "account_id": 5066,
+          "name": "Prakash H",
+          "display_name": null,
+          "email": "pbhandar@techmahindra.com",
+          "username": "PrakashH"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-28 13:49:09.000000000",
+        "message": "Patch Set 1:\n\n> Can you please review the code? evel.c calls evel_batch.c with this\n > piece of code:\n > \n > case EVEL_DOMAIN_BATCH:\n > EVEL_DEBUG(\"Event is a Batch at %lp\", evt_ptr);\n > evel_free_batch((EVENT_HEADER *)evt_ptr);\n > memset(evt_ptr, 0, sizeof(EVENT_HEADER));\n > free(evt_ptr);\n > break;\n > \n > the pointer is freed twice, which will cause an issue\n\nThough both pointers passed to functions are same, but each does the different thing. \nevel_free_batch(evt_ptr) -> frees all contained events, and the newly called evel_free_header(..) function frees the header part of the batch event.\n\nfree(evt_ptr) -> this function in evel.c as mentioned by you would free the evt_ptr only. The rest of functions were freeing memory pointed by evt_ptr (i.e. header + batch events). \n\nTo test this, I have commented the free(evt_ptr) and tried running the valgrind, I see that 384 bytes are being lost because of this. So free(evt_ptr) is needed which is not duplicate.",
+        "patchset_number": 1
+      },
+      {
+        "id": "301fc27cca34207e569513ecbf2012d3a661c2b4",
+        "author": {
+          "account_id": 55,
+          "name": "Marco Platania",
+          "display_name": null,
+          "email": "platania@research.att.com",
+          "username": "platania"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-04 13:06:44.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "0b8de26b42549b6ffa876717a2b2c5481f9885d2",
+        "author": {
+          "account_id": 55,
+          "name": "Marco Platania",
+          "display_name": null,
+          "email": "platania@research.att.com",
+          "username": "platania"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-04 13:06:46.000000000",
+        "message": "Change has been successfully merged by Marco Platania",
+        "patchset_number": 1
+      },
+      {
+        "id": "695a0fd0006f509a21b2669ff4ca28400a2ed3be",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-04 13:13:34.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/demo-master-merge-java/803/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/demo-master-merge-java/803",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fapi~master~I9e46aa87bfefbd56ef0077017293df34b654e36f",
+  "change_id": "I9e46aa87bfefbd56ef0077017293df34b654e36f",
+  "_number": 111178,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "cdadbfe8_12757df5",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "the only question I have is: Does the JVM print the exception information when the exception is thrown?  If not, we may need to set the Thread.UncaughtExceptionHandler for the main thread as the first thing it does.  However, if the JVM does print it, then no need to set the handler.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-12 13:22:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a9e93ebe_f107fab6",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "I also think we should have a shared consistent output message for ALL the components. This can be used by docker services that scan the logs to determine if an image is up-and-running correctly before trying to move on to loading another image.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-08-12 13:43:40.000000000",
+      "in_reply_to": "cdadbfe8_12757df5",
+      "unresolved": true
+    },
+    {
+      "id": "7fe73cd5_e92f941a",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "@Jim: Yes the exception information is getting printed into the logs. Tested this locally as well as in the pod's logs in a kubernetes setup.\n@Pam: We could have consistent output message (corresponding to specific errorCodes if we decided to go that route), but since we are going ahead with a generic errorCode of 1, and to know the actual error, we have to go to the logs anyway because the pod itself crashed, so is there a use in creating consistent messages!\nThe requirement I think is to \"Return non-zero (1 or anything else) exit code when the pod(main process) fail and assume that correct information has been already placed in the logs\"\nSorry Pam, maybe I am missing your point.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-08-12 15:02:39.000000000",
+      "in_reply_to": "a9e93ebe_f107fab6",
+      "unresolved": true
+    },
+    {
+      "id": "022da2e5_6a0cb685",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "What I'm saying is this should be a public static final String in a common file. API, PAP and PDP components use that string to formulate its message to the logs. now we can use say fabric8 to determine if our docker image is up-and-running or failed.\nFor example, mariadb image dumps a final log message that is used to determine it is running:\n               <wait>\n                  <time>20000</time>\n                  <log>.*port: 3306  mariadb.org binary distribution</log>\n                </wait>\nPolicy components should have the same consistent message both for failure and success that can be used to synch up image startup.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-08-12 15:19:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "620580a3_c70b75f9",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "Isn't it sufficient, to indicate failure, that it exits with a non-zero status?\n\nSeems like we could address message consistency in a future \"Technical Debt\" epic.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-12 15:35:18.000000000",
+      "in_reply_to": "022da2e5_6a0cb685",
+      "unresolved": true
+    },
+    {
+      "id": "67646959_5441d6f7",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "For the purposes of this jira, but we lack an overall message to say everything is good also. Since we are doing the messages now, and it really isn't a lot of work...why not",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-08-12 16:24:53.000000000",
+      "in_reply_to": "620580a3_c70b75f9",
+      "unresolved": true
+    },
+    {
+      "id": "ae66f748_da1e379b",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/startstop/Main.java",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "Let's leave this JIRA to address the exit status, and create another JIRA to add some consistent start-up/shutdown messages.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-08-13 13:18:29.000000000",
+      "in_reply_to": "67646959_5441d6f7",
+      "unresolved": true
+    }
+  ]
+}

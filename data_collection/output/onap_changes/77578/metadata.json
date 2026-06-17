@@ -1,0 +1,406 @@
+{
+  "id": "ccsdk%2Fdistribution~master~I5c66f29ca40d9224aef3d230593735b8e0aa1f3b",
+  "change_id": "I5c66f29ca40d9224aef3d230593735b8e0aa1f3b",
+  "_number": 77578,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-01-30 13:39:55.000000000",
+    "updated": "2019-04-18 09:10:50.000000000",
+    "submitted": "2019-01-31 14:10:49.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2319,
+      "name": "Sylvain Desbureaux",
+      "display_name": null,
+      "email": "sylvain.desbureaux@orange.com",
+      "username": "sdesbure"
+    },
+    "submitter": {
+      "account_id": 87,
+      "name": "Dan Timoney",
+      "display_name": null,
+      "email": "dtimoney@att.com",
+      "username": "djtimoney"
+    }
+  },
+  "subject": "reduce ccsdk-ansible-server image footprint",
+  "commit_message": "reduce ccsdk-ansible-server image footprint\n\nProject \"CIA\" scope is to provide smaller and multi architecture docker\nimages.\n\nThis proposition aims to do that for ccsdk-ansible-server.\n\nThe current size of this proposal is 139mb compared to the 618Mb image\nproposed before (and before actual ansible installation).\n\nPrinciples used are the following:\n\n1. a \"basic\" `docker build .` should provide a working image;\n2. use the smallest (and multi arch) base image possibe;\n3. install necessary stuff only;\n4. leverage python best practices for installation;\n5. remove installation stuff occuring at run level and move them to\n   build level.\n\n* Dockerfile is now at the root part;\n* ansible configuration file `ansible.cfg` is created and put in\n  `configuration` folder;\n* ansible configuration file `ansible.cfg` is pushed during the\n  build part with a reproductible process;\n* `python` files are on `ansible-server\" folder so copying during build\n  works out of the box;\n* yml files are put directly on `ansible-server/Playbooks` so copying\nduring build works out the box;\n\n* Dockerfile base image is now alpine:3.8;\n* `timeout` executable being now from busybox, change in the\n  command-line call has been made (`--signal` is now `-s` and `-t` is\n  set before setting the timeout value).\n\n* Only install python and python-pip as alpine package and remove build\n  dependencies package after use.\n\n* put all python requirements in `requirements.txt` package and launch\n  pip installation command with this file.\n\n* call directly python main script (`RestServer.py`) as entrypoint and\n  do the python installation stuff at build time.\n\n- [x] change pom.xml so building parts works\n- [ ] consider changing destination folder (`/opt/ansible-server/`) to\n      the ancient one (`/opt/onap/ccsdk/`) if this is problematic\n\nChange-Id: I5c66f29ca40d9224aef3d230593735b8e0aa1f3b\nIssue-ID: INT-816\nSigned-off-by: Sylvain Desbureaux <sylvain.desbureaux@orange.com>\n",
+  "change_log": {
+    "entry_count": 27,
+    "entries": [
+      {
+        "id": "d2264b105cb5493571d680acfad70c6c141559de",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-30 13:39:55.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ecf2fafe1e02773e0528bfd5864b1e51dd8f040a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 13:44:41.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-distribution-master-verify-java/178/",
+        "patchset_number": 1
+      },
+      {
+        "id": "24f488c2f29c53b0254801dd2fa0707b3fea823f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 13:50:26.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-distribution-master-verify-java/178/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-distribution-master-verify-java/178",
+        "patchset_number": 1
+      },
+      {
+        "id": "ab39a774292cb7c267b1e8e3ea5532075a02086a",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:10:41.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)\n\nNot entirely happy with the directory structure changes - this was unnecessary - but willing to live with it for now to get the benefit of the other changes.  Might refactor back if this works okay, but am concerned that pip install at docker build time might be problematic (it was back when we first implemented this due to firewall issues, but that might have been before ONAP Jenkins moved to AWS - so could be fine now, and if so, that is definitely a far, far better method  then the workaround of installing at run time)",
+        "patchset_number": 1
+      },
+      {
+        "id": "45c35b673c2f88f27594d2a9a97ad2adebb27d46",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:10:47.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "e427b946314a4f48d972ab694c9d91808bc5305b",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2019-01-31 14:10:49.000000000",
+        "message": "Change has been successfully merged by Dan Timoney",
+        "patchset_number": 1
+      },
+      {
+        "id": "9194569357762ddba6096794383fcf24eb435f2f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:13:28.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-distribution-master-merge-java/133/",
+        "patchset_number": 1
+      },
+      {
+        "id": "f4d0fd059c92992c35b44a3687614ff8694379c2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:25:11.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-distribution-master-merge-java/133/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-distribution-master-merge-java/133",
+        "patchset_number": 1
+      },
+      {
+        "id": "6426de1b0e9ed614500e1d57194b62e17576e689",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:25:41.000000000",
+        "message": "Patch Set 1:\n\nplease release",
+        "patchset_number": 1
+      },
+      {
+        "id": "b22512520c83ee52467b7091101749cf1afbaa8b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:36:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-distribution-master-release-version-java-daily/430/ (1/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "477d05462aa8dd07618ebb5e999297f185c935c7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:40:44.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-distribution-master-docker-version-java-daily/643/ (2/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "492812e6fd74d1e07bb76be836160616f9bdc4b2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:44:08.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-distribution-arm64-master-docker-version-java-daily/9/ (3/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "b5a5d379c905d85ac9b6fd47d000ce4e8afadf3b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:54:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ccsdk-distribution-master-docker-version-java-daily/643/ : FAILURE\n\nSome Enforcer rules have failed. Look in the log for specific messages explaining why the rule failed\n ( https://jenkins.onap.org/job/ccsdk-distribution-master-docker-version-java-daily/643/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-distribution-master-docker-version-java-daily/643\n\nhttps://jenkins.onap.org/job/ccsdk-distribution-arm64-master-docker-version-java-daily/9/ : FAILURE\n\nSome Enforcer rules have failed. Look in the log for specific messages explaining why the rule failed\n ( https://jenkins.onap.org/job/ccsdk-distribution-arm64-master-docker-version-java-daily/9/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-distribution-arm64-master-docker-version-java-daily/9\n\nhttps://jenkins.onap.org/job/ccsdk-distribution-master-release-version-java-daily/430/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-distribution-master-release-version-java-daily/430",
+        "patchset_number": 1
+      },
+      {
+        "id": "887dc6194dfe0f1a5174bf99f2c96f3cf3b3e3d7",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 15:03:21.000000000",
+        "message": "Patch Set 1:\n\nAs I suspected, docker build fails with this change.",
+        "patchset_number": 1
+      },
+      {
+        "id": "fb162a9db0417a3385c5684db35014eb73f1d2e1",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 15:03:27.000000000",
+        "message": "Patch Set 1: Reverted\n\nThis patchset was reverted in change: Ifdf957de9c1a16645dcb64e139c80d035983f8b2",
+        "patchset_number": 1
+      },
+      {
+        "id": "eeb5de6d2181ddd46ef31b1e1ffc9650538726b7",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 15:03:33.000000000",
+        "message": "Patch Set 1: Reverted\n\nThis patchset was reverted in change: I11cf97f41705e82d4ee1bba74a8ebf53bd1f7502",
+        "patchset_number": 1
+      },
+      {
+        "id": "806ada685587daf62997bdfa82e92578bf7ff012",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 15:08:48.000000000",
+        "message": "Patch Set 1:\n\nDan, do you see where the error is? I'm trying to find but I'm a bit lost in Jenkins...",
+        "patchset_number": 1
+      },
+      {
+        "id": "edfa8c84e8cb7049373e87b6b149fdabdcbaf605",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 15:09:50.000000000",
+        "message": "Patch Set 1:\n\nfound that: Found Banned Dependency: org.onap.ccsdk.sli.core:utils-provider:jar:0.4.1-SNAPSHOT\nbut I don't know if it's the core problem",
+        "patchset_number": 1
+      },
+      {
+        "id": "67317c769f3e91fb4663b0f5e9eaf7ea0399e235",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 15:14:12.000000000",
+        "message": "Patch Set 1:\n\nOk, got that: \nERROR] Failed to execute goal io.fabric8:docker-maven-plugin:0.16.5:build (generate-images) on project ansible-server: Unable to build image [onap/ccsdk-ansible-server-image]: The command '/bin/sh -c apk add --no-cache py2-pip                        python2 &&    apk add --no-cache --virtual .build-deps build-base                                              libffi-dev                                              openssl-dev                                              python2-dev &&    pip install --no-cache-dir --upgrade pip==$PIP_TAG &&     pip install --no-cache-dir -r ansible-server/requirements.txt &&    apk del .build-deps' returned a non-zero code: 1 -> [Help 1]\n\n\nI add this error also when I was testing and the problem was this part of pom.xml:\n<properties>\n   ...\n   <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>\n\n\nWhen removed, it worked for me.\nI can remove it in order to see if it works but do I need to recreate a review?",
+        "patchset_number": 1
+      },
+      {
+        "id": "bf7787d698d266660602d432c095abed95018c85",
+        "author": {
+          "account_id": 2477,
+          "name": "Takamune Cho",
+          "display_name": null,
+          "email": "takamune.cho@att.com",
+          "username": "Takamune_Cho"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 19:48:24.000000000",
+        "message": "Patch Set 1:\n\nHi, Do we have any reason why moving to /opt/ansible-server? This moving would impact some scripts to provide the on-boarding VNF function for usecase.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d3f0618ca14020245c551eb2ea8666ff65ec5545",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 20:29:58.000000000",
+        "message": "Patch Set 1:\n\nWell I moved to /opt/ansible-server as it's the name of the project. there's no particular reason.\n\nI don't see why that would break something as it seems on my tests that path are relatives",
+        "patchset_number": 1
+      },
+      {
+        "id": "cbc858b50ed5ce18f57a644bd552d97511caad6f",
+        "author": {
+          "account_id": 3707,
+          "name": "Frank Sandoval",
+          "display_name": null,
+          "email": "frank.sandoval@oamtechnologies.com",
+          "username": "sandovalfrOAM"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 23:20:07.000000000",
+        "message": "Patch Set 1:\n\ndocker-maven-plugin version must be 0.28.0 to build on Arm (and absolute path of <dockerFile> must be removed)",
+        "patchset_number": 1
+      },
+      {
+        "id": "ff78554e6be7ce538a57fe5c91303000f34684ab",
+        "author": {
+          "account_id": 2477,
+          "name": "Takamune Cho",
+          "display_name": null,
+          "email": "takamune.cho@att.com",
+          "username": "Takamune_Cho"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-16 17:54:25.000000000",
+        "message": "Patch Set 1:\n\nwhen we reshuffled the path and entry point. we have to check docker-compose file and Chart under OOM - that all breaks now.",
+        "patchset_number": 1
+      },
+      {
+        "id": "10e6e26111ee36f14389085b0f4a660706b8be35",
+        "author": {
+          "account_id": 2477,
+          "name": "Takamune Cho",
+          "display_name": null,
+          "email": "takamune.cho@att.com",
+          "username": "Takamune_Cho"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-16 17:55:56.000000000",
+        "message": "Patch Set 1:\n\n/bin/bash should be standard shell in container.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f919b2ead7724d98bfa799ce45b0ccfb5f1020eb",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-25 08:05:48.000000000",
+        "message": "Patch Set 1:\n\nhello @Takamune,\nfirst, forcing entry point in an helm chart is a bad practice and here there were no need to do that.\nSecond, I asked Dan if he wanted that I update helm chart (https://jira.onap.org/browse/SDNC-639).\nI also don't see the need for bash as we only need to start a python script.\nI propose to update both ansible-server charts (for APPC and SDNC) in order to get rid of it and use the default entry point",
+        "patchset_number": 1
+      },
+      {
+        "id": "62bae8cd82ce087caba0d87f44b81582143c9c0a",
+        "author": {
+          "account_id": 2477,
+          "name": "Takamune Cho",
+          "display_name": null,
+          "email": "takamune.cho@att.com",
+          "username": "Takamune_Cho"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-25 15:26:02.000000000",
+        "message": "Patch Set 1:\n\nWhy do you think a ENTRY point in helm Chart and docker compose is bad?\n\nWe need to change all helm Charts and docker compose files in ONAP in this gerrit that got impacted to make sure all working as well. \n\nI need bash for some scripts, which I will push to ansible container later. bash is standard shell script in linux for years. I do not know why alpine does not have bash. \n\nwe can talk further. @Sylvain",
+        "patchset_number": 1
+      },
+      {
+        "id": "6815b6ebc934c181e25cf53738f3c5571ee2a92d",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-18 09:10:50.000000000",
+        "message": "Patch Set 1:\n\nGuys, there is a problem with AnsibleModule.py. The file is different than the one was added with this commit https://gerrit.onap.org/r/#/c/66131/, reverted with this gerrit https://gerrit.onap.org/r/#/c/77516/. In consequence after commit of Sylvain ansibleSysCall from AnsibleModule.py is not compatible with ansibleSysCall  used in RestServer.py",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

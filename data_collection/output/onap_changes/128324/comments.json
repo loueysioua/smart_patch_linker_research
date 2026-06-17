@@ -1,0 +1,76 @@
+{
+  "id": "sdc~master~Ib7258fe7002f5db03ccec84e935adfe0d217bfad",
+  "change_id": "Ib7258fe7002f5db03ccec84e935adfe0d217bfad",
+  "_number": 128324,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9a145fb1_097ee37f",
+      "file_path": "openecomp-ui/src/sdc-app/onboarding/versionsPage/VersionsPageActionHelper.js",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "This method flow does not seems to be right.\n\nThis call will return a promise, which can be a success or a failure.\n\nThe success message should be only shown if the call was successful. Otherwise a failure message. \nThe failure seems to be already be handled by the RestAPIUtil with the catch blocks on the calls:\n\"\n.catch(error => {\n                store.dispatch({\n                    type: LoaderConstants.RECEIVE_RESPONSE,\n                    url: error.config.url\n                });\n                errorResponseHandler(error.response);\n                return Promise.reject({\n                    responseJSON: error.response.data\n                });\n            });\n\"\n\nThe screen should be loading before this call and, on the finally part of the promise, it should call something to stop loading the screen. I also believe that the RestAPIUtil already shows/hides the loading spinner, with the events:\n\n\"store.dispatch({ type: LoaderConstants.SEND_REQUEST, url: url });\"\nand \n\"store.dispatch({type: LoaderConstants.RECEIVE_RESPONSE, url: result.config.url});\"\n\nso there would be no reason to handle it in this method.\n\n\nIf I'm not wrong, I believe you should be doing something like this:\nScreensHelper.loadScreen(dispatch, {\n            screen: enums.SCREEN.ONBOARDING_CATALOG\n        }).then(response -> \ndispatch(\n            notificationActions.showSuccess({\n                message: i18n('Item successfully deleted')\n            })\n        );\n);\n\nbut this may not work as the RestAPIUtil code is already catching an error, so maybe the showSuccess code will always be executed. In this case, we could do something like:\n\nconst response = await ScreensHelper.loadScreen(dispatch, {\n            screen: enums.SCREEN.ONBOARDING_CATALOG\n        })\n//evaluate the response to check if it is a success or not, then, if successful, call the showSuccess.\n\nFor the best, there should be a way to pass the success handling callback function to the RestAPIUtil, but this is something not yet supported there.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-06 11:21:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eddf6f47_a74441b5",
+      "file_path": "openecomp-ui/src/sdc-app/onboarding/versionsPage/VersionsPageActionHelper.js",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "For reference on promise and async/await:\nhttps://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-06 11:24:15.000000000",
+      "in_reply_to": "9a145fb1_097ee37f",
+      "unresolved": true
+    },
+    {
+      "id": "bd4a08b4_8403ed2d",
+      "file_path": "openecomp-ui/src/sdc-app/onboarding/versionsPage/VersionsPageActionHelper.js",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "I tested here. It is working as expected. When there is an error, error message shown in UI and it stays in same page, it is not proceeding further to dispatch success message. Only successful deletion redirects to homepage and shows success message. Thanks for information. It was really helpful for testing.",
+      "author": {
+        "account_id": 6710,
+        "name": "Krupa Nagabhushan",
+        "display_name": null,
+        "email": "krupa.nagabhushan@est.tech",
+        "username": "KrupaNagabhushan"
+      },
+      "updated": "2022-04-07 17:23:08.000000000",
+      "in_reply_to": "eddf6f47_a74441b5",
+      "unresolved": false
+    },
+    {
+      "id": "f1071730_5db58622",
+      "file_path": "openecomp-ui/src/sdc-app/onboarding/versionsPage/VersionsPageActionHelper.js",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "Ok, I missed that await throws an exception for rejected promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#promise_rejection\n\nSorry for the whole disturbance. Still, I feel that the await is just an excuse to not handle the promise, maybe I'm wrong.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-07 17:29:13.000000000",
+      "in_reply_to": "bd4a08b4_8403ed2d",
+      "unresolved": false
+    }
+  ]
+}

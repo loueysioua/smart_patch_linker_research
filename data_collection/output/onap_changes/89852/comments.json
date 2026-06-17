@@ -1,0 +1,518 @@
+{
+  "id": "vid~master~Ib7beb5a5ac58c2ac9767f5e8dc4f988ac0a44c3e",
+  "change_id": "Ib7beb5a5ac58c2ac9767f5e8dc4f988ac0a44c3e",
+  "_number": 89852,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "6ebb7edf_5b17c0a8",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "shouldn't that be stored in some external properties ?",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2019-06-14 11:41:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f9fc426d_9811dcbf",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 101,
+      "message": "I think should be named `probeGetAllSubscribers`.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:27:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6b7ddcc3_b60c1b9f",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 107,
+      "message": "I see here two issues.\nI do NOT think these should block this commit (or be part of), but still should be addressed:\n\n1. From generalization perspective, it should be good to have the request info in the return value.\n   e.g. Extending HttpResponse model.\n   Same applies for the exceptions: if can throw ExceptionWithRequestInfo, this is much better, in my view.\n\n2. `syncRestClient.get` has a fallback mechanism -- `callWithRetryOverHttp`. In case of probing, we will lose the indication of root case when `causedBySslHandshakeError` is positive. I think it's an important information we _should_ give somehow.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:27:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f24bb2f9_7f4af6e0",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 109,
+      "message": "I suggest leaking the whole URI, including host, port, protocol. i.e. `urlBase + String.format(URIS.SUBSCRIBERS, 0)`.\nThis will assist understanding misconfigs.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:27:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3d8c1cae_7306126a",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 115,
+      "message": "I suggest leaking the whole URI, including host, port, protocol.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:27:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6c0b0ec3_ea9da8b7",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 114,
+      "message": "I prefer having the value \"0\", as it clearly signal \"no response\" instead of a fabricated return value.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a11b63e2_aaf8310b",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/asdc/AsdcClient.java",
+      "patchset_number": 3,
+      "line": 37,
+      "message": "Redundant slash here.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3af408f1_7b94f680",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/services/VidServiceImpl.java",
+      "patchset_number": 3,
+      "line": 154,
+      "message": "Some of the comments from AAI applies here; mainly:\n *  Full URI in response\n *  Adopt {Response|Exception}WithRequestInfo model in `asdcClient`.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "448f7c40_455d1984",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/services/VidServiceImpl.java",
+      "patchset_number": 3,
+      "line": 160,
+      "message": "I prefer having the value \"0\", as it clearly signal \"no response\" instead of a fabricated return value.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "945d4899_44b3b8a2",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/services/VidServiceImpl.java",
+      "patchset_number": 3,
+      "line": 161,
+      "message": "Please prefer `Logging.exceptionToDescription(e)` which unwraps the whole stack",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 08:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bd1e44b3_5310aabe",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/controller/ProbeController.java",
+      "patchset_number": 3,
+      "line": 58,
+      "message": "That's nice! I thought it was introduced only in spring 5 (while we're on 4).",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cba50d1e_18666cee",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 414,
+      "message": "Anyhow, should be `requestsList`, with plural \"requests\".",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f7cad485_6403e6eb",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 415,
+      "message": "Or:\n```\nimport org.apache.commons.collections4.ListUtils\n\nreturn ListUtils.emptyIfNull(requestList.getRequestList());\n```",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9b8097de_dd55bdfa",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 877,
+      "message": "I'm bit confused of the tangling here; can't it be simplified?\n(especially the createRequestsList, which recreates a RestObject?)",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9ff972c4_3c5e0bec",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/RestObjectWithRequestInfo.java",
+      "patchset_number": 3,
+      "line": 49,
+      "message": "Why not null, if getRaw() is null? (Again, also here, I prefer having null if no body than a fabricated empty string.)\nThe only dereference I find is on org.onap.vid.model.probes.HttpRequestMetadata#getRawData which is null-safe.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f4d1d50d_e1202552",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/aai/AaiOverTLSClientTest.java",
+      "patchset_number": 3,
+      "line": 92,
+      "message": "Can we add a test where syncRestClient.get throws an exception?",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-17 10:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "73343c3b_8b5b1c84",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 101,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "f9fc426d_9811dcbf",
+      "unresolved": true
+    },
+    {
+      "id": "4ff16c94_67921d50",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "6ebb7edf_5b17c0a8",
+      "unresolved": true
+    },
+    {
+      "id": "4cd6c025_64941aaa",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "f24bb2f9_7f4af6e0",
+      "unresolved": true
+    },
+    {
+      "id": "063bff25_8642f07f",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 114,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "6c0b0ec3_ea9da8b7",
+      "unresolved": true
+    },
+    {
+      "id": "e78d69be_e9e49b6c",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/aai/AaiOverTLSClient.java",
+      "patchset_number": 3,
+      "line": 115,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "3d8c1cae_7306126a",
+      "unresolved": true
+    },
+    {
+      "id": "949de4bf_7ab3c982",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/asdc/AsdcClient.java",
+      "patchset_number": 3,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "a11b63e2_aaf8310b",
+      "unresolved": true
+    },
+    {
+      "id": "c151f3ec_165cf0d6",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 414,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "cba50d1e_18666cee",
+      "unresolved": true
+    },
+    {
+      "id": "86fd8cb4_a6e858ec",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 415,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "f7cad485_6403e6eb",
+      "unresolved": true
+    },
+    {
+      "id": "67ec00b2_6bd84975",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/RestObjectWithRequestInfo.java",
+      "patchset_number": 3,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "9ff972c4_3c5e0bec",
+      "unresolved": true
+    },
+    {
+      "id": "1f60cc4a_a3589856",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/services/VidServiceImpl.java",
+      "patchset_number": 3,
+      "line": 160,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "448f7c40_455d1984",
+      "unresolved": true
+    },
+    {
+      "id": "4f12d0a2_8cc8c657",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/services/VidServiceImpl.java",
+      "patchset_number": 3,
+      "line": 161,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "945d4899_44b3b8a2",
+      "unresolved": true
+    },
+    {
+      "id": "39538d7b_59624ea9",
+      "file_path": "vid-app-common/src/test/java/org/onap/vid/aai/AaiOverTLSClientTest.java",
+      "patchset_number": 3,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 08:26:56.000000000",
+      "in_reply_to": "f4d1d50d_e1202552",
+      "unresolved": true
+    },
+    {
+      "id": "b71e4bce_bf67e960",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 877,
+      "message": "What do you think about this?",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-06-19 10:09:13.000000000",
+      "in_reply_to": "9b8097de_dd55bdfa",
+      "unresolved": true
+    },
+    {
+      "id": "57cf5f9d_81c01285",
+      "file_path": "vid-app-common/src/main/java/org/onap/vid/mso/MsoBusinessLogicImpl.java",
+      "patchset_number": 3,
+      "line": 877,
+      "message": "I tried to fit into existing implementation as much as I could. But I agree that this method should be refactored - I'll try to do that in separate commit",
+      "author": {
+        "account_id": 3873,
+        "name": "Wojciech Sliwka",
+        "display_name": null,
+        "email": "wojciech.sliwka@nokia.com",
+        "username": "wsliwka"
+      },
+      "updated": "2019-06-19 11:05:35.000000000",
+      "in_reply_to": "b71e4bce_bf67e960",
+      "unresolved": true
+    }
+  ]
+}

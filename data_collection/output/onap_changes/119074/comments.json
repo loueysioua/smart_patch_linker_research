@@ -1,0 +1,93 @@
+{
+  "id": "cps~master~I1e8dda4db79d1772e443b7e442cc77f49f74094f",
+  "change_id": "I1e8dda4db79d1772e443b7e442cc77f49f74094f",
+  "_number": 119074,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8b038900_e9f5b85f",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/config/WebSecurityConfig.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "Just realizing we cannot update SQ DB, instead we need to add an @ignore rule here similar to waht we used for a 5-level class inheritacne in the exceptions... Can you lok up the exact annotation to ignore just this vioation please",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-03-10 15:15:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "42279d30_c595604e",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/config/WebSecurityConfig.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "why we are not involving the configuration here?\nit seems reasonable to define the configuration properties with default values instead of constants.\nit seems suitable for all the cases including testing and production,\nshould also resolve the sonar issue as well.\n\nlike in application.xml (same for tests)\n```\nsecurity:\n   auth:\n      username: ${CPS_USERNAME:cpsuser}\n      password: ${CPS_PASSWORD:cpsr0cks!}\n```\nthen in code\n```\n@Value(\"${security.auth.username}\")\nprivate String username;\n\n@Value(\"${security.auth.password}\")\nprivate String password;\n```",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-03-11 09:13:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8d467b3f_5b2996c8",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/config/WebSecurityConfig.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "if that solves the problems that woudl be great!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-03-11 10:17:35.000000000",
+      "in_reply_to": "42279d30_c595604e",
+      "unresolved": true
+    },
+    {
+      "id": "1f2b8a99_9ddf0309",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/config/WebSecurityConfig.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "I like this solution as the code is cleaner like this. Thanks Ruslan !\n\nFrom a security point of view, this is equivalent to the previous approach as a default password is still provided in the code source. \n\nWhat I mean is that sometimes it is not because Sonar is not able to detect a security issue that we should leave it and, at the opposite, it is not because Sonar raises an alert for something that we are ok in our context that we should change it.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-03-11 14:46:29.000000000",
+      "in_reply_to": "8d467b3f_5b2996c8",
+      "unresolved": true
+    },
+    {
+      "id": "e75e96e7_dfa9d597",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/config/WebSecurityConfig.java",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "I agree sometimes SQ just raises a warning to check something is an issue or not and when can label it with @Ignore if we think it is not really an issue.\nBut like in this case if we can up with an even better simple solution that is great of course\n(I do think that as long as you have constants with this name SQ will complain so we stil might need @Ignore annotation, I have to see the new solution to be sure)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-03-11 14:53:19.000000000",
+      "in_reply_to": "1f2b8a99_9ddf0309",
+      "unresolved": true
+    }
+  ]
+}

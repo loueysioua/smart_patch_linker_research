@@ -1,0 +1,518 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~I29deb2696c7e6687235c71e990b2b405c82fc991",
+  "change_id": "I29deb2696c7e6687235c71e990b2b405c82fc991",
+  "_number": 91724,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2019-07-19 09:02:17.000000000",
+    "updated": "2019-10-07 13:28:31.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 4851,
+      "name": "Andrzej Szukuć",
+      "display_name": null,
+      "email": "andrzej.szukuc@nokia.com",
+      "username": "andrzejszukuc"
+    },
+    "submitter": null
+  },
+  "subject": "A complete refactoring of AaiClient",
+  "commit_message": "A complete refactoring of AaiClient\n\nChange-Id: I29deb2696c7e6687235c71e990b2b405c82fc991\nSigned-off-by: andrzejszukuc <andrzej.szukuc@nokia.com>\nIssue-ID: DCAEGEN2-1059\n",
+  "change_log": {
+    "entry_count": 35,
+    "entries": [
+      {
+        "id": "868389bb8f90a98621de6ea89f04c5422b873d9a",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-07-19 09:02:17.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "1351e293f353cd94304272eb02e7dff45ea2e5aa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:04:56.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/465/",
+        "patchset_number": 1
+      },
+      {
+        "id": "40077259d49a17eeb6a086e6c3e0b842e33473c3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:07:04.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/465/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/465/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/465",
+        "patchset_number": 1
+      },
+      {
+        "id": "4b6327644303b51a16408d48d9bb5ac69b17c1c7",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-07-19 09:07:46.000000000",
+        "message": "Patch Set 1:\n\nThis change introduces three annotations @AaiPojo, @AaiOptional, @AaiRequired. Objects marked with @AaiPojo must be non-generic interfaces with non-argument, non-generic, non-default methods. @AaiRequired is used to mark fields that are mandatory in order to make a call to AAI API. @AaiOptional purpose is to add additional non-mandatory parameters that are supported by specific AAI endpoint. For instance:\n\n@AaiPojo(path = \"/network/logical-links/logical-link/${link-name}\", type = \"logical-link\")\ninterface LogicalLink {\n    @AaiRequired(value = \"link-name\")\n    String getLinkName();\n    @AaiRequired(value = \"link-type\")\n    String getLinkType();\n}\n\ndescribes objects with two mandatory parameters. Mandatory parameters should be used in AAI endpoint description.\n\nFrom a previous definition, two interfaces will be created during compilation time. LogicalLinkRequired and LogicalLinkComplete. LogicalLinkRequired will contain only mandatory fields. On the other hand LogicalLinkComplete going to contain mandatory fields, optional fields and also getResourceVersion() (required for object deletion) and getRelationshipList() (list of related objects).\n\nAdditionally, AaiActionFactory interface is created. It consists of methods for operating on objects annotated with @AaiPojo. For every interface X annotated with @AaiPojo following method will be added to AaiActionFactory:\n\nAaiCreateAction<XComplete> createX();\nAaiDeleteAction<XComplete> deleteX();\nAaiUpdateAction<XComplete> updateX();\nAaiGetAction<XRequired, XComplete> getX();\n\n<T extends AaiRelationable> \nAaiGetRelationAction<T, XRequired> getRelationX(Class<T> cls);\n\n<T extends AaiModel> \nAaiAddRelationAction<XRequired, T> addRelationX(Class<T> cls);\n\n<T extends AaiModel> \nAaiDeleteRelationAction<XRequired, T> addRelationX(Class<T> cls);\n\nMoreover, abstract class AaiActionFactoryBase is created. It implements AaiActionFactory interface and stores metadata obtained from Aai* annotations. The metadata contains recipes on how to map XRequired, XComplete objects to AAI API endpoints and Gson TypeAdapterFactoryries in order to provide a simple mapping of objects to JSON.\n\nFor XRequired and XComplete Immutables builder are created.\n\nAn example of client usage:\nfinal AaiActionFactory factory = new AaiHttpActionFactory(someConfig);\nfactory\n    .createPnf()\n    .call(ImmutablePnfComplete\n        .builder()\n        .pnfName(\"Stefan3\")\n        .build()\n     ).block();\nfinal PnfComplete = factory\n    .getPnf()\n    .call(ImmutablePnfRequired\n        .builder()\n        .pnfName(\"Stefan3\")\n        .build()\n     ).block();\n factory\n    .addRelationPnf(ServiceInstanceRequired.class)\n    .call(ImmutableAaiRelation\n        .<PnfRequired, ServiceInstanceRequired>builder()\n        .from(pnf2)\n        .to(ImmutableServiceInstanceRequired\n            .builder()\n            .globalCustomerId(\"JanuszCustomer\")\n            .serviceInstanceId(\"66c20097-1b80-41c1-8312-1c22971f5f03\")\n            .serviceType(\"vFWCL\")\n            .build()\n        ).relationType(RelationType.UNKNOWN) //UNKNOWN will generate a default relation type\n         .build())\n    .block();",
+        "patchset_number": 1
+      },
+      {
+        "id": "ea2a321040a5c0a85fe1ce5dd36f46e1e382cd13",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-07-19 09:12:30.000000000",
+        "message": "Patch Set 1:\n\nrecheck",
+        "patchset_number": 1
+      },
+      {
+        "id": "62ff5fc71ec3f5d7847c8cd4e0a531cdaf04b10f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:13:00.000000000",
+        "message": "Patch Set 1: -Verified\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/466/",
+        "patchset_number": 1
+      },
+      {
+        "id": "93f043ba59e0c1b5d8d05adbb127d57997800673",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:15:24.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/466/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/466/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/466",
+        "patchset_number": 1
+      },
+      {
+        "id": "c6b7506bcc21698b71fa4f9d8f5808b975ce0fc4",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-07-19 09:39:08.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "dccda90ed5db8ac04df954805b0fe17afd709394",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:42:48.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/467/",
+        "patchset_number": 2
+      },
+      {
+        "id": "cd64b09260110cee8f2e9606baa6802501688daa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 09:45:44.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/467/ : FAILURE\n\nBuild failed to find artifact org.onap.dcaegen2.services.sdk.rest.services:aai-client:jar:1.3.0-SNAPSHOT needed for sub-project org.onap.dcaegen2.services.sdk.rest.services:dmaap-client:jar:1.3.0-SNAPSHOT. Check correct groupId, artifactId and version. This may also indicate a problem with nexus. Another possibility is that this is a -SNAPSHOT version and it has expired from nexus -- in that case check with the project which provides the artifact. ( https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/467/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/467",
+        "patchset_number": 2
+      },
+      {
+        "id": "079833292a2eaed213f761f85c9735773e95ac95",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-07-19 10:04:42.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "fb2678b86bca24e135ac9f500d21bfd081dd68c0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 10:07:02.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/468/",
+        "patchset_number": 3
+      },
+      {
+        "id": "28cb67476b420da3778ea035e381bedaed255a4a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 10:17:39.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/468/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/468",
+        "patchset_number": 3
+      },
+      {
+        "id": "79bbae3c44f9a6b74d79aee0be44a5e5d7438f93",
+        "author": {
+          "account_id": 3873,
+          "name": "Wojciech Sliwka",
+          "display_name": null,
+          "email": "wojciech.sliwka@nokia.com",
+          "username": "wsliwka"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 12:30:22.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "f29260fd44c1b0af5a70d719a11a03b3635db220",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-07-19 14:30:05.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "786c6dff75d95f1c8c7b5c0007f43623c093718b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 14:32:58.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/469/",
+        "patchset_number": 4
+      },
+      {
+        "id": "3b388c92f3412861797dcb00f6aed6584384a5df",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-19 14:44:23.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/469/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/469",
+        "patchset_number": 4
+      },
+      {
+        "id": "eeda38f2d9b8c417b2e1aec7caa25fdad602d280",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-07-21 18:14:29.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "f23e981040ea9ff0c0eda5c77aa8baa1ade2fb30",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-21 18:17:56.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/470/",
+        "patchset_number": 5
+      },
+      {
+        "id": "59e0b38a318954bdb980d44e6d745dc2e7365633",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-21 18:29:36.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/470/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/470",
+        "patchset_number": 5
+      },
+      {
+        "id": "e5e1791c80e2033f670e37b5e3a92e1534e31f65",
+        "author": {
+          "account_id": 3873,
+          "name": "Wojciech Sliwka",
+          "display_name": null,
+          "email": "wojciech.sliwka@nokia.com",
+          "username": "wsliwka"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-07-29 12:58:54.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "61345f6c81af3fa10dfd9edf1c0a1b587c642353",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-03 20:49:57.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "78c4a32ebf1ae24f354639b6b1f9459f5324d5bd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-03 20:52:43.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/474/",
+        "patchset_number": 6
+      },
+      {
+        "id": "86910dfd77ed2253fa657921bf5c0fc4f23d2276",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-03 21:05:15.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/474/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/474",
+        "patchset_number": 6
+      },
+      {
+        "id": "044f361355b7df9b7b82888ce315edf2fff531ce",
+        "author": {
+          "account_id": 4851,
+          "name": "Andrzej Szukuć",
+          "display_name": null,
+          "email": "andrzej.szukuc@nokia.com",
+          "username": "andrzejszukuc"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-05 01:35:10.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "63424fe02cacf2893024d4917a014ef45a6df8eb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-05 01:37:46.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/475/",
+        "patchset_number": 7
+      },
+      {
+        "id": "99e490c52574bba0109e81bb7790cdc1de02ec10",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-05 01:49:30.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/475/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/475",
+        "patchset_number": 7
+      },
+      {
+        "id": "b24c21a542598bea184cc30a2c06a586b549aa3c",
+        "author": {
+          "account_id": 105,
+          "name": "Tony Hansen",
+          "display_name": null,
+          "email": "tony@att.com",
+          "username": "TonyLHansen"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-28 15:37:55.000000000",
+        "message": "Patch Set 7:\n\nany other reviews?",
+        "patchset_number": 7
+      },
+      {
+        "id": "74f440d248c2824981c17cc2cd5af3bf88e9e709",
+        "author": {
+          "account_id": 2807,
+          "name": "Piotr Wielebski",
+          "display_name": null,
+          "email": "piotr.wielebski@nokia.com",
+          "username": "pwielebs"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-03 12:39:08.000000000",
+        "message": "Patch Set 8: Patch Set 7 was rebased",
+        "patchset_number": 8
+      },
+      {
+        "id": "6fae22b3ff2a0973a42d5c34313e8ac10749123d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 12:41:56.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/496/",
+        "patchset_number": 8
+      },
+      {
+        "id": "2674e4c5684a763b4236a0acdfca6e98d451d330",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 12:53:54.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-services-sdk-master-verify-java/496/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-services-sdk-master-verify-java/496",
+        "patchset_number": 8
+      },
+      {
+        "id": "430f7abea4c23cae61e9a7410255a89b013bdcf3",
+        "author": {
+          "account_id": 2807,
+          "name": "Piotr Wielebski",
+          "display_name": null,
+          "email": "piotr.wielebski@nokia.com",
+          "username": "pwielebs"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 10:13:17.000000000",
+        "message": "Patch Set 8:\n\n> Patch Set 7:\n> \n> any other reviews?\n\nLet's postpone it for Frankfurt.",
+        "patchset_number": 8
+      },
+      {
+        "id": "2bee088d4b48ec78e87e088b523415527ae71557",
+        "author": {
+          "account_id": 2807,
+          "name": "Piotr Wielebski",
+          "display_name": null,
+          "email": "piotr.wielebski@nokia.com",
+          "username": "pwielebs"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 10:14:27.000000000",
+        "message": "Patch Set 8: Code-Review-1\n\nFor Frankfurt",
+        "patchset_number": 8
+      },
+      {
+        "id": "14698f014e9b7a625130e8caedf15cb4a8d1ec87",
+        "author": {
+          "account_id": 3433,
+          "name": "Bogumil Zebek",
+          "display_name": null,
+          "email": "bogumil.zebek@nokia.com",
+          "username": "bogumil_zebek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-11 12:38:44.000000000",
+        "message": "Removed reviewer Bogumil Zebek.",
+        "patchset_number": 8
+      },
+      {
+        "id": "9f4c239f63f704e47b0eb7eab20a7285817fe6e5",
+        "author": {
+          "account_id": 2807,
+          "name": "Piotr Wielebski",
+          "display_name": null,
+          "email": "piotr.wielebski@nokia.com",
+          "username": "pwielebs"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-10-07 13:28:31.000000000",
+        "message": "Abandoned",
+        "patchset_number": 8
+      }
+    ]
+  }
+}

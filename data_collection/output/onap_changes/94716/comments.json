@@ -1,0 +1,93 @@
+{
+  "id": "multicloud%2Fk8s~master~I454fb1998fc84e5f0d566f32b7dcfd85872c5183",
+  "change_id": "I454fb1998fc84e5f0d566f32b7dcfd85872c5183",
+  "_number": 94716,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "38c6f6dd_4a3a0e06",
+      "file_path": "kud/deployment_infra/images/nfd-master.yaml",
+      "patchset_number": 5,
+      "line": 1,
+      "message": "Please add a comment mentioning the source of this file like a link to the nfd github repo from where these files are copied",
+      "author": {
+        "account_id": 285,
+        "name": "Ritu Sood",
+        "display_name": null,
+        "email": "ritu.sood@intel.com",
+        "username": "ritusood"
+      },
+      "updated": "2019-09-09 22:53:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e4e749a5_64e881de",
+      "file_path": "kud/deployment_infra/images/nfd-master.yaml",
+      "patchset_number": 5,
+      "line": 1,
+      "message": "Thank you for reviewing this Ritu. I've added the link in the JIRA story. Would you want it to be added here as well?",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2019-09-09 23:02:10.000000000",
+      "in_reply_to": "38c6f6dd_4a3a0e06",
+      "unresolved": false
+    },
+    {
+      "id": "dfe466ea_08e86965",
+      "file_path": "kud/tests/nfd.sh",
+      "patchset_number": 7,
+      "line": 32,
+      "message": "I've got one suggestion here. As 'cpu-hardware_multithreading' capability is not that common (at least in my openstack lab such feature is not discovered on KUD node, I guess LF jenkins slaves may also not have it), I'd suggest to change matchExpression so that this testcase won't fail, because such capability shouldn't limit nfd functionality.\nMy advice would be to set matchExpression based on some more common label, like \"feature.node.kubernetes.io/system-os_release.ID\" (with prior checking of assigned label value of any k8s node).",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2019-09-10 11:20:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "51432bce_c86dc779",
+      "file_path": "kud/tests/nfd.sh",
+      "patchset_number": 7,
+      "line": 57,
+      "message": "I think assuming only \"Pending\" state of pod as a fail condition may be misleading in some environments (like pod sandbox may be creating for too long time, or image pulling). I'd suggest to apply further check here.\n\nHaving looked into such \"Pending\" pod, it looks like it should have in it's last (chronologicaly first) status condition, \"PodScheduled -> False -> Unschedulable\" information provided.\nIt can be easily retrieved with example commands:\n```\nkubectl get pods  nfd-pod -o json | jq '.status.conditions[-1]' #For checking first status condition struct\nkubectl get pods  nfd-pod -o json | jq '.status.conditions[-1].reason' -r #For retrieving exact status\n```\n\nI'd suggest to apply some further checking like aobve here, to ensure this \"Pending\" condition is really a symptom of nfd issue.",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2019-09-10 11:20:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4c1b392d_d64b0149",
+      "file_path": "kud/tests/nfd.sh",
+      "patchset_number": 7,
+      "line": 57,
+      "message": "Hi Konrad, thank you for reviewing the patch. Before I make any changes, I want to explain why I chose 'cpu-hardware_multithreading' as the matchExpression over system-os_release.ID. Right now we are running KuD on 16.04 O.S. We will be moving to 18.04 in the future. However, another project which uses KuD is running on 18.04 currently. If this test case passes in one would fail in other. I also did some testing before using CPU-hardware... Upon testing with multiple match expressions and checking for the labels in 3 Hardware devices, CPU-hardware... was enabled in all 3 cases in the Bios. Hence, I chose this label. CPU-hardware... match expression would work for Baremetal, ICN deployment(another project) and VM deployment since it is bound to be not scheduled. \nThis test case is bound to fail in a VM deployment. I think I should have put a comment about it in retrospect. \nHowever, the test case passes in all the Baremetal deployment.\nSince people who use KuD defer to Baremetal deployment as opposed to VM which is used for testing purposes, I think CPU-hardware is a good candidate that fits all. \n\nHaving said that, I do agree with you that \"pending state\" test case should be changed and I will do that. \n\nPlease let me know your thoughts.",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2019-09-10 18:11:23.000000000",
+      "in_reply_to": "51432bce_c86dc779",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "sdc~master~Iceca3f160eaeb1a6431fc3c5bbab92847e95ae4d",
+  "change_id": "Iceca3f160eaeb1a6431fc3c5bbab92847e95ae4d",
+  "_number": 123253,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2063612f_31f8b95f",
+      "file_path": "openecomp-be/tools/install/database/init_schemas.cql",
+      "patchset_number": 1,
+      "line": 25,
+      "message": "This will add the new columns in the case of a fresh install, but in an upgrade scenario we need to alter the table",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2021-08-12 08:35:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "aa0c2491_cd814b4a",
+      "file_path": "openecomp-be/tools/install/database/init_schemas.cql",
+      "patchset_number": 1,
+      "line": 25,
+      "message": "There is no upgrade scenario implemented in the onboarding init solution.\nI could not find also a way to add a column only if it does not exist when using a cql script.\n\nAs a workaround, I've kind of activated the use of an alter_table.cql script (it was being added to the init docker image, but not being called), and added the alter tables there. \nThe alter_table.cql result is being ignored, so it will not guarantee a successful upgrade. I believe if one cql command fails, the next ones will not be executed, and I also could not find an error handling in cql scripts.\n\nI could, though, split every single command (3 for now) in a separate file and force the execution of all commands if wanted (ignoring the result).",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2021-08-12 14:25:50.000000000",
+      "in_reply_to": "2063612f_31f8b95f",
+      "unresolved": true
+    },
+    {
+      "id": "b8d75969_66a519a2",
+      "file_path": "openecomp-be/tools/install/database/init_schemas.cql",
+      "patchset_number": 1,
+      "line": 25,
+      "message": "I've implemented a way to add and run upgrade scripts during the onboarding init: https://gerrit.onap.org/r/c/sdc/+/123263.\nFor this particular change, I've added a new script to be executed: openecomp-be/tools/install/database/upgrade-scripts/20210729-dox.package_details.cql",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2021-08-13 09:27:22.000000000",
+      "in_reply_to": "aa0c2491_cd814b4a",
+      "unresolved": true
+    }
+  ]
+}

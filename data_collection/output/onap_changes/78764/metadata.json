@@ -1,0 +1,454 @@
+{
+  "id": "oom%2Foffline-installer~master~I3d3da9381b0e804f511ee854c41554b924d18883",
+  "change_id": "I3d3da9381b0e804f511ee854c41554b924d18883",
+  "_number": 78764,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-02-19 15:53:53.000000000",
+    "updated": "2019-03-07 09:18:01.000000000",
+    "submitted": "2019-03-07 09:18:01.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 3957,
+      "name": "Samuli Silvius",
+      "display_name": null,
+      "email": "s.silvius@partner.samsung.com",
+      "username": "silvius"
+    },
+    "submitter": {
+      "account_id": 4009,
+      "name": "Michal Ptacek",
+      "display_name": null,
+      "email": "m.ptacek@partner.samsung.com",
+      "username": "Michal.Ptacek"
+    }
+  },
+  "subject": "Re-factored resources upload into role",
+  "commit_message": "Re-factored resources upload into role\n\nWhole functionality of resource files upload is\nimplemented in resource-data role instead of\nplaybook level tasks.\nThis will make roles easier to test\nand make it easier to implement other OS support later.\n\nIssue-ID: OOM-1654\n\nChange-Id: I3d3da9381b0e804f511ee854c41554b924d18883\nSigned-off-by: Samuli Silvius <s.silvius@partner.samsung.com>\n",
+  "change_log": {
+    "entry_count": 30,
+    "entries": [
+      {
+        "id": "807d5a25acd873fecde8c961423c15bfa756342d",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-19 15:53:53.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "a97b4b48be6d545227dfc8a5339a2c01c7ad79a5",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-20 12:07:42.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nI really liked some neat improvements you've made, like substituting 'yum' module for 'package_facts' for checking if a package is installed on host which resolves issue i came up while testing on Centos but my overall feeling is that the task flow is now less readable as it used to be in upload_resources.yml. Specifically I mean main.yml calling upload_resources.yml calling unarchive-resource.yml calling unarchive-{{ transport }}-resource.yml. \n\nIs there a particular reason you didn't follow more ansible native approach which would be to split tasks to even more roles and make them dependencies via roles/resource-data/meta/main.yml?\n\nSecondly what is the reason for playing on \"hosts: resources[0], infrastructure\" and then in roles/resource-data/tasks/main.yml \"Collect source resources\" on resource host and rest on infra with \"when\"? Why not splitting \"Collect source resources\" and the rest in two roles and then \n\nhosts: resources[0]\nroles:\n  - role1\n\nhosts: infrastructure\nroles:\n  - role2\n\nWouldn't it be more readable without superfluous 'whens'?",
+        "patchset_number": 1
+      },
+      {
+        "id": "60e082fd5e19260d9e2ed778bf28c7d7904979d7",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-20 12:55:15.000000000",
+        "message": "Patch Set 1:\n\n(5 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "8eab352eaa599408cd087a1428e0cd3d326a1ff4",
+        "author": {
+          "account_id": 4886,
+          "name": "Petr Ospalý",
+          "display_name": null,
+          "email": "p.ospaly@email.cz",
+          "username": "p.ospaly"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-20 12:57:54.000000000",
+        "message": "Patch Set 1:\n\nI also find it now less readable - like I said before - I need a \"find\" and \"grep\" to understand ansible. I am not sure what is the ansible way, but so far it is quite scary. I understand that over-use of the shell module is a bad practice (my bad), but using non-declarative, procedure-like constructs (loop) seems like writing a procedural code in a very ugly and not much expressive language - ansible. But I am still ansible novice so I feel incompetent to say what is a good or bad ansible.",
+        "patchset_number": 1
+      },
+      {
+        "id": "26eab728eb184aa8a7001edf3d8be8389e1be749",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-20 16:56:58.000000000",
+        "message": "Patch Set 1:\n\n(5 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "6961b53bc88608607cdceffe331238eb70c9eb99",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-20 17:17:48.000000000",
+        "message": "Patch Set 1:\n\n> I also find it now less readable - like I said before - I need a\n > \"find\" and \"grep\" to understand ansible. I am not sure what is the\n > ansible way, but so far it is quite scary. I understand that\n > over-use of the shell module is a bad practice (my bad), but using\n > non-declarative, procedure-like constructs (loop) seems like\n > writing a procedural code in a very ugly and not much expressive\n > language - ansible. But I am still ansible novice so I feel\n > incompetent to say what is a good or bad ansible.\n\nIt should not be less readable now as things are defined and used now only where they are needed. Maybe if I change variable passing to global as suggested by Bartek you will find it better? Btw what IDE you are using. At least using purely vi for opening one file at the file is not a best option.\n\nLast part of you comment is not targeted to this commit. Yes ansible is not a programming language, it's declarative configuration language. And writing e.g. loops as you mentioned is not right for it's nature.\nHowever it's still better than the previous code where all instances of variables was explicitly written and same code was copy-pasted for the different variable.\nAny mode difficult functionality should be written with own ansible module (where real programming language can be used) and in ansible we are back in declarative way. But in this role we are not even close to that complexity.\n\nWe still have that shell call there for the actual ssh transfer. And that would be a worth of writing own ansible module for that if existing ansible module cannot handle the job. Because of that one shell task idempotence is handled here quite simple way and already on the main module of the role (just check if dir is already there) and that's not very good. With own module idempotence could be handled more correctly.",
+        "patchset_number": 1
+      },
+      {
+        "id": "84d237c526b2d7a393aee676bcdd6a141902f30e",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-20 18:05:23.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "b86ee8c76eb39938e9fdf80c5481137913ec0df1",
+        "author": {
+          "account_id": 4886,
+          "name": "Petr Ospalý",
+          "display_name": null,
+          "email": "p.ospaly@email.cz",
+          "username": "p.ospaly"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-21 09:25:58.000000000",
+        "message": "Patch Set 2:\n\n@samuli - I think my problem is with the fact that ansible is trying to be declarative (using dummy configuration file format - yaml), but fails there because you still end up telling it HOW to do stuff instead of WHAT it should do.\n\nLike I want to fix a problem with this playbook, which fails when the ssh-key is protected with a passphrase.\n\nIdeal declarative way:\n\nHost: infra\nrole: extract_resources(from_host, to_dir)\n\nAnsible shoudl figure out how to achieve that (or that role/module).\n\nBut in reality to achieve that I need several steps and you cannot even write it as a module because the steps are spread over two hosts (or can you?):\n\n1. create ephemeral ssh-keypair on infra\n2. add a public key of this just created key to authorized_keys on resource-host\n3. do the copying and extraction on infra - that is implemented already\n4. delete this private key on infra\n5. remove it from authorized keys on resource-host\n\nCan you hide all of this this in one module/role?\n\nIf so, then ok. But I think you cannot.\n\nSo at the end, what ansible brings to the table? You could just use a python program from get go and utilize modules - which at the end is what ansible does...but it is obscured first with a bunch of yamls, where they invented horrible syntax to do loops etc.\n\nBtw. I can compare ansible to saltstack which I used before and there is very much often used jinja templating - and it feels much better when you need to do some imperative logic.",
+        "patchset_number": 2
+      },
+      {
+        "id": "50c5776ea73dabdd041659680f29f9e7c958aff8",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-21 09:49:24.000000000",
+        "message": "Patch Set 2:\n\n> @samuli - I think my problem is with the fact that ansible is\n > trying to be declarative (using dummy configuration file format -\n > yaml), but fails there because you still end up telling it HOW to\n > do stuff instead of WHAT it should do.\n > \n > Like I want to fix a problem with this playbook, which fails when\n > the ssh-key is protected with a passphrase.\n > \n > Ideal declarative way:\n > \n > Host: infra\n > role: extract_resources(from_host, to_dir)\n > \n > Ansible shoudl figure out how to achieve that (or that\n > role/module).\n > \n > But in reality to achieve that I need several steps and you cannot\n > even write it as a module because the steps are spread over two\n > hosts (or can you?):\n > \n > 1. create ephemeral ssh-keypair on infra\n > 2. add a public key of this just created key to authorized_keys on\n > resource-host\n > 3. do the copying and extraction on infra - that is implemented\n > already\n > 4. delete this private key on infra\n > 5. remove it from authorized keys on resource-host\n > \n > Can you hide all of this this in one module/role?\n > \n > If so, then ok. But I think you cannot.\n > \n > So at the end, what ansible brings to the table? You could just use\n > a python program from get go and utilize modules - which at the end\n > is what ansible does...but it is obscured first with a bunch of\n > yamls, where they invented horrible syntax to do loops etc.\n > \n > Btw. I can compare ansible to saltstack which I used before and\n > there is very much often used jinja templating - and it feels much\n > better when you need to do some imperative logic.\n\nYes as I already mentioned ansible is declarative and also mentioned that it fails to keep itself completely declarative by allowing those imperative possibilities.\n\nAnswer to your question, yes you can write that kind of module. And I mentioned also that in above. I.e. that is the correct way to keep ansible code declarative.\n\nAnsible uses Jinja2 for templating and I think you should be able to do same staff as with Salstack. However even if you can write imperative code with temtlating language I don't think the core functionality should be made there but ansible python modules. But surely those both can be combined.",
+        "patchset_number": 2
+      },
+      {
+        "id": "863a9d7185190b26f3685202c324a74c13e11a59",
+        "author": {
+          "account_id": 4886,
+          "name": "Petr Ospalý",
+          "display_name": null,
+          "email": "p.ospaly@email.cz",
+          "username": "p.ospaly"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-21 09:59:14.000000000",
+        "message": "Patch Set 2:\n\n@samuli: if you really can write this logic in one module - even if it affects two machines (it makes changes to both in the correct order), then ok and maybe that would be the real improvement for this playbook",
+        "patchset_number": 2
+      },
+      {
+        "id": "7f7ced8202a2a15afc07f0760dc462db36c4e1df",
+        "author": {
+          "account_id": 5052,
+          "name": "Milan Verešpej",
+          "display_name": null,
+          "email": "m.verespej@partner.samsung.com",
+          "username": "milan.verespej"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-25 14:38:41.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "3f8bfd4b1e37cb3bc26cfb8266cc37524d1374be",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-26 08:46:21.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "b7045b2808e7f398efcf7e044e5ee1ea9a33dbc0",
+        "author": {
+          "account_id": 4886,
+          "name": "Petr Ospalý",
+          "display_name": null,
+          "email": "p.ospaly@email.cz",
+          "username": "p.ospaly"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-26 13:14:11.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "62bfc2910047d0a89d0589f3d4fb0e56168857b3",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-26 16:02:36.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "28b0068baa553273d737aef7e1b60eb3b0d8f88d",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-26 17:44:30.000000000",
+        "message": "Patch Set 2:\n\nall variable \"renamings\" removed.",
+        "patchset_number": 2
+      },
+      {
+        "id": "81333db10a8bef76f86a617fbeafaa738651aa31",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-26 17:44:41.000000000",
+        "message": "Patch Set 2: Verified+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "fe37a394b56852aecf841bae3d53f15f67b7023b",
+        "author": {
+          "account_id": 4886,
+          "name": "Petr Ospalý",
+          "display_name": null,
+          "email": "p.ospaly@email.cz",
+          "username": "p.ospaly"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-27 09:40:35.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "6b952e369394fab3a9650ba4a565959ffec62b60",
+        "author": {
+          "account_id": 5239,
+          "name": "Mateusz Pilat",
+          "display_name": null,
+          "email": "m.pilat@partner.samsung.com",
+          "username": "m.pilat"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-28 12:17:20.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\n(2 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "57f4e9eab8def8be20175340c9fc6c3d3637ccda",
+        "author": {
+          "account_id": 5097,
+          "name": "Bartek Grzybowski",
+          "display_name": null,
+          "email": "b.grzybowski@partner.samsung.com",
+          "username": "bgrzybowski"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-28 14:44:12.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "a400fe20a08348a1cd43cc3ef5349db6ba763c58",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-28 17:15:56.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "8a94e99cdc8a73483b9166e92b41458facc0623a",
+        "author": {
+          "account_id": 5239,
+          "name": "Mateusz Pilat",
+          "display_name": null,
+          "email": "m.pilat@partner.samsung.com",
+          "username": "m.pilat"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-01 07:38:24.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "0e4d7b9154515b794593e37ec8d88cbf0bbb4c84",
+        "author": {
+          "account_id": 5052,
+          "name": "Milan Verešpej",
+          "display_name": null,
+          "email": "m.verespej@partner.samsung.com",
+          "username": "milan.verespej"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-01 15:24:13.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "296c373ec64b90f49f332e6e9e42ae08161b2235",
+        "author": {
+          "account_id": 5052,
+          "name": "Milan Verešpej",
+          "display_name": null,
+          "email": "m.verespej@partner.samsung.com",
+          "username": "milan.verespej"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-01 15:39:48.000000000",
+        "message": "Uploaded patch set 3: Patch Set 2 was rebased.",
+        "patchset_number": 3
+      },
+      {
+        "id": "d85a4bb05aa8120c67c2803fb762ea06758d9c04",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-03-03 11:55:57.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "c2fb9278e71bf32dffd001f28e56b8037c4afa0e",
+        "author": {
+          "account_id": 3957,
+          "name": "Samuli Silvius",
+          "display_name": null,
+          "email": "s.silvius@partner.samsung.com",
+          "username": "silvius"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-03 11:58:34.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "2d03f2b0a39baf0edbd5ceedd038a4387e7edc77",
+        "author": {
+          "account_id": 5052,
+          "name": "Milan Verešpej",
+          "display_name": null,
+          "email": "m.verespej@partner.samsung.com",
+          "username": "milan.verespej"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-06 14:49:55.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "cb7d3a42c9963d57b249859f46c367a02f6bf2bf",
+        "author": {
+          "account_id": 5052,
+          "name": "Milan Verešpej",
+          "display_name": null,
+          "email": "m.verespej@partner.samsung.com",
+          "username": "milan.verespej"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-06 14:54:43.000000000",
+        "message": "Patch Set 5:\n\nI am sorry I accidentally rebased without commit with checksum change. Samuli can you please redo it?",
+        "patchset_number": 5
+      },
+      {
+        "id": "152ab1c75e751ded36b8e6fc428cc2f4e7f73607",
+        "author": {
+          "account_id": 4009,
+          "name": "Michal Ptacek",
+          "display_name": null,
+          "email": "m.ptacek@partner.samsung.com",
+          "username": "Michal.Ptacek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-07 08:01:08.000000000",
+        "message": "Patch Set 6: Patch Set 5 was rebased",
+        "patchset_number": 6
+      },
+      {
+        "id": "269e910db547e95e4bc55a89325fd9b1da313a88",
+        "author": {
+          "account_id": 4009,
+          "name": "Michal Ptacek",
+          "display_name": null,
+          "email": "m.ptacek@partner.samsung.com",
+          "username": "Michal.Ptacek"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-07 09:17:51.000000000",
+        "message": "Patch Set 6: Verified+1 Code-Review+2",
+        "patchset_number": 6
+      },
+      {
+        "id": "046e55a93698a5a6c54a93afd385ff270ddcfbe4",
+        "author": {
+          "account_id": 4009,
+          "name": "Michal Ptacek",
+          "display_name": null,
+          "email": "m.ptacek@partner.samsung.com",
+          "username": "Michal.Ptacek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-07 09:18:01.000000000",
+        "message": "Change has been successfully merged by Michal Ptacek",
+        "patchset_number": 6
+      }
+    ]
+  }
+}

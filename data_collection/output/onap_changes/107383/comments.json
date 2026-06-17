@@ -1,0 +1,42 @@
+{
+  "id": "integration~master~Ic422bebf6e46bcc42a3e5198e7702bb8b901287f",
+  "change_id": "Ic422bebf6e46bcc42a3e5198e7702bb8b901287f",
+  "_number": 107383,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f3e751a6_32107397",
+      "file_path": "test/security/sslendpoints/main.go",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "Wouldn't look nicer if reduce those three conditionals into one with alternative operator?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-05-08 12:25:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e69aecde_0a6782a4",
+      "file_path": "test/security/sslendpoints/main.go",
+      "patchset_number": 1,
+      "line": 135,
+      "message": "I thought so at first and tried it:\n\n return p.Service.Tunnel != \"ssl\" && !strings.HasPrefix(p.State.State, \"closed\") && !strings.HasPrefix(p.State.State, \"filtered\")\n\nI also went through:\n\n1. condition inversion\n\n return !(p.Service.Tunnel == \"ssl\" || strings.HasPrefix(p.State.State, \"closed\") || strings.HasPrefix(p.State.State, \"filtered\"))\n\n2. single condition statement\n\n if p.Service.Tunnel == \"ssl\" || strings.HasPrefix(p.State.State, \"closed\") || strings.HasPrefix(p.State.State, \"filtered\") {\n \treturn false\n }\n return true\n\n3. switch statement\n\n switch {\n case p.Service.Tunnel == \"ssl\":\n \treturn false\n case strings.HasPrefix(p.State.State, \"closed\"):\n \treturn false\n case strings.HasPrefix(p.State.State, \"filtered\"):\n \treturn false\n default:\n \treturn true\n }\n\nConditional chain seemed to be idiomatic Go: readable, returns early, easy to write tests (I'm on it) and to check test coverage",
+      "author": {
+        "account_id": 5047,
+        "name": "Pawe? Wieczorek",
+        "display_name": "Pawel Wieczorek",
+        "email": "pawel-wieczorek@outlook.com",
+        "username": "pwieczorek"
+      },
+      "updated": "2020-05-08 14:01:39.000000000",
+      "in_reply_to": "f3e751a6_32107397",
+      "unresolved": true
+    }
+  ]
+}

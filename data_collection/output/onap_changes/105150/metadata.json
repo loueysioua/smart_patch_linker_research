@@ -1,0 +1,308 @@
+{
+  "id": "testsuite~master~Ida0289d8d1bcbaa9759b00b09ae552e0575c2efb",
+  "change_id": "Ida0289d8d1bcbaa9759b00b09ae552e0575c2efb",
+  "_number": 105150,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2020-04-06 13:29:35.000000000",
+    "updated": "2020-04-06 17:45:34.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 29,
+      "name": "Brian Freeman",
+      "display_name": null,
+      "email": "bf1936@att.com",
+      "username": "bdfreeman1421"
+    },
+    "submitter": null
+  },
+  "subject": "Add demo, heatbridge,eteutils back",
+  "commit_message": "Add demo, heatbridge,eteutils back\n\ninteraction with jjb was missed when change to COPY . was made\n\nIssue-ID: TEST-229\nChange-Id: Ida0289d8d1bcbaa9759b00b09ae552e0575c2efb\nSigned-off-by: Brian Freeman <bf1936@att.com>\n",
+  "change_log": {
+    "entry_count": 20,
+    "entries": [
+      {
+        "id": "aeaae64986dae94a0347b66949384a870f3f1b9e",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-06 13:29:35.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2be9946a35467385551572bbc87fbc81e75ae023",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-06 13:31:51.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "7cd32f43890f9c74f7cf2886249dd240f9250e57",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 14:42:05.000000000",
+        "message": "Patch Set 2:\n\n(2 comments)\n\nSee comments on two files that get over written by testsuite/oom charts",
+        "patchset_number": 2
+      },
+      {
+        "id": "17a446a1d5a0fc5919d1da8e06a5d677c5f86ead",
+        "author": {
+          "account_id": 37,
+          "name": "Daniel Rose",
+          "display_name": null,
+          "email": "ultimatedogg@gmail.com",
+          "username": "DR695H"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 14:52:09.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "e545383cac7e0c9a9d47fdae825d82abdcc8ea67",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 15:27:55.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\n(1 comment)\n\nas mentioned in the mail,\nI am not very fond of Dockerfile depending on pre-processing from Jenkins\nJenkins or gitlab-ci should clone the repo then launch the build, nothing more.\n\nWhen you read such dockerfile it is confusing because you do not know where demo, heatbridge, python-utils are coming from, so your dockerfile cannot be simply used (if you clone the repo, run a docker buid ./docker it will fail).\n\nI would prefer a solution as I did on Daniel's patch (I should have done it on master)\nSee the pip install git+https + git clone inside the Docker, I think it is a good way to include third party repositories and keep them under control. \nAs everything is done in the docker, there is no dependencies on CI system. The Docker becomes self-sufficient.\nI also added a requirements.txt to collect the python requirements\n\nBut this patch as my patchest #6 in 97660 is very different from the patch initiated by Daniel...\nit fixed the missing dir but it remains confusing\n\n------------------------------------------------------------------------------\n\nFROM ubuntu\n## Be careful of Windows newlines\nMAINTAINER \"ONAP\"\nLABEL name=\"Docker image for the ONAP Robot Testing Framework\"\nLABEL usage=\"docker run -e ROBOT_TEST=<testname> -ti onapete\"\nENV BUILDTIME=true\n\t\nARG ONAP_TAG=master\n\t\nCOPY requirements.txt requirements.txt\n\t\n# Install Python, Pip, Robot framework, chromium, lighttpd web server\nRUN apt-get update \\\n    && apt-get install \\\n        --no-install-recommends \\\n        --assume-yes \\\n            chromium-browser \\\n            chromium-chromedriver \\\n            dnsutils \\\n            git \\\n            gcc \\\n            libffi-dev \\\n            libssl-dev \\\n            lighttpd \\\n            make \\\n            net-tools \\\n            python2.7 python-dev python-setuptools python-wheel python-pip \\\t\n            netbase \\\n            unzip zip \\\n            x11-utils x11-xserver-utils \\\n            xvfb \\\n            xxd  \\\n            wget vim  \\\n            python3.7 python3.7-dev python3-pip && \\\n    pip install -r requirements.txt && \\\n    pip install --no-cache-dir \\\n    git+https://git.onap.org/testsuite/heatbridge.git@$ONAP_TAG#egg=heatbridge\\&subdirectory=heatbridge  \\\n    git+https://git.onap.org/testsuite/python-testing-utils.git@$ONAP_TAG#egg=robotframework-onap\\&subdirectory=robotframework-onap && \\\n    git clone --depth 1 https://git.onap.org/testsuite -b $ONAP_TAG /var/opt/ONAP && \\\n    git clone --depth 1 https://git.onap.org/demo -b $ONAP_TAG /src/demo\n\t\nRUN python3.7 -m pip install setuptools wheel\nRUN python3.7 -m pip install virtualenv\n# Copy the robot code\nRUN mkdir -p /etc/lighttpd && \\\n    rm /etc/lighttpd/lighttpd.conf && \\\n    ln -s /var/opt/ONAP/docker/lighttpd.conf /etc/lighttpd/lighttpd.conf && \\\n    ln -s /var/opt/ONAP/docker/authorization /etc/lighttpd/authorization && \\\n    chmod 777 /var/opt/ONAP/setup.sh \\\n\t\n    && chmod 777 /var/opt/ONAP/runTags.sh \\\n    && chmod 777 /var/opt/ONAP/dnstraffic.sh \\\n    && chmod 777 /var/opt/ONAP/runSoak.sh \\\n    && chmod 777 /var/opt/ONAP/runEteTag.sh \\\n    && chmod 600 /var/opt/ONAP/robot/assets/keys/* && \\\n    cd /var/opt/ONAP && ./setup.sh \\\n\t\n\t\n    && apt-get autoremove --assume-yes \\\n    && rm -rf /var/lib/apt/lists/*  \\\n    && apt-get clean\nCMD [\"lighttpd\", \"-D\", \"-f\",  \"/etc/lighttpd/lighttpd.conf\"]",
+        "patchset_number": 2
+      },
+      {
+        "id": "ce808858ffabdbbdf596282dd5c9babf02966c37",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 15:36:19.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\n(1 comment)\n\nI +1 Morgan statement (and so -1 this review)",
+        "patchset_number": 2
+      },
+      {
+        "id": "5b43076303e83fa3bfde57022cbe8e4288287f12",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 15:37:37.000000000",
+        "message": "Patch Set 2:\n\nAnd fyi, as Morgan already said, \ntestsuite/oom will be reintegrated into OOM main repo just after Frankfurt version is out (or sooner) as it's a nightmare to coordinate those two repos and lead to Healtchcheck failures that are lasting weeks (CLI, NBI, ...) and I don't want that anymore",
+        "patchset_number": 2
+      },
+      {
+        "id": "b76fff2d3d3244856ab4b6fcec87cddd1876f8bc",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-04-06 15:38:56.000000000",
+        "message": "Abandoned\n\nOK - quick fix till full plan is created doesn't seem to be needed.",
+        "patchset_number": 2
+      },
+      {
+        "id": "8a563f61f8a0aaa20a6b5773e05fef7a321e6fb3",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 15:48:00.000000000",
+        "message": "Patch Set 2:\n\nSo will aai oom project repo be moved back into oom as well ? the whole idea was to empower the projects to do their own helm charts as consistent updates so a project config change and matching helm charts could be done as one thing by the project - seems like moving the health checks into the project repo would be a better way to match health check changes with the project changes ?",
+        "patchset_number": 2
+      },
+      {
+        "id": "75560f421338523ffd622da9eb625c199b962481",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 15:57:53.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> So will aai oom project repo be moved back into oom as well ? the whole idea was to empower the projects to do their own helm charts as consistent updates so a project config change and matching helm charts could be done as one thing by the project - seems like moving the health checks into the project repo would be a better way to match health check changes with the project changes ?\n\nIt is like git submodules, it sounds like a good idea but it is not really at the end. 😊\nwhen there is a change in AAI impacting a test, we need to sync 3 repos, which is not possible\nmoreover the skills in helm charts are limited, if you allow all the projects to do their charts, it become unmanageable for the OOM team (hardcoded passwords, templating, security, linting, divergence, lots of DBs/versions versus unification effort, docker optimization,..)\n\nYou are right, projects would probably feel more committed to the healthcheck tests if they had to host them in their repository. I think integration could suggest that for Guiling. Another option is to keep the robot part in testsuite but get new healthcheck from the projects (like policy and nbi)",
+        "patchset_number": 2
+      },
+      {
+        "id": "44557142c5bb80076c2e0f7e4c5ed423499b49af",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 15:58:21.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> So will aai oom project repo be moved back into oom as well ? the whole idea was to empower the projects to do their own helm charts as consistent updates so a project config change and matching helm charts could be done as one thing by the project - seems like moving the health checks into the project repo would be a better way to match health check changes with the project changes ?\n\n\nThat's my intention yes.\n\nWhen you look on how a simple Dockerfile is done by some projects (double processes, \"I install curl and nc cause I like to debug even in production\", ...), I'm pretty sure that no project is able to handle correctly its own helm charts.\n\nThey still can propose changes in OOM but Krzysztof (O. not K. ;) ) and I will be able to take a look and verify that all the charts are (becoming) consistents.\n\nWe've got a long way before the project becomes cloud natives and their charts are super simple. Look at SO for example, all the projects are in the same git repo, meaning it's impossible to update one without building the others. This is not \"cloud native\".\n\nAnd we have countless examples on ONAP these days.\nWhen we'll have strong components, reliable deployments, it will be time to see how we can give more freedom for the project.\n\nBut I'm sure that today it will be a mistake (and AAI breaking once in a while -- although a lot less now they wait for us to say +1 -- is the perfect proof for me)",
+        "patchset_number": 2
+      },
+      {
+        "id": "c92246b5bc048bf83a3b6d995ad5511d09d88646",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 16:24:54.000000000",
+        "message": "Patch Set 2:\n\nSo good discussion.\n\nI have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n\nThat being said - robot is broken - distribution and instantiation is blocked for Guilan.\n\nWhen will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?",
+        "patchset_number": 2
+      },
+      {
+        "id": "1b2a396f4e8d36d70fb52da34989333ea98f3ef8",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 16:37:49.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> So good discussion.\n> \n> I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> \n> That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> \n> When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n\nSorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.",
+        "patchset_number": 2
+      },
+      {
+        "id": "ad153fbcabb9b1098dd51852ea57a9ed187456ce",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 16:56:29.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > So good discussion.\n> > \n> > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > \n> > That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> > \n> > When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n> \n> Sorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.\n\ntoday healthdist is successuly run on OOM Master (pre-frankfurt) everyday and on every gating so we can do some automatic testing but we need a robot pod in good shape to use the other scripts especially the the 3 ones you are mentioning.\n\nI would like to run isntantiateVWCL, instantiateVFWDT, instantiatevCPEInfra the same way (as pnf_registrate)\nBut I think these use cases are dependending on the installation (need networks and preconditions done through the onap_overide.yaml) and cannot be run as a simple robot tag. Do you confirm that demo init is needed prior to the 3 instantiation tests.\n\nI think the patch I submitted should fix the 3rd party repo existing issue.\nKryzstof K. made recent tests and was able to run demo init.\n\nI do not clearly see how far we are if we move to Daniel new docker (as far as I understand in his mail, it is already used in ATT, so we shall not be very far)\nI hope I could give a try tomorrow.\nWe should decide quickly if it is achievable for Frankfurt..or not.\n\nRegarding the problem of instantiation, I am not sure it is 100% due to the robot at the moment - we got also an issue when performing E2E tests (basic_vm) with onap-test framework (working fine in El Alto). I suspect some changes in A&AI/SDNC (as we had in SDC with the new onboarding procedure). we got a SDNC/AAI issue on module creation.",
+        "patchset_number": 2
+      },
+      {
+        "id": "eee81b3943a3bff1f08ee7c8b2b16637f1466910",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 17:00:16.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > So good discussion.\n> > > \n> > > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > > \n> > > That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> > > \n> > > When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n> > \n> > Sorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.\n> \n> today healthdist is successuly run on OOM Master (pre-frankfurt) everyday and on every gating so we can do some automatic testing but we need a robot pod in good shape to use the other scripts especially the the 3 ones you are mentioning.\n> \n> I would like to run isntantiateVWCL, instantiateVFWDT, instantiatevCPEInfra the same way (as pnf_registrate)\n> But I think these use cases are dependending on the installation (need networks and preconditions done through the onap_overide.yaml) and cannot be run as a simple robot tag. Do you confirm that demo init is needed prior to the 3 instantiation tests.\n> \n> I think the patch I submitted should fix the 3rd party repo existing issue.\n> Kryzstof K. made recent tests and was able to run demo init.\n> \n> I do not clearly see how far we are if we move to Daniel new docker (as far as I understand in his mail, it is already used in ATT, so we shall not be very far)\n> I hope I could give a try tomorrow.\n> We should decide quickly if it is achievable for Frankfurt..or not.\n> \n> Regarding the problem of instantiation, I am not sure it is 100% due to the robot at the moment - we got also an issue when performing E2E tests (basic_vm) with onap-test framework (working fine in El Alto). I suspect some changes in A&AI/SDNC (as we had in SDC with the new onboarding procedure). we got a SDNC/AAI issue on module creation.\n\ndemo init is required before instantiate but not for healthdist.\nSince healthdist requires the demo repo to be in the container I dont understand how it could be working. Is the gating using the latest robot docker ?",
+        "patchset_number": 2
+      },
+      {
+        "id": "610d92f2be04b31245a76f3f54903570978e5c18",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 17:13:31.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > So good discussion.\n> > > > \n> > > > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > > > \n> > > > That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> > > > \n> > > > When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n> > > \n> > > Sorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.\n> > \n> > today healthdist is successuly run on OOM Master (pre-frankfurt) everyday and on every gating so we can do some automatic testing but we need a robot pod in good shape to use the other scripts especially the the 3 ones you are mentioning.\n> > \n> > I would like to run isntantiateVWCL, instantiateVFWDT, instantiatevCPEInfra the same way (as pnf_registrate)\n> > But I think these use cases are dependending on the installation (need networks and preconditions done through the onap_overide.yaml) and cannot be run as a simple robot tag. Do you confirm that demo init is needed prior to the 3 instantiation tests.\n> > \n> > I think the patch I submitted should fix the 3rd party repo existing issue.\n> > Kryzstof K. made recent tests and was able to run demo init.\n> > \n> > I do not clearly see how far we are if we move to Daniel new docker (as far as I understand in his mail, it is already used in ATT, so we shall not be very far)\n> > I hope I could give a try tomorrow.\n> > We should decide quickly if it is achievable for Frankfurt..or not.\n> > \n> > Regarding the problem of instantiation, I am not sure it is 100% due to the robot at the moment - we got also an issue when performing E2E tests (basic_vm) with onap-test framework (working fine in El Alto). I suspect some changes in A&AI/SDNC (as we had in SDC with the new onboarding procedure). we got a SDNC/AAI issue on module creation.\n> \n> demo init is required before instantiate but not for healthdist.\n> Since healthdist requires the demo repo to be in the container I dont understand how it could be working. Is the gating using the latest robot docker ?\n\nhealthdist (as well as healthcheck) is working because it is run from a xtesting docker - not from the robot pods -\n\nit is run as a job in the cluster, and the docker image used is the one built here https://gitlab.com/Orange-OpenSource/lfn/onap/integration/xtesting/container_registry\nthis docker includes well the demo repository as well as the other third party repositories\nit is rebuilt everyday so it takes into account all the new changes done in all the repositories.",
+        "patchset_number": 2
+      },
+      {
+        "id": "24cd029cb081f4f063ec4634bf8e4bff3da0418b",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 17:15:52.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > > Patch Set 2:\n> > > > > \n> > > > > So good discussion.\n> > > > > \n> > > > > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > > > > \n> > > > > That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> > > > > \n> > > > > When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n> > > > \n> > > > Sorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.\n> > > \n> > > today healthdist is successuly run on OOM Master (pre-frankfurt) everyday and on every gating so we can do some automatic testing but we need a robot pod in good shape to use the other scripts especially the the 3 ones you are mentioning.\n> > > \n> > > I would like to run isntantiateVWCL, instantiateVFWDT, instantiatevCPEInfra the same way (as pnf_registrate)\n> > > But I think these use cases are dependending on the installation (need networks and preconditions done through the onap_overide.yaml) and cannot be run as a simple robot tag. Do you confirm that demo init is needed prior to the 3 instantiation tests.\n> > > \n> > > I think the patch I submitted should fix the 3rd party repo existing issue.\n> > > Kryzstof K. made recent tests and was able to run demo init.\n> > > \n> > > I do not clearly see how far we are if we move to Daniel new docker (as far as I understand in his mail, it is already used in ATT, so we shall not be very far)\n> > > I hope I could give a try tomorrow.\n> > > We should decide quickly if it is achievable for Frankfurt..or not.\n> > > \n> > > Regarding the problem of instantiation, I am not sure it is 100% due to the robot at the moment - we got also an issue when performing E2E tests (basic_vm) with onap-test framework (working fine in El Alto). I suspect some changes in A&AI/SDNC (as we had in SDC with the new onboarding procedure). we got a SDNC/AAI issue on module creation.\n> > \n> > demo init is required before instantiate but not for healthdist.\n> > Since healthdist requires the demo repo to be in the container I dont understand how it could be working. Is the gating using the latest robot docker ?\n> \n> healthdist (as well as healthcheck) is working because it is run from a xtesting docker - not from the robot pods -\n> \n> it is run as a job in the cluster, and the docker image used is the one built here https://gitlab.com/Orange-OpenSource/lfn/onap/integration/xtesting/container_registry\n> this docker includes well the demo repository as well as the other third party repositories\n> it is rebuilt everyday so it takes into account all the new changes done in all the repositories.\n\nSo its outside of the onap project repositories. Got it.",
+        "patchset_number": 2
+      },
+      {
+        "id": "76d7187815875fc83cf87fd0a1dfb0d394045d74",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 17:19:17.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > > Patch Set 2:\n> > > \n> > > > Patch Set 2:\n> > > > \n> > > > > Patch Set 2:\n> > > > > \n> > > > > > Patch Set 2:\n> > > > > > \n> > > > > > So good discussion.\n> > > > > > \n> > > > > > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > > > > > \n> > > > > > That being said - robot is broken - distribution and instantiation is blocked for Guilan.\n> > > > > > \n> > > > > > When will a fix be in place so that we have a docker container that works for healthdist, isntantiateVWCL , instantiateVFWDT, instantiatevCPEInfra , etc ?\n> > > > > \n> > > > > Sorry Frankfurt release not Guillan. Seems like a Sev 1 Test Blocker if we cant do any automated testing.\n> > > > \n> > > > today healthdist is successuly run on OOM Master (pre-frankfurt) everyday and on every gating so we can do some automatic testing but we need a robot pod in good shape to use the other scripts especially the the 3 ones you are mentioning.\n> > > > \n> > > > I would like to run isntantiateVWCL, instantiateVFWDT, instantiatevCPEInfra the same way (as pnf_registrate)\n> > > > But I think these use cases are dependending on the installation (need networks and preconditions done through the onap_overide.yaml) and cannot be run as a simple robot tag. Do you confirm that demo init is needed prior to the 3 instantiation tests.\n> > > > \n> > > > I think the patch I submitted should fix the 3rd party repo existing issue.\n> > > > Kryzstof K. made recent tests and was able to run demo init.\n> > > > \n> > > > I do not clearly see how far we are if we move to Daniel new docker (as far as I understand in his mail, it is already used in ATT, so we shall not be very far)\n> > > > I hope I could give a try tomorrow.\n> > > > We should decide quickly if it is achievable for Frankfurt..or not.\n> > > > \n> > > > Regarding the problem of instantiation, I am not sure it is 100% due to the robot at the moment - we got also an issue when performing E2E tests (basic_vm) with onap-test framework (working fine in El Alto). I suspect some changes in A&AI/SDNC (as we had in SDC with the new onboarding procedure). we got a SDNC/AAI issue on module creation.\n> > > \n> > > demo init is required before instantiate but not for healthdist.\n> > > Since healthdist requires the demo repo to be in the container I dont understand how it could be working. Is the gating using the latest robot docker ?\n> > \n> > healthdist (as well as healthcheck) is working because it is run from a xtesting docker - not from the robot pods -\n> > \n> > it is run as a job in the cluster, and the docker image used is the one built here https://gitlab.com/Orange-OpenSource/lfn/onap/integration/xtesting/container_registry\n> > this docker includes well the demo repository as well as the other third party repositories\n> > it is rebuilt everyday so it takes into account all the new changes done in all the repositories.\n> \n> So its outside of the onap project repositories. Got it.\n\nyes\nI got the repositories to host the xtsting dockers late..I may reinsource everything under integration/xtesting in Guilin because I understand until LF IT does not endorse gitlab.com, people are relunctant to contribute out of the official repositories.\nbut gitlab.com is very ... practical...built-in registry, security dashboard, free (self-service) CI\nrewriting stuff for jenkins assuming that it already works and does the job is not easy..",
+        "patchset_number": 2
+      },
+      {
+        "id": "78d96b6e632e3cc5d5bb81d164d28bb429b7ccf8",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-04-06 17:36:34.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> So good discussion.\n> \n> I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> \n\nWe wait for PTL +1 before merge on OOM unless very specific case that should happen less and less Likely.",
+        "patchset_number": 2
+      },
+      {
+        "id": "6517caf032a73d1fae145198e1d30d8adb318531",
+        "author": {
+          "account_id": 29,
+          "name": "Brian Freeman",
+          "display_name": null,
+          "email": "bf1936@att.com",
+          "username": "bdfreeman1421"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-04-06 17:45:34.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 2:\n> \n> > Patch Set 2:\n> > \n> > So good discussion.\n> > \n> > I have seen oom helm charts break projects since the PTL is not always included in chart changes that cause their projects to break so probably want to tighten that process up a bit.\n> > \n> \n> We wait for PTL +1 before merge on OOM unless very specific case that should happen less and less Likely.\n\nccsdk and sdnc seem to be sensitive because of the opendaylight dependencies",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

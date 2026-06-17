@@ -1,0 +1,168 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I0e9c784fd1c8d73a1864da0def220a287ab59d72",
+  "change_id": "I0e9c784fd1c8d73a1864da0def220a287ab59d72",
+  "_number": 104093,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2020-03-20 20:15:02.000000000",
+    "updated": "2020-03-25 22:42:11.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1761,
+      "name": "Joseph Chou",
+      "display_name": null,
+      "email": "jc2555@att.com",
+      "username": "jc2555"
+    },
+    "submitter": null
+  },
+  "subject": "ONAP update jar file",
+  "commit_message": "ONAP update jar file\n\nUpdate apache ant from 1.8.4 to 1.9.12 to resolve security risk\n\nIssue-ID: POLICY-2439\nChange-Id: I0e9c784fd1c8d73a1864da0def220a287ab59d72\nSigned-off-by: Joseph Chou <jc2555@att.com>\n",
+  "change_log": {
+    "entry_count": 10,
+    "entries": [
+      {
+        "id": "39c029aaf2bf0af30057f01fb7ccebdb153b82a1",
+        "author": {
+          "account_id": 1761,
+          "name": "Joseph Chou",
+          "display_name": null,
+          "email": "jc2555@att.com",
+          "username": "jc2555"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-03-20 20:15:02.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f1bb017c09e7de9204190ecefbf4fcca0046ab96",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-20 20:15:13.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/1155/",
+        "patchset_number": 1
+      },
+      {
+        "id": "28e04ade93ea51e7ce4b820362da9566d2ab57e2",
+        "author": {
+          "account_id": 1761,
+          "name": "Joseph Chou",
+          "display_name": null,
+          "email": "jc2555@att.com",
+          "username": "jc2555"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-03-20 20:18:30.000000000",
+        "message": "Patch Set 1:\n\nThe purpose is to upgrade apache ant from version 1.8.4 to 1.9.12, to resolve security risk identified by blackduck scan",
+        "patchset_number": 1
+      },
+      {
+        "id": "e39600d2df0208debe7ecb6e8a55c81a80baa924",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-20 20:22:10.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/1155/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/1155",
+        "patchset_number": 1
+      },
+      {
+        "id": "03aa5dd3719c90fde5ece9452e0df11aed8dcbc5",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-20 20:41:32.000000000",
+        "message": "Patch Set 1: Code-Review-2\n\nThis just isn't good timing as we are about to release images. I'd like to wait until after we release the current version to Integration.\n\nJorge please let me know your thoughts",
+        "patchset_number": 1
+      },
+      {
+        "id": "c8a4a0793d84c9bbc98324b2c075a000782e789e",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-20 21:24:12.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n> This just isn't good timing as we are about to release images. I'd\n > like to wait until after we release the current version to\n > Integration.\n > \n > Jorge please let me know your thoughts\n\nYes, I agree, this would have to be postponed until we release our first set of images.\n\nI would also ask to include more documentation on what the code changes are correcting, on the JIRA ticket, so we don't need to verify ourselves.   Full compilation of the other repos should be performed as well to minimize the possibility of breakage.  This is to avoid the problems that the previous log4j (rejected) submission had.  Transitive dependencies problems are the most difficult problems to debug if they cause a problem.\n\nI also think the code change is incorrect, running a mvn dependency:tree in policy-core, kie-api does not have the ant dependency (kie-ci instead does, so the code change should go there).   Let's document that in the ticket next time Joseph, so we, committers, don't need to do it ourselves.\n\nLastly, let's have the summary line (first line) descriptive of the commit change. For example \"ONAP\" word is unnecessary, this repo is ONAP.   Please refer to https://wiki.onap.org/display/DW/Commit+Messages for guidelines.   It seems that the second line is more representative of the work, and could replace the first one in this commit for example (under 50 chars per guidelines in wiki page).",
+        "patchset_number": 1
+      },
+      {
+        "id": "3418aab96d273931dafd7aac440224dc12795b96",
+        "author": {
+          "account_id": 1761,
+          "name": "Joseph Chou",
+          "display_name": null,
+          "email": "jc2555@att.com",
+          "username": "jc2555"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-03-20 21:30:56.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1: Code-Review-1\n> \n> > This just isn't good timing as we are about to release images. I'd\n>  > like to wait until after we release the current version to\n>  > Integration.\n>  > \n>  > Jorge please let me know your thoughts\n> \n> Yes, I agree, this would have to be postponed until we release our first set of images.\n> \n> I would also ask to include more documentation on what the code changes are correcting, on the JIRA ticket, so we don't need to verify ourselves.   Full compilation of the other repos should be performed as well to minimize the possibility of breakage.  This is to avoid the problems that the previous log4j (rejected) submission had.  Transitive dependencies problems are the most difficult problems to debug if they cause a problem.\n> \n> I also think the code change is incorrect, running a mvn dependency:tree in policy-core, kie-api does not have the ant dependency (kie-ci instead does, so the code change should go there).   Let's document that in the ticket next time Joseph, so we, committers, don't need to do it ourselves.\n> \n> Lastly, let's have the summary line (first line) descriptive of the commit change. For example \"ONAP\" word is unnecessary, this repo is ONAP.   Please refer to https://wiki.onap.org/display/DW/Commit+Messages for guidelines.   It seems that the second line is more representative of the work, and could replace the first one in this commit for example (under 50 chars per guidelines in wiki page).\n\nThanks Jorge, will do.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e801ff6bb1aaf1bbcb696fdc37042270e81bc343",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-25 11:22:04.000000000",
+        "message": "Patch Set 1:\n\nWe have released an image, so please rebase this and follow Jorge's instructions.",
+        "patchset_number": 1
+      },
+      {
+        "id": "eb4cdd6bcc1294b281da7cf037b2f860b1897f9a",
+        "author": {
+          "account_id": 1761,
+          "name": "Joseph Chou",
+          "display_name": null,
+          "email": "jc2555@att.com",
+          "username": "jc2555"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-03-25 13:01:36.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> We have released an image, so please rebase this and follow Jorge's instructions.\n\nWill follow Jorge's instruction in the future.",
+        "patchset_number": 1
+      },
+      {
+        "id": "44fd78032336ce4e793f0f4a5aabd498b41f90f0",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-03-25 22:42:11.000000000",
+        "message": "Abandoned\n\nThis review is duplicated",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

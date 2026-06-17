@@ -1,0 +1,59 @@
+{
+  "id": "logging-analytics%2Fpomba%2Fpomba-sdnc-context-builder~master~I93e95e18a9b498dbedcc9ca14c84dd8eab17f59f",
+  "change_id": "I93e95e18a9b498dbedcc9ca14c84dd8eab17f59f",
+  "_number": 78306,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4b53bf03_646004ae",
+      "file_path": "src/main/java/org/onap/pomba/contextbuilder/sdnc/handlers/VnfApiHandler.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "Considering that you're building a URL to an external endpoint, I think it would be safer to provision the list of parameters in a properties file (same as base URL).\nThat way, the URL can be specific to deployments (ex: if a deployment needs to add a timeout or something).",
+      "author": {
+        "account_id": 2965,
+        "name": "Pierre Rioux",
+        "display_name": null,
+        "email": "pierre.rioux@amdocs.com",
+        "username": "prioux"
+      },
+      "updated": "2019-02-12 15:48:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1b1c6d2a_f9024e26",
+      "file_path": "src/main/java/org/onap/pomba/contextbuilder/sdnc/handlers/VnfApiHandler.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "The URL we're calling here is a resource-link we extract from the previous response so it's not one that exposed to the user in the application.properties file.  Exposing the depth parameter might not make sense for a URL they don't know about.\nWe did something similar in service-decomposition where we hard coded the depth value for the query.",
+      "author": {
+        "account_id": 3131,
+        "name": "Trevor Tait",
+        "display_name": null,
+        "email": "rtait@amdocs.com",
+        "username": "rtait"
+      },
+      "updated": "2019-02-12 19:26:13.000000000",
+      "in_reply_to": "4b53bf03_646004ae",
+      "unresolved": false
+    },
+    {
+      "id": "45823778_1f2b73d9",
+      "file_path": "src/main/java/org/onap/pomba/contextbuilder/sdnc/handlers/VnfApiHandler.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "Well I don't like it but ok...\nAnything that's hardcoded will end up being fixed this way instead of simply updating property files.\nI would have preferred a single property, like a URI template:\nuriTemplate=/some/base/url/{0}{1}\nwhere {0} is the custom part and {1} is for parameters.\nSDC-ctx-builder has an example.",
+      "author": {
+        "account_id": 2965,
+        "name": "Pierre Rioux",
+        "display_name": null,
+        "email": "pierre.rioux@amdocs.com",
+        "username": "prioux"
+      },
+      "updated": "2019-02-12 20:17:45.000000000",
+      "in_reply_to": "1b1c6d2a_f9024e26",
+      "unresolved": false
+    }
+  ]
+}

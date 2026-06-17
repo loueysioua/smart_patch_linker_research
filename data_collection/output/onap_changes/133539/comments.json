@@ -1,0 +1,212 @@
+{
+  "id": "sdc~master~Ic41a8d0e792f4f0c6effd7eb6c9bd74887a0506c",
+  "change_id": "Ic41a8d0e792f4f0c6effd7eb6c9bd74887a0506c",
+  "_number": 133539,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "43bedb51_953147d5",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/servlets/InterfaceTypeServlet.java",
+      "patchset_number": 1,
+      "line": 69,
+      "message": "wouldn't be better to use buildErrorResponse() or buildGeneralErrorResponse()",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-03 15:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7932da3d_87c05d50",
+      "file_path": "catalog-dao/src/main/java/org/openecomp/sdc/be/resources/data/InterfaceData.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "I'd change this for\n        final Object normativeProperty = properties.get(GraphPropertiesDictionary.NORMATIVE.getProperty());\n        interfaceDataDefinition.setUserCreated(!(normativeProperty instanceof Boolean && (boolean) normativeProperty));",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-03 15:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e4b02e95_5ce349dc",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/operations/impl/InterfaceLifecycleOperation.java",
+      "patchset_number": 1,
+      "line": 917,
+      "message": "I'd change for\n\n{\n        try (final GraphTraversalSource traversal = janusGraphGenericDao.getJanusGraph().traversal()) {\n            traversal.V()\n                .has(GraphPropertiesDictionary.UNIQUE_ID.getProperty(), interfaceTypeId)\n                .out(GraphEdgeLabels.INTERFACE_OPERATION.getProperty())\n                .toList()\n                .forEach(interfaceOperationVertex -> {\n                    traversal.V(interfaceOperationVertex).out(GraphEdgeLabels.PROPERTY.getProperty()).drop().iterate();\n                    interfaceOperationVertex.remove();\n                });\n            traversal.V().has(GraphPropertiesDictionary.UNIQUE_ID.getProperty(), interfaceTypeId).toList()\n                .forEach(interfaceTypeVertex -> {\n                    traversal.V(interfaceTypeVertex).out(GraphEdgeLabels.PROPERTY.getProperty()).drop().iterate();\n                    interfaceTypeVertex.remove();\n                });\n        } catch (Exception e) {\n            log.error(\"Bla-bla-bla\");\n        }\n    }\n\nby doing this :\n- inline unnecessary variables (interfaceOperationTypeList, interfaceTypeList, janusGraph)\n- close AutoCloseable traversal",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-03 15:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "529b1e1c_9721477a",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/operations/impl/InterfaceLifecycleOperation.java",
+      "patchset_number": 1,
+      "line": 921,
+      "message": "uncovered code",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-03 15:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "57e29d3e_aee3b8a2",
+      "file_path": "common-be/src/main/java/org/openecomp/sdc/be/datatypes/elements/InterfaceDataDefinition.java",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "isn't\nnormative = !userCreated\n?\n\ndo we need additional boolean?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2023-03-03 15:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1763f8df_61fd431a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/servlets/InterfaceTypeServlet.java",
+      "patchset_number": 1,
+      "line": 69,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-06 15:27:07.000000000",
+      "in_reply_to": "43bedb51_953147d5",
+      "unresolved": false
+    },
+    {
+      "id": "214f484a_d00f9be7",
+      "file_path": "catalog-dao/src/main/java/org/openecomp/sdc/be/resources/data/InterfaceData.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-06 15:27:07.000000000",
+      "in_reply_to": "7932da3d_87c05d50",
+      "unresolved": false
+    },
+    {
+      "id": "31a0e266_04a6be1b",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/operations/impl/InterfaceLifecycleOperation.java",
+      "patchset_number": 1,
+      "line": 917,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-06 15:27:07.000000000",
+      "in_reply_to": "e4b02e95_5ce349dc",
+      "unresolved": false
+    },
+    {
+      "id": "b7fde98d_483f5e18",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/operations/impl/InterfaceLifecycleOperation.java",
+      "patchset_number": 1,
+      "line": 921,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-06 15:27:07.000000000",
+      "in_reply_to": "529b1e1c_9721477a",
+      "unresolved": false
+    },
+    {
+      "id": "abb88cdd_4b2baafa",
+      "file_path": "common-be/src/main/java/org/openecomp/sdc/be/datatypes/elements/InterfaceDataDefinition.java",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-06 15:27:07.000000000",
+      "in_reply_to": "57e29d3e_aee3b8a2",
+      "unresolved": false
+    },
+    {
+      "id": "5d386dc8_4e5542e0",
+      "file_path": "catalog-dao/src/main/java/org/openecomp/sdc/be/resources/data/InterfaceData.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "this is not working as you might expect, I am seeing true being set here even though normativeProperty is true, perhaps cast to Boolean rather than primitive boolean",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2023-03-09 10:25:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1cfef40b_53f3fe1e",
+      "file_path": "catalog-dao/src/main/java/org/openecomp/sdc/be/resources/data/InterfaceData.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "I am not seeing this interaction when normativeProperty is true, but I will set as Boolean as both seem to work",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2023-03-10 17:36:07.000000000",
+      "in_reply_to": "5d386dc8_4e5542e0",
+      "unresolved": false
+    }
+  ]
+}

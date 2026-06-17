@@ -1,0 +1,841 @@
+{
+  "id": "cps~master~I61cf6450c8ed8a5154990ea19467e016dc1155b4",
+  "change_id": "I61cf6450c8ed8a5154990ea19467e016dc1155b4",
+  "_number": 116668,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1af17ee0_196b68c0",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 3,
+      "line": 23,
+      "message": "Ignore this, this will be reverted once I fix the test that is @Ignored",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-07 13:25:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "34bc44b4_7e999e7e",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 57,
+      "message": "I need to fix this test, mockModuleStoreService is returning null instead of the mocked mockYangTextSchemaSourceSet",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-07 13:25:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d28d5e57_eb7e78c4",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 63,
+      "message": "for some reason this return null instead of mockYangTextSchemaSo",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-07 14:23:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "11cdff21_cfc5d7c4",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 57,
+      "message": "I think you are setting up the mocks incorrectly, they are now just objects in your tets class, different instances then what the service uses.\n\nYou need to inject or set your mocks on the real service\nlike here in the CpsAdminServiceImpl Spec:\n\nclass CpsAdminServiceImplSpec extends Specification {\ndef mockCpsAdminPersistenceService = Mock(CpsAdminPersistenceService)\ndef objectUnderTest = new CpsAdminServiceImpl()\n\ndef setup() {\nobjectUnderTest.cpsAdminPersistenceService = mockCpsAdminPersistenceService\n}",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 14:47:13.000000000",
+      "in_reply_to": "34bc44b4_7e999e7e",
+      "unresolved": true
+    },
+    {
+      "id": "21c21d2f_f04ad425",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 57,
+      "message": "that setup is already done on line 36. \n\n    def setup() {\n        objectUnderTest.cpsModulePersistenceService = mockModuleStoreService\n    }",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-07 16:25:05.000000000",
+      "in_reply_to": "11cdff21_cfc5d7c4",
+      "unresolved": true
+    },
+    {
+      "id": "cfeda76e_d6e8e202",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 32,
+      "message": "dont define this here as you only need it in 1 test (at the moment)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7695828c_213d2652",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 38,
+      "message": "dont think it matter but recommended way to set up the mocks in like this:\n\n    CpsModulePersistenceService mockCpsModulePersistenceService = Mock()\n    CpsModuleServiceImpl objectUnderTest = new CpsModuleServiceImpl()\n\n    def setup() {\n        objectUnderTest.cpsModulePersistenceService = mockCpsModulePersistenceService\n    }",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "51abcf66_790bc0e1",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 61,
+      "message": "no need for named parameters as you are using an existing constructor",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f56753cb_94025d06",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 62,
+      "message": "need to use Sq brackets otherwise you get a groovy map :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "489b26d3_d8f24912",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 68,
+      "message": "this causes problems and there is no need to both mock and expect calls when you use mocking with specific parameters! You usually do one or the other.\nSince you test depend on mocks behavior which only happens with the correct paarmeters there is no need. I don't fully understand why it doesn't work but I normally only use this when I don't depend on return from Mock or when I use wildcards when mocking the behavior",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e65f7928_486d97f8",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 69,
+      "message": "assert is not needed in then block anything that is a boolean will automcatilly 'asserted' I used it depending on readability\neg NOT for: result == 21\nbut DO for: assert result.booleanProperty == true    ( == true is optional but I think it helps)\n\nprobably not for result.contains(something)\n\nJust some advise I will normally not reject on the absence or inclusion of assets it is personal choice...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f1945d6_6b50d0bd",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 71,
+      "message": "can be sticter and more readable, see my  suggested solution",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb9e8e26_bce0eb3c",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 74,
+      "message": "this is testing the moduleReference constructor no need to do that in this unit test",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-07 18:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "02ff6a38_bd6a8241",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 32,
+      "message": "this is result of multiple combinations trying to spot a solution for the issue. I agree it must go under the test using it",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 08:33:17.000000000",
+      "in_reply_to": "cfeda76e_d6e8e202",
+      "unresolved": true
+    },
+    {
+      "id": "9fda88ff_93ccc634",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 38,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 08:33:17.000000000",
+      "in_reply_to": "7695828c_213d2652",
+      "unresolved": false
+    },
+    {
+      "id": "ac6d6ec7_1f8928f4",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 61,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 08:33:17.000000000",
+      "in_reply_to": "51abcf66_790bc0e1",
+      "unresolved": false
+    },
+    {
+      "id": "a35d51e8_8b1ed8e0",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 62,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 08:33:17.000000000",
+      "in_reply_to": "f56753cb_94025d06",
+      "unresolved": false
+    },
+    {
+      "id": "19685206_a2aafba2",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 3,
+      "line": 74,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 08:33:17.000000000",
+      "in_reply_to": "fb9e8e26_bce0eb3c",
+      "unresolved": false
+    },
+    {
+      "id": "1e4ddd77_b7005317",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "as discuss you can make these common properties of the class and use in all tests",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 10:44:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4d068692_9d5d45fb",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 70,
+      "message": "this is cause the problem. You basically override the definition on the mock behavior on line 65. I agree it doesn't 'look' wrong and this could be considered a Spock bug!\nSince you test outcome depends on the mock behavior which is dependent on the correct parameter values. So there is no need to verify the method is called with those parameters, you typically only do that for void methods or method that return null (in your scenario) and don't need to be mocked...\nHowever if you want you can do BOTH but you need to remove line 65 and define the expectation and the mock behavior in one line here (in the then: block, which seems a bit strange) like so:\n            1 * mockModuleStoreService.getYangTextSchemaSourceSet(dataspaceName, schemaSetName) >> mockYangTextSchemaSourceSet",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 10:44:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ac1fb636_a1e23660",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 137,
+      "message": "assert is optional in then block (but NOT in assert-methods)\nI don't think it is needed whene using '=='  but it is personal preference",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "16dedd2d_3f63cc0d",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 140,
+      "message": "correct indentation",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "11eaf1a0_b506d57f",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 141,
+      "message": "a 'good scout' might update other test descriptions now for consistency :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fa847c70_d3830092",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsModuleService.java",
+      "patchset_number": 4,
+      "line": 47,
+      "message": "this implies a Java Collection. \n@return a SchemaSet",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "226bdf4c_a4ded930",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/CpsModulePersistenceService.java",
+      "patchset_number": 4,
+      "line": 61,
+      "message": "should this not be the actually class name?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "17a4ee96_666c76b9",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 56,
+      "message": "just add full stop '.' :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9923c888_572438a6",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 68,
+      "message": "'the correct schema set is returned'\nOR\n'the schemas set with the correct dataspace name and module references is returned'\n\nI think the first option is better as the 2nd option easily can get out of date as test is extended/improved.\nThe way I see it the label is a high level description and will be in reports. The groovy code provides the details in very readable format no need to 'duplicate' in description",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 11:42:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7209f47c_1274e9c6",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 140,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 13:04:10.000000000",
+      "in_reply_to": "16dedd2d_3f63cc0d",
+      "unresolved": false
+    },
+    {
+      "id": "5ad11f3c_ae287bb8",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 141,
+      "message": "Ack",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 13:04:10.000000000",
+      "in_reply_to": "11eaf1a0_b506d57f",
+      "unresolved": false
+    },
+    {
+      "id": "ccc8c12d_f8fcf1a8",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsModuleService.java",
+      "patchset_number": 4,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 13:04:10.000000000",
+      "in_reply_to": "fa847c70_d3830092",
+      "unresolved": false
+    },
+    {
+      "id": "a271cde2_47e5d655",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/CpsModulePersistenceService.java",
+      "patchset_number": 4,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 13:04:10.000000000",
+      "in_reply_to": "226bdf4c_a4ded930",
+      "unresolved": false
+    },
+    {
+      "id": "d1f59912_3e5f9386",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 137,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": "ac1fb636_a1e23660",
+      "unresolved": false
+    },
+    {
+      "id": "ca2a7327_589582e4",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 129,
+      "message": "I assumed you would follow comment from other test file\n'Get existing schema set.'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "93c8323f_6701d2af",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 135,
+      "message": "I usually keep this short without details that can become outdated (and can be read in the code anyway)\n\nthen 'the correct schema set is returned'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2659a82c_5786591c",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 135,
+      "message": "fix indentation",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ad8755c2_2c58351e",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 56,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": "17a4ee96_666c76b9",
+      "unresolved": false
+    },
+    {
+      "id": "eda635e0_e83c745c",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 60,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": "1e4ddd77_b7005317",
+      "unresolved": false
+    },
+    {
+      "id": "c2dd1968_b689643d",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 68,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": "9923c888_572438a6",
+      "unresolved": false
+    },
+    {
+      "id": "4d287ab1_d1d12a18",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/impl/CpsModuleServiceImplSpec.groovy",
+      "patchset_number": 4,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:06:43.000000000",
+      "in_reply_to": "4d068692_9d5d45fb",
+      "unresolved": false
+    },
+    {
+      "id": "5a4bc7d0_0f378c4a",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 129,
+      "message": "well, you are asking to change the whole test. Meanwhile I'm trying to keep consistency about something was already approved.\nSame apply for next comment.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-08 16:26:54.000000000",
+      "in_reply_to": "ca2a7327_589582e4",
+      "unresolved": true
+    },
+    {
+      "id": "0475a96c_1e94ae79",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 129,
+      "message": "OK, we can improve these later...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:42:17.000000000",
+      "in_reply_to": "5a4bc7d0_0f378c4a",
+      "unresolved": true
+    },
+    {
+      "id": "b994a92e_3f84e42f",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 135,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:42:17.000000000",
+      "in_reply_to": "2659a82c_5786591c",
+      "unresolved": false
+    },
+    {
+      "id": "0fed3238_dfdeec18",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/AdminRestControllerSpec.groovy",
+      "patchset_number": 7,
+      "line": 135,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-08 16:42:17.000000000",
+      "in_reply_to": "93c8323f_6701d2af",
+      "unresolved": false
+    },
+    {
+      "id": "22dbbd64_3e3fbbae",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsModuleServiceImpl.java",
+      "patchset_number": 8,
+      "line": 49,
+      "message": "extracting module information from yang resources is not a responsibility of persistence module.\nit's expected the module provides same data types it was accepted to store. No extra transformations.\nthis implementation makes it a requirement to use yang parser (ODL or other) for ANY alternative \nimplementations (nosql db etc).\n\nconsidered moving the yang transformation to cps-service module",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-11 08:08:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "069c3cfd_27c7d7a1",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/CpsModulePersistenceService.java",
+      "patchset_number": 8,
+      "line": 63,
+      "message": "this artifact is not a part of SPI, so it's not expected to be exposed within method sugnature.\nit's expected SPI artifacts being part of spi.model package",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-11 08:08:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d27f8350_a93a8efb",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsModuleServiceImpl.java",
+      "patchset_number": 8,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-11 09:03:48.000000000",
+      "in_reply_to": "22dbbd64_3e3fbbae",
+      "unresolved": false
+    },
+    {
+      "id": "f569bde3_acda643f",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/CpsModulePersistenceService.java",
+      "patchset_number": 8,
+      "line": 63,
+      "message": "Done",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-11 09:03:48.000000000",
+      "in_reply_to": "069c3cfd_27c7d7a1",
+      "unresolved": false
+    },
+    {
+      "id": "04cd48d7_be28050b",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/ModuleReference.java",
+      "patchset_number": 9,
+      "line": 34,
+      "message": "why are we now storing the name as well, do we need it , or is is just that it might be handy?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-11 09:46:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "133bd1fe_fd946bdc",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/ModuleReference.java",
+      "patchset_number": 9,
+      "line": 34,
+      "message": "the second, plus we are not storing it. We just retrieve it Schema, from the yang resources same as other data.\nIt can be reverted, but I see it as useful information.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-11 11:50:55.000000000",
+      "in_reply_to": "04cd48d7_be28050b",
+      "unresolved": true
+    }
+  ]
+}

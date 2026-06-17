@@ -1,0 +1,854 @@
+{
+  "id": "policy%2Fmodels~master~I5beccd7c24cd4ee67b7a29b7d346afcd29c17cfc",
+  "change_id": "I5beccd7c24cd4ee67b7a29b7d346afcd29c17cfc",
+  "_number": 100729,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2020-01-23 23:59:21.000000000",
+    "updated": "2020-02-03 18:31:05.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 811,
+      "name": "Jim Hahn",
+      "display_name": null,
+      "email": "jrh3@att.com",
+      "username": "jrh3"
+    },
+    "submitter": null
+  },
+  "subject": "Actor prototype round #2",
+  "commit_message": "Actor prototype round #2\n\nLeft original code intact so that it can continue to be used until\neverything has been converted to use the new approach.  Simply added\nnew methods and classes.  (A few minor edits were required to the old\ncode, e.g., added constructors to the Actor implementations).  Code\nto be removed is annotated with \"TODO\".\n\nThis only contains one revised actor, SDNC.  This actor combines code\nfrom actor.sdnc, sdnc, and drools-applications.\n\nAdded operation Builder and simplified generation of futures.  Modified\nthe code to pass exceptions back via the future.\nAllow executor service to be overridden.\nAdded ClosedLoopEventContext and moved the event and A&AI data inside,\neliminating the need for ControlLoopAaiData.\nModified code to throw exceptions when an actor or operation is not found,\nor if the operation manager has not been started.  This makes it easier to\nchain the calls together, using a single try/catch.\nMoved classes around into different packages.\nModified to allow chaining of operations onto the end of an existing\nfuture.\nAdded support for invoking an operation as a sub-operation, whose actions\nare appended to the parent's pipeline.\nReturned OperationOutcome instead of simple PolicyResult.\nInvoked callback when operation starts.\nProvided mechanism whereby operations can determine if the pipeline has\nbeen stopped.  This is independent of the Future.cancel() method.\nBroke futures into separate segments so that each segment can be\ncontrolled by its own timeout.\nEliminated startPreProcessor(), as startOperation() will now be responsible\nfor the whole operation, including retries.\nHandled exceptions from contained objects (e.g., from configure(), start())\nImplemented retries.\nMerged properties so that some can be specified at the actor level.\nAdded target entity to operation parameters.\nRename classes from Closed Loop to Control Loop, as they are generic.\nModified the code to be more reliable about invoking the actor's start and\ncomplete callbacks.  Once the pipeline has been stopped, no further\ncallbacks are invoked.\nAdded preprocessor call to Operation Manager.\nAdded ParameterValidationRuntimeException class to propagate\nvalidation results up.\nRenamed OperationManager to Operator.\nRefactor common code in junit.\nAdded test for \"future\" return values.\nMoved stopPipeline and handleException up.\nPrevented deadlocks in pipeline controller.  Also modified it to\nautomatically remove itself from its parent when it's stopped.\nInstead of returning a failed future, Params start() should throw\nan exception.\nAllow a pipeline's \"future\" to cancel the pipeline thus eliminating the\nneed to pass a pipeline controller into Params.\nRemoved attempt from Params.\nNeed to adjust junits per latest round of changes.\n\nIssue-ID: POLICY-1625\nSigned-off-by: Jim Hahn <jrh3@att.com>\nChange-Id: I5beccd7c24cd4ee67b7a29b7d346afcd29c17cfc\n",
+  "change_log": {
+    "entry_count": 59,
+    "entries": [
+      {
+        "id": "583061df3df044a29b6fabce2b53fb377649336f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-23 23:59:21.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "07d30684816940f17dd9451e83f6ba30f3cfd72f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-23 23:59:47.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 1
+      },
+      {
+        "id": "29141c1399acd587af329b2012b9c0881c9bca33",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 00:03:07.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/693/",
+        "patchset_number": 1
+      },
+      {
+        "id": "27fb84fb469d4538d6d4789640525bde44962d95",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 00:08:56.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/693/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/693/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/693",
+        "patchset_number": 1
+      },
+      {
+        "id": "a9595a8ef4bd38ab17cfa0f1bbbf8707558c1cca",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-24 00:33:22.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0c5f7f1b42d72902a5724be8d2fca96448afc42f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 00:37:07.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/694/",
+        "patchset_number": 2
+      },
+      {
+        "id": "217bfec22e58fd9e5e37555657cab5fff538d958",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 00:43:12.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/694/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/694/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/694",
+        "patchset_number": 2
+      },
+      {
+        "id": "beacfb0d56f516439c19463ac68341c56fe4fc14",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-24 14:45:12.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "972bf83392ee6a3eb26ca055dba59a907e13af0f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 14:47:56.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/695/",
+        "patchset_number": 3
+      },
+      {
+        "id": "38928b09c3e2c3f0932edbdc6232f85710b03e95",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 14:53:03.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/695/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/695/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/695",
+        "patchset_number": 3
+      },
+      {
+        "id": "7b2280d15da6c4a787f1d15c8e6d4952ae1c010d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-24 15:46:27.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "977182025e5ab71a7d2e376fee562d62b5c4f23c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 15:49:14.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/696/",
+        "patchset_number": 4
+      },
+      {
+        "id": "45b14675a05ca7db36d14f09d6d73754d2b421a4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 15:55:43.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/696/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/696/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/696",
+        "patchset_number": 4
+      },
+      {
+        "id": "8e66fd7dd9f646c7fbfbb26a1001c1686a71f340",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-24 18:23:32.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "b0c02e2f4b4a74ed9d9152e5a70783feba64af78",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 18:27:08.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/697/",
+        "patchset_number": 5
+      },
+      {
+        "id": "49eb3f986787aedbfd3268f649707b32cb1fc4b4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 18:32:35.000000000",
+        "message": "Patch Set 5: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/697/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/697/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/697",
+        "patchset_number": 5
+      },
+      {
+        "id": "d16503121748e05d15c1978b39cb9089b4c5d076",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-24 23:07:44.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "cf7b0f4b24a5b27d804cd6c5f303adf1a9a478f6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 23:10:39.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/698/",
+        "patchset_number": 6
+      },
+      {
+        "id": "7cedc26c413d9d954ed5e121703571b886c5718b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-24 23:16:35.000000000",
+        "message": "Patch Set 6: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/698/ : FAILURE\n\nmaven-compiler-plugin testCompile goal has failed to compile tests. Please review the compilation issues in the log ( https://jenkins.onap.org/job/policy-models-master-verify-java/698/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/698",
+        "patchset_number": 6
+      },
+      {
+        "id": "e8e117b1c588bcaa1c2baef35c2804a8985ce21b",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-25 15:56:07.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "1153158c27febd64c8fd4787453ed693d1f6140d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 15:59:55.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/699/",
+        "patchset_number": 7
+      },
+      {
+        "id": "6f1c342d4f02c801468f7743b99db940d20752e2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 16:07:17.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/699/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/699",
+        "patchset_number": 7
+      },
+      {
+        "id": "0e2e845dd98bc2a51e97128d5133a49cdc481988",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-25 16:43:00.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "7eb23f54011f1dd3f01c9a66d6fcabef2765e32f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 16:45:20.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/700/",
+        "patchset_number": 8
+      },
+      {
+        "id": "430d3ab101344e5770565bab85927a2bfeccd69c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 16:51:25.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/700/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/700",
+        "patchset_number": 8
+      },
+      {
+        "id": "a4016e146dcb4ac698a4db083a7f2f656ed6ad00",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-25 20:11:01.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "34f2e61b06973d756edc30ccd43cfc430857f203",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 20:14:21.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/701/",
+        "patchset_number": 9
+      },
+      {
+        "id": "5b7ecee4b38f94c8d9eea92f7544c7e5fd1fb3ad",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-25 20:21:27.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/701/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/701",
+        "patchset_number": 9
+      },
+      {
+        "id": "4e7a3530901080fffeead233a4666af18e4d9ef4",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-26 02:05:38.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "754514601b57278e64e5dc2d1355bff1572bfb46",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-26 02:09:44.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/702/",
+        "patchset_number": 10
+      },
+      {
+        "id": "bd225e2292599a1b1ff1fe325ea0b815cb8cac7f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-26 02:16:33.000000000",
+        "message": "Patch Set 10: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/702/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/702",
+        "patchset_number": 10
+      },
+      {
+        "id": "5e5229e9fc5bfcebc92e907b8d205a86baefbfec",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-27 21:02:56.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "5a89b3a1f6732a15ebdee647c5e977f4c3faeefd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-27 21:06:30.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/703/",
+        "patchset_number": 11
+      },
+      {
+        "id": "3ee9eb77b5aa8c29d771799a6878e45573d2420e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-27 21:12:12.000000000",
+        "message": "Patch Set 11: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/703/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-models-master-verify-java/703/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/703",
+        "patchset_number": 11
+      },
+      {
+        "id": "40093e1601ab18b65f701c10253cb5fef2cd8f12",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-28 20:17:03.000000000",
+        "message": "Uploaded patch set 12.",
+        "patchset_number": 12
+      },
+      {
+        "id": "5eab2c8cc3dd74a7d18c172420decd858c7888cf",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-28 20:20:56.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/708/",
+        "patchset_number": 12
+      },
+      {
+        "id": "682d4389bc8b3e57c4f8fc3b1bb3679c8d7d7547",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-28 20:27:15.000000000",
+        "message": "Patch Set 12: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/708/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-models-master-verify-java/708/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/708",
+        "patchset_number": 12
+      },
+      {
+        "id": "2690a43fcd922a8c59c157e25581cff955e94a87",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-28 23:23:00.000000000",
+        "message": "Uploaded patch set 13.",
+        "patchset_number": 13
+      },
+      {
+        "id": "ef5b8bf8783535a99627165c2be031603363a392",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-28 23:27:51.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/709/",
+        "patchset_number": 13
+      },
+      {
+        "id": "9a3d592d06acf41e85217ef72483823a14115a5d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-28 23:34:56.000000000",
+        "message": "Patch Set 13: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/709/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/709",
+        "patchset_number": 13
+      },
+      {
+        "id": "2e6fa206955f0a22f9ac2e421020af352a87c215",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-30 07:07:55.000000000",
+        "message": "Uploaded patch set 14.",
+        "patchset_number": 14
+      },
+      {
+        "id": "e532ee15611516cd0d81c3b8bb73667220f3a9c0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-30 07:11:54.000000000",
+        "message": "Patch Set 14:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/710/",
+        "patchset_number": 14
+      },
+      {
+        "id": "9e8528cd50cae3cd03aa41264c3a9c5e286913a2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-30 07:18:20.000000000",
+        "message": "Patch Set 14: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/710/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-models-master-verify-java/710/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/710",
+        "patchset_number": 14
+      },
+      {
+        "id": "49115cf0dee4bb0172934ea4199e33441bab04f9",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-31 00:32:52.000000000",
+        "message": "Uploaded patch set 15.",
+        "patchset_number": 15
+      },
+      {
+        "id": "ab039796272732fef4fca7a26cf16d57c6cedf34",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-31 00:36:43.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/711/",
+        "patchset_number": 15
+      },
+      {
+        "id": "1369f9a3f9cc51d8745907af8a1fd5ce88cc14c0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-31 00:44:17.000000000",
+        "message": "Patch Set 15: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/711/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/711",
+        "patchset_number": 15
+      },
+      {
+        "id": "cd4f02a75d2fa659d20f0f73577a0c1b7d0fa9e3",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-01-31 21:06:41.000000000",
+        "message": "Uploaded patch set 16.",
+        "patchset_number": 16
+      },
+      {
+        "id": "9af021597768d8bd8bb00dfd5172dbbff148e7dc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-31 21:11:42.000000000",
+        "message": "Patch Set 16:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/714/",
+        "patchset_number": 16
+      },
+      {
+        "id": "2d2660ea6748273b4e40c9b98a2282fd6ad59c0b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-01-31 21:17:23.000000000",
+        "message": "Patch Set 16: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/714/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/714",
+        "patchset_number": 16
+      },
+      {
+        "id": "cc125cd7ebeaf518cac347e4ea399aa5083df9ee",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-01 03:49:01.000000000",
+        "message": "Uploaded patch set 17.",
+        "patchset_number": 17
+      },
+      {
+        "id": "b596ece9214b7d29abfb131f206ab7e81bf444b3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-01 03:50:51.000000000",
+        "message": "Patch Set 17:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/715/",
+        "patchset_number": 17
+      },
+      {
+        "id": "95498bcc572b309cfacc19e2545209aa895ed61f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-01 03:58:26.000000000",
+        "message": "Patch Set 17: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/715/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/715",
+        "patchset_number": 17
+      },
+      {
+        "id": "0e86576eec1ff6967a080e4ae272aab9af2f942e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-01 05:32:44.000000000",
+        "message": "Uploaded patch set 18.",
+        "patchset_number": 18
+      },
+      {
+        "id": "2ae433d996c4685a0d75e7082a64350673c642fa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-01 05:35:32.000000000",
+        "message": "Patch Set 18:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/716/",
+        "patchset_number": 18
+      },
+      {
+        "id": "1dd546c028d06d3e503c4949efaf668b6f39f6ba",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-01 05:41:18.000000000",
+        "message": "Patch Set 18: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/716/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/716",
+        "patchset_number": 18
+      },
+      {
+        "id": "1b4cdde068c8498c150cf8035b50348333dc9f4e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-02 07:37:38.000000000",
+        "message": "Uploaded patch set 19.",
+        "patchset_number": 19
+      },
+      {
+        "id": "77d528a0848e2424dd20eb8a885f2e1746cb89c4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-02 07:40:15.000000000",
+        "message": "Patch Set 19:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/717/",
+        "patchset_number": 19
+      },
+      {
+        "id": "5b2259bc5cef315ac937e36f941bfa837bcec2a3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-02 07:47:16.000000000",
+        "message": "Patch Set 19: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/717/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/717",
+        "patchset_number": 19
+      },
+      {
+        "id": "ee31b2737d41da88e2bc83249420c98953588a39",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-03 18:31:05.000000000",
+        "message": "Abandoned\n\nConsolidating into a single review.",
+        "patchset_number": 19
+      }
+    ]
+  }
+}

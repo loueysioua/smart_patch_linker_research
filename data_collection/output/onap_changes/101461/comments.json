@@ -1,0 +1,110 @@
+{
+  "id": "oom%2Foffline-installer~master~I82f0f8590812c277f2969d71f95fb6475c72f7c8",
+  "change_id": "I82f0f8590812c277f2969d71f95fb6475c72f7c8",
+  "_number": 101461,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "0e18880f_eb84a85f",
+      "file_path": "ansible/roles/certificates/handlers/main.yml",
+      "patchset_number": 3,
+      "line": null,
+      "message": "You don't have to define separate handlers for each distro - those handlers differ only in the command so it would suffice to parametrize it:\n\nRole defaults:\n  <keyname>:\n    RedHat:\n      <cmd_keyname>: <custom command>\n    Debian:\n      <cmd_keyname>: <custom command>\n\nhandlers/main.yml:\n\n(...)\n command: \"{{ <keyname>[ansible_os_family][<cmd_keyname>] }}\"\n(...)",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 08:07:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "512415b0_4e37d9e4",
+      "file_path": "ansible/roles/certificates/handlers/main.yml",
+      "patchset_number": 3,
+      "line": 12,
+      "message": "This condition and the one in line 6 shouldn't be there - that condition should appear in the caller only.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 08:07:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4431c4c6_e32c23a4",
+      "file_path": "ansible/roles/certificates/molecule/ubuntu/certs",
+      "patchset_number": 3,
+      "line": null,
+      "message": "This symlink shouldn't be there, this dir is created by relevant certificate's role task.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 08:07:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f1b62ccc_3ebc60b5",
+      "file_path": "ansible/roles/certificates/molecule/ubuntu/molecule.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "empty line",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 08:07:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "04cc6c26_8f4680c4",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 3,
+      "line": 16,
+      "message": "I really think we should stick to ansible_os_family - it's more generic and you don't have to define a list, just \"RedHat\" or \"Debian\".",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 08:07:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6c46e405_a3258fef",
+      "file_path": "ansible/roles/certificates/tasks/upload_root_ca.yml",
+      "patchset_number": 4,
+      "line": 6,
+      "message": "Is the looping needed here? It's only one path so wouldn't \"dest: root_ca_path[ansible_os_family]\" and redefine the defaults as\n\nroot_ca_path:\n  RedHat: \"/etc/pki/ca-trust/source/anchors/\"\t\n  Debian: \"/usr/local/share/ca-certificates/\"\n\nsuffice?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-04-21 13:34:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

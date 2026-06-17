@@ -1,0 +1,76 @@
+{
+  "id": "appc~master~I3219a5ec0ffd530338ce364f608a9706d5a92c03",
+  "change_id": "I3219a5ec0ffd530338ce364f608a9706d5a92c03",
+  "_number": 43031,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_270cc33a",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "How are the changes to this file related to APPC-437?",
+      "author": {
+        "account_id": 1125,
+        "name": "Skip Wonnell",
+        "display_name": null,
+        "email": "skip@att.com",
+        "username": "skipwonnell"
+      },
+      "updated": "2018-04-16 21:20:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_871a776d",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 1,
+      "line": 292,
+      "message": "Doesn't this update change the flow since now resultData can be null?   Is this fixing a bug?",
+      "author": {
+        "account_id": 1125,
+        "name": "Skip Wonnell",
+        "display_name": null,
+        "email": "skip@att.com",
+        "username": "skipwonnell"
+      },
+      "updated": "2018-04-16 21:20:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5a6526b3",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "These changes are the result of having written unit tests for the fetchResult method. The tests pointed out several bugs in the code and without these changes the if(resultData ==null) conditions are untestable + some bugs have been fixed. I'll explain in a little bit more detail.\n\nIn the original code, the first condition if(resultData ==null) never resolves to \"true\".\nThe reason for this can be found in the behavior of the optString method's documentation:\n\n\"Get an optional string associated with a key. It returns an empty string if there is no such key. If the value is not a string and is not null, then it is converted to a string.\"\n\nThe optString method never returns null, only an empty string when no value has been found. That is why I used the overloaded optString which returns null as the default value instead of an empty string. This change allows the logic to go inside the other conditions, but unfortunately another bug is unveiled:\n\n           resultData = allNodeData.optJSONObject(attribute).toString();\n           resultData = allNodeData.optJSONArray(attribute).toString();\n\nThe optJSONObject and optJSONArray do in fact return null (unlike the optString method) when no value for a given key exists. But because the toString() method is invoked on a null reference, a NullPointerException will be thrown which is clearly a developer mistake. The new implementation uses lambda expressions and Optional object from java to do the toString() conversion only if a non null value exists, otherwise resultData is assigned null and the next check can be performed.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-04-17 07:56:05.000000000",
+      "in_reply_to": "5a93c517_270cc33a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fa5512c2",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 1,
+      "line": 292,
+      "message": "Yes, this is a bug fix, please check my previous explanation:)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-04-17 07:56:05.000000000",
+      "in_reply_to": "5a93c517_871a776d",
+      "unresolved": false
+    }
+  ]
+}

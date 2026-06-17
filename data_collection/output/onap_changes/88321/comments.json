@@ -1,0 +1,76 @@
+{
+  "id": "sdc~master~I89c9ee966b8b4445e791af897bd60cdb845b845b",
+  "change_id": "I89c9ee966b8b4445e791af897bd60cdb845b845b",
+  "_number": 88321,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3e697123_443a76b0",
+      "file_path": "catalog-be/src/test/java/org/openecomp/sdc/be/components/impl/ResourceBusinessLogicTest.java",
+      "patchset_number": 3,
+      "line": 922,
+      "message": "Please consider collapsing these two blocks using \"|\" operator.",
+      "author": {
+        "account_id": 3717,
+        "name": "Piotr Darosz",
+        "display_name": null,
+        "email": "piotr.darosz@nokia.com",
+        "username": "darop"
+      },
+      "updated": "2019-05-29 07:30:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "eb37b542_f5b47b3b",
+      "file_path": "catalog-be/src/test/java/org/openecomp/sdc/be/components/impl/ResourceBusinessLogicTest.java",
+      "patchset_number": 3,
+      "line": 922,
+      "message": "Cannot do that because call to assertComponentException is call to two different methods depends from a type of exception being thrown",
+      "author": {
+        "account_id": 3663,
+        "name": "Tomasz Golabek",
+        "display_name": null,
+        "email": "tomasz.golabek@nokia.com",
+        "username": "golabek"
+      },
+      "updated": "2019-05-29 08:08:18.000000000",
+      "in_reply_to": "3e697123_443a76b0",
+      "unresolved": false
+    },
+    {
+      "id": "e618bd48_50e48e35",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/servlets/exception/ComponentExceptionMapper.java",
+      "patchset_number": 3,
+      "line": 55,
+      "message": "This commit has made the ComponentException an abstract class, in order to support two ways to throw this exception with the appropriate information: \nactionStatus or responseFormat.\nThe ComponnetException abstract class exposes one method \"responseFormat\" which both ByResponseFormatComponnetException and ByActionStatusComponnetException override.\nTherefore, I would expect \"ComponentExceptionMapper\" clase, to use the componentException as is, and call it's responseFormat() method to get the response format, and won't use explicit casting via \"isInstanceOf\",\nThis behaviuor conflicts the principles of OOP.\nI suggest that ComponentException::responseFormat method won't get any parameter.\nThe ByResponseFormatException implementation will remain as is.\nThe ByActionStatusException implementation will be changed, so the responseFormat method will use the Singelton instance of ResponseFormatManager to convert the actionStatus+params to a responseFormat.\nThe ComponentExceptionMapper::toResponse implementation won't do any casting and logic, but simply call componentException.responseFormat().",
+      "author": {
+        "account_id": 2065,
+        "name": "Yuli Shlosberg",
+        "display_name": null,
+        "email": "ys9693@att.com",
+        "username": "ys9693"
+      },
+      "updated": "2019-05-30 12:14:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8658d316_47a87fea",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/servlets/exception/ComponentExceptionMapper.java",
+      "patchset_number": 3,
+      "line": 55,
+      "message": "Thanks for descriptive info. Done",
+      "author": {
+        "account_id": 3663,
+        "name": "Tomasz Golabek",
+        "display_name": null,
+        "email": "tomasz.golabek@nokia.com",
+        "username": "golabek"
+      },
+      "updated": "2019-05-31 11:05:49.000000000",
+      "in_reply_to": "e618bd48_50e48e35",
+      "unresolved": true
+    }
+  ]
+}

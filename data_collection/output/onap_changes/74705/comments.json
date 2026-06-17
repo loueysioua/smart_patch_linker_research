@@ -1,0 +1,144 @@
+{
+  "id": "so~casablanca~If516b7ec38dad3fbc7409aff42275a98ef2af76b",
+  "change_id": "If516b7ec38dad3fbc7409aff42275a98ef2af76b",
+  "_number": 74705,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_5ce3fca3",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputs.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "There are some issues with this code as there is no benefit with this type of extracted method validators. At first you should approach from the domain perspective (what you want to validate) and consider the how(empty String, pattern matching) as the second step. \nAlso I think there is too much fragmentation on how the execution object is used between different method invocations. Parameters are access from the execution only to be passed separately to the validating method along with the execution object itself.\nMy recommendation: simply have validating methods for each parameter: validateCorrelationId(execution), validatePnfUuId(execution) etc and access the required values from those methods. It will be a lot more readable since when someone starts reading this class, it'll be clear at a glance what type of validations are done, while the \"how\" will be hidden inside:)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-12-17 13:05:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_3cf63864",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputs.java",
+      "patchset_number": 1,
+      "line": 61,
+      "message": "Consider a similar approach for the timeout validation + maybe solve this using lambdas and Optional ? :) The idea is to have a consistent approach.",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-12-17 13:05:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_9c04044b",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputs.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "Maybe even better (and simpler) would be to have methods like getCorrelationId(execution) that also validate and throws exceptions internally.",
+      "author": {
+        "account_id": 2795,
+        "name": "Lukasz Biniek",
+        "display_name": null,
+        "email": "lukasz.biniek@nokia.com",
+        "username": "Biniek"
+      },
+      "updated": "2018-12-17 13:11:48.000000000",
+      "in_reply_to": "9adffdf1_5ce3fca3",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_dcb4cc83",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputs.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "This sounds similar as to what I have proposed except I'd avoid naming methods getXXX if they do anything more than just return a field value :) Having getters suddenly throw an exception is never simpler :)",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-12-17 13:24:07.000000000",
+      "in_reply_to": "9adffdf1_9c04044b",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_31073e84",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/GeneratePnfUuidDelegateTest.java",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Caumnda introduced DelegateExecutionFake object for testing purpose. Use it instead of mocking, and the test would be much simpler and more valuable. Use also AssertJ lib, is cleaner. \n\n    public void execute_shouldSetValidUuidAsPnfUuid() {\n        // given\n        GeneratePnfUuidDelegate delegate = new GeneratePnfUuidDelegate();\n        DelegateExecutionFake execution = new DelegateExecutionFake();\n        // when\n        delegate.execute(execution);\n        //then\n        assertThat((String)execution.getVariable(PNF_UUID)).matches(PnfCheckInputs.UUID_REGEX);\n    }",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2018-12-18 10:36:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_d1f7d289",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputsTest.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Use DelegateExecutionFake instead of mocking Execution.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2018-12-18 10:36:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_b141eeaa",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/GeneratePnfUuidDelegateTest.java",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Done",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2018-12-18 11:09:10.000000000",
+      "in_reply_to": "9adffdf1_31073e84",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_711e26bd",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PnfCheckInputsTest.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 3699,
+        "name": "Joanna Jeremicz",
+        "display_name": null,
+        "email": "joanna.jeremicz@nokia.com",
+        "username": "joannajeremicz"
+      },
+      "updated": "2018-12-18 11:09:10.000000000",
+      "in_reply_to": "9adffdf1_d1f7d289",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "id": "oom~master~Idf8a6ba8ef14ce7ca397438c2200c11517d0458e",
+  "change_id": "Idf8a6ba8ef14ce7ca397438c2200c11517d0458e",
+  "_number": 94614,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-08-29 15:37:24.000000000",
+    "updated": "2019-09-02 20:29:30.000000000",
+    "submitted": "2019-09-02 19:00:12.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2319,
+      "name": "Sylvain Desbureaux",
+      "display_name": null,
+      "email": "sylvain.desbureaux@orange.com",
+      "username": "sdesbure"
+    },
+    "submitter": {
+      "account_id": 137,
+      "name": "Alexis de Talhouet",
+      "display_name": null,
+      "email": "adetalhouet89@gmail.com",
+      "username": "adetalhouet"
+    }
+  },
+  "subject": "Move Policy Storage to RWO",
+  "commit_message": "Move Policy Storage to RWO\n\nToday when deploying Policy with OOM, the PersistentVolumeClaim needs the\n\"ReadWriteMany\" (or \"RWX\") capability.\n\nAccording to Kubernetes Documentation (https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes),\nReadWriteMany stands for \"the volume can be mounted as read-write by many nodes\".\n\nThat means that a particular PVC needs to be read and written from many pods.\nThat also means that your code takes that into account and do the work to avoid\nwrite at the same place at the same time.\n\nAn issue on RWX mode is that most \"official\" storage driver from Kubernetes doesn't\nsupport it (13 over the 19 drivers doesn't support it, espacially OpenStack, Amazon\nand Google storage classes).\n\nPolicy PVC for Nexus and Policy PVC for mariadb are  used only for one POD.\nThus we don't need RWX.\n\nChange-Id: Idf8a6ba8ef14ce7ca397438c2200c11517d0458e\nIssue-ID: POLICY-2019\nSigned-off-by: Sylvain Desbureaux <sylvain.desbureaux@orange.com>\n",
+  "change_log": {
+    "entry_count": 21,
+    "entries": [
+      {
+        "id": "2976e9d8a8eea5b73ef25b54de09eada266b8412",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 15:37:24.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "0e032c4fba4dfb0af5d2ef822ce3d13bdda52fb4",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 15:37:25.000000000",
+        "message": "Patch Set 1:\n\nGitlab controller: Deployment put on queue, number 7 on the queue.",
+        "patchset_number": 1
+      },
+      {
+        "id": "50f5c388380006fea817a8ce6c9fd5fc81836017",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 15:46:33.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "f11b6d79a2bc38fe203e8a9a2536dca12a53579b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 15:48:32.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/oom-master-verify-helm/2746/",
+        "patchset_number": 1
+      },
+      {
+        "id": "fb385be9fd78408f183165d34b07723e6a8d8d07",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 15:49:13.000000000",
+        "message": "Patch Set 1:\n\nout of curiosity Sylvain, if we move at some point to a mariadb galera cluster, are all db writes funneled through one container, and would be ok to have these settings?",
+        "patchset_number": 1
+      },
+      {
+        "id": "aafc1ff0c7b93cdc2c3bd97f18860482ac8ee913",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-29 15:55:39.000000000",
+        "message": "Patch Set 1:\n\nAs far as I understand how we deploy galera cluster, each galera instance (and thus pod) has it's own storage (in order to replicate this part) and then RWO is OK with that.\n\nI didn't found an \"official\" helm chart for galera cluster but here's an example for MongoDB replicaset: https://github.com/helm/charts/blob/master/stable/mongodb-replicaset/values.yaml#L108\nyou see that access is RWO.",
+        "patchset_number": 1
+      },
+      {
+        "id": "1e4a4e573929a94bb49d681da06ae877bd15cb38",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 15:58:33.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-verify-helm/2746/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-verify-helm/2746",
+        "patchset_number": 1
+      },
+      {
+        "id": "4b67613d0b686b03a470da3be007951ccd7eb49b",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 16:21:42.000000000",
+        "message": "Patch Set 1:\n\n> As far as I understand how we deploy galera cluster, each galera\n > instance (and thus pod) has it's own storage (in order to replicate\n > this part) and then RWO is OK with that.\n > \n > I didn't found an \"official\" helm chart for galera cluster but\n > here's an example for MongoDB replicaset: https://github.com/helm/charts/blob/master/stable/mongodb-replicaset/values.yaml#L108\n > you see that access is RWO.\n\nthat's good, thanks for the feedback.",
+        "patchset_number": 1
+      },
+      {
+        "id": "1c370b25b310f33daff1997c2041803629be906f",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 16:35:19.000000000",
+        "message": "Patch Set 1:\n\nMike - can you confirm this change is ok for master vs staging?",
+        "patchset_number": 1
+      },
+      {
+        "id": "1e8a14b82e066519ec5972a1c856dcfee88de333",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 07:25:49.000000000",
+        "message": "Patch Set 1:\n\nGitlab.com: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 1
+      },
+      {
+        "id": "1a11b7c0008ac5d689266479169b8fc13bb789f6",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 07:28:02.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "f5b48da72a150f2077866c85051a531a53a15795",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 10:38:40.000000000",
+        "message": "Patch Set 1:\n\nGitlab.com: Chained-CI build too long. Aborting.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e6d095a37ed3ec9c075f88238ff77a41387f9331",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 16:02:31.000000000",
+        "message": "Patch Set 1: -Code-Review\n\noom_redeploy",
+        "patchset_number": 1
+      },
+      {
+        "id": "9491dad0b464a5abb6a73fb649f5a4ce448e9254",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 16:02:34.000000000",
+        "message": "Patch Set 1:\n\nGitlab controller: Deployment put on queue, number 1 on the queue.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f0ac4731ad08fe0ec35ddf77a42cdae9a6ff5ac6",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 16:02:36.000000000",
+        "message": "Patch Set 1:\n\nGitlab.com: Chained-CI build started, max time: 10800 seconds",
+        "patchset_number": 1
+      },
+      {
+        "id": "8876ca7b750f009a3ede66f35a7c530a55f75f65",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 18:36:44.000000000",
+        "message": "Patch Set 1:\n\nGitlab.com: Chained CI build failure on some jobs.\nJobs with issue:\n- Step: apps_test \"* Project: xtesting-onap \"* Status: failed \"* Pipeline: 'https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/pipelines/79570722' \"* API pipeline url: 'https://gitlab.com/api/v4/projects/10614465/pipelines/79570722' \"* Failed jobs: \"*   - id: 284828378 \"*     name: healthcheck-k8s/onap_healthcheck_k8s \"*     status: failed \"*     duration: 81.190632 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/284828378 \"*   - id: 284828380 \"*     name: healthcheck-onap/onap_healthcheck_small \"*     status: failed \"*     duration: 73.8633 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/284828380 \"*   - id: 284828381 \"*     name: healthcheck-onap/onap_healthcheck_medium \"*     status: failed \"*     duration: 119.364662 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/284828381 \"*   - id: 284828382 \"*     name: healthcheck-onap/onap_healthcheck_full \"*     status: failed \"*     duration: 122.032752 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/284828382 \"*   - id: 284828384 \"*     name: xtesting_vnf/onap_vnf \"*     status: failed \"*     duration: 1198.740558 \"*     link: https://gitlab.com/Orange-OpenSource/lfn/onap/xtesting-onap/-/jobs/284828384 \"",
+        "patchset_number": 1
+      },
+      {
+        "id": "8e92bca8077637c56b327f23f697fe9f2f20276e",
+        "author": {
+          "account_id": 5170,
+          "name": "ONAP JobDeployer",
+          "display_name": null,
+          "email": "jobdeployer-admin@onap.org",
+          "username": "onapbot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 18:36:48.000000000",
+        "message": "Patch Set 1:\n\nGitlab.com: \n______________ Results _____________\n******** Kubernetes Results ********\n * Nb Pods: 209\n * Nb Failed Pods: 7\n * List of Failed Pods: [\n   - onap-clamp-clamp-96b98bc7d-shkkk\n   - onap-clamp-clamp-dash-es-6799d79889-k67md\n   - onap-clamp-clamp-dash-kibana-7c7dd9cbcf-229cq\n   - onap-clamp-clamp-dash-logstash-999bd9d69-s59ft\n   - onap-dcaegen2-dcae-bootstrap-797cbf7cf7-85bjf\n   - onap-sdnc-cds-blueprints-processor-cffdb76b9-df878\n   - onap-sdnc-cds-command-executor-f559b46c4-n4mq7\n   - onap-sdnc-cds-sdc-listener-66bb8d5bfd-lwhm6]\n*********** Helm Results ***********\n * Nb Helm Charts: 31\n * Nb Failed Helm Charts: 1\n * List of Failed Helm Charts: [\n   - onap-dcaegen2]\n******** Healthcheck Results *******\n2019-08-31 18:14:42,473 - xtesting.core.robotframework - INFO - \n==============================================================================\nHealth-Check :: Test that ONAP components are available via basic API calls   \n==============================================================================\nBasic A&AI Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic AAF Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic AAF SMS Health Check                                            | PASS |\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | FAIL |\nConnectionError: HTTPSConnectionPool(host='appc.onap', port=8443): Max retries exceeded with url: /restconf/operations/SLI-API:healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7ff35fefbc90>: Failed to establish a new connection: [Errno 111] Connection refused',))\n------------------------------------------------------------------------------\nBasic CLI Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic CLAMP Health Check                                              | FAIL |\nConnectionError: HTTPSConnectionPool(host='clamp.onap', port=8443): Max retries exceeded with url: /restservices/clds/v1/healthcheck (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7ff35ff69050>: Failed to establish a new connection: [Errno 111] Connection refused',))\n------------------------------------------------------------------------------\nBasic DCAE Health Check                                               | FAIL |\nConnectionError: HTTPConnectionPool(host='dcae-healthcheck.onap', port=80): Max retries exceeded with url: /healthcheck (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff35fe45c90>: Failed to establish a new connection: [Errno 111] Connection refused',))\n------------------------------------------------------------------------------\nBasic DMAAP Data Router Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Message Router Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic DMAAP Bus Controller Health Check With Basic Auth               | PASS |\n------------------------------------------------------------------------------\nBasic External API NBI Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Log Elasticsearch Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic Log Kibana Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic Log Logstash Health Check                                       | PASS |\n------------------------------------------------------------------------------\nBasic Microservice Bus Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-pike API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-starlingx API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-titanium_cloud API Health Check                      | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-vio API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Multicloud-k8s API Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic OOF-Homing Health Check                                         | PASS |\n------------------------------------------------------------------------------\nBasic OOF-SNIRO Health Check                                          | PASS |\n------------------------------------------------------------------------------\nBasic OOF-CMSO Health Check                                           | FAIL |\n403 != 200\n------------------------------------------------------------------------------\nBasic Policy Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Pomba AAI-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba SDC-context-builder Health Check                          | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-discovery-context-builder Health Check            | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Service-Decomposition Health Check                        | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Network-Discovery-MicroService Health Check               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Pomba-Kibana Health Check                                 | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Elastic-Search Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Sdnc-Context-Builder Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic Pomba Context-Aggregator Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic Portal Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic SDC Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic SDNC Health Check                                               | PASS |\n------------------------------------------------------------------------------\nBasic SO Health Check                                                 | PASS |\n------------------------------------------------------------------------------\nBasic UseCaseUI API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC catalog API Health Check                                    | PASS |\n------------------------------------------------------------------------------\nBasic VFC emsdriver API Health Check                                  | PASS |\n------------------------------------------------------------------------------\nBasic VFC gvnfmdriver API Health Check                                | PASS |\n------------------------------------------------------------------------------\nBasic VFC huaweivnfmdriver API Health Check                           | PASS |\n------------------------------------------------------------------------------\nBasic VFC jujuvnfmdriver API Health Check                             | PASS |\n------------------------------------------------------------------------------\nBasic VFC multivimproxy API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nokiav2driver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC nslcm API Health Check                                      | PASS |\n------------------------------------------------------------------------------\nBasic VFC resmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnflcm API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfmgr API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC vnfres API Health Check                                     | PASS |\n------------------------------------------------------------------------------\nBasic VFC workflow API Health Check                                   | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztesdncdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VFC ztevnfmdriver API Health Check                              | PASS |\n------------------------------------------------------------------------------\nBasic VID Health Check                                                | PASS |\n------------------------------------------------------------------------------\nBasic VNFSDK Health Check                                             | PASS |\n------------------------------------------------------------------------------\nBasic Holmes Rule Management API Health Check                         | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Holmes Engine Management API Health Check                       | FAIL |\n502 != 200\n------------------------------------------------------------------------------\nBasic Multicloud-fcaps API Health Check                               | PASS |\n------------------------------------------------------------------------------\nBasic Modeling genericparser API Health Check                         | PASS |\n------------------------------------------------------------------------------\nBasic CDS Health Check                                                | FAIL |\nConnectionError: HTTPConnectionPool(host='cds-blueprints-processor-http.onap', port=8080): Max retries exceeded with url: /api/v1/execution-service/health-check (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff35fbcbe10>: Failed to establish a new connection: [Errno 111] Connection refused',))\n------------------------------------------------------------------------------\nHealth-Check :: Test that ONAP components are available via basic ... | FAIL |\n61 critical tests, 54 passed, 7 failed\n61 tests total, 54 passed, 7 failed\n==============================================================================\nOutput:  /var/lib/xtesting/results/full/output.xml\n____________________________________",
+        "patchset_number": 1
+      },
+      {
+        "id": "9510808c6b01bc889a1d08f002f6396294bf25c7",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 19:39:56.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "c72b8b2a069a173db7864076e08c3609b421cbe3",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 19:00:10.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "fcec7d71c7feed50753ab665cca5f4fbf3d8f1fb",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 19:00:12.000000000",
+        "message": "Change has been successfully merged by Alexis de Talhouët",
+        "patchset_number": 1
+      },
+      {
+        "id": "49701cffa7504b790b3bcf6cfc1fe19fba2ee34c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 20:29:30.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/oom-master-merge-helm/1026/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/oom-master-merge-helm/1026",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

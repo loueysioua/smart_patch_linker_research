@@ -1,0 +1,110 @@
+{
+  "id": "aai%2Fdata-router~master~I1fabfdf3a4a4911094ea24f96603f23e4af452c0",
+  "change_id": "I1fabfdf3a4a4911094ea24f96603f23e4af452c0",
+  "_number": 63649,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_1da8131f",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 1,
+      "line": 434,
+      "message": "More diligence is required.\n\nWith the above fix, this method will now throw a null pointer exception when entityJsonNode is null.\n\nI think we need to ask the question, does the rest of the method need to be executed at all if entityJsonObject is null? Or do we want to exit (possibly with an exception) instead?",
+      "author": {
+        "account_id": 703,
+        "name": "Tian Lee",
+        "display_name": null,
+        "email": "TianL@amdocs.com",
+        "username": "TianL"
+      },
+      "updated": "2018-08-30 09:21:48.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_4ce25e30",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 1,
+      "line": 434,
+      "message": "I suggest removing initialization line#414 and adding this:\n\nif (entityJsonNode != null) {\nRouterServiceUtil.extractObjectsByKey(entityJsonNode, key, foundNodes);\n}",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-08-30 13:01:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_0c66a6c1",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 1,
+      "line": 434,
+      "message": "I think what Tian is suggesting is:\n\nif(null != entityJsonObject) {\n RouterServiceUtil.extractObjectsByKey(convertToJsonNode(entityJsonObject.toString(), key, foundNodes);\n} else {\n  thow exception;\n}",
+      "author": {
+        "account_id": 3131,
+        "name": "Trevor Tait",
+        "display_name": null,
+        "email": "rtait@amdocs.com",
+        "username": "rtait"
+      },
+      "updated": "2018-08-30 13:14:28.000000000",
+      "in_reply_to": "1a76adc5_4ce25e30",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_8cf876c4",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 1,
+      "line": 434,
+      "message": "Agreed, please see patch 2.",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-08-30 13:20:01.000000000",
+      "in_reply_to": "1a76adc5_1da8131f",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_ec91ea47",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 2,
+      "line": 412,
+      "message": "entityJsonNode is not referenced outside of the \"if\" statement, therefore can be declared on line 415.",
+      "author": {
+        "account_id": 703,
+        "name": "Tian Lee",
+        "display_name": null,
+        "email": "TianL@amdocs.com",
+        "username": "TianL"
+      },
+      "updated": "2018-08-30 13:35:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_2c47e2bd",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/EntityEventPolicy.java",
+      "patchset_number": 2,
+      "line": 412,
+      "message": "fixed in patch 3.",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-08-30 13:48:18.000000000",
+      "in_reply_to": "1a76adc5_ec91ea47",
+      "unresolved": false
+    }
+  ]
+}

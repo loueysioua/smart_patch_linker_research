@@ -1,0 +1,518 @@
+{
+  "id": "vid~master~I128b22092b78cf05a904648c276807a7ebb21aca",
+  "change_id": "I128b22092b78cf05a904648c276807a7ebb21aca",
+  "_number": 102674,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f0c6e80f_37b8e547",
+      "file_path": "epsdk-app-onap/src/main/resources/vid-data-deprecated.sql",
+      "patchset_number": 6,
+      "line": 59,
+      "message": "I suggest using ID=7, as current max is 6 -- for 'VNF Scale Out'.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9816db74_8b72fac2",
+      "file_path": "epsdk-app-onap/src/main/resources/vid-data-deprecated.sql",
+      "patchset_number": 6,
+      "line": 59,
+      "message": "This method of adding entries to the database is deprecated.\nPlease move this statement at end of file \"db.changelog-01.sql\"\n\nVID is using *liquibase* to control ongoing changes on live DB. This allows incremental DB versioning.\n\nResult should be something like:\n\n--changeset vid:add_workflow_pnf_software_upgrade\nINSERT INTO `vid_workflow` (`WORKFLOW_DB_ID`, `WORKFLOW_APP_NAME`) VALUES (7, 'PNF Software Upgrade');\n\n\nNote that the \"on duplicate key\" is not necessary, as liquibase controls applying the change once.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6863031e_f28ca6d8",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 291,
+      "message": "I would suppose that just defining something like that will be enough, without introducing `userParam` as global:\n\n                        } else if (workflowType == \"PNF Software Upgrade\") {\n                            requestParametersData = {\n                              userParams: [\n                                    { \"name\":\"pnfId\", \"value\":vnf.properties[\"vnf-id\"] },\n                                    { \"name\":\"pnfName\", \"value\": vnf.name },\n                                    {\n                                      \"name\":\"targetSoftwareVersion\",\n                                      \"value\":vm.getInternalWorkFlowParameter(workflowType, 'text', 'Target software version').value\n                                    }\n                              ]\n                           }\n                        };\n\n\nThis will allow a simplified \"nativeWorkflowRequestData\" method that I suggest below.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bd6a3536_3794bb4b",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 326,
+      "message": "I'm pretty sure this block is not passed-through, so case is not needed to be handled here.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "785a41c7_1036e26b",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 359,
+      "message": "I suggest extracting this block to function instead of duplicating it.\n\nThe method signature, in that case, will be something like  `nativeWorkflowRequestData(modelType, requestParameters)`\n\nIt may conditionally add vnfInstanceId or pnfInstanceId field-name by modelType, OR: let the caller append it's non-common fields on the result. (I prefer the former.)",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dec7f4c9_9dc50dd3",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 360,
+      "message": "So, it is assumed that the VNFs list includes also PNF?\nIs that assumption temporal (until a further VID/AAI change), or this should be valid from now on?",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d2100f36_5347bce1",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 244,
+      "message": "this change can be reverted back to \"us16807000\" once you have your simulator and tests setup with the given user.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "531b8cf4_a5cf9bdb",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 310,
+      "message": "is it intentional the instance id is repeated in both \"pnfInstanceId\" and in userParams(name=\"pnfId\")?",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b87f8541_ffdc817a",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 363,
+      "message": "I can assume this implementation is a stub, until a list is of PNFs is available? (I'm echoing my same question from above)",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-06 10:23:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5237f5a2_73d16174",
+      "file_path": "epsdk-app-onap/src/main/resources/vid-data-deprecated.sql",
+      "patchset_number": 6,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "9816db74_8b72fac2",
+      "unresolved": false
+    },
+    {
+      "id": "7039b84f_6ca866bf",
+      "file_path": "epsdk-app-onap/src/main/resources/vid-data-deprecated.sql",
+      "patchset_number": 6,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "f0c6e80f_37b8e547",
+      "unresolved": false
+    },
+    {
+      "id": "0569d434_9bac3010",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 291,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "6863031e_f28ca6d8",
+      "unresolved": false
+    },
+    {
+      "id": "860a9986_14ebd092",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 326,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "bd6a3536_3794bb4b",
+      "unresolved": false
+    },
+    {
+      "id": "140cf413_2e6e5ee5",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 6,
+      "line": 359,
+      "message": "Have added a new method with arguments (ModelType, workflowType and vnf) . Passing ModelType as undefined as of now, until we have the PNF changes implemented. Please review if the changes are okay.",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "785a41c7_1036e26b",
+      "unresolved": false
+    },
+    {
+      "id": "f4ac6b62_6b19b822",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 244,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "d2100f36_5347bce1",
+      "unresolved": false
+    },
+    {
+      "id": "b4e0d666_103b6ee7",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 310,
+      "message": "It is intentional to differentiate the api endpoint parameter and the naming convention inside SO",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "531b8cf4_a5cf9bdb",
+      "unresolved": false
+    },
+    {
+      "id": "6a4bc77a_031821f2",
+      "file_path": "vid-webpack-master/cypress/integration/iFrames/changeManagement.e2e.ts",
+      "patchset_number": 6,
+      "line": 363,
+      "message": "Yes that is right",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-20 14:41:09.000000000",
+      "in_reply_to": "b87f8541_ffdc817a",
+      "unresolved": false
+    },
+    {
+      "id": "7b7e3824_c927d1c0",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 8,
+      "line": 263,
+      "message": "Can be removed",
+      "author": {
+        "account_id": 5099,
+        "name": "Eric Moore",
+        "display_name": null,
+        "email": "eric.e.moore@est.tech",
+        "username": "EricMoore"
+      },
+      "updated": "2020-04-21 09:36:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c193fb7a_12d63f52",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 8,
+      "line": 263,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-21 10:00:02.000000000",
+      "in_reply_to": "7b7e3824_c927d1c0",
+      "unresolved": false
+    },
+    {
+      "id": "c1b29de9_da1cd576",
+      "file_path": "epsdk-app-onap/src/main/resources/db.changelog-01.sql",
+      "patchset_number": 9,
+      "line": 289,
+      "message": "this changeset is ok.\n\nstill, it should better be placed at the end of the file.\nanyhow, in this position it breaks the previous changeset to two.\n\nyou may find these docs insightful: https://www.liquibase.org/documentation/sql_format.html",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-26 11:22:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "03913388_988ecff9",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 290,
+      "message": "It wasn't my intention; sorry for the confusion. See my comment on line 264 below, and then re-read https://gerrit.onap.org/r/c/vid/+/102674/6/vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js#291\n\nIt is ok to have here a function, but name \"nativeWorkflowRequestData\" is not describing the method, and params are not \"on\".",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-26 11:22:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5c1cfa22_26dc6e95",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 364,
+      "message": "This code is not very clean, so I understand how we're struggling here aorund it.\nStill, I suggest redoing it one more time.\n\n\nThe case of \"if (workflowType === \"PNF Software Upgrade\")\" is redundant\n-----------------------------------------------------------------------\n\nBecause it is very similar to the generic \"else\", I suggest generifying the else with a code similar to this:\n\n                    } else if (workflowType === \"PNF Software Upgrade\") {\n                        data = nativeWorkflowRequestData('pnf', requestParameters, vnf)\n                    } else {\n                        data = nativeWorkflowRequestData('vnf', requestParameters, vnf)\n                    }\n\n\nAnd nativeWorkflowRequestData() will do something like (note the few item with arrow)\n\n\nnativeWorkflowRequestData(modelType, requestParameters) {\n             data = {\n                            modelInfo: {\n                                modelType: modelType,  <=====\n                                modelInvariantId: vnf.properties['model-invariant-id'],\n                                modelVersionId: vnf.modelVersionId,\n                                modelName: vnf.properties['vnf-name'],\n                                modelVersion: vnf.version,\n                                modelCustomizationName: vnf.properties['model-customization-name'],\n                                modelCustomizationId: vnf.properties['model-customization-id']\n                            },\n                            cloudConfiguration: vnf.cloudConfiguration,\n                            requestInfo: requestInfoData,\n                            relatedInstanceList: [],\n                            requestParameters: requestParametersData\n                        };\n                    }\n\n           data[modelType + 'Name'] = vnf.name,   <=====\n           data[modelType + 'InstanceId'] = vnf.id,   <=====\n\n          return data;\n\n}",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-26 11:22:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "866ba4d1_7bc0e6e2",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 364,
+      "message": "Sorry Ittay for the misunderstanding. I will change it accordingly. But in this case, do we need to set the below under requestParameters like Eric had done? Because the argument requestParameters is the requestParametersData which need to have this info? Can you please clarify on this.\nrequestParameters: {\n      userParams: [\n\n           {\n              \"name\":\"pnfId\",\n               \"value\":vnf.properties[\"vnf-id\"]\n            },\n            {\n               \"name\":\"pnfName\",\n               \"value\": vnf.name\n             },\n             userParam\n         ]\n      }",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-27 10:36:05.000000000",
+      "in_reply_to": "5c1cfa22_26dc6e95",
+      "unresolved": true
+    },
+    {
+      "id": "e31f7759_e041f6d3",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 364,
+      "message": "my code here was not checked 😊 and you are correct:\n\n1) The method signature should be `nativeWorkflowRequestData(modelType, requestParameters, vnf) {`\n2) after `relatedInstanceList: [],` should be `requestParameters: requestParameters`\n\nThere might be more mistakes around....\n\nIf you're asking about the separation between the `data` construction from it's inner `relatedInstanceList` -- I recommend following the current way it is done in separation (only because that is how it is today). If you prefer combining both cases - **on line 349** it is valid (althought not my preference):\n\n                    } else if (workflowType === \"PNF Software Upgrade\") {\n\n             var requestParameters = {\n                  userParams: [\n                     {\n                        \"name\":\"pnfId\",\n                        \"value\":vnf.properties[\"vnf-id\"]\n                     },\n                     {\n                        \"name\":\"pnfName\",\n                        \"value\": vnf.name\n                     },\n                     {\n                        \"name\":\"targetSoftwareVersion\",\n                        \"value\":vm.getInternalWorkFlowParameter(workflowType, 'text', 'Target software version').value\n                     }\n                  ]\n               };\n                        data = nativeWorkflowRequestData('pnf', requestParameters, vnf)\n                    } else {",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-27 11:11:03.000000000",
+      "in_reply_to": "866ba4d1_7bc0e6e2",
+      "unresolved": true
+    },
+    {
+      "id": "6d70f2f1_6076baf6",
+      "file_path": "epsdk-app-onap/src/main/resources/db.changelog-01.sql",
+      "patchset_number": 9,
+      "line": 289,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-27 18:03:35.000000000",
+      "in_reply_to": "c1b29de9_da1cd576",
+      "unresolved": false
+    },
+    {
+      "id": "e424c1ee_80a540c4",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 290,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-27 18:03:35.000000000",
+      "in_reply_to": "03913388_988ecff9",
+      "unresolved": false
+    },
+    {
+      "id": "342b825d_31d24254",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 9,
+      "line": 364,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-27 18:03:35.000000000",
+      "in_reply_to": "e31f7759_e041f6d3",
+      "unresolved": false
+    },
+    {
+      "id": "2aecad2c_60627e9c",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 10,
+      "line": 453,
+      "message": "relatedInstanceList is not needed for pnf. Testcase fails when it is added for pnf. Since it has been added only for'vnf' ModelType. \nvnf.name is added as part of userParam in pnf case.",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-27 18:03:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7dfe830_c4c60fe2",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 10,
+      "line": 377,
+      "message": "i'm pretty sure this block is redundant and can be removed.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2020-04-28 03:53:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c1829df2_610dd970",
+      "file_path": "vid-app-common/src/main/webapp/app/vid/scripts/modals/new-change-management/new-change-management.controller.js",
+      "patchset_number": 10,
+      "line": 377,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2020-04-28 09:41:47.000000000",
+      "in_reply_to": "e7dfe830_c4c60fe2",
+      "unresolved": false
+    }
+  ]
+}

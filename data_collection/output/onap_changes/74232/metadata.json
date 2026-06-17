@@ -1,0 +1,336 @@
+{
+  "id": "aai%2Faai-common~master~Ieb8237de3fd31136ceac14bf4a8216a7ab3b7179",
+  "change_id": "Ieb8237de3fd31136ceac14bf4a8216a7ab3b7179",
+  "_number": 74232,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-12-04 20:42:33.000000000",
+    "updated": "2018-12-05 17:00:08.000000000",
+    "submitted": "2018-12-05 16:12:12.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 75,
+      "name": "Venkata Harish Kajur",
+      "display_name": null,
+      "email": "vk250x@att.com",
+      "username": "vk250x"
+    },
+    "submitter": {
+      "account_id": 33,
+      "name": "James Forsyth",
+      "display_name": null,
+      "email": "jf2512@att.com",
+      "username": "jimmydot"
+    }
+  },
+  "subject": "Improve the performance of resoures microservice",
+  "commit_message": "Improve the performance of resoures microservice\n\nCurrently the findSubGraph is being invoked\nand causing additional calls to the database by backing\na tree backed vertex and slowing the performance of GET ALLs\nOriginal intention of both of them was to pre fetch depth 0, 1, and 2\nat once so we don't have to get them at each depth but since\nthat was not done right there is extra amount of time\n\nAfter the aai-uri migration to ensure all vertexes\nhave the aai-uri and also to make sure they are unique across graph\nwe don't need to traverse a vertex to find the parents to build aai-uri\nit was done previously when there was no aai-uri to derive the uri of a\ngiven vertex and its not necessary anymore so there would be performance\nimprovements of vserver when there are a lot of relationships\n\nCurrently the edge labels are retrieved for each vertex a\nand b and the performance of the GET with relationships will be\npropotional to the GET request and how many cousin edges it has\nand the more cousin edges there are the more slower the response time\nwill be as for each cousin vertex its trying to get the edge in between\nso the code is modified to only go to the database for the edge label\nwhen there are multiple edge labels (cousin edges) between a and b\nIf there are only one edge label and its a cousin vertex then we\ncan use the edge rule to be able to figure out the edge label\n\nImprove PUT on the cloud region by modifying the getEdgesBetween\nmethod which currently was retrieving all the parent\nchild edges between a and b and then only using the first edge\nThe traversal itself was too complicated and was costly in terms of\ndatabase retrieval and calls and optimized the code to utilize the\nedge information so we can modify the query to db at runtime\nbased on the information provided so when a 10000 vservers under a\ntenant adding a new vserver under tenant would be slow because of the\nold query performance as it was taking some time there but with this\noptimization, its only spending at most a millisecond or 2 in that\nmethod\n\nAlso noticed that when a PUT operation takes place, the method\ncalls the related objects to create a dmaap event which was in turn\ncalling the findParents and actually utilizing the parents to create the\ndmaap event and would spend quite a lot of time here because of the\nexpensive call of the findParents in this case we need those vertexes\nSo optimized the code so based on a given vertex, we have the aai-uri\nand the newly added metadata uriTemplate to break the aai-uri into\nits parent aai-uri and grand parent aai-uri and so forth\nWith this breakdown, we can get the list of aai-uris which are parents,\ngrandparents and then use the aai-uri to look them up which is O(1)\nlookup time due to the fact they are unique indexes\nThe time it takes when doing a traversal to find the parents is\npropotional to the number of edges but this will be optimistic\n\nAnother area which was improved was the json path execution of the\nedge rules so when the edge rules get loaded into memory it creates a\ndocument object, it utilizes the jsonpath to query information about\nthe edge rules but the only thing here is each time it gets called\nthe query gets invoked and uses jsonpath to retrieve the edge rules when\nwe can cached them based on the filter so that the user executed and if\nthe filter is the same as before, the expected edge rules will return\nthe same\nToo much time was spent making the query and retrieving and building the\nedgerules\nSo a cache is a perfect way to optimize this part\n\nIssue-ID: AAI-1987\nChange-Id: Ieb8237de3fd31136ceac14bf4a8216a7ab3b7179\nSigned-off-by: Kajur, Harish (vk250x) <vk250x@att.com>\n",
+  "change_log": {
+    "entry_count": 22,
+    "entries": [
+      {
+        "id": "366afba7ef16a301f50c56264785b5f66c0ecd3c",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-04 20:42:33.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b79942ea5649383d5c3b8974cacd1869b6b4fb20",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-04 20:46:02.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/708/",
+        "patchset_number": 1
+      },
+      {
+        "id": "ea340000e700c5aa171d22cba9cddbf1a125dd0f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-04 20:55:46.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/708/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/708",
+        "patchset_number": 1
+      },
+      {
+        "id": "824ebfa80156573a04e7e89d9633606625da98f7",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 04:53:20.000000000",
+        "message": "Patch Set 1:\n\n(9 comments)\n\nfirst batch of comments",
+        "patchset_number": 1
+      },
+      {
+        "id": "b5f420a31506fb32184d3d65f6be2dd368bbd957",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 04:55:02.000000000",
+        "message": "Patch Set 1:\n\nalso, how is this code going to play out with the AAI schema service re-factor?",
+        "patchset_number": 1
+      },
+      {
+        "id": "73ab9e2a6ac889f5351a29ac86c91293d5658664",
+        "author": {
+          "account_id": 4341,
+          "name": "Keong Lim",
+          "display_name": null,
+          "email": "keong.lim+onap@gmail.com",
+          "username": "keong"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 05:10:49.000000000",
+        "message": "Patch Set 1:\n\n(2 comments)\n\nsecond batch",
+        "patchset_number": 1
+      },
+      {
+        "id": "3cbc7bc18d44f02a18426476cf3b6ba82ef34ad1",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-05 14:18:29.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "7c3d6c5280335499db68e66f87f81c043159a01d",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-05 14:18:50.000000000",
+        "message": "Patch Set 2:\n\n(3 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "566ee1b5391d3ac9403ec5d23fe49fb49d5f28ba",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-05 14:19:42.000000000",
+        "message": "Patch Set 2:\n\nNone of the changes that is mentioned here will impact schema service. At least not in the day one implementation.",
+        "patchset_number": 2
+      },
+      {
+        "id": "f9a7c04fe11d22242da5272a130f9401f39a7181",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 14:21:28.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/709/",
+        "patchset_number": 2
+      },
+      {
+        "id": "093d94bace48f5b43589f54adfaf37f1e8de099f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 14:30:07.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/709/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/709/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/709",
+        "patchset_number": 2
+      },
+      {
+        "id": "af7f806eedbd2b61f46eaeb134188c260ffc98f4",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-05 14:38:46.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "85a76aadab620a02f19c1d9c281d94aae388f466",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 14:41:44.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/710/",
+        "patchset_number": 3
+      },
+      {
+        "id": "5ddea2e77c2d10b53910ec199bbdcedb6c9111f5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 14:51:52.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/710/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/710",
+        "patchset_number": 3
+      },
+      {
+        "id": "e0a6bd61c51ce04da9a8db210616cf716701fe70",
+        "author": {
+          "account_id": 3799,
+          "name": "SoumyaNaik",
+          "display_name": null,
+          "email": "sn207c@att.com",
+          "username": "SoumyaNaik"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 15:37:14.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "d465eeed24f3f71798a7c7d24181e07c28532ffe",
+        "author": {
+          "account_id": 33,
+          "name": "James Forsyth",
+          "display_name": null,
+          "email": "jf2512@att.com",
+          "username": "jimmydot"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 16:12:11.000000000",
+        "message": "Patch Set 3: Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "d59eb8cc8d255a9ee53a8fcae5ecfe491f84c515",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-12-05 16:12:12.000000000",
+        "message": "Change has been successfully merged by James Forsyth",
+        "patchset_number": 3
+      },
+      {
+        "id": "a7458d494ce0c50c6ad0db2d61c201fd4491527b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 16:14:57.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-merge-java/324/",
+        "patchset_number": 3
+      },
+      {
+        "id": "7313acf660ffc26a9526e05c05e8d67cf53abcbc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 16:25:53.000000000",
+        "message": "Patch Set 3:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-merge-java/324/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-merge-java/324",
+        "patchset_number": 3
+      },
+      {
+        "id": "ce21dd236091807c2ba717b26c8a2e8ab38e0329",
+        "author": {
+          "account_id": 75,
+          "name": "Venkata Harish Kajur",
+          "display_name": null,
+          "email": "vk250x@att.com",
+          "username": "vk250x"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-12-05 16:45:57.000000000",
+        "message": "Patch Set 3:\n\nplease release",
+        "patchset_number": 3
+      },
+      {
+        "id": "93448e5bc5a853357d137fa2a0e33e98978759f1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 16:48:53.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-release-version-java-daily/624/",
+        "patchset_number": 3
+      },
+      {
+        "id": "b6f6ddf53381a742ed5cd0e860a2a9bb66fd7d05",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-12-05 17:00:08.000000000",
+        "message": "Patch Set 3:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-release-version-java-daily/624/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-release-version-java-daily/624",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

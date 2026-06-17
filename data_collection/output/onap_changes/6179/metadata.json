@@ -1,0 +1,224 @@
+{
+  "id": "oom~master~I30df3cc11315b757a1d3e3da832681682a970825",
+  "change_id": "I30df3cc11315b757a1d3e3da832681682a970825",
+  "_number": 6179,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-07-24 09:55:34.000000000",
+    "updated": "2017-08-14 13:11:05.000000000",
+    "submitted": "2017-08-13 10:59:18.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    },
+    "submitter": {
+      "account_id": 345,
+      "name": "Yury Novitsky",
+      "display_name": null,
+      "email": "yury.novitsky@amdocs.com",
+      "username": "yuryn"
+    }
+  },
+  "subject": "[OOM-3] Docker credentials secret missing",
+  "commit_message": "[OOM-3] Docker credentials secret missing\n\n\nChange-Id: I30df3cc11315b757a1d3e3da832681682a970825\nSigned-off-by: Borislav Glozman <Borislav.Glozman@amdocs.com>\n",
+  "change_log": {
+    "entry_count": 14,
+    "entries": [
+      {
+        "id": "1cba08a2e727d38d057a2b8f73f114195565468a",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-07-24 09:55:34.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d55eff5d33bcb6725be799ccc05d47d9bfdedfaa",
+        "author": {
+          "account_id": 747,
+          "name": "Bharath Thiruveedula",
+          "display_name": null,
+          "email": "bharath.thiruveedula@verizon.com",
+          "username": "bharaththiruveedula"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-07-26 05:13:15.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "4fb863648f72e69d7e54a41badc88d3476f7ab73",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-07-27 15:25:04.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)\n\nBased on OOM-3 the issue is really not being able to DL docker images because credentials aren't there. I believe the image pull policy change and the addition of prepare-image.sh are fine, but not in the scope of this BUG. Hence I'd rather have those two changes track by two others Jira, with the fix in seperated patches.\nThanks for the contribution.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f52c99074943bb3cf3140355966ffe0066918c63",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-07-27 17:14:28.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(5 comments)\n\nCan you explain why you opted to use the imagePullPolicy of IfNotPresent instead of Always?  With IfNotPresent, any updates to images in the registry will not be automatically deployed when the pods restart.  It adds an extra layer of management for someone to now ssh to EACH k8s worker node and run the image pull script.  I don't think this is the right way of doing this..the easiest way is to just let kubernetes pull the images that are newer than what is currently deployed and this happens automatically when you set the pullPolicy to Always.  i believe the default policy is also Always.\n\nThe other comment about these changes is that we did not have to use docker secrets to have k8s be able to pull from ONAP's registry.  We simply configured our docker daemons to properly use insecure-registries and went from there.  There were no issues pulling images etc when the k8s environment is setup to handle that.  Did you consider that before going ahead with adding additional logic for the docker secrets etc?",
+        "patchset_number": 1
+      },
+      {
+        "id": "1559ac18f55e4d1a381ee9f664113894bf8b66c0",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-07-30 07:44:38.000000000",
+        "message": "Patch Set 1:\n\n> (5 comments)\n > \n > Can you explain why you opted to use the imagePullPolicy of\n > IfNotPresent instead of Always?  With IfNotPresent, any updates to\n > images in the registry will not be automatically deployed when the\n > pods restart.  It adds an extra layer of management for someone to\n > now ssh to EACH k8s worker node and run the image pull script.  I\n > don't think this is the right way of doing this..the easiest way is\n > to just let kubernetes pull the images that are newer than what is\n > currently deployed and this happens automatically when you set the\n > pullPolicy to Always.  i believe the default policy is also Always.\n > \n > The other comment about these changes is that we did not have to\n > use docker secrets to have k8s be able to pull from ONAP's\n > registry.  We simply configured our docker daemons to properly use\n > insecure-registries and went from there.  There were no issues\n > pulling images etc when the k8s environment is setup to handle\n > that.  Did you consider that before going ahead with adding\n > additional logic for the docker secrets etc?\n\nHi Mandeep,\nThank you for your comments! I will try to address them.\nWe changed to use imagePullPolicy because it takes 40-60 minutes in our \nlab to pull all the images (on each node), preventing ONAP successful deployment. \nCurrent ONAP deployment design requires all components to start in less than 10 \nminutes...\nDefault imagePullPolicy is IfNotPresent \naccording to: https://kubernetes.io/docs/concepts/containers/images/ .\nWe added however it in all places as \n1. Declarative - easier for human to read, \n2. In order to be able to change it easily in script to \"Never\" for making sure all\nimages are pulled in advance.\nRegarding pulling latest version of images during pods restart - it may be\ndangerous in a production environment - I would prefer more control, using versioning.\n\nWe are striving to make the onap deployment k8s infrastructure agnostic, \nmeaning it will run not only on Rancher. On Rancher after adding \"Registry\" the secrets \nare indeed not needed. However on our k8s, without Rancher (and I assume \nthat it will be like this for most deployments) secrets are required. Insecure-registries \nare not something I would like to make customers to configure unless it is completely \nnecessary - it is a workaround that has to be done on all k8s dones. \n\nHope my logic is convincing.",
+        "patchset_number": 1
+      },
+      {
+        "id": "37416f001c19407403dcaeca1cc7a29431b347ad",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-07-30 08:24:48.000000000",
+        "message": "Patch Set 2: Published edit on patch set 1.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0a89abe7d696e534e14364d45c83b82d573d4760",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-07-30 11:32:10.000000000",
+        "message": "Patch Set 3: Published edit on patch set 2.",
+        "patchset_number": 3
+      },
+      {
+        "id": "d2ca46fb3dfa0e1afc6144d4d06e2086054e7ac7",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-07-30 14:41:09.000000000",
+        "message": "Patch Set 4: Published edit on patch set 3.",
+        "patchset_number": 4
+      },
+      {
+        "id": "7b6c4a5b8bb34e41c93ec684a20518e0f9c95481",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-03 13:05:45.000000000",
+        "message": "Patch Set 5: Patch Set 4 was rebased",
+        "patchset_number": 5
+      },
+      {
+        "id": "173f7868ab3ed5fee474c66de07d709ec98292a8",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-10 07:39:43.000000000",
+        "message": "Patch Set 5: Code-Review+2",
+        "patchset_number": 5
+      },
+      {
+        "id": "efa526f40b0a583b166e9f715f5d775817c8c966",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-10 07:40:09.000000000",
+        "message": "Patch Set 5: Verified+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "c4c8247863f46585151da93955b38f7bd99b7f82",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-11 18:14:58.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "952243986f5c102da0e37a39c39f827abd2746b5",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-08-13 10:59:18.000000000",
+        "message": "Change has been successfully merged by Yury Novitsky",
+        "patchset_number": 5
+      },
+      {
+        "id": "3bcc532d807e354e2c2be3a3f1783d3789f56a94",
+        "author": {
+          "account_id": 201,
+          "name": "Jerome Doucerain",
+          "display_name": null,
+          "email": "jerome.doucerain@bell.ca",
+          "username": "jdoucerain"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-14 13:11:05.000000000",
+        "message": "Patch Set 5:\n\nI am good with docker secret credentials addition.\nBut reviewing the path for volumes, it is using /dockerdata-nfs which is very environment specific. At some point that would have to be driven by parameters",
+        "patchset_number": 5
+      }
+    ]
+  }
+}

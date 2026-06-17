@@ -1,0 +1,42 @@
+{
+  "id": "appc~master~I4754a4428bcbb92170de63e34fc5c9c5cb34d9e9",
+  "change_id": "I4754a4428bcbb92170de63e34fc5c9c5cb34d9e9",
+  "_number": 28659,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_ace79d3f",
+      "file_path": "appc-config/appc-config-adaptor/provider/src/main/java/org/onap/appc/ccadaptor/SshJcraftWrapper.java",
+      "patchset_number": 3,
+      "line": 747,
+      "message": "So is channel.connect a non-blocking method that will continue connecting after returning? And that's why you created the waitForChannelConnectionAvailability method?",
+      "author": {
+        "account_id": 49,
+        "name": "Patrick Brady",
+        "display_name": null,
+        "email": "patrick.brady@att.com",
+        "username": "pb071"
+      },
+      "updated": "2018-01-19 20:32:48.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_37867a14",
+      "file_path": "appc-config/appc-config-adaptor/provider/src/main/java/org/onap/appc/ccadaptor/SshJcraftWrapper.java",
+      "patchset_number": 3,
+      "line": 747,
+      "message": "Channel implements Runnable, and is working with threads, depending on implementation in some cases connect method is non-blocking, like ChannelSubsytem in this case (runs deamon in a new thread). Normally there shouldn't be any sleep after connect, but for some reason author put it there, so I assume that it's related with connection availability. However there is overloaded method connect available with timeout argument,  and it seems to be cleaner solution, which should fit this case, so I'm moving code to this solution.",
+      "author": {
+        "account_id": 2729,
+        "name": "Tomasz Kaminski",
+        "display_name": null,
+        "email": "tomasz.kaminski@nokia.com",
+        "username": "kamyk"
+      },
+      "updated": "2018-01-22 09:16:48.000000000",
+      "in_reply_to": "5a93c517_ace79d3f",
+      "unresolved": false
+    }
+  ]
+}

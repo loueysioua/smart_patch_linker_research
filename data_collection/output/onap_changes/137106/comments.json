@@ -1,0 +1,195 @@
+{
+  "id": "cps~master~I33637138457a0c5d49b80dd4967057bd5bfa69d4",
+  "change_id": "I33637138457a0c5d49b80dd4967057bd5bfa69d4",
+  "_number": 137106,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c41a0c0c_454fa042",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 1,
+      "line": 47,
+      "message": "We need to sanitize the input strings here. For example imagine if the xpath being subscribed to is /mynode[@myparam='myvalue']\nNow IS_ONGOING_CM_SUBSCRIPTION_CPS_PATH_QUERY becomes\n\n    /datastores/.../filters/filter[@xpath='/mynode[@myparam='myvalue']']\n\nThis will lead to a CpsPathException.\n\nInstead we need to replace each single quote ' by doubling them '' so it becomes this:\n\n    /datastores/.../filters/filter[@xpath='/mynode[@myparam=''myvalue'']']\n\nThis will parse as intended. From CPS Path Query documentation:\n\n> Quotations marks and apostrophes can be escaped by doubling them in their respective quotes, for example 'CPS ''Path'' Query' -> CPS 'Path' Query\n\nBasically we need a helper method:\n\n    private static String escapeQuotesByDoublingThem(final String value) {\n        return value.replace(\"'\", \"''\");\n    }",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 10:24:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ad8397a2_5a8d9840",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "Could add a leaf condition here to see if it still works\n\n    /cps/path/child[@param='value']",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 10:24:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "99c803e0_c5497cfa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 1,
+      "line": 47,
+      "message": "Regarding xpath parameter, we may also want to all normalize it:\n\n    CpsPathUtil.getNormalizedXpath(xpath)\n\nBecause the same xpath can be represented multiple ways, e.g. \n\n    /cps/path[@param='value']\n    /cps/path[@param=\"value\"]\n    /cps/path[@param = 'value']\netc.\nWe would see those as different subscriptions unless we normalize. It's a bit of an edge case...",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 10:34:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2da25ab6_83e9f037",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 1,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-02-02 11:12:46.000000000",
+      "in_reply_to": "c41a0c0c_454fa042",
+      "unresolved": false
+    },
+    {
+      "id": "b5e13e94_21739369",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-02-02 11:12:46.000000000",
+      "in_reply_to": "ad8397a2_5a8d9840",
+      "unresolved": false
+    },
+    {
+      "id": "1f5cd6ff_f9ecb680",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "NB: I think we can use cpsDataService.getDataNodes here for a small performance improvement, since we're not using any Cps Path Query -specific features",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 11:48:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ebeb8d64_884302a4",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 2,
+      "line": 51,
+      "message": "Both these check are wrong, and need to use .isEmpty()\n\n1) queryDataNodes will return empty collection for no match, never null\n\n2) DataNode.leaves map is initialized to Collections.emptyMap() by default. This can never be null either. (More generally, whether a subscriber list CAN be empty will depend on our later implementation of removing subscriptions.)",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 11:48:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9b3e4da0_78e9571d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImplSpec.groovy",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "I'm not really happy with this test, I think it needs some redesign.\n\nFor one thing, given a cpsPathQuery:\n\n    /datastores/datastore[@name='ncmp-datastore:passthrough-running']\n     /cm-handles/cm-handle[@id='ch-1']/filters/filter[@xpath='/']\n\nThe query can only return either 0 or 1 nodes exactly, not 2. Also, the xpath param of the mock datanode is ('/cps/path') which does not match the one requested ('/')\n\nIdeally we should have at least two tests:\n\n1) Happy path test. Call:\n\n    objectUnderTest.isOngoingCmSubscription(DatastoreType.PASSTHROUGH_RUNNING, \n                                            'ch-1', '/cps/path')\n\nwith this mock queryDataNodes response:\n\n    [new DataNode(xpath: '/cps/path', leaves: ['subscribers': 'sub-1'])]\n\nassert response == true\n\n2) No matching node:\n\n    objectUnderTest.isOngoingCmSubscription(DatastoreType.PASSTHROUGH_RUNNING, \n                                            'ch-1', '/non-existing/cps/path')\n\nwith mock response:\n\n    []\n\nassert response == false",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 11:48:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "050ce55a_7b416e73",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 15:53:07.000000000",
+      "in_reply_to": "1f5cd6ff_f9ecb680",
+      "unresolved": false
+    },
+    {
+      "id": "facb0be4_0b9c7877",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImpl.java",
+      "patchset_number": 2,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 15:53:07.000000000",
+      "in_reply_to": "ebeb8d64_884302a4",
+      "unresolved": false
+    },
+    {
+      "id": "dee2bc2a_07d8d7cd",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmSubscriptionServiceImplSpec.groovy",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-02-02 15:53:07.000000000",
+      "in_reply_to": "9b3e4da0_78e9571d",
+      "unresolved": false
+    }
+  ]
+}

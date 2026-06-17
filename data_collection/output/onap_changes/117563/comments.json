@@ -1,0 +1,93 @@
+{
+  "id": "oom~master~Icdbc4fd5892c3f350642ffdd924e4c36f0135019",
+  "change_id": "Icdbc4fd5892c3f350642ffdd924e4c36f0135019",
+  "_number": 117563,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bd59f066_ad675ddb",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 112,
+      "message": "shouldn't this be somehow calculated from the flavor itself?\n\nIf it is left as is then when someone changes the \"small\" flavor for his environment or define other flavor \"super small\" then this is not going to work right?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-02-08 12:30:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d1271d1a_fc1a1c9c",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 112,
+      "message": "I thought about that but it's not super simple to say the least.\nWhat I can do is to allow to change also and to explain roughly how to make it work",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-02-08 12:35:35.000000000",
+      "in_reply_to": "bd59f066_ad675ddb",
+      "unresolved": true
+    },
+    {
+      "id": "dfa8631e_a7e1db6a",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "this looks better but how about tight it to the amount of RAM of active flavor rather than to the flavor name itself?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-02-08 13:03:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "75346cb4_d87e139d",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "because we don't need it if RAM > 8G\nand new_heap is roughly tied to cpus.\nto be honest, I think that if someone wants to change the values, he has to read how to do it because it's not easy to automate (in particular because of metrics unit abbrev are different) as we're quite limited with go template language.\n\nSo, we have 3 cases:\n* no limits so MAX_HEAP_SIZE, HEAP_NEW_SIZE won't be set. As we certainly have more than 8gb, it's not an issue\n* \"big\" flavor, MAX_HEAP_SIZE, HEAP_NEW_SIZE won't be set. As we certainly have more than 8gb, it's not an issue\n* \"small\" flavor is used, MAX_HEAP_SIZE, HEAP_NEW_SIZE will be set. As we certainly have less than 8gb, it's not an issue. Even if it's more than 8G, you can set the values accordingly.\n\nIf someone wants to be smart and use \"specific\" values with \"big\" flavor but less than 8Gb, too bad for him (it's the only case where we can have troubles)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-02-08 13:51:28.000000000",
+      "in_reply_to": "dfa8631e_a7e1db6a",
+      "unresolved": true
+    },
+    {
+      "id": "95c1b3d5_dae33746",
+      "file_path": "kubernetes/portal/components/portal-cassandra/templates/deployment.yaml",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "OK fair enough.. We can always improve this in a future if people complain about it",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-02-08 19:37:12.000000000",
+      "in_reply_to": "75346cb4_d87e139d",
+      "unresolved": true
+    }
+  ]
+}

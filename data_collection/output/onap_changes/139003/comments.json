@@ -1,0 +1,947 @@
+{
+  "id": "cps~master~Iabc4b53e9414477cf3d0b2e1e5a03ba8b4995169",
+  "change_id": "Iabc4b53e9414477cf3d0b2e1e5a03ba8b4995169",
+  "_number": 139003,
+  "change_comments": [
+    {
+      "id": "5516d5fd_fb36610a",
+      "patchset_number": 8,
+      "message": "recheck",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2024-09-25 20:36:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ed7358f9_a4cf7f11",
+      "patchset_number": 8,
+      "message": "This is a non-blocking review. (Please ignore if not relevalt to the meetings that I haven't been there.)\n\nNB: I have a NB suggestion to make it easier:\n\nCurrently, the main modules and the packages that have some classes are like this:\n\ncps-ncmp-rest\n\torg.onap.cps.ncmp.rest.controller\n\torg.onap.cps.ncmp.rest.util\n\t\ncps-rest\n\torg.onap.cps.rest.controller\n\torg.onap.cps.rest.exceptions\n\torg.onap.cps.rest.utils\n\ncps-ncmp-service\n\ttoo.many.package\n\t\ncps-service\n\ttoo.many.package\n\t\ncps-ri\n\torg.onap.cps.ri.repository\n\torg.onap.cps.ri\n\torg.onap.cps.ri.models \n\torg.onap.cps.ri.utils\n\t\ncps-path-parser\n\torg.onap.cps.cpspath.parser\n\t\n\t\n1- There is a test case restControllerShouldOnlyDependOnRestController can be renamed into cpsRestControllerArchTest without changing the test (right hand side of equality.)\n\n2- Then, I would write the same test for ncmpRestControllerArchTest. I would still  keep the final variable names as is by adding more like for this: \nNCMP_REST_CONTROLLER_PACKAGE = \"org.onap.cps.ncmp.rest..\";\n\n3- Also, the same test can be added for cps-path-parser since it has only a package that contain classes. (using the same strategy above)\n\n4- Finally, I would add the same test for cps-ri (exactly the same ones above.)\n\nNOTE: I would skip writing any tests for cps-ncmp-service and cps-service modules since there are many package that have cross dependencies (at least for this commit)\n\nNote-2: There may be another way (I haven't check yet) in order not to include third party dependencies in ArchTest. Since, it must be really difficult and complex to find all of them.\n\nHope this make it a bit simplfy Levente.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-09-30 15:41:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e5062805_fb902e91",
+      "patchset_number": 8,
+      "message": "can we meet to discuss this commit and how exactly to implement what we want...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-02 14:20:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cc169812_71acb759",
+      "patchset_number": 15,
+      "message": "recheck",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 15:15:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fa3217b9_17a3c403",
+      "patchset_number": 16,
+      "message": "one last suggestion (but would like feedback form others)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-09 10:35:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4c991c9d_f7041326",
+      "patchset_number": 16,
+      "message": "recheck",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-09 10:49:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9e67c823_d83a1ce9",
+      "patchset_number": 17,
+      "message": "fine by me as per the meeting we had before.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-09 14:29:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "4756766f_6209f89d",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "still ignored?\nMayeb we should just delete it for now",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-09-24 15:57:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bf698b1d_143a9692",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "I am lost, I think we need to dicusss the naming convention for these rules\nI liek what you did belwo having comments in between to explain waht is what..\nthe rull can have a simplere name based on teh module \n\ne.g cpsServiceDependencies",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-09-24 15:57:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7f30f49b_66e79cb5",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 61,
+      "message": "can we remove comments",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-09-24 15:57:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "41624c17_2447d081",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "If the names are too long, it could mean the rules or package structure is wrong, or maybe it's just that CamelCasingIsHardToReadInLongSentences.\n\nWe could use a mixture of snake_case for sentences and CamelCase for classes:\n- CpsPathParser_is_only_used_by_CpsService\n- CpsService_is_only_used_by_CpsRestController_or_NcmpService\n- NcmpService_is_only_used_by_NcmpRestController\n\nWhat do you think?",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-09-24 18:29:17.000000000",
+      "in_reply_to": "bf698b1d_143a9692",
+      "unresolved": true
+    },
+    {
+      "id": "6c761bba_884c5d93",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "org.onap.cps.ri should be covered by other rule, and not here. No packages should use RI directly",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-09-24 18:29:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fa9cfdb8_b37ec91a",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "I think this rule could be more targeted: nothing should depend directly on cps-ri at all\n\ncpsReferenceImplShouldHaveNoDependants\n\n    classes().that().resideInAPackage(\"org.onap.cps.ri..\").should().onlyHaveDependentClassesThat()\n                    .resideInAnyPackage(\"org.onap.cps.ri..\");",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-09-24 18:29:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "80ecb3f7_e3103ca7",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-09-25 11:11:49.000000000",
+      "in_reply_to": "4756766f_6209f89d",
+      "unresolved": false
+    },
+    {
+      "id": "9c4ede8d_36faa216",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-09-25 11:11:49.000000000",
+      "in_reply_to": "7f30f49b_66e79cb5",
+      "unresolved": false
+    },
+    {
+      "id": "a1032f22_527f3f8e",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Hi Daniel!\nPls keep in mind that this patch only supposed to cover the scenarios that we discussed during the meetings. CPS at this stage will contain dependencies that are rule breakers like this one (and the one new test related to the NSCMP REST module).\nWe will dael with these issues after we identify all of them.\nThis rule for example have been here for ages. i just removed the constants from the code.",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-09-25 11:26:16.000000000",
+      "in_reply_to": "6c761bba_884c5d93",
+      "unresolved": true
+    },
+    {
+      "id": "2808a801_fb3832a2",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "good suggestions",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-02 14:20:46.000000000",
+      "in_reply_to": "41624c17_2447d081",
+      "unresolved": true
+    },
+    {
+      "id": "ed0dd4c1_4a10dc50",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "agreed",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-02 14:20:46.000000000",
+      "in_reply_to": "fa9cfdb8_b37ec91a",
+      "unresolved": true
+    },
+    {
+      "id": "9d57e8d7_87236e2c",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 8,
+      "line": 39,
+      "message": "I dont understand this rule. I think we need to discus",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-02 14:20:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "92f94ec0_31518a0b",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "Similar to teh issue above,\ndo we really need these reverse-dependency rules can we not JUST have rules using onlyDependOnClassesThat() instead?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-02 14:20:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3c8df841_e0e68360",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 11,
+      "line": 9,
+      "message": "NB: Add a note that other dependencies wil follow in separate commits",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-03 15:51:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e36031c1_67c38a19",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 48,
+      "message": "we agreed to extract out a common-accepted packages array with just java for now...\nWhat happened with that?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-03 15:51:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "345ad263_dcd388ef",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 50,
+      "message": "below packages are breaking the agreed dependencies and need to be removed from this rule. This wil be handle in a separate user story",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-03 15:51:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "496d7fa9_536a1a1a",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 61,
+      "message": "use same comment as suggested above",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-03 15:51:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "63d5e655_053a9daf",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "a1032f22_527f3f8e",
+      "unresolved": false
+    },
+    {
+      "id": "cd787ee3_6e0cce48",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "ed0dd4c1_4a10dc50",
+      "unresolved": false
+    },
+    {
+      "id": "738bc416_3470b7b0",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 8,
+      "line": 39,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "9d57e8d7_87236e2c",
+      "unresolved": false
+    },
+    {
+      "id": "37a62676_108227ab",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "92f94ec0_31518a0b",
+      "unresolved": false
+    },
+    {
+      "id": "8549d600_4df1d17f",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 50,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "345ad263_dcd388ef",
+      "unresolved": false
+    },
+    {
+      "id": "7ab6f470_93c4983c",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": "496d7fa9_536a1a1a",
+      "unresolved": false
+    },
+    {
+      "id": "74c03dba_3cf0aac5",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 46,
+      "message": "Is CPS API really used by NCMP rest controller? I don't see any references to _org.onap.cps.api_ inside _cps-ncmp-rest_ module. I think Rest packages should depend on corresponding API package:\n- CPS Rest -> CPS API\n- NCMP Rest -> NCMP API",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f2c7e0c8_295d7477",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 58,
+      "message": "Currently, ncmp.api does depend on ncmp.impl, but it really shouldn't. This should be considered a violation IMO",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a5b34c68_572b06a3",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 59,
+      "message": "Is this a current dependency? NCMP *API* should not depend CPS API, rather NCMP impl may depend on CPS. Either way, I don't see any package imports to _org.onap.cps.api_ inside _org.onap.cps.ncmp.api_.\n\n@Toine should we be adding rules for dependencies that don't currently exist?",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-10-08 11:45:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "142206c5_b475958c",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 11,
+      "line": 9,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 12:05:55.000000000",
+      "in_reply_to": "3c8df841_e0e68360",
+      "unresolved": false
+    },
+    {
+      "id": "fb2db9c1_a9e868bc",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 12:05:55.000000000",
+      "in_reply_to": "74c03dba_3cf0aac5",
+      "unresolved": false
+    },
+    {
+      "id": "ea675ce8_c2eb0b7d",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 58,
+      "message": "Ack",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 12:05:55.000000000",
+      "in_reply_to": "f2c7e0c8_295d7477",
+      "unresolved": false
+    },
+    {
+      "id": "189bc540_763ea455",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 12:05:55.000000000",
+      "in_reply_to": "a5b34c68_572b06a3",
+      "unresolved": false
+    },
+    {
+      "id": "48e5e6c8_c8a25887",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 13,
+      "line": 58,
+      "message": "keep in mind that ncmp.api here means the ncmp service module's API package not the REST API. those are implemented in the impl package in the same module.",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 12:12:14.000000000",
+      "in_reply_to": "ea675ce8_c2eb0b7d",
+      "unresolved": false
+    },
+    {
+      "id": "802f749b_47cb021b",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "Ack",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-08 14:29:58.000000000",
+      "in_reply_to": "2808a801_fb3832a2",
+      "unresolved": false
+    },
+    {
+      "id": "839cb25f_fc622071",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 48,
+      "message": "you can use a private static method to combine a constant array of common classes with the listed ones. I PoCed it for you here: https://gerrit.nordix.org/c/onap/cps/+/22307/24..25",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-08 16:09:59.000000000",
+      "in_reply_to": "e36031c1_67c38a19",
+      "unresolved": true
+    },
+    {
+      "id": "1c189b42_c3d8200c",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 15,
+      "line": 70,
+      "message": "NB: remove comment",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-08 16:09:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7fda58e5_1eedd5ce",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 11,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-09 10:18:19.000000000",
+      "in_reply_to": "839cb25f_fc622071",
+      "unresolved": false
+    },
+    {
+      "id": "68ef6f9d_9675bd61",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 15,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-09 10:18:19.000000000",
+      "in_reply_to": "1c189b42_c3d8200c",
+      "unresolved": false
+    },
+    {
+      "id": "96977626_8742a479",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 16,
+      "line": 51,
+      "message": "I am happy enough to move this into common to (so what if somebody wants to try logging in an interface (default) method\nthe main purpose for these rules was to prevent misuse of our own packages not so much the 3pps..\nBut we can discuss at next meeting...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-09 10:35:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "794094a2_cb302746",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 16,
+      "line": 51,
+      "message": "right. static and default methods in interfaces and we can do everything thr.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-09 10:43:24.000000000",
+      "in_reply_to": "96977626_8742a479",
+      "unresolved": true
+    },
+    {
+      "id": "16b3c15c_ef8d7fcd",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 16,
+      "line": 51,
+      "message": "i did not moved it , because the ncmp api for example should not use this in the future.\nI wouldn't be strict with the 3pp array anyways, im sure it will change a lot in the future anyways, depending on what other modules are depending on",
+      "author": {
+        "account_id": 8155,
+        "name": "Levente Csanyi",
+        "display_name": null,
+        "email": "levente.csanyi@est.tech",
+        "username": "leventecsanyi"
+      },
+      "updated": "2024-10-09 10:49:31.000000000",
+      "in_reply_to": "794094a2_cb302746",
+      "unresolved": true
+    },
+    {
+      "id": "1ee49fb7_d88082aa",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 93,
+      "message": "NB: accepted",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-09 14:16:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6c72eac0_eb5b4f82",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 32,
+      "message": "NB:  /**\n * Verifies the proper use of dependencies across all CPS modules.\n * This ensures a clean architectural separation and prevents circular dependencies between components.\n */",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 14:56:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b432c254_c9ea2828",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 35,
+      "message": "// Constants for package names to improve maintainability and readability\n    private static final String NCMP_REST_PACKAGE = \"org.onap.cps.ncmp.rest..\";\n    private static final String NCMP_API_PACKAGE = \"org.onap.cps.ncmp.api..\";\n    private static final String NCMP_IMPL_PACKAGE = \"org.onap.cps.ncmp.impl..\";\n    private static final String CPS_SPI_PACKAGE = \"org.onap.cps.spi..\";\n    private static final String CPS_UTILS_PACKAGE = \"org.onap.cps.utils..\";",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 14:56:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c425a19_53f9dc0e",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 55,
+      "message": "NB: cpsNcmpRestShouldNotBeDependedUpon",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 14:56:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e64364e0_ca444e5f",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 35,
+      "message": "we agreed before NOT to use constants!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-09 15:01:06.000000000",
+      "in_reply_to": "b432c254_c9ea2828",
+      "unresolved": true
+    },
+    {
+      "id": "d4afdc3c_b719ee4a",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 55,
+      "message": "i prefer the current name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-10-09 15:01:06.000000000",
+      "in_reply_to": "7c425a19_53f9dc0e",
+      "unresolved": true
+    },
+    {
+      "id": "e65851cf_7d01f4b0",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 35,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 15:06:22.000000000",
+      "in_reply_to": "e64364e0_ca444e5f",
+      "unresolved": false
+    },
+    {
+      "id": "b2dec1a9_040f447f",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 55,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 15:06:22.000000000",
+      "in_reply_to": "d4afdc3c_b719ee4a",
+      "unresolved": false
+    },
+    {
+      "id": "310dbda7_bf1091e9",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/LayeredArchitectureTest.java",
+      "patchset_number": 16,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 15:14:04.000000000",
+      "in_reply_to": "16b3c15c_ef8d7fcd",
+      "unresolved": false
+    },
+    {
+      "id": "fa9c0aa0_73964588",
+      "file_path": "cps-application/src/test/java/org/onap/cps/architecture/NcmpArchitectureTest.java",
+      "patchset_number": 17,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-09 15:14:04.000000000",
+      "in_reply_to": "6c72eac0_eb5b4f82",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,552 @@
+{
+  "id": "policy%2Fdocker~master~Ibd1898819a5cb70f25bf69d71f2975dd2845389e",
+  "change_id": "Ibd1898819a5cb70f25bf69d71f2975dd2845389e",
+  "_number": 122697,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2021-07-19 11:54:24.000000000",
+    "updated": "2021-07-21 11:28:29.000000000",
+    "submitted": "2021-07-21 11:21:02.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7668,
+      "name": "Kevin Timoney",
+      "display_name": null,
+      "email": "kevin.timoney@est.tech",
+      "username": "ktimoney"
+    },
+    "submitter": {
+      "account_id": 4903,
+      "name": "Ajith Sreekumar",
+      "display_name": "Ajith Sreekumar",
+      "email": "ajith.sreekumar@bell.ca",
+      "username": "a.sreekumar"
+    }
+  },
+  "subject": "Update db-migrator to include rollback functionality",
+  "commit_message": "Update db-migrator to include rollback functionality\n\nIssue-ID: POLICY-3490\nChange-Id: Ibd1898819a5cb70f25bf69d71f2975dd2845389e\nSigned-off-by: ktimoney <kevin.timoney@est.tech>\n",
+  "change_log": {
+    "entry_count": 37,
+    "entries": [
+      {
+        "id": "0243df41316583eda5c3ba4ca8202f38ed822bb7",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-19 11:54:24.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "4d5bffed999cae82e21a2069292a2f1439f79107",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 11:56:32.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/260/",
+        "patchset_number": 1
+      },
+      {
+        "id": "8ea8e9c1ae7eca933b10b9529e99958bb51aa1f5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 11:58:54.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/260/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/260",
+        "patchset_number": 1
+      },
+      {
+        "id": "97ba5df527fcc25fa6eb519e3cbc06ff53f1e607",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 13:19:26.000000000",
+        "message": "Patch Set 1:\n\nif an upgrade fails in the middle, how does this rollback start from the last successful script?  And how does it invoke the rollback/downgrade scripts in the reverse order?  (Similar question for downgrading.)",
+        "patchset_number": 1
+      },
+      {
+        "id": "9064acd1c8b45f208ad3030bc3c87d9514371bc3",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 13:31:56.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> if an upgrade fails in the middle, how does this rollback start from the last successful script?  And how does it invoke the rollback/downgrade scripts in the reverse order?  (Similar question for downgrading.)\n\nThe upgrade function includes this block of code:\n                if [ ${rc} -ne 0 ]; then\n                    echo \"${SCHEMA}: upgrade aborted at ${schemaVersion} by script ${sqlName}\"\n                    set_current_release \"${schemaVersion}\"\n                    rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n                    return ${rc}\n                fi\nso if a script fails in the middle of an upgrade the rollback is triggered:\nrollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n\nthis calls the rollback function which retrieves the list of scripts that were run successfully during the upgrade.\nThe history tables has a couple of new columns, id and tag.\nid is a sequence number and tag groups upgrade/downgrade operations together.\ntags are made up from date/time + version + single letter operation code (u/d/r)\nThe records (script names) are retrieved using the tag and are returned in reverse id order.\nThe names of the upgrade and rollback (downgrade scripts) are the same so it just runs the rollback versions. There is no rollback for downgrade at the moment.",
+        "patchset_number": 1
+      },
+      {
+        "id": "896469c65d9052fefa43fe8475134ac2f4dbdd7f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 13:50:56.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > if an upgrade fails in the middle, how does this rollback start from the last successful script?  And how does it invoke the rollback/downgrade scripts in the reverse order?  (Similar question for downgrading.)\n> \n> The upgrade function includes this block of code:\n>                 if [ ${rc} -ne 0 ]; then\n>                     echo \"${SCHEMA}: upgrade aborted at ${schemaVersion} by script ${sqlName}\"\n>                     set_current_release \"${schemaVersion}\"\n>                     rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n>                     return ${rc}\n>                 fi\n> so if a script fails in the middle of an upgrade the rollback is triggered:\n> rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n> \n> this calls the rollback function which retrieves the list of scripts that were run successfully during the upgrade.\n> The history tables has a couple of new columns, id and tag.\n> id is a sequence number and tag groups upgrade/downgrade operations together.\n> tags are made up from date/time + version + single letter operation code (u/d/r)\n> The records (script names) are retrieved using the tag and are returned in reverse id order.\n> The names of the upgrade and rollback (downgrade scripts) are the same so it just runs the rollback versions. There is no rollback for downgrade at the moment.\n\nso if there are 100 upgrade scripts and it fails at script 50, it will begin rolling back by executing downgrade script 49, 48, etc.?  I didn't notice that the script name was being stored, so wasn't sure how it knew which one to execute.  Guess I should look more closely - maybe it just stores the script's sequence number (as the \"id\").",
+        "patchset_number": 1
+      },
+      {
+        "id": "e6d300f5cb249676de56b9547f2c21b0eb1407dc",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 14:00:53.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1:\n> > > \n> > > if an upgrade fails in the middle, how does this rollback start from the last successful script?  And how does it invoke the rollback/downgrade scripts in the reverse order?  (Similar question for downgrading.)\n> > \n> > The upgrade function includes this block of code:\n> >                 if [ ${rc} -ne 0 ]; then\n> >                     echo \"${SCHEMA}: upgrade aborted at ${schemaVersion} by script ${sqlName}\"\n> >                     set_current_release \"${schemaVersion}\"\n> >                     rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n> >                     return ${rc}\n> >                 fi\n> > so if a script fails in the middle of an upgrade the rollback is triggered:\n> > rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n> > \n> > this calls the rollback function which retrieves the list of scripts that were run successfully during the upgrade.\n> > The history tables has a couple of new columns, id and tag.\n> > id is a sequence number and tag groups upgrade/downgrade operations together.\n> > tags are made up from date/time + version + single letter operation code (u/d/r)\n> > The records (script names) are retrieved using the tag and are returned in reverse id order.\n> > The names of the upgrade and rollback (downgrade scripts) are the same so it just runs the rollback versions. There is no rollback for downgrade at the moment.\n> \n> so if there are 100 upgrade scripts and it fails at script 50, it will begin rolling back by executing downgrade script 49, 48, etc.?  I didn't notice that the script name was being stored, so wasn't sure how it knew which one to execute.  Guess I should look more closely - maybe it just stores the script's sequence number (as the \"id\").\n\nYes, that's right. If you look at the end of the sample output on the WIKI https://wiki.onap.org/display/DW/Instructions+for+running+db-migrator you'll get a better idea of what's going on.\nThe id is a separate sequence number to track all operations and in what order they occurred.\nThe name of the script is stored in the script field e.g. 0100-jpapolicyaudit.sql.\nTags take the format of 1907210941060900u - these are unique to each operation/version (0900u).\nSo when you hit an operation that's not successful all you need to do is query for the tag and order by id desc. An error in a 0900 version upgrade will only rollback 0900 version files, 0800 will be left alone.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8d899cb4da2c1f80e068478de0f7881d11c8dc86",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 14:09:44.000000000",
+        "message": "Patch Set 1:\n\n> Yes, that's right. If you look at the end of the sample output on the WIKI https://wiki.onap.org/display/DW/Instructions+for+running+db-migrator you'll get a better idea of what's going on.\n> The id is a separate sequence number to track all operations and in what order they occurred.\n> The name of the script is stored in the script field e.g. 0100-jpapolicyaudit.sql.\n> Tags take the format of 1907210941060900u - these are unique to each operation/version (0900u).\n> So when you hit an operation that's not successful all you need to do is query for the tag and order by id desc. An error in a 0900 version upgrade will only rollback 0900 version files, 0800 will be left alone.\n\nCool, thanks!  So if there are three upgrade/downgrades (or upgrade/rollbacks), then the next time it downgrades (or rolls back), it will only do the downgrade associated with the last upgrade (i.e., the records from the previous runs will not interfere with the latest attempt)?",
+        "patchset_number": 1
+      },
+      {
+        "id": "8503a898941d0c29eebfa8540c250b6f0307c267",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 14:16:45.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Yes, that's right. If you look at the end of the sample output on the WIKI https://wiki.onap.org/display/DW/Instructions+for+running+db-migrator you'll get a better idea of what's going on.\n> > The id is a separate sequence number to track all operations and in what order they occurred.\n> > The name of the script is stored in the script field e.g. 0100-jpapolicyaudit.sql.\n> > Tags take the format of 1907210941060900u - these are unique to each operation/version (0900u).\n> > So when you hit an operation that's not successful all you need to do is query for the tag and order by id desc. An error in a 0900 version upgrade will only rollback 0900 version files, 0800 will be left alone.\n> \n> Cool, thanks!  So if there are three upgrade/downgrades (or upgrade/rollbacks), then the next time it downgrades (or rolls back), it will only do the downgrade associated with the last upgrade (i.e., the records from the previous runs will not interfere with the latest attempt)?\n\nYes that's correct. That's the reason I included the tag field so we are careful to only rollback exactly what we want. There may be multiple upgrades and downgrades to a particular schema and we want to track them all but also be able to differentiate between them.",
+        "patchset_number": 1
+      },
+      {
+        "id": "35426ae77d03c28253bb0d77c3b5d5de83921ba8",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 14:22:06.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > if an upgrade fails in the middle, how does this rollback start from the last successful script?  And how does it invoke the rollback/downgrade scripts in the reverse order?  (Similar question for downgrading.)\n> \n> The upgrade function includes this block of code:\n>                 if [ ${rc} -ne 0 ]; then\n>                     echo \"${SCHEMA}: upgrade aborted at ${schemaVersion} by script ${sqlName}\"\n>                     set_current_release \"${schemaVersion}\"\n>                     rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n>                     return ${rc}\n>                 fi\n> so if a script fails in the middle of an upgrade the rollback is triggered:\n> rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\"\n> \n> this calls the rollback function which retrieves the list of scripts that were run successfully during the upgrade.\n> The history tables has a couple of new columns, id and tag.\n> id is a sequence number and tag groups upgrade/downgrade operations together.\n> tags are made up from date/time + version + single letter operation code (u/d/r)\n> The records (script names) are retrieved using the tag and are returned in reverse id order.\n> The names of the upgrade and rollback (downgrade scripts) are the same so it just runs the rollback versions. There is no rollback for downgrade at the moment.\n\nI don't think rollback should silently fallback to an earlier version (which will most likely won't play nicely if succeeds with the rest of the components being upgraded, it should be all or nothing for all components, ie. api, etc ..).  If the upgrade fails typically it will require manual intervention as there could be db corruption or other unanticipated problem, in any case, I think the operations folks should know.  I thought the tool already has options to do these operations manually.  In any case, I suggest to not deal with automated rollback at this point in time, and do it when the framework for migrating data is proven solid, but we should have mechanisms in the tool to give ops people the means to fix it (I thought there were already options to do it) and we could revisit rollback automation at a future point.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6cde33f0c04695481c872837af1e196ea439dfd6",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 14:26:33.000000000",
+        "message": "Patch Set 1:\n\n> I don't think rollback should silently fallback to an earlier version (which will most likely won't play nicely if succeeds with the rest of the components being upgraded, it should be all or nothing for all components, ie. api, etc ..).  If the upgrade fails typically it will require manual intervention as there could be db corruption or other unanticipated problem, in any case, I think the operations folks should know.  I thought the tool already has options to do these operations manually.  In any case, I suggest to not deal with automated rollback at this point in time, and do it when the framework for migrating data is proven solid, but we should have mechanisms in the tool to give ops people the means to fix it (I thought there were already options to do it) and we could revisit rollback automation at a future point.\n\nI don't think we were planning to roll back automatically.  However, the idea was to record exactly where it failed, so the downgrade scripts could be executed to perform a rollback from where it broke, or the user could intervene to fix something manually and then continue the upgrade from where it left off.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d6dc44a4a080448315773754a461822469bb55da",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 14:28:25.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > I don't think rollback should silently fallback to an earlier version (which will most likely won't play nicely if succeeds with the rest of the components being upgraded, it should be all or nothing for all components, ie. api, etc ..).  If the upgrade fails typically it will require manual intervention as there could be db corruption or other unanticipated problem, in any case, I think the operations folks should know.  I thought the tool already has options to do these operations manually.  In any case, I suggest to not deal with automated rollback at this point in time, and do it when the framework for migrating data is proven solid, but we should have mechanisms in the tool to give ops people the means to fix it (I thought there were already options to do it) and we could revisit rollback automation at a future point.\n> \n> I don't think we were planning to roll back automatically.  However, the idea was to record exactly where it failed, so the downgrade scripts could be executed to perform a rollback from where it broke, or the user could intervene to fix something manually and then continue the upgrade from where it left off.\n\nWe can remove this line: rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\" to disable the automatic rollback.",
+        "patchset_number": 1
+      },
+      {
+        "id": "37f101f67c366d93a89d597b9149469cdb503233",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 14:34:02.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > I don't think rollback should silently fallback to an earlier version (which will most likely won't play nicely if succeeds with the rest of the components being upgraded, it should be all or nothing for all components, ie. api, etc ..).  If the upgrade fails typically it will require manual intervention as there could be db corruption or other unanticipated problem, in any case, I think the operations folks should know.  I thought the tool already has options to do these operations manually.  In any case, I suggest to not deal with automated rollback at this point in time, and do it when the framework for migrating data is proven solid, but we should have mechanisms in the tool to give ops people the means to fix it (I thought there were already options to do it) and we could revisit rollback automation at a future point.\n> > \n> > I don't think we were planning to roll back automatically.  However, the idea was to record exactly where it failed, so the downgrade scripts could be executed to perform a rollback from where it broke, or the user could intervene to fix something manually and then continue the upgrade from where it left off.\n> \n> We can remove this line: rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\" to disable the automatic rollback.\n\nyep, that would be good with me to disable it by default .. if we run into problems, the info will come out in the \"report\" options, is that correct? and if you can refresh my memory, there are command options to downgrade and upgrade as the ops folks choose to do, is that right?",
+        "patchset_number": 1
+      },
+      {
+        "id": "752e91687a5e9e73482812fe682c725ef0590afa",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 14:40:43.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1:\n> > > \n> > > > I don't think rollback should silently fallback to an earlier version (which will most likely won't play nicely if succeeds with the rest of the components being upgraded, it should be all or nothing for all components, ie. api, etc ..).  If the upgrade fails typically it will require manual intervention as there could be db corruption or other unanticipated problem, in any case, I think the operations folks should know.  I thought the tool already has options to do these operations manually.  In any case, I suggest to not deal with automated rollback at this point in time, and do it when the framework for migrating data is proven solid, but we should have mechanisms in the tool to give ops people the means to fix it (I thought there were already options to do it) and we could revisit rollback automation at a future point.\n> > > \n> > > I don't think we were planning to roll back automatically.  However, the idea was to record exactly where it failed, so the downgrade scripts could be executed to perform a rollback from where it broke, or the user could intervene to fix something manually and then continue the upgrade from where it left off.\n> > \n> > We can remove this line: rollback \"${PREVIOUS_RELEASE}\" \"${schemaVersion}\" \"${tag}\" to disable the automatic rollback.\n> \n> yep, that would be good with me to disable it by default .. if we run into problems, the info will come out in the \"report\" options, is that correct? and if you can refresh my memory, there are command options to downgrade and upgrade as the ops folks choose to do, is that right?\n\nYes the report will show the success field as 0 (second last one) if a script fails.\n| 103 | 0100-jpapolicyaudit.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n| 104 | 0110-sequence.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n| 105 | 0120-JpaPolicyAuditIndex_timestamp.sql | upgrade | 0800 | 0900 | 1907211410140900u | 0 | 2021-07-19 14:10:14 |\nIn this case 0120-JpaPolicyAuditIndex_timestamp.sql has failed.\nrollback is slightly different to downgrade, rollback may not include all the downgrade scripts.\nTrying to downgrade an incomplete upgrade will also fail.\nBut if you are doing it manually you can remove any scripts from the downgrade directory that are not required.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6841a666b6507e8664fbe58d5c07f7284a84412d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 14:46:59.000000000",
+        "message": "Patch Set 1:\n\n> Yes the report will show the success field as 0 (second last one) if a script fails.\n> | 103 | 0100-jpapolicyaudit.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n> | 104 | 0110-sequence.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n> | 105 | 0120-JpaPolicyAuditIndex_timestamp.sql | upgrade | 0800 | 0900 | 1907211410140900u | 0 | 2021-07-19 14:10:14 |\n> In this case 0120-JpaPolicyAuditIndex_timestamp.sql has failed.\n> rollback is slightly different to downgrade, rollback may not include all the downgrade scripts.\n> Trying to downgrade an incomplete upgrade will also fail.\n> But if you are doing it manually you can remove any scripts from the downgrade directory that are not required.\n\nNot sure why rollback and downgrade should be any different: just look at what's in the DB and start executing in reverse order until you reach the required version.  One caveat is that the most recently executed script should be skipped or downgraded, depending on whether or not its flag indicated failure or success, respectively",
+        "patchset_number": 1
+      },
+      {
+        "id": "4f9c7fe7030ae8b248fb672179fc35fd1d6fbaa3",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-19 16:12:42.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a5e17191e9b58f607b9674c2fb98066903167891",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 16:15:44.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/261/",
+        "patchset_number": 2
+      },
+      {
+        "id": "428a122b16dcfb41f026c68b5990eb442afc6ee7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 16:18:07.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/261/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/261",
+        "patchset_number": 2
+      },
+      {
+        "id": "2357d7a815b38671eadf28477da5512bb80e43d2",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-19 16:21:05.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 1:\n> \n> > Yes the report will show the success field as 0 (second last one) if a script fails.\n> > | 103 | 0100-jpapolicyaudit.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n> > | 104 | 0110-sequence.sql | upgrade | 0800 | 0900 | 1907211410140900u | 1 | 2021-07-19 14:10:14 |\n> > | 105 | 0120-JpaPolicyAuditIndex_timestamp.sql | upgrade | 0800 | 0900 | 1907211410140900u | 0 | 2021-07-19 14:10:14 |\n> > In this case 0120-JpaPolicyAuditIndex_timestamp.sql has failed.\n> > rollback is slightly different to downgrade, rollback may not include all the downgrade scripts.\n> > Trying to downgrade an incomplete upgrade will also fail.\n> > But if you are doing it manually you can remove any scripts from the downgrade directory that are not required.\n> \n> Not sure why rollback and downgrade should be any different: just look at what's in the DB and start executing in reverse order until you reach the required version.  One caveat is that the most recently executed script should be skipped or downgraded, depending on whether or not its flag indicated failure or success, respectively\n\nI have removed the rollback code for now.\nWe can add it in again later if we think we need it.\nIt can be done manually instead.",
+        "patchset_number": 2
+      },
+      {
+        "id": "e1201978c8b3da97c101781d02f2061f1ade39e4",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 21:30:32.000000000",
+        "message": "Patch Set 2:\n\n(3 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "4d7206c0b7cad9a155171ab5208f9149477589c0",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-20 07:49:14.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "c867acd8c9686c4b22573fb44bbf356cf1728a3e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 07:51:19.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/265/",
+        "patchset_number": 3
+      },
+      {
+        "id": "f620328c7ed7db41ac689dada495c70b8314467b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 07:53:15.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/265/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/265",
+        "patchset_number": 3
+      },
+      {
+        "id": "41d2ba2fb480901113d95ee6b10dcb126b0741a7",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-20 08:00:20.000000000",
+        "message": "Patch Set 3:\n\n(3 comments)\n\nNew patch uploaded",
+        "patchset_number": 3
+      },
+      {
+        "id": "5db1d5f6991f41c66a9f7179e84b41fdc9a4b135",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 13:32:45.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "caeabd8b3712dcbeee478fd9e819d8961da8fb1b",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 14:27:22.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "65eb37f73f9e3fb67de8e215174e200d5a8f80a5",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 14:28:07.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "32cda58f9320f742f6fe83f43e1517e0f5c77b1d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 14:33:17.000000000",
+        "message": "Patch Set 3:\n\n(4 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "dae91b6ebc09594ee224c0daca160759064b0531",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-20 14:48:27.000000000",
+        "message": "Patch Set 3:\n\n(4 comments)\n\nReplied to comments.",
+        "patchset_number": 3
+      },
+      {
+        "id": "3af670c6428391b54ba2b789f4caf783121b0829",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 15:14:11.000000000",
+        "message": "Patch Set 3:\n\n(3 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "487c98e2b54982c832b293786088a43b986bcadf",
+        "author": {
+          "account_id": 7668,
+          "name": "Kevin Timoney",
+          "display_name": null,
+          "email": "kevin.timoney@est.tech",
+          "username": "ktimoney"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-20 15:24:21.000000000",
+        "message": "Patch Set 3:\n\n(4 comments)\n\nReplied to comments",
+        "patchset_number": 3
+      },
+      {
+        "id": "7a4dc5adfebb4e812df70f3a0d7f9938b810a98f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 18:24:25.000000000",
+        "message": "Patch Set 3: Code-Review+2\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "0bb5b1e927ca236f3dae0080aa7674d9a9127b43",
+        "author": {
+          "account_id": 3239,
+          "name": "Ram Krishna Verma",
+          "display_name": null,
+          "email": "ramkrishna.verma@gmail.com",
+          "username": "ramverma"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 20:12:29.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "e31663a0cfd80f9cb765edcf9417cb3aba2dc559",
+        "author": {
+          "account_id": 4903,
+          "name": "Ajith Sreekumar",
+          "display_name": "Ajith Sreekumar",
+          "email": "ajith.sreekumar@bell.ca",
+          "username": "a.sreekumar"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 11:20:39.000000000",
+        "message": "Patch Set 3: Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "e4f9f0bd8f59b2b06666fe1e31f079f2fb04eff3",
+        "author": {
+          "account_id": 4903,
+          "name": "Ajith Sreekumar",
+          "display_name": "Ajith Sreekumar",
+          "email": "ajith.sreekumar@bell.ca",
+          "username": "a.sreekumar"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 11:20:59.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "d877d9f36e40509a8bf0683532ef17a697a2e07e",
+        "author": {
+          "account_id": 4903,
+          "name": "Ajith Sreekumar",
+          "display_name": "Ajith Sreekumar",
+          "email": "ajith.sreekumar@bell.ca",
+          "username": "a.sreekumar"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-21 11:21:02.000000000",
+        "message": "Change has been successfully merged by Ajith Sreekumar",
+        "patchset_number": 3
+      },
+      {
+        "id": "25bdac6460f50d7096b89207a850c2991169b443",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 11:28:29.000000000",
+        "message": "Patch Set 3:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-merge-java/71/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-merge-java/71",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

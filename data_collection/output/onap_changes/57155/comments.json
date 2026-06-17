@@ -1,0 +1,25 @@
+{
+  "id": "policy%2Fdrools-applications~master~Ia9d2ac704e6b7c434e5a9e7aee6d7dcf9198e4f2",
+  "change_id": "Ia9d2ac704e6b7c434e5a9e7aee6d7dcf9198e4f2",
+  "_number": 57155,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "da7095c5_84e8b57d",
+      "file_path": "controlloop/common/actors/actor.appc/src/test/java/org/onap/policy/controlloop/actor/appc/AppcServiceProviderTest.java",
+      "patchset_number": 2,
+      "line": 120,
+      "message": "Oh I didn't realize that the \"singletons\" defined in the interface in policy-common/HttpServletServer interfaces hiding the types of factories underneath went away.   I guess the code move went a bit bit beyond what I expected. \n\nI would have expected only package changes and not actual lines of code changes, so only the imports, so they don't trickle all the way to all users.\n\nThe idea of having it work as before\n\nHttpServletServer.factory.destroy();\n\nbesides in my opinion being more cosmetic, it allows you to swap factory implementation in one simple point without users knowing about it .. so if you have another  implementation that builds objects and stores in database for some other purpose, you just create another class and swap it in the interface, and don't change all the underlying uses of it, now you'll have to change it.   I guess I have an issue with all these \"Indexed\" names proliferating in user code ..\n\nI would prefer for example to have kept the static final factory class member.\n\nI also envisioned that while the  HttpServletServer.factory guarantees the singleton behavior, somebody that don't want the singleton behavior, could use the \"new IndexedHttpServletFactory(..)\" that will become handy for junits, etc ..   I think now it is forced to treat always be used as a singleton.\n\nI guess this is a general comment.  \n\nLet me know your thoughts ..",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-07-27 20:49:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

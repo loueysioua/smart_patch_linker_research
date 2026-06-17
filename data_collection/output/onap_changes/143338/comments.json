@@ -1,0 +1,76 @@
+{
+  "id": "ci-management~master~Ia8180a5a1fedf54508da6c5ae2f717f89c876d66",
+  "change_id": "Ia8180a5a1fedf54508da6c5ae2f717f89c876d66",
+  "_number": 143338,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "39cacfa6_103a246e",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Was it not possible to do something like was done for node 19? Running curl scripts this way is not really considered best practice",
+      "author": {
+        "account_id": 1,
+        "name": "Andrew Grimberg",
+        "display_name": null,
+        "email": "agrimberg@linuxfoundation.org",
+        "username": "agrimberg"
+      },
+      "updated": "2026-02-20 20:29:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3ba9aced_4f5d8cf8",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Sadly the old way to setup the installation repo is not working, I tried a similar approach for node 20 and it get following error:\n\n---\nThe repository 'https://deb.nodesource.com/node_20.x jammy Release' does not have a Release file., W:Updating from such a repository can't be done securely, and is therefore disabled by default., W:See apt-secure(8) manpage for repository creation and user configuration details., W:Skipping acquire of configured file 'main/source/Sources' as repository 'https://deb.nodesource.com/node_22.x nodistro InRelease' does not seem to provide it (sources.list entry misspelt?), W:https://ppa.launchpadcontent.net/openjdk-r/ppa/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details\n---\n\nAlternatively I solved the DEPRECATION note above but still got a similar error:\n\n---\n==> openstack.docker: 188         - name: Add nodejs repository with signed-by\n==> openstack.docker: Failed to update apt cache after 5 retries: E:The repository 'https://deb.nodesource.com/node_20.x jammy Release' does not have a Release file., W:Updating from such a repository can't be done securely, and is therefore disabled by default., W:See apt-secure(8) manpage for repository creation and user configuration details., W:Skipping acquire of configured file 'main/source/Sources' as repository 'https://deb.nodesource.com/node_22.x nodistro InRelease' does not seem to provide it (sources.list entry misspelt?), W:https://ppa.launchpadcontent.net/openjdk-r/ppa/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.\n==> openstack.docker: 189           ansible.builtin.apt_repository:\n==> openstack.docker: 190             repo: \"deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_20.x {{ ansib...\n==> openstack.docker:\n==> openstack.docker:                       ^ column 19\n---\n\nI'm afraid my first approach is the only option that works so far, I will try to find another way without using curl.",
+      "author": {
+        "account_id": 7833,
+        "name": "Kevin Sandi",
+        "display_name": null,
+        "email": "ksandi@contractor.linuxfoundation.org",
+        "username": "kevin.sandi"
+      },
+      "updated": "2026-02-21 03:03:15.000000000",
+      "in_reply_to": "39cacfa6_103a246e",
+      "unresolved": true
+    },
+    {
+      "id": "c84e2c2d_c80f644c",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Hi @agrimberg@linuxfoundation.org\nI found another way to fix this, please review my latest patchset.",
+      "author": {
+        "account_id": 7833,
+        "name": "Kevin Sandi",
+        "display_name": null,
+        "email": "ksandi@contractor.linuxfoundation.org",
+        "username": "kevin.sandi"
+      },
+      "updated": "2026-02-24 08:17:48.000000000",
+      "in_reply_to": "3ba9aced_4f5d8cf8",
+      "unresolved": true
+    },
+    {
+      "id": "55145777_f4cddedf",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Ack",
+      "author": {
+        "account_id": 1,
+        "name": "Andrew Grimberg",
+        "display_name": null,
+        "email": "agrimberg@linuxfoundation.org",
+        "username": "agrimberg"
+      },
+      "updated": "2026-02-24 20:45:45.000000000",
+      "in_reply_to": "c84e2c2d_c80f644c",
+      "unresolved": false
+    }
+  ]
+}

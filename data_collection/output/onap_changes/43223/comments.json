@@ -1,0 +1,59 @@
+{
+  "id": "oom~master~I4ac01cabaaed0796659c22a545cc8be19138c6d1",
+  "change_id": "I4ac01cabaaed0796659c22a545cc8be19138c6d1",
+  "_number": 43223,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_c7a4ffa7",
+      "file_path": "kubernetes/policy/charts/mariadb/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Why it has to be in liveness probe condition? Is it an env var?",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2018-04-17 03:07:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a7a773a6",
+      "file_path": "kubernetes/policy/charts/mariadb/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "it is passed as an argument to the mariadb docker \"COMMAND\" entry (similar to the entrypoint) to start the mysqld server.   So for example you should see the mariadb server running with that option (see below):\n\nroot@k8s:/dockerdata-nfs/oom# kubectl exec -it jhh-policydb-c98fdbcb9-mb6wk --container policydb -n oom bash\nroot@jhh-policydb-c98fdbcb9-mb6wk:/# ps -ef\nUID        PID  PPID  C STIME TTY          TIME CMD\nmysql        1     0  0 Apr16 ?        00:00:30 mysqld --lower-case-table-names=1\nroot       252     0  0 03:22 ?        00:00:00 bash\nroot       258   252  0 03:22 ?        00:00:00 ps -ef",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-17 03:23:21.000000000",
+      "in_reply_to": "5a93c517_c7a4ffa7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c7f95f81",
+      "file_path": "kubernetes/policy/charts/mariadb/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "But it should not be added inside the liveness if condition.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2018-04-17 03:57:29.000000000",
+      "in_reply_to": "5a93c517_a7a773a6",
+      "unresolved": false
+    }
+  ]
+}

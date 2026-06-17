@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fcommon~master~I4103f0f4c65620c47b4acf2d276f104937b91187",
+  "change_id": "I4103f0f4c65620c47b4acf2d276f104937b91187",
+  "_number": 77604,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "90eecab6_0d5c4a50",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Not sure about this one, in the unlikely case that stop() synchronized block fits right between 180 before 182, before the scheduler retuns to this thread to continue online 182, I think it is ok to return false, as there would be no consumer underneath (closed in stop), the operation failed if you will.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-02-05 19:03:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "74f53447_ef86c221",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "I would disagree here as the result says only if we managed to start the thread not if it's running at the time that we return from this function.\n\nThere is no way to assign the later definition as any code that would try to use it without taking this synchronized block would have a race condition by design.\n\nI would even say that because we are throwing exceptions whenever anything goes wrong in this function the return value is redundant but I didn't wanted to change the API here as I wasn't sure about that",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-02-05 19:18:01.000000000",
+      "in_reply_to": "90eecab6_0d5c4a50",
+      "unresolved": false
+    },
+    {
+      "id": "c181e5ad_18b358b5",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Yes, there is no much point in the return value in the method signature, but that would be a discussion independent of this one, as it's using a generic interface.\n\nNevertheless, the focus here is the scenario described in the review description.  At the point of method return, success is returned, but in reality there is no consumer object underneath, and that's very iffy to claim that it's correct, just focusing on thread creation aspect (which is pretty trivial unless jvm or os memory issues).\n\nSimpler solution is to move the \"return result\" within the synchronized block, that would be best.    Actually, you don't need a local variable.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-02-05 20:22:47.000000000",
+      "in_reply_to": "74f53447_ef86c221",
+      "unresolved": false
+    },
+    {
+      "id": "44e7c1cf_c7790118",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Yeah good point. I'll replace that.\n\nMy biggest concern is that using this.alive may make this function randomly return false and if someone use this value as error indicator then it may be very hard to debug what went wrong.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-02-05 20:32:54.000000000",
+      "in_reply_to": "c181e5ad_18b358b5",
+      "unresolved": false
+    },
+    {
+      "id": "bbcfe284_273a1035",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "personally, I like the \"return result\", because the contract says that it returns true if it was started, not if it's currently alive.  In addition, that's how \"start()\" works in a lot of the servlet code, too - if it returns successfully from start(), then you can assume that it was started, but you don't know that it's still running.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-02-05 20:56:38.000000000",
+      "in_reply_to": "44e7c1cf_c7790118",
+      "unresolved": false
+    },
+    {
+      "id": "f071b1eb_f6ac87ec",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "I like your way of thinking about this and after a while of thinking I agree that it would be best to leave it as I implemented it.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-02-05 21:06:43.000000000",
+      "in_reply_to": "bbcfe284_273a1035",
+      "unresolved": false
+    },
+    {
+      "id": "638a020d_47966687",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Not sure what is the debate.  As I mentioned in my previous comment: \n\n\"Simpler solution is to move the \"return result\" within the synchronized block. \n ..\" \n\nIt solves the scenario under discussion in a better way by removing the race condition described altogether, and is valid for any semantics you decide to attach to start(), therefore being independent of personal preference or interpretation.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-02-06 05:12:10.000000000",
+      "in_reply_to": "f071b1eb_f6ac87ec",
+      "unresolved": false
+    },
+    {
+      "id": "de866e8d_c45174cb",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "So the argument raised by Jim is that having return inside synchronization block may be misleading for some people as they may expect that the true value means that the thread is running not that it was started",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-02-06 09:40:45.000000000",
+      "in_reply_to": "638a020d_47966687",
+      "unresolved": false
+    },
+    {
+      "id": "95f4e4c3_1eb8e47f",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Actually, it's irrelevant whether it's inside or outside of the synchronized block, as you always have the race condition that another thread could stop the server after the return result has been placed onto the stack, but before the invoking code can take action on it.\nThat being said, you could change line 176 to simply say \"return true\" and add \"return false\" after line 181, thus eliminating the \"result\" variable altogether.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-02-06 12:47:47.000000000",
+      "in_reply_to": "de866e8d_c45174cb",
+      "unresolved": false
+    },
+    {
+      "id": "48834647_0c2401b2",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 4,
+      "line": 180,
+      "message": "Yes, these 176 and 181 changes are in line with my thoughts, I don't see result var necessary.  It also avoids conversation about method semantics that I would like to avoid for such small changes [operation result and alive are effectively fully coupled (with the caveat of thread start which should be fairly benign) which satisfies both perspectives].",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-02-06 17:35:14.000000000",
+      "in_reply_to": "95f4e4c3_1eb8e47f",
+      "unresolved": false
+    }
+  ]
+}

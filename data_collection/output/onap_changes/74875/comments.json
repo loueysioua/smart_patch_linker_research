@@ -1,0 +1,144 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I8397e0134d254cd5b6be79ed2b847ce265fc775c",
+  "change_id": "I8397e0134d254cd5b6be79ed2b847ce265fc775c",
+  "_number": 74875,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_facf4b27",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/main.kt",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "Extract string to const and reuse in `logger` declaration (:34)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-19 08:57:31.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_badd43e2",
+      "file_path": "sources/hv-collector-main/src/main/resources/logback.xml",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "remove also this line",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-19 08:57:31.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_3af1536b",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/logging/LogLevel.kt",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "1. Let's add `.toUpperCase()` to be more flexible\n2. Rename function to `fromString` - it's more natural to call LogLevel.fromString than LogLevel.getLogLevel (this looks like singleton call)\n3. I'm not sure we want to simply catch this exception and provide \ndefault - it might be useful to log this information somewhere.\nWe can use Option for this:\n```\n        fun optionFromString(level: String) = Try {\n            valueOf(level.toUpperCase())\n        }.toOption()\n```\n```ArgVesHvConfiguration\n\nlogLevel = determineLoglevel(logLevel)\n\n    private fun determineLoglevel(logLevel: String) = LogLevel.optionFromString(logLevel)\n            .getOrElse {\n                logger.warn {\n                    \"Failed to parse $logLevel as $LOG_LEVEL command line. \" +\n                            \"Using default log level (${LogLevel.INFO})\"\n                }\n                LogLevel.INFO\n            }\n```\nI'm not convinced it's nice solution but at least we get log message :)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-19 08:57:31.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_5af69764",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/logging/Logger.kt",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "`.level = level.level`\nMaybe it's just me, but looks weird :) \n\nNot really insisting, but consider renaming `level` property to `logbackLevel` and maybe add `invoke` function to LogLevel and make property private.\n\n```.level = level.logbackLevel```\n```.level = level()\n\n    operator fun invoke() = logbackLevel\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-19 08:57:31.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_602deea7",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/ArgVesHvConfiguration.kt",
+      "patchset_number": 3,
+      "line": 123,
+      "message": "Use DefaultValues.LOG_LEVEL in this function (both msg and result)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-12-20 07:12:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_802a528e",
+      "file_path": "sources/hv-collector-main/src/main/kotlin/org/onap/dcae/collectors/veshv/main/ArgVesHvConfiguration.kt",
+      "patchset_number": 3,
+      "line": 135,
+      "message": "Use LogLevel.INFO.name()",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-12-20 07:12:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e010fe5a",
+      "file_path": "sources/hv-collector-main/src/test/kotlin/org/onap/dcae/collectors/veshv/main/ArgVesHvConfigurationTest.kt",
+      "patchset_number": 3,
+      "line": 118,
+      "message": "Use more specific assertions. The current one will print something like \"expected true, was false\" in case of failure, which is not very helpful ;). assertThat(xxx).isEqualTo(yyy) will print \"expected yyy, but was xxx\", so developer will know right away what's going on.\n\nApply to other assertions, too.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-12-20 07:12:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_c00b7a28",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/logging/Logger.kt",
+      "patchset_number": 3,
+      "line": 34,
+      "message": "it is usually placed in the bottom part of the class",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-12-20 07:12:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

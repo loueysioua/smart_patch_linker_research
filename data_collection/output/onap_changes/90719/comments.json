@@ -1,0 +1,110 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~Icf6e5357d828e19db73bb58b98fd60e9f111d0dc",
+  "change_id": "Icf6e5357d828e19db73bb58b98fd60e9f111d0dc",
+  "_number": 90719,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "47494d9a_42f65331",
+      "file_path": "k8s/k8s-node-type.yaml",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "Note that the import of the type file has been removed.  This is consistent with what some other plugins are already doing.  A blueprint that uses this plugin must import the Cloudify types.  Doing it this way means that there will be no conflict between the imports in the blueprint and the import in the type file.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-01 12:04:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4e985a6_8c0a5f85",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 482,
+      "message": "should the default here be True?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-07-01 14:28:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "af4d065f_b967f41c",
+      "file_path": "k8s/tests/conftest.py",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-07-01 14:28:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a3141463_826bd0f5",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 482,
+      "message": "False is the right default.  (The idea is that the \"tls_info\" property is optional in a blueprint, but if it's present, it should have both \"use_tls\" and \"cert_directory\".  The Cloudify type definition system doesn't have a way to express that.  If it did, we wouldn't need defaulting.)   The \"use_tls\" name is now perhaps a bit misleading.  If it's set to true, it means that the component is acting as a TLS server and needs the full set of certificates provided by our tls initContainer.  If \"use_tls\" is false, the component just needs the CA cert, and we don't need the initContainer.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-01 15:11:09.000000000",
+      "in_reply_to": "d4e985a6_8c0a5f85",
+      "unresolved": false
+    },
+    {
+      "id": "356c6380_12474bef",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 482,
+      "message": "Since the purpose of \"use_tls\" is changing and its meaning is not what it was before, would it be less confusing in the long run for the name of the variable to be updated sooner rather than later?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-07-02 03:00:49.000000000",
+      "in_reply_to": "a3141463_826bd0f5",
+      "unresolved": false
+    },
+    {
+      "id": "a23cbf8d_faa4a3fd",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 1,
+      "line": 482,
+      "message": "If it were just a matter of renaming a variable in the code, I'd consider a change.  But this is the name of a property in the type definition, so the impact would be to require changing all of the blueprints.   \nFrom the point of view of the blueprint writer who consciously inserts a tls_info property into a blueprint, \"use_tls\" is a pretty reasonable choice for the sub-property name.   The idea is that whoever develops the component would know the value for \"cert_directory\" (this is where the component looks for its cert/key), but whoever is doing an actual deployment could decide whether to actually use TLS.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-02 22:21:33.000000000",
+      "in_reply_to": "356c6380_12474bef",
+      "unresolved": false
+    }
+  ]
+}

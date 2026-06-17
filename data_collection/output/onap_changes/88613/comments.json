@@ -1,0 +1,331 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~Ia8246ded00e11d8ce90c2d84091249134548be01",
+  "change_id": "Ia8246ded00e11d8ce90c2d84091249134548be01",
+  "_number": 88613,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a7783bfe_27eb5b7c",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "Using `replaceAll()` doesn't look nice, but I don't have any other ideas how to deal with quotes escaping which are the result of `JsonElement::toString`.\nI could use `JsonElement:: getAsString` instead, but then I would have to handle somehow situations, when one passes something that is not String.",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-28 10:17:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8d9ccd05_8ecabaa5",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 83,
+      "message": "What if content type is \"application/json; charset=utf-8\"? Maybe we shall move ContentType enum to the model and use it directly in our public API so we force clients to use predefined content types?\n\nDoes DMaaP MR support different content types? If the behavior is special only for Json then maybe we should define abstract class ContentType with subclass JsonContentType (singleton) and let's say OtherContentType(type: String). In Kotlin it would be easier:\n\nsealed class ContentType(val mime: String)\nobject JsonContentType : ContentType(\"application/json\")\nclass OtherContentType(mime: String): ContentType(mime)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 10:17:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0eacd243_3e909e82",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "Is this really what we want? Shouldn't we replace `\\\"` with `\"` ?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 10:17:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "46330442_e740753d",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 5,
+      "line": 92,
+      "message": "Maybe rename it to subscriber. Here System Under Test is both publisher and subscriber.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 10:17:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "100392d9_334bf4f0",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 5,
+      "line": 78,
+      "message": "Please move these variables into corresponding methods. Flux can be a single shot instances (after completion re-subscription may not be possible).\n\nAlso consider moving the lists above also int test methods. Keeping them closer to the test may improve readability. On the other hand you've named it well so it shouldn't be a problem.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 10:17:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a133b280_6d6e2218",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 83,
+      "message": "Filip suggested using ContentType enum in public API, but also said that maybe it would be better to make that change in new MR. \nBut, of course, I can do it here.\n\nAs far as I know (I was checking `readthedocks` and instructions), MR support exactly 2 content types: 'application/json' and 'text.plain'",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-30 10:46:37.000000000",
+      "in_reply_to": "8d9ccd05_8ecabaa5",
+      "unresolved": false
+    },
+    {
+      "id": "450bc116_5fda029d",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "If we want to send multiple messages with `text/plain`, content should look like\n\"message1\nmessage2\nmessage3\"\n\nMessageRouter figures out that we are sending multiple messages only if we split them with new line. So we should send one multi-line String (as far as I understand)",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-30 10:46:37.000000000",
+      "in_reply_to": "0eacd243_3e909e82",
+      "unresolved": false
+    },
+    {
+      "id": "faed6164_85953c60",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "One multi-line String without inner quotes around single messages",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-30 11:00:32.000000000",
+      "in_reply_to": "450bc116_5fda029d",
+      "unresolved": false
+    },
+    {
+      "id": "83f91866_9466ec22",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 83,
+      "message": "OK. We may do it in separate MR. But please create a task on the board so we'll have this deal written down ;)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 11:02:35.000000000",
+      "in_reply_to": "a133b280_6d6e2218",
+      "unresolved": false
+    },
+    {
+      "id": "3bdd6bf7_c205bfbe",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "Ok. I understand this interleave-with-endl stuff. But what about quotes?\n\nMy understanding (I use kotlin \"\"\" syntax to avoid ambiguity):\n\nInput List<JsonElement>:\nList[JsonElem{\"name\":\"Wiesio\"}, JsonElem{\"name\":\"Czesio\"}]\n\nAfter mapping over JsonElement::toString (is this correct?):\nList[\"\"\"{\"name\":\"Wiesio\"}\"\"\", \"\"\"{\"name\":\"Czesio\"}\"\"\"]\n\nThen we collect with interleaving:\n\"\"\"{\"name\":\"Wiesio\"}\n{\"name\":\"Czesio\"}\"\"\"\n\nAfter replaceAll:\n\"\"\"{name:Wiesio}\n{name:Czesio}\"\"\"\n\nwhich is not a correct Json, isn't it?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 11:02:35.000000000",
+      "in_reply_to": "450bc116_5fda029d",
+      "unresolved": false
+    },
+    {
+      "id": "1c534481_0af3c9ad",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 5,
+      "line": 78,
+      "message": "One comment here: It will work (and is working of course :) ), but maybe we should keep these sample data closer to the methods. Just thinking.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-30 11:02:35.000000000",
+      "in_reply_to": "100392d9_334bf4f0",
+      "unresolved": false
+    },
+    {
+      "id": "bed57369_541de2ad",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "Yes, that Json would be incorrect. \nFirstly I thought that this is what MessageRouter does - removes quotes from Json if it's send with `text/plain`. I thought that, because:\n\n\ncurl --header \"Content-type: text/plain\" --request POST --data \"{\"message\":\"jakisMessage\"}\" http://localhost:3904/events/pnfReady\n\n\nif I make get request now, the result is:\n\n[\"{message:jakisMessage}\"]\n\n\n\n\nBut I've just formatted curl differently:\n\ncurl --header \"Content-type: text/plain\" --request POST --data '{\"message\":\"jakisMessage\"}' http://localhost:3904/events/pnfReady\n\n(used apostrophe instead of quotes)\nand when making get request:\n\n[\"{\\\"message\\\":\\\"jakisMessage\\\"}\"]\n\n\n\nSo, I understand that in that situation I should send correct json? ;)",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-30 11:23:45.000000000",
+      "in_reply_to": "3bdd6bf7_c205bfbe",
+      "unresolved": false
+    },
+    {
+      "id": "c97e8b0f_e454febb",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 83,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-06 07:12:45.000000000",
+      "in_reply_to": "83f91866_9466ec22",
+      "unresolved": false
+    },
+    {
+      "id": "05bfdbec_56ad461e",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 5,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-06 07:12:45.000000000",
+      "in_reply_to": "46330442_e740753d",
+      "unresolved": false
+    },
+    {
+      "id": "bf3fffd3_3edb2904",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 5,
+      "line": 78,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-06 07:12:45.000000000",
+      "in_reply_to": "1c534481_0af3c9ad",
+      "unresolved": false
+    },
+    {
+      "id": "973c2835_d4f43057",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 2,
+      "line": 90,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-06 08:38:12.000000000",
+      "in_reply_to": "a7783bfe_27eb5b7c",
+      "unresolved": false
+    },
+    {
+      "id": "fed5c26a_b43280a4",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 94,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-06 08:38:12.000000000",
+      "in_reply_to": "bed57369_541de2ad",
+      "unresolved": false
+    },
+    {
+      "id": "ee1d0c84_76857bce",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 88,
+      "message": "final",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-06 08:41:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b8b7c64d_c4a9b181",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 8,
+      "line": 32,
+      "message": "Import not used",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-06-06 11:15:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,2464 @@
+{
+  "id": "cps~master~I1d788ab745d65965570e28beaefa511cbe4a8547",
+  "change_id": "I1d788ab745d65965570e28beaefa511cbe4a8547",
+  "_number": 138355,
+  "change_comments": [
+    {
+      "id": "43837e48_682953c2",
+      "patchset_number": 2,
+      "message": "package are to much based on teh types of class but shoudl be based on usecases instead. As discused lets drop teh 'facadsa' and organise like so:\n\n\ncmsubscriptioncache\n-cache\n-models\n-ncmp \n--ncmpInEventConsumer\n--ncmpOutProduducer\n--CmNotificationSubscriptionHandler\n--CmNotificationSubscriptionNcmpOutEventPublishingTask\n--CmNotificationSubscriptionComparator\n--CmNotificationSubscriptionNcmpOutEventMapper\n-dmi\n--dmiInProducer\n--dmiOutConsumer\n--CmNotificationSubscriptionDmiInEventMapper\n-utils\n--persistenceService",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8948452b_855105a1",
+      "patchset_number": 5,
+      "message": "Structrue looks fine, Well done!\n\nMain problem is that IntelliJ did NOT change map names and mocks and a few legacy inconsistent names, You just have to do them al manually...\nI think I highlight most of them but make suer to do a good self review in Nordix when you think you are done :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c2957a9d_72dad4aa",
+      "patchset_number": 6,
+      "message": "a lot of hard work done last night.\nThe main issue is this the name of map:\nMap<String, DmiCmSubscriptionDetails> dmiSubscriptionPerDmi\n\nI think this name is OK (teh word detaisl isn't really needed), you start using it consistently in a big class using it.\n\nBut then you start being inconsistent and calling it\n-dmiSubscriptionDetailsPerDmi\n-dmiSubscriptionDetailsMap\n\nJust make sure you always use the same name in the production code and test code!\n\nMaybe to a search of 'Map<String, DmiCmSubscriptionDetails>' to ensure you get all te instances of it. I actually only review the classed that changed in the last commit and try to make them all but it might be in classes you haven't changed too...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e8fc350e_686bd1bc",
+      "patchset_number": 7,
+      "message": "no objections really",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-07-04 14:33:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1c56371d_d6571a08",
+      "patchset_number": 7,
+      "message": "remerge",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-05 11:36:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "7c57b6dc_1d0c284d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/consumers/CmNotificationSubscriptionAvcEventConsumer.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "this event is NOT related to the subscrptions\njust CmAvcEventConsumer",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9829d7f9_6e4cfd7c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "Comparatot or Examiner",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "899655ae_ac5dd3e2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "getNewDmiCmNotificationSubscriptionPredicates",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "810a66f0_45338830",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "see method name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "17daf331_9dd556e6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 74,
+      "message": "as above",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "568927ed_791bc0bd",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionNcmpOutEventPublishingTask.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "service\n\nits not a generic utility type class but just part of the service",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-01 14:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4fa98cd7_baaef8df",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/consumers/CmNotificationSubscriptionAvcEventConsumer.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "7c57b6dc_1d0c284d",
+      "unresolved": false
+    },
+    {
+      "id": "6b740c06_5ac42abe",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "Used Comparator",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "9829d7f9_6e4cfd7c",
+      "unresolved": true
+    },
+    {
+      "id": "6b09f773_ba293f49",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "899655ae_ac5dd3e2",
+      "unresolved": false
+    },
+    {
+      "id": "28a33ae9_fa39dc98",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "810a66f0_45338830",
+      "unresolved": false
+    },
+    {
+      "id": "992e696f_e60d5472",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "17daf331_9dd556e6",
+      "unresolved": false
+    },
+    {
+      "id": "b15353bd_ca33fdd7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionNcmpOutEventPublishingTask.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "moved to impl.cmsubscription.ncmp package",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-01 16:03:04.000000000",
+      "in_reply_to": "568927ed_791bc0bd",
+      "unresolved": true
+    },
+    {
+      "id": "b390ae5f_fe3992e4",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 5,
+      "line": 19,
+      "message": "NB: result",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d1e5336d_680640cc",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "legacy: this description dont make sense... IS missing a word I think",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2656ddbf_30778cb0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 79,
+      "message": "NB: dmiScubscriptionDetailsPerDmi",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d08d2866_b712af38",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 81,
+      "message": "follwo above",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9777273c_dfdf69f9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 95,
+      "message": "as before",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "18bdb982_fac20ffc",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 142,
+      "message": "just 's' instead of 'list'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4adbd994_6ef76d70",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 167,
+      "message": "s",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "89ee73f6_2a4928fc",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 187,
+      "message": "as before\n(check all map names that contain classes you have changed the name of. AS IntelliJ woudln't have renamed them automatically!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f70bbe1b_8223dd64",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparator.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "prefix with 'old' or 'existing' ?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7494c8de_86e5a11c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 5,
+      "line": 113,
+      "message": "align map name with new names of content",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e83ba5e1_124243c0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "allign map name with new classnames of content",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "abd028ce_587e4568",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 5,
+      "line": 76,
+      "message": "align map name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "035a1977_b4083b53",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventProducer.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "simplify name?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6de5891c_3b43fa0e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/EventsFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": 41,
+      "message": "legacy (I assume) Replace all \" with '",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a134b97d_a1473c3d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": null,
+      "message": "not reviewed",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "688289bd_2bf0fa01",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/CmSubscriptionConfigSpec.groovy",
+      "patchset_number": 5,
+      "line": 52,
+      "message": "align name and add 's' as it is plural",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6d6983b4_a2442aa9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiInEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "54f9469e_2ef63e99",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 53,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e3216e5c_5c79b87b",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "mayeb for next commit, but names of mock and class are inconsistent now",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "00f9c568_42938cc9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 113,
+      "message": "legacy: use static import to shorten table row size",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f94282d1_f6a93f29",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparatorSpec.groovy",
+      "patchset_number": 5,
+      "line": 34,
+      "message": "use classname with s for plural",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "99f9223d_7c5d33fd",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparatorSpec.groovy",
+      "patchset_number": 5,
+      "line": 51,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0e070cdf_39a1d9bd",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e6c76c44_ee327299",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 43,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "273920f8_e9effed8",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d2c2d8c2_98501887",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpInEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "51d18c99_c7fdad96",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7247ad75_6f9c2365",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 36,
+      "message": "align name (for all)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b2e5a9e8_bfbe8ee6",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "check for \" that should be '",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f196614e_c94d43f4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "use static imports",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "53b01648_88568d5f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 169,
+      "message": "use static imports",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0787d978_934234aa",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "align name",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-03 16:12:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3abd3e1b_6dbe156a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 5,
+      "line": 19,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "b390ae5f_fe3992e4",
+      "unresolved": false
+    },
+    {
+      "id": "d57f6f62_ac8e96a8",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "amm.. will remove this in the class in the next class.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "d1e5336d_680640cc",
+      "unresolved": true
+    },
+    {
+      "id": "ae16ab85_cc4b0472",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 79,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "2656ddbf_30778cb0",
+      "unresolved": false
+    },
+    {
+      "id": "151633d0_aa952cd5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 81,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "d08d2866_b712af38",
+      "unresolved": false
+    },
+    {
+      "id": "16c945f4_08475450",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 95,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "9777273c_dfdf69f9",
+      "unresolved": false
+    },
+    {
+      "id": "0a2b4ca5_2034a72d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "18bdb982_fac20ffc",
+      "unresolved": false
+    },
+    {
+      "id": "b13c3517_543855d6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 167,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "4adbd994_6ef76d70",
+      "unresolved": false
+    },
+    {
+      "id": "78fb9902_2f7b0bee",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 187,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "89ee73f6_2a4928fc",
+      "unresolved": false
+    },
+    {
+      "id": "16b37fb6_21ff8ad2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparator.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "prefixed with existing",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "f70bbe1b_8223dd64",
+      "unresolved": true
+    },
+    {
+      "id": "2899a335_2d5d7475",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 5,
+      "line": 113,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "7494c8de_86e5a11c",
+      "unresolved": false
+    },
+    {
+      "id": "5cd9fb8a_b434cd5f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "e83ba5e1_124243c0",
+      "unresolved": false
+    },
+    {
+      "id": "cc5c9bce_e09cd91b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 5,
+      "line": 76,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "abd028ce_587e4568",
+      "unresolved": false
+    },
+    {
+      "id": "e758163f_5625dd60",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventProducer.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "035a1977_b4083b53",
+      "unresolved": false
+    },
+    {
+      "id": "2cc41dbc_bd90e03b",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/EventsFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": 41,
+      "message": "will remove this file in the next patchset.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "6de5891c_3b43fa0e",
+      "unresolved": true
+    },
+    {
+      "id": "2e60941f_87145f13",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": null,
+      "message": "yes 😊 I know the reason.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "a134b97d_a1473c3d",
+      "unresolved": true
+    },
+    {
+      "id": "a3b1e054_4246e2bf",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/CmSubscriptionConfigSpec.groovy",
+      "patchset_number": 5,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "688289bd_2bf0fa01",
+      "unresolved": false
+    },
+    {
+      "id": "43ba0a29_baedd0bc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiInEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "6d6983b4_a2442aa9",
+      "unresolved": false
+    },
+    {
+      "id": "4f9feb1e_c1438315",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 53,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "54f9469e_2ef63e99",
+      "unresolved": false
+    },
+    {
+      "id": "90fba3b1_065e9175",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "yep.. will be removing EventsFacade and MappersFacade.\nSo will take care of the code corresponding to that.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "e3216e5c_5c79b87b",
+      "unresolved": true
+    },
+    {
+      "id": "2209eb10_9753ff60",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 113,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "00f9c568_42938cc9",
+      "unresolved": false
+    },
+    {
+      "id": "a4ef2226_f4dd9cfc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparatorSpec.groovy",
+      "patchset_number": 5,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "f94282d1_f6a93f29",
+      "unresolved": false
+    },
+    {
+      "id": "1b6b80a8_cd5b8787",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparatorSpec.groovy",
+      "patchset_number": 5,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "99f9223d_7c5d33fd",
+      "unresolved": false
+    },
+    {
+      "id": "024edf46_3637a5bc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "0e070cdf_39a1d9bd",
+      "unresolved": false
+    },
+    {
+      "id": "6aa8f77c_de0ffb56",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "e6c76c44_ee327299",
+      "unresolved": false
+    },
+    {
+      "id": "8b71468b_ad4b3d34",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "273920f8_e9effed8",
+      "unresolved": false
+    },
+    {
+      "id": "d41e76fd_3adbdcac",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpInEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "d2c2d8c2_98501887",
+      "unresolved": false
+    },
+    {
+      "id": "bfe7cfa3_2aff57be",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "51d18c99_c7fdad96",
+      "unresolved": false
+    },
+    {
+      "id": "0a0999ba_c16079df",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "7247ad75_6f9c2365",
+      "unresolved": false
+    },
+    {
+      "id": "6757a6de_da6f2a7e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "b2e5a9e8_bfbe8ee6",
+      "unresolved": false
+    },
+    {
+      "id": "7b918d22_6d33f9cb",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "f196614e_c94d43f4",
+      "unresolved": false
+    },
+    {
+      "id": "5d278353_50aa4074",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 169,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "53b01648_88568d5f",
+      "unresolved": false
+    },
+    {
+      "id": "d07e6a34_7204b86d",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 08:07:00.000000000",
+      "in_reply_to": "0787d978_934234aa",
+      "unresolved": false
+    },
+    {
+      "id": "19905cf4_a5e9771a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 6,
+      "line": 70,
+      "message": "NB: Can you check this description, it doesn't make sense",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dd0b52e1_48e7ceea",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 79,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "2656ddbf_30778cb0",
+      "unresolved": false
+    },
+    {
+      "id": "57eebcd6_9d3279f8",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 81,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "d08d2866_b712af38",
+      "unresolved": false
+    },
+    {
+      "id": "c2841674_14bb0cf2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 95,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "9777273c_dfdf69f9",
+      "unresolved": false
+    },
+    {
+      "id": "2f18e92a_17fdec8f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "18bdb982_fac20ffc",
+      "unresolved": false
+    },
+    {
+      "id": "9822ef4f_9136405c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 167,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "4adbd994_6ef76d70",
+      "unresolved": false
+    },
+    {
+      "id": "89840fb7_7d0f119b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 5,
+      "line": 187,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "89ee73f6_2a4928fc",
+      "unresolved": false
+    },
+    {
+      "id": "14f4588b_3cf66cb0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 6,
+      "line": 95,
+      "message": "you didnt include teh word 'Details' but I think it is OK as that part is pretty obvious...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8811cd3e_0e5d94aa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 6,
+      "line": 127,
+      "message": "NB: inconsistent with the other ones",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "531ce9e9_4395e825",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumer.java",
+      "patchset_number": 6,
+      "line": 104,
+      "message": "inconstsitent use of 'Details'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8e8ddcf6_f2f818d0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 83,
+      "message": "- Dont use the word word 'Map' Instead use PerDmi  (DDMI is key here too correct?)\n- USe of word 'Details' inconsistent with previous names for same map",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "54d35d18_28da3554",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 112,
+      "message": "use same name as befoer",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88a633e2_a404f724",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "use same name as before",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e4b58b99_19e2e595",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 6,
+      "line": 76,
+      "message": "use same naem as befoer",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "094ce0a4_de3b4879",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventProducer.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "035a1977_b4083b53",
+      "unresolved": false
+    },
+    {
+      "id": "4799f0f7_dfe03215",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventPublishingTask.java",
+      "patchset_number": 6,
+      "line": 54,
+      "message": "use same name as before",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6a5357a1_3a931a7e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/EventsFacadeSpec.groovy",
+      "patchset_number": 6,
+      "line": 41,
+      "message": "legacy (I assume) Replace all \" with '",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "543bb9be_6bbb6bfc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "a134b97d_a1473c3d",
+      "unresolved": false
+    },
+    {
+      "id": "b207b383_3f390376",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/CmSubscriptionConfigSpec.groovy",
+      "patchset_number": 5,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "688289bd_2bf0fa01",
+      "unresolved": false
+    },
+    {
+      "id": "b2ea7b18_fe890b71",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiInEventMapperSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "6d6983b4_a2442aa9",
+      "unresolved": false
+    },
+    {
+      "id": "2b554a30_1a46df7f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 53,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "54f9469e_2ef63e99",
+      "unresolved": false
+    },
+    {
+      "id": "012e071c_184e8feb",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "e3216e5c_5c79b87b",
+      "unresolved": false
+    },
+    {
+      "id": "d5768864_3d05cdcb",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumerSpec.groovy",
+      "patchset_number": 5,
+      "line": 113,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "00f9c568_42938cc9",
+      "unresolved": false
+    },
+    {
+      "id": "74464e68_6a10b439",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "0e070cdf_39a1d9bd",
+      "unresolved": false
+    },
+    {
+      "id": "d752353e_39f4b154",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "e6c76c44_ee327299",
+      "unresolved": false
+    },
+    {
+      "id": "7d742743_428fe545",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "273920f8_e9effed8",
+      "unresolved": false
+    },
+    {
+      "id": "741fdd45_54195dea",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 6,
+      "line": 115,
+      "message": "NB: especially in Groovy (spotbugs doesn't care), dont break lines unnecessarily. For me it actual redability will detrmine if and where I breal the line",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f02295f5_2d8abed4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 6,
+      "line": 146,
+      "message": "NB: remvoe line breaks",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "84e4a603_1736e4c4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 6,
+      "line": 37,
+      "message": "as same names as before",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "69604793_4707adef",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "no idea what I meant with above 😄",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "b2e5a9e8_bfbe8ee6",
+      "unresolved": false
+    },
+    {
+      "id": "7ce9a5e5_dccb0e40",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 120,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "f196614e_c94d43f4",
+      "unresolved": false
+    },
+    {
+      "id": "75f0d3aa_00f4b06a",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 5,
+      "line": 169,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": "53b01648_88568d5f",
+      "unresolved": false
+    },
+    {
+      "id": "0c1783f6_f64a96a4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 6,
+      "line": 171,
+      "message": "break line here\n(actauly mayeb this is just teh gerrit view?)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88da9ee2_3b03d50c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 6,
+      "line": 177,
+      "message": "NB: break lien here",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8a232527_e489bc44",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 32,
+      "message": "NB: remove ;",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "95d7b79c_a47f11fb",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 48,
+      "message": "NB: remove unnecessary line breaks",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7a72763a_1989a509",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 66,
+      "message": "NB: remove line break",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 08:11:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4343c9b9_2fb3d1d2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/cache/DmiCacheHandler.java",
+      "patchset_number": 6,
+      "line": 127,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "8811cd3e_0e5d94aa",
+      "unresolved": false
+    },
+    {
+      "id": "e3d68383_f06712fb",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/dmi/DmiOutEventConsumer.java",
+      "patchset_number": 6,
+      "line": 104,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "531ce9e9_4395e825",
+      "unresolved": false
+    },
+    {
+      "id": "8d456777_bcc53e79",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 83,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "8e8ddcf6_f2f818d0",
+      "unresolved": false
+    },
+    {
+      "id": "6e7973c7_7e970fdc",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 6,
+      "line": 76,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "e4b58b99_19e2e595",
+      "unresolved": false
+    },
+    {
+      "id": "b9c4e1db_c209369f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventPublishingTask.java",
+      "patchset_number": 6,
+      "line": 54,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "4799f0f7_dfe03215",
+      "unresolved": false
+    },
+    {
+      "id": "6aca09cf_8f7fb9ab",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 6,
+      "line": 115,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "741fdd45_54195dea",
+      "unresolved": false
+    },
+    {
+      "id": "7bfd489b_a237fdeb",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 6,
+      "line": 146,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "f02295f5_2d8abed4",
+      "unresolved": false
+    },
+    {
+      "id": "051445ce_a6b2e30f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapperSpec.groovy",
+      "patchset_number": 6,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "84e4a603_1736e4c4",
+      "unresolved": false
+    },
+    {
+      "id": "56829e10_8ebc8f18",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 6,
+      "line": 171,
+      "message": "looks weird to me if we break the line.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "0c1783f6_f64a96a4",
+      "unresolved": true
+    },
+    {
+      "id": "713b9347_b5b2e012",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "8a232527_e489bc44",
+      "unresolved": false
+    },
+    {
+      "id": "9471ef6c_352564ff",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "95d7b79c_a47f11fb",
+      "unresolved": false
+    },
+    {
+      "id": "7d867dea_31521f7e",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/NcmpCmNotificationSubscriptionSpec.groovy",
+      "patchset_number": 6,
+      "line": 66,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:15:09.000000000",
+      "in_reply_to": "7a72763a_1989a509",
+      "unresolved": false
+    },
+    {
+      "id": "782face6_2ea0c167",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "your reply is even more confusing then the description :-D",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "d57f6f62_ac8e96a8",
+      "unresolved": true
+    },
+    {
+      "id": "23ae7d23_b760bc0c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionComparator.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "16b37fb6_21ff8ad2",
+      "unresolved": false
+    },
+    {
+      "id": "e1eb3f63_ac619874",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImpl.java",
+      "patchset_number": 6,
+      "line": 112,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "54d35d18_28da3554",
+      "unresolved": false
+    },
+    {
+      "id": "b62208c9_0b19a72c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/EventsFacadeSpec.groovy",
+      "patchset_number": 5,
+      "line": 41,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "2cc41dbc_bd90e03b",
+      "unresolved": false
+    },
+    {
+      "id": "9b2cae0c_085ac252",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/EventsFacadeSpec.groovy",
+      "patchset_number": 6,
+      "line": 41,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "6a5357a1_3a931a7e",
+      "unresolved": false
+    },
+    {
+      "id": "4bf76b11_3e0391aa",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 7,
+      "line": 54,
+      "message": "NB: no need for the prefix 'test'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7374114b_82a48734",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/CmSubscriptionHandlerImplSpec.groovy",
+      "patchset_number": 7,
+      "line": 115,
+      "message": "NB: remvoe linebreak",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "114d8a1c_987f68cc",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 6,
+      "line": 171,
+      "message": "I presumed it was already broken just BEFOER the OMIT_DESCENDANTS...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "56829e10_8ebc8f18",
+      "unresolved": false
+    },
+    {
+      "id": "b0cf2573_dc2fa5ef",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/cmnotificationsubscription/utils/CmSubscriptionPersistenceServiceSpec.groovy",
+      "patchset_number": 6,
+      "line": 177,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-07-04 10:22:40.000000000",
+      "in_reply_to": "88da9ee2_3b03d50c",
+      "unresolved": false
+    },
+    {
+      "id": "d20a6490_7d38bf03",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "haha. I meant I am set to remove this class anyways in the next iteration of this patch. Thats why not considering this comment 😊",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-04 10:35:25.000000000",
+      "in_reply_to": "782face6_2ea0c167",
+      "unresolved": true
+    },
+    {
+      "id": "a363131b_e3fe3230",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 5,
+      "line": 70,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-07-05 10:22:46.000000000",
+      "in_reply_to": "d20a6490_7d38bf03",
+      "unresolved": false
+    },
+    {
+      "id": "072048cf_946929d6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/MappersFacade.java",
+      "patchset_number": 6,
+      "line": 70,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-07-05 10:22:46.000000000",
+      "in_reply_to": "19905cf4_a5e9771a",
+      "unresolved": false
+    },
+    {
+      "id": "ba1e7e98_d611f41a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmnotificationsubscription/ncmp/NcmpOutEventMapper.java",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-07-05 10:22:46.000000000",
+      "in_reply_to": "88a633e2_a404f724",
+      "unresolved": false
+    },
+    {
+      "id": "ee9612e3_82110afa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionDelta.java",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-07-05 10:23:38.000000000",
+      "in_reply_to": "6b740c06_5ac42abe",
+      "unresolved": false
+    },
+    {
+      "id": "cfe87860_daa262dd",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/cmsubscription/utils/CmNotificationSubscriptionNcmpOutEventPublishingTask.java",
+      "patchset_number": 2,
+      "line": 21,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-07-05 10:23:38.000000000",
+      "in_reply_to": "b15353bd_ca33fdd7",
+      "unresolved": false
+    }
+  ]
+}

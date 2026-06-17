@@ -1,0 +1,314 @@
+{
+  "id": "oom%2Foffline-installer~master~I8f8e19ebc290fd48a63146e96f418b98344e4433",
+  "change_id": "I8f8e19ebc290fd48a63146e96f418b98344e4433",
+  "_number": 79590,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b433d320_99b72ec8",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "previously we were \"adding\" our cluster_ip value to daemon.json, now we are going to \"replace\" value?\nI also did not get it running yet ... was this tested ?\n(looks that original version more far more robust and don't make any expectations whether dns was set or not, it should work that if dns is set add our value, if it's not set create whole dns attribute with our value",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-04 08:12:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "32b71e2d_1a480149",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "Tested it was, but not with our installer - I had to tell ansible where module is - what error we are talking about?\n\nThe previous version was not robust at all - it could only add to the list or create a new list at the top-level object. This is much more flexible.\n\nFor replace - it clould be changed to append but I made this decision for obvious reasons - we wwant tot fake dns right? So we dont want to add another nameserever because than we dont have certainty that our fake dns resolving will work.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-04 09:22:27.000000000",
+      "in_reply_to": "b433d320_99b72ec8",
+      "unresolved": false
+    },
+    {
+      "id": "a5beb886_25d91557",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 1,
+      "line": 181,
+      "message": "So this fails on hosts where there is no python3 - I tested this module in chroot but the host had python3 - I have to workaround the code to work on both python2 and python3...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-04 10:23:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "34d54790_6ac8bcd8",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "adding was done because our CI had some preconfigured dns that it needed.\nalso old module just did what was necessary from it - nothing more. (YAGNI)",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-04 11:08:13.000000000",
+      "in_reply_to": "32b71e2d_1a480149",
+      "unresolved": false
+    },
+    {
+      "id": "b564958d_d81fef26",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "If it will be needed then just change \"replace\" to \"extend\". I created the new module because the old one would not be able to setup other options lik the logging options, which is done in this commit. It should be flexible enough for any other json-modification usage.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-04 11:13:25.000000000",
+      "in_reply_to": "34d54790_6ac8bcd8",
+      "unresolved": false
+    },
+    {
+      "id": "de359bfc_8c775c58",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "can you also explain the empty key \"\", like it's used in role.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 17:00:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "057809a6_6784611a",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "do we really need all these options?\nI guess these are related to the json object i.e. ways to modify it. But from file point of view all these options are confusing. Could it be explained better?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 17:00:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "596745c8_264eba46",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "I can improve on this.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-04 19:50:31.000000000",
+      "in_reply_to": "de359bfc_8c775c58",
+      "unresolved": false
+    },
+    {
+      "id": "0dbb7ad4_d2b525c0",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "I tried to explain them in description, I guess I didn't do good job. I was trying to keep the action's name similar to python methods on those objects. Naming and description can be changed of course, if you provide me better alternative.\n\nBasically:\nadd - adds new key/value to the json if there is no such key yet\nreplace - the same as add but it will overwrite the value if key is already there\nappend - it appends to dict or list a value - the object must exists and must be dict or list, with dict it has special effect to not overwrite any value if there is some already\nupdate - applies to dicts only and behaves like append but this time does overwrite old value\nextend - applies only to list - it is the same as list's method extend",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-04 19:50:31.000000000",
+      "in_reply_to": "057809a6_6784611a",
+      "unresolved": false
+    },
+    {
+      "id": "61e6f781_1d4d427b",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "Feels like imperative mixed with declarative somehow. \nFor user the module should be declarative.\nE.g. add/replace could be just one option? Changed flag is set if module actually did overwrite value.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-05 07:54:02.000000000",
+      "in_reply_to": "0dbb7ad4_d2b525c0",
+      "unresolved": false
+    },
+    {
+      "id": "5a64b395_24c09b70",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "No? This has nothing to do with ansible reporting..this is option for the user. User may want some option in json (in all cases), but he wants to honor the old values if there is already some, or...he does not care and he wants to overwrite that option regardless.\n\nThis has nothing to do with declarative/imperative - verything in ansible is mixture of that - or can we reorder the tasks and the result will be the same? No, it would break the ansible run - some task expects that other tasks already executed.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-05 09:32:00.000000000",
+      "in_reply_to": "61e6f781_1d4d427b",
+      "unresolved": false
+    },
+    {
+      "id": "4d8e5b14_01c76707",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "If you would like more of option \"present\", \"absent\" then it would cripple this module - I cannot from those two words deduce if you want from key=dns value=\"10.0.0.1\" to do this:\n\n{ \"dns\": \"10.0.0.1\" } <<< this is broken config\n\nor this:\n\n{ \"dns\": [ \"10.0.0.1\" ] } <<< correct config\n\nor what if that ip is already there and you want only to add bunch of new values?\n\nkey=dns value=\" [ \\\"10.0.0.2\\\", \\\"10.0.0.3\\\" ]\"\n\nshould it do this?:\n\n{ \"dns\": [ \"10.0.0.1\" , [ \"10.0.0.2\", \"10.0.0.2\" ] ] } < broken\n\nor this:\n\n{ \"dns\": [ \"10.0.0.1\" , \"10.0.0.2\", \"10.0.0.2\" ] } < correct\n\nThis module can deal with any of these usecases, but I cannot from one word (present) realize what user wants or I have to force one usecase - and the usefulness of this module is gone.\n\nAnd this deals with dns only and there you have the logging options, which are not lists at all, but it is dictionary...old module could not do anything with that - it could only deal with lists in top-level - new module can go deep in json and modify it there...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-05 09:53:51.000000000",
+      "in_reply_to": "5a64b395_24c09b70",
+      "unresolved": false
+    },
+    {
+      "id": "baa81a86_4cc88a1f",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 6,
+      "line": 12,
+      "message": "Isn't it possible to use fail_json attribute here directly on AnsibleModule  (AnsibleModule.fail_json) to fail fast instead of using it on class instance as far as in line 289?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-18 11:06:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c7f05662_d257a8be",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "For me this comment is not sufficient, i'd paste the link to the post on stackoverflow with explanation. Anyone not reading this review and trying to reuse this code will be wondering what's the reasoning for this space at the start of the string.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-18 11:06:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0c7720af_22d2baa7",
+      "file_path": "ansible/library/json_mod.py",
+      "patchset_number": 6,
+      "line": 12,
+      "message": "At this moment you did not initiliaze the ansible module which is done in main - and there it fails fast",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-18 13:08:21.000000000",
+      "in_reply_to": "baa81a86_4cc88a1f",
+      "unresolved": true
+    },
+    {
+      "id": "8c6de0bc_69149745",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "I was thinking about it, but the link is quite long",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-18 13:08:21.000000000",
+      "in_reply_to": "c7f05662_d257a8be",
+      "unresolved": true
+    },
+    {
+      "id": "b4c86df4_0a9762d8",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "https://stackoverflow.com/questions/31969872\n\nU sure it's long?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-18 13:36:39.000000000",
+      "in_reply_to": "8c6de0bc_69149745",
+      "unresolved": true
+    },
+    {
+      "id": "8891a93e_44b54583",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "Ok, I did not realize that it was redirected to the full url",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-03-18 17:34:09.000000000",
+      "in_reply_to": "b4c86df4_0a9762d8",
+      "unresolved": true
+    }
+  ]
+}

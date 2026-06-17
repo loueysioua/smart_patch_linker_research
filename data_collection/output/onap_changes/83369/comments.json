@@ -1,0 +1,76 @@
+{
+  "id": "oom%2Foffline-installer~master~I725ce9a306da1977628b6c03d5ff10fca77fb3b0",
+  "change_id": "I725ce9a306da1977628b6c03d5ff10fca77fb3b0",
+  "_number": 83369,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d1810d33_ca62ea10",
+      "file_path": "ansible/roles/chrony/templates/chrony.conf.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "maybe jinja's whitespace control might help readability a bit",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-27 13:36:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a24dc790_f61642b8",
+      "file_path": "ansible/roles/chrony/templates/chrony.conf.j2",
+      "patchset_number": 2,
+      "line": 17,
+      "message": "whitespace",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-27 13:36:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b2d426b3_ab7448a9",
+      "file_path": "ansible/roles/chrony/templates/chrony.conf.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "Whitespace control for me is PITA, that's why i don't use it. But i really tried with this one as you requested nevertheless and gave up after half one hour of fighting with unnecessary spaces or lack of line feed, this is how it would look, but it still fails in one circumstance:\n\n{% if chrony_mode == 'server' %}\nlocal stratum 1\nallow\n{% elif chrony_mode == 'client' %}\n  {%- for tserver in chrony.servers %}\nserver {{ tserver }} iburst\n  {%- endfor %}\n  {%- if chrony.slewclock == false %}\n  {#- Step the time by default #}\n\nmakestep {{ chrony.makestep }}\n  {%- else %}\n  {#- Slew the clock but step at boot time if time error larger than 30 seconds #}\n\ninitstepslew {{ chrony.initstepslew }}{% for tserver in chrony.servers %} {{ tserver }}{% endfor %}\n\n  {%- endif %}\n  {%- if timesync.servers is not defined %}\n\nmaxjitter {{ chrony.maxjitter }}\n  {%- endif %}\n{% endif -%}\n\ndriftfile {{ chrony['conf'][ansible_os_family]['driftfile'] }}\nrtcsync\nlogdir /var/log/chrony\n\n\nIf it's really much more readable i can fight for another half an hour, what you think?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-27 15:20:33.000000000",
+      "in_reply_to": "d1810d33_ca62ea10",
+      "unresolved": false
+    },
+    {
+      "id": "c468614d_c9d21a01",
+      "file_path": "ansible/roles/chrony/templates/chrony.conf.j2",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "not worth it +1",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-28 07:34:54.000000000",
+      "in_reply_to": "b2d426b3_ab7448a9",
+      "unresolved": false
+    }
+  ]
+}

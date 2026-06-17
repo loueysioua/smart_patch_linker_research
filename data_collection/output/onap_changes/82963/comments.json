@@ -1,0 +1,42 @@
+{
+  "id": "policy%2Fmodels~master~I9d01146415531d18bc9648dcf232b425bc09578d",
+  "change_id": "I9d01146415531d18bc9648dcf232b425bc09578d",
+  "_number": 82963,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2de73fcf_3dc6982d",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "maybe we can also have a createDummyPolicyModelsProvider() which just return new DummyPolicyModelsProviderImpl();",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-03-21 17:47:12.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "de18f01b_d19c7346",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "I don't think that would be a good idea as it would violate the factory pattern from the Gang of 4 book.\n\nHave a look at the unit test for the dummy model provider and you can see that it is very easy to configure the parameters to have this method return a DummyPolcyModelsPrivder:\n\n        PolicyModelsProviderParameters parameters = new PolicyModelsProviderParameters();\n        parameters.setImplementation(DummyPolicyModelsProviderImpl.class.getCanonicalName());\n        parameters.setDatabaseUrl(\"jdbc:dummy\");\n        parameters.setPersistenceUnit(\"dummy\");\n\n        PolicyModelsProvider dummyProvider = new PolicyModelsProviderFactory().createPolicyModelsProvider(parameters);\n\n        dummyProvider.init();\n\n        ToscaServiceTemplate serviceTemplate = dummyProvider.getPolicies(new PfConceptKey());\n        assertNotNull(serviceTemplate);\n        assertEquals(\"onap.vcpe.tca:1.0.0\",\n                serviceTemplate.getTopologyTemplate().getPolicies().get(\"onap.vcpe.tca\").getId());\n\n        dummyProvider.close();",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-03-21 22:40:50.000000000",
+      "in_reply_to": "2de73fcf_3dc6982d",
+      "unresolved": false
+    }
+  ]
+}

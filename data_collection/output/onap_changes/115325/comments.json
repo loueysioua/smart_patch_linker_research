@@ -1,0 +1,144 @@
+{
+  "id": "vnfrqts%2Frequirements~master~I35c08e3ad9ac544ab21563974a2a6790368875c9",
+  "change_id": "I35c08e3ad9ac544ab21563974a2a6790368875c9",
+  "_number": 115325,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ba194347_b3bb7de5",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 1,
+      "line": 847,
+      "message": "Since the general requirement is that eventId shall be unique (except for special case for fault domain), I agree that it is good to mention this exception in the VES specification. In fact I think this was already discussed a long time ago, but never documented.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2020-11-27 17:41:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "87afc344_dd1e3dfd",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 1,
+      "line": 853,
+      "message": "There are a number of problems with proposal above:\n* It introduces new requirements for use of the eventId field. E g assumption that certain format is used or that numbering starts at zero. This is a non-backwards compatible change that cannot be added in a minor update of the spec.\n* Describing expected behavior of producer or consumer beyond eventId guidelines themselves is a bit out of place for this section of the spec.\n* I don't think eventId shall be used as general mechanism for consumers to identify restarts. E g 3GPP has defined notification notifyAlarmListRebuilt to address this scenario for alarms. See TS 28.532 clause 11.2.1.1.6 including description of reason field. So the restart is communicated as part of higher level protocol.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2020-11-27 17:41:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "298b7299_e8a8cf21",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 1,
+      "line": 847,
+      "message": "Ok, I understand, that this is then a +1 on the overall initiative.",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2020-12-01 15:19:18.000000000",
+      "in_reply_to": "ba194347_b3bb7de5",
+      "unresolved": false
+    },
+    {
+      "id": "8518a8a2_8721b38e",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 1,
+      "line": 853,
+      "message": "On Your points:\n1. I was following the eventId use-cases examples mentioned here.\nEach of these examples contains a number at the end of the domain or domainId.\nI was proposing a change on that spirit.\n\nWe can generalize this proposal, stating, that in cases described (when the eventId table cannot be persisted), the network function might not be able to assure, that the eventId are unique. This is as well fine for me, but it doesn`t really help analytics apps.\n\n2. Well, I can remove that part on the expected xNF /Analytics behavior.\nIndeed, this goes beyond the VES event spec definition. \n\n3. Yes, I agree, that 3GPP has better suited mechanisms to deal with different use-cases, when the alarm/event list is expected to be non-consistent. Still, as we have a VES CommonHeader here, I tried to accomodate a solution following existing rules.\n\nIf that is fine for everyone, we can simply remove this requirement, and state clearly, that under certain circumstances the eventId uniqueness cannot be assured. Still, I am not sure, if this will be enough for all stakeholders.",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2020-12-01 15:19:18.000000000",
+      "in_reply_to": "87afc344_dd1e3dfd",
+      "unresolved": true
+    },
+    {
+      "id": "bd10fa51_261c3cbe",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 2,
+      "line": 850,
+      "message": "Here is a proposed further update to the text:\n\nIn certain scenarios such as restarts, the xNF might not be able to assure eventId uniqueness as information about the latest used eventId values is not persisted. When such eventId information is unavailable, the xNF should reset the eventId numbering following the eventId use case examples.\n\nNotes:\n* Removed LCM, since restarts can happen due to other reasons than LCM operations\n* Referring simply to eventId information in the xNF, since event table is a bit implementation and domain specific.\n* Removed that numbering starts from 0, and simply stating that numbering is reset. Note that existing examples suggest numbering start from 1 rather than 0, and also refers to these numbers as positive integers (which mathematically speaking excludes zero). In any case it is also stated in the very beginning that everything is just examples for eventId, so I also changed from shall to should to avoid introducing backwards incompatible rule.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2020-12-04 17:35:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2bbef5ce_6f6382d1",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 2,
+      "line": 850,
+      "message": "Ok, Oskar, just had a look at this. It looks to be a nice proposal.\nI just introduced it in the text, and I`ll publish this as the next PS.",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2021-01-04 14:35:29.000000000",
+      "in_reply_to": "bd10fa51_261c3cbe",
+      "unresolved": false
+    },
+    {
+      "id": "c03f2ca4_d2cd8c2d",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 4,
+      "line": 848,
+      "message": "can be identified as implicit link.. something like `EventId Use Cases Examples`_.",
+      "author": {
+        "account_id": 93,
+        "name": "Vijay Venkatesh Kumar",
+        "display_name": null,
+        "email": "vijayv81@gmail.com",
+        "username": "vv770d"
+      },
+      "updated": "2021-01-12 20:59:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5005779a_bf10a3d2",
+      "file_path": "docs/Chapter8/ves_7_2/ves_event_listener_7_2.rst",
+      "patchset_number": 4,
+      "line": 848,
+      "message": "Well, the description added here is actually a part of \"EventID use-case examples\" chapter.\nI can try to create an internal link. I assume, then that that`s we`re fine with the proposed text, right?",
+      "author": {
+        "account_id": 5597,
+        "name": "Damian Nowak",
+        "display_name": "Damian Nowak",
+        "email": "damian.nowak@nokia.com",
+        "username": "deen1985"
+      },
+      "updated": "2021-01-13 12:06:32.000000000",
+      "in_reply_to": "c03f2ca4_d2cd8c2d",
+      "unresolved": false
+    }
+  ]
+}

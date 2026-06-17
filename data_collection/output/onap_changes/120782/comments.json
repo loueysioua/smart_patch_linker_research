@@ -1,0 +1,841 @@
+{
+  "id": "cps~master~Id8da3d767199c5767c625b55d175ac6791dcca48",
+  "change_id": "Id8da3d767199c5767c625b55d175ac6791dcca48",
+  "_number": 120782,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2720e37c_a84c64d8",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/rest/controller/DataRestController.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "not sure why we need to make this decision in REST layer and I doubt if we want need 2 different methods (signatures) in JAVA API",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 12:43:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cc3ef49e_6b203311",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 171,
+      "message": "unless you plan to add different values there is no need for this column\n(but I suppose its WiP now so I'll wait  and see)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 12:43:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a7969bea_e1129d53",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 136,
+      "message": "no need in my opinion, see next comment",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 12:43:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fcdb346d_1e8b1d5d",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 142,
+      "message": "this is where I would check if xPath is root (or empty) and decide. No need for additional Java API, check in REST etc. ect. \nmuch less duplication too!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 12:43:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5eafe32c_d892ca5e",
+      "file_path": "cps-ri/src/test/resources/data/fragment.sql",
+      "patchset_number": 1,
+      "line": 17,
+      "message": "making it consistent, good work!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 12:43:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "313e801a_3a90da3d",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/rest/controller/DataRestController.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "i don't mind changing, but check the similar method above",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 14:04:44.000000000",
+      "in_reply_to": "2720e37c_a84c64d8",
+      "unresolved": true
+    },
+    {
+      "id": "ba946725_672b3c6d",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/rest/controller/DataRestController.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "for the saveData we had a Java API method WITHOUT xPath BEFORE we need to version with the xpath.\nFor backward compatibility we couldn't remove the old method from the Java API.\nbut it could probably be refactored to use only the new JAVA-api method in both cases from the REST impl\nFeel free to refactor that as part of this patch if you want.",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 15:50:48.000000000",
+      "in_reply_to": "313e801a_3a90da3d",
+      "unresolved": true
+    },
+    {
+      "id": "33ce415d_69c68ff1",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "this could be refactored to use saveData line #56 if parentNodeXPath is empty or '/'.\nIt ight actually be a bug on the API when someone tries to use the JavaApi taht way!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-22 15:50:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "94838a59_31a4d551",
+      "file_path": "cps-rest/src/main/java/org/onap/cps/rest/controller/DataRestController.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "Done.since the other method is unrelated to this change, left it as is",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "ba946725_672b3c6d",
+      "unresolved": false
+    },
+    {
+      "id": "8148897f_5c325fbf",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 1,
+      "line": 171,
+      "message": "Ack",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "cc3ef49e_6b203311",
+      "unresolved": false
+    },
+    {
+      "id": "44e66b61_b6aa5ed5",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 136,
+      "message": "Ack",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "a7969bea_e1129d53",
+      "unresolved": false
+    },
+    {
+      "id": "178571a1_c136ff14",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "fcdb346d_1e8b1d5d",
+      "unresolved": false
+    },
+    {
+      "id": "aed41050_ba6e3b5b",
+      "file_path": "cps-ri/src/test/resources/data/fragment.sql",
+      "patchset_number": 1,
+      "line": 17,
+      "message": "Ack",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "5eafe32c_d892ca5e",
+      "unresolved": false
+    },
+    {
+      "id": "cd34cbad_964a3a0c",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/impl/CpsDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Feel free to write a bug on this.",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-22 18:11:21.000000000",
+      "in_reply_to": "33ce415d_69c68ff1",
+      "unresolved": false
+    },
+    {
+      "id": "654c1a1a_4cc6e16e",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 177,
+      "message": "there is no special treatment for root xpath in the controller\nso there is no reason to extra test loop for this parameter. \nit makes sense to remove the xpath from parameter and use a constant \nwithin a 'when' or variable defined in 'given'",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-04-23 10:49:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5525440b_f3ac33e7",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "this case is extra, see above comment\ni'd suggest to use xpath as constant in 'when', no need to to parameterize it",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-04-23 10:49:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "651ed9b0_5fb91c4e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 133,
+      "message": "\"/\".equals(xpath)\nconstant goes first",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-04-23 10:49:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9452c81e_e082db4f",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "as per the story, \"an empty xpath parameter and a single / should we treated the same\". \nAdd test case for the empty path scenario",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-04-23 11:12:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e5aff089_a2666f31",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 177,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 14:40:29.000000000",
+      "in_reply_to": "654c1a1a_4cc6e16e",
+      "unresolved": false
+    },
+    {
+      "id": "ea16f001_4874f0d2",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 14:40:29.000000000",
+      "in_reply_to": "5525440b_f3ac33e7",
+      "unresolved": false
+    },
+    {
+      "id": "6a850aaa_d502b616",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "empty is converted to / as per swagger api default value.check CpsDataApi. test for empty value is covered in Persistence tests.",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 14:40:29.000000000",
+      "in_reply_to": "9452c81e_e082db4f",
+      "unresolved": false
+    },
+    {
+      "id": "30dc014b_bd2c104e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 133,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 14:40:42.000000000",
+      "in_reply_to": "651ed9b0_5fb91c4e",
+      "unresolved": false
+    },
+    {
+      "id": "fcbb1919_d61d17a7",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 194,
+      "message": "I think we discussed before but I forgot what we agreed, not so sure now I see this solution...\n(I asume this is with omit-descendants option)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7ebd6f88_aed2f6d4",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 4,
+      "line": 133,
+      "message": "the idea of a separate method for this was a good",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "51933e5f_e277e304",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentRepository.java",
+      "patchset_number": 4,
+      "line": 57,
+      "message": "Maybe introduce a more specialized exception:\nNoDataUnderAnchor()",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5419d493_e0e5ca82",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 171,
+      "message": "@Unroll missing\n(actually we shoudl move to later version of Spock then we dont neeed that annotation anymore)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4332e904_839d4cc8",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 181,
+      "message": "note used",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bb570f84_8706cf7a",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 181,
+      "message": "there is several xPaths referenced in the scope of this test.\nI think i would call it inputXPath for clarity, or similar",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e855419_daee73e5",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 182,
+      "message": "explain, why 'any' ?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "84292b6b_6d122f23",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 206,
+      "message": "same comments as above",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "caf9d56e_bf7050d6",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/exceptions/DataNodeNotFoundException.java",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "see previous comment about a new exception that more clearly indicated the scenario",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-23 16:33:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a8cb06b8_28081d72",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 194,
+      "message": "Not sure what you mean, this is error scenario irrespective of descendant option",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 16:42:52.000000000",
+      "in_reply_to": "fcbb1919_d61d17a7",
+      "unresolved": false
+    },
+    {
+      "id": "3dd7be25_99d7807c",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 4,
+      "line": 133,
+      "message": "method for one line of code ? I this this is pretty readable.\nLet me know if I understood you correctly.",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 16:42:52.000000000",
+      "in_reply_to": "7ebd6f88_aed2f6d4",
+      "unresolved": true
+    },
+    {
+      "id": "efe88244_b0c4b00d",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentRepository.java",
+      "patchset_number": 4,
+      "line": 57,
+      "message": "We did an exercise previously where we rather reduced the number of (similarly named) exceptions as they are ever growing. This name is pretty clear. What do others think ?",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 16:42:52.000000000",
+      "in_reply_to": "51933e5f_e277e304",
+      "unresolved": true
+    },
+    {
+      "id": "49056d3a_105353c2",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/exceptions/DataNodeNotFoundException.java",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "replied in previous comment",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-23 16:42:52.000000000",
+      "in_reply_to": "caf9d56e_bf7050d6",
+      "unresolved": true
+    },
+    {
+      "id": "a4a0a4ea_b60b3168",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentRepository.java",
+      "patchset_number": 4,
+      "line": 57,
+      "message": "I have a preference for keeping DataNodeNotFoundException here. It seems consistent to me.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-04-24 03:00:49.000000000",
+      "in_reply_to": "efe88244_b0c4b00d",
+      "unresolved": true
+    },
+    {
+      "id": "962c34e5_c5ce50ba",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/spi/exceptions/CpsExceptionsSpec.groovy",
+      "patchset_number": 4,
+      "line": 128,
+      "message": "Duplicated method lines 128 and 122.\n\nThis makes the compilation failing from my IDE. Maven compilation is successful.\n\nThe former method could be renamed 'Creating a exception that a datanode with xpath does not exist.' for example.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-04-24 03:00:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7240af35_f0ea464d",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 194,
+      "message": "I think this requires some discussion again",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-26 08:49:28.000000000",
+      "in_reply_to": "a8cb06b8_28081d72",
+      "unresolved": false
+    },
+    {
+      "id": "5ac3710f_e87e1525",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 4,
+      "line": 133,
+      "message": "isRoot is easer to read :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-26 08:49:28.000000000",
+      "in_reply_to": "3dd7be25_99d7807c",
+      "unresolved": true
+    },
+    {
+      "id": "84e3f82d_de4ad1b0",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentRepository.java",
+      "patchset_number": 4,
+      "line": 57,
+      "message": "ok",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-26 08:49:28.000000000",
+      "in_reply_to": "a4a0a4ea_b60b3168",
+      "unresolved": false
+    },
+    {
+      "id": "5d6c98e7_e60e95da",
+      "file_path": "cps-rest/src/test/groovy/org/onap/cps/rest/controller/DataRestControllerSpec.groovy",
+      "patchset_number": 4,
+      "line": 194,
+      "message": "inviting opinions from other too. I this cannot be resolve today (I wil be on leave0 merge as is and we can discuss again later\n\nin my opinion get '/' with descendants should return (first) datatree instance\nget '/' without descendant is a special case. I though we agreed we would throw a specific exception in that case, well that has my preference anyway. Maybe look for team agreement at stand-up meeting!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-04-26 08:54:07.000000000",
+      "in_reply_to": "7240af35_f0ea464d",
+      "unresolved": false
+    },
+    {
+      "id": "e5c8f3fe_70e9b950",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 4,
+      "line": 133,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "5ac3710f_e87e1525",
+      "unresolved": false
+    },
+    {
+      "id": "12c6b106_06e905f1",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 171,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "5419d493_e0e5ca82",
+      "unresolved": false
+    },
+    {
+      "id": "37bec62d_ad14b39d",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 181,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "4332e904_839d4cc8",
+      "unresolved": false
+    },
+    {
+      "id": "4872db9f_4ba43749",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 181,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "bb570f84_8706cf7a",
+      "unresolved": false
+    },
+    {
+      "id": "2a64cf73_586c35b8",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 182,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "9e855419_daee73e5",
+      "unresolved": false
+    },
+    {
+      "id": "a3723940_dba875f3",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsDataPersistenceServiceSpec.groovy",
+      "patchset_number": 4,
+      "line": 206,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "84292b6b_6d122f23",
+      "unresolved": false
+    },
+    {
+      "id": "0dc9b7f8_f8a2ad35",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/exceptions/DataNodeNotFoundException.java",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "Ack",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "49056d3a_105353c2",
+      "unresolved": false
+    },
+    {
+      "id": "c484b099_75e6d6b4",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/spi/exceptions/CpsExceptionsSpec.groovy",
+      "patchset_number": 4,
+      "line": 128,
+      "message": "Done",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-04-26 12:00:39.000000000",
+      "in_reply_to": "962c34e5_c5ce50ba",
+      "unresolved": false
+    }
+  ]
+}

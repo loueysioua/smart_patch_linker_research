@@ -1,0 +1,59 @@
+{
+  "id": "integration~master~I68aa4d941350b1abf32b4d2bc00cbee489af6587",
+  "change_id": "I68aa4d941350b1abf32b4d2bc00cbee489af6587",
+  "_number": 116546,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b2fc230a_c512d599",
+      "file_path": "deployment/noheat/infra-openstack/vagrant/Vagrantfile",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "Shouldn't this snippet be idempotent? Image will be retrieved each time this provisioner is run.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-01-07 10:33:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "86b45e4b_fe959b1b",
+      "file_path": "deployment/noheat/infra-openstack/vagrant/Vagrantfile",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "I agree that it would be beneficial to keep such scripts idempotent.\n\nThis one is set to never run (L150) unless directly requested (as recommended in post-up message L45) - typically once per environment lifetime. Use case I had in mind (and use mostly) is to \"vagrant up\" -> run \"post-up msg\" recommendation -> \"vagrant halt/up\" (when environment is needed). This way I download the image once, store it in DevStack and clean it from /tmp on next boot.\n\nLet me know which location you think would be good for such images (maybe \"/root/os_images\"?) - I'll patch this snippet with proper location and \"continue download\" flag for wget",
+      "author": {
+        "account_id": 5047,
+        "name": "Pawe? Wieczorek",
+        "display_name": "Pawel Wieczorek",
+        "email": "pawel-wieczorek@outlook.com",
+        "username": "pwieczorek"
+      },
+      "updated": "2021-01-15 10:12:46.000000000",
+      "in_reply_to": "b2fc230a_c512d599",
+      "unresolved": true
+    },
+    {
+      "id": "95586398_10a4d9c0",
+      "file_path": "deployment/noheat/infra-openstack/vagrant/Vagrantfile",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "Ok sorry, I didn't tackle the fact that the policy in L150 is actually \"never\"; in that context my remark is irrelevant.\n\n/root/ dir should work ok I suppose.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-01-15 11:34:17.000000000",
+      "in_reply_to": "86b45e4b_fe959b1b",
+      "unresolved": false
+    }
+  ]
+}

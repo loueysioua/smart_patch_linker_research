@@ -146,8 +146,7 @@ export interface PatchsetDiscussion {
 }
 
 /**
- * A single code revision (patchset) of a change, including all file diffs
- * and the reviewer comments left on this specific patchset.
+ * A single code revision (patchset) of a change, including uploader, created, and modified file paths.
  */
 export interface PatchsetInfo {
   /**
@@ -163,44 +162,28 @@ export interface PatchsetInfo {
   readonly uploader: ResolvedAccount | null;
   /** UTC timestamp when this patchset was uploaded. */
   readonly created: Timestamp;
-  /**
-   * Diffs for every modified file in this patchset.
-   * Each entry contains the file path and the corresponding diff hunks.
-   */
-  readonly file_diffs: FileDiff[];
-  /**
-   * Reviewer comments (inline and patchset-level) left on THIS patchset only.
-   * Comments from other patchsets are not included here.
-   */
-  readonly discussion: PatchsetDiscussion;
+  /** List of file paths modified in this specific patchset. */
+  readonly modified_file_paths: string[];
 }
 
 /**
- * All code-related content for a single change.
- * Inline comments are NOT included here; they live in each PatchsetInfo.discussion.
+ * File diffs for a specific patchset.
  */
-export interface CodeContent {
-  /**
-   * The one-line summary / title of the change (the first line of the commit
-   * message, as stored by Gerrit).
-   */
-  readonly subject: string;
-  /**
-   * The full commit message text of the current (latest) patchset.
-   * Includes the subject line, body, and any footers (Change-Id, Signed-off-by, etc.).
-   * Null when the commit endpoint returns no data.
-   */
-  readonly commit_message: string | null;
-  /**
-   * Flat, deduplicated list of all file paths modified across ALL patchsets.
-   * Ordered alphabetically for deterministic output.
-   */
-  readonly modified_file_paths: string[];
-  /**
-   * Ordered list of all patchsets (revisions), from first to latest.
-   * Each entry includes the diff for every file changed in that patchset.
-   */
-  readonly patchsets: PatchsetInfo[];
+export interface PatchsetDiff {
+  readonly patchset_number: number;
+  readonly commit_sha: string;
+  readonly file_diffs: FileDiff[];
+}
+
+/**
+ * All comments for a single change, grouped at the change metadata level.
+ */
+export interface ChangeComments {
+  readonly id: ChangeInfoId;
+  readonly change_id: ChangeId;
+  readonly _number: NumericChangeId;
+  readonly change_comments: ChangeComment[];
+  readonly inline_comments: InlineComment[];
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -346,13 +329,11 @@ export interface DiscussionContext {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Top-level output shape
+// Top-level output shapes
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * The canonical output record for a single Gerrit change.
- * Combines Change-Level Metadata, Code Retrieval Features, Discussion Context,
- * and the Change Log.
+ * The canonical metadata record for a single Gerrit change.
  */
 export interface ChangeMetadata {
   // ── Change-Level Metadata ──────────────────────────────────────────────────
@@ -387,17 +368,17 @@ export interface ChangeMetadata {
   /** All account roles mapped to this change. */
   readonly accounts: ChangeAccountMapping;
 
-  // ── Code Retrieval Features ────────────────────────────────────────────────
+  // ── Code Retrieval Features (Metadata portion) ─────────────────────────────
 
-  /** Subject line, full commit message, file paths, and per-patchset diffs. */
-  readonly code: CodeContent;
+  /** The one-line summary / title of the change. */
+  readonly subject: string;
+  /** The full commit message text of the current (latest) patchset. */
+  readonly commit_message: string | null;
 
   // ── Change Log ─────────────────────────────────────────────────────────────
 
   /**
-   * The audit trail of all change-level messages: CI bot posts, patchset
-   * upload notices, vote events, and any other timeline entries.
-   * Sourced from the MESSAGES query option on GET /changes/.
+   * The audit trail of all change-level messages.
    */
   readonly change_log: ChangeLog;
 }

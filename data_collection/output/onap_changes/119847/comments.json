@@ -1,0 +1,178 @@
+{
+  "id": "oom~master~I8ef67c27ed95432fb90de88b2976f39068fa7be0",
+  "change_id": "I8ef67c27ed95432fb90de88b2976f39068fa7be0",
+  "_number": 119847,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "37397139_947bf286",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "nope. Instead of removing this just surround it with if .Values.ricLink is not empty and eveyrhting will be working fine and user will be bale to give ricLink via override instead of rebuilding the whole chart",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-26 09:08:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "782b16ff_d2ff78d9",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "You are right but I think this was done wrongly in OOM in the first place. Actually, we don't have only one RIC, instead we may have multiple RICs and the information about all of them should be put in this json file. See an example configuration here:\nhttps://gerrit.o-ran-sc.org/r/gitweb?p=nonrtric.git;a=blob;f=docker-compose/policy-service/config/application_configuration.controller.json;h=cf97ed98b0a75982936c658c3f33c18da3f7f789;hb=HEAD\n\nSo, we need to have multiple ricLinks depending on how many RICs the user has provisioned. I don't think we can use override file to include multiple RICs here.",
+      "author": {
+        "account_id": 5051,
+        "name": "Muhammad Rehan Raza",
+        "display_name": null,
+        "email": "muhammad.rehan.raza@est.tech",
+        "username": "RehanRaza"
+      },
+      "updated": "2021-03-26 09:27:29.000000000",
+      "in_reply_to": "37397139_947bf286",
+      "unresolved": true
+    },
+    {
+      "id": "ac073940_b1496222",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Ok I was not aware of that but still it's possible to do this with helm, you just need to use a list and a loop here:\n\nin values.yaml:\nrics:\n - name: ric1\n  link: link1\n  anyOtherConfigNeeded: anyValue\n - name: ric2 \n  link: link2\n  anyOtherConfigNeeded: anyValue\n\nand then here you would just do:\n\n{{ range ric := .Values.rics }}\n      {\n        \"name\": {{ $ric.name }},\n        \"baseUrl\": \"{{ $ric.link }}\",\n        \"controller\": \"controller1\",\n        \"managedElementIds\": [\n          \"kista_1\",\n          \"kista_2\"\n        ]\n      }",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-26 09:49:00.000000000",
+      "in_reply_to": "782b16ff_d2ff78d9",
+      "unresolved": true
+    },
+    {
+      "id": "3bcbd8e5_72a2dc11",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "The change would also need to consider multiple managedElements per RIC.",
+      "author": {
+        "account_id": 5519,
+        "name": "John Keeney",
+        "display_name": "John Keeney",
+        "email": "john.keeney@est.tech",
+        "username": "JohnKeeney"
+      },
+      "updated": "2021-03-26 11:22:11.000000000",
+      "in_reply_to": "ac073940_b1496222",
+      "unresolved": true
+    },
+    {
+      "id": "77a5ccff_19e037fc",
+      "file_path": "kubernetes/a1policymanagement/values.yaml",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "Removal was intended to fix the issue at hand for Honolulu: \nInvalid URL for \"the\" RIC. \n\nRICs can be added at runtime (REST-based config interface, or consul, or configMap change) so removal here could have been considered a temporary fix.",
+      "author": {
+        "account_id": 5519,
+        "name": "John Keeney",
+        "display_name": "John Keeney",
+        "email": "john.keeney@est.tech",
+        "username": "JohnKeeney"
+      },
+      "updated": "2021-03-26 11:22:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "62c30ca8_00e93871",
+      "file_path": "kubernetes/a1policymanagement/values.yaml",
+      "patchset_number": 3,
+      "line": 93,
+      "message": "RIC & (SDNC) controller configuration for A1 PMS needs a general re-think and consolidation\n\nTODO in Istanbul",
+      "author": {
+        "account_id": 5519,
+        "name": "John Keeney",
+        "display_name": "John Keeney",
+        "email": "john.keeney@est.tech",
+        "username": "JohnKeeney"
+      },
+      "updated": "2021-03-26 11:22:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "58b08037_ae0f2df5",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 3,
+      "line": 11,
+      "message": "Just for your information that's not a problem at all;)\n\nWe would just add another loop and that's it;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-26 12:22:36.000000000",
+      "in_reply_to": "3bcbd8e5_72a2dc11",
+      "unresolved": true
+    },
+    {
+      "id": "283ec0e7_e0fe8e99",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 4,
+      "line": 24,
+      "message": "this whitespace after }} prevents linting from passing but I'm not looking at this if I can find an easier way to generate this. Give me a minute",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-29 19:22:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "82e57e10_68d7dcb4",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 5,
+      "line": 11,
+      "message": "I am not sure if I understand this. Where is a1p.generateRics defined?\nI don't see any new template file included in this patchset.",
+      "author": {
+        "account_id": 5051,
+        "name": "Muhammad Rehan Raza",
+        "display_name": null,
+        "email": "muhammad.rehan.raza@est.tech",
+        "username": "RehanRaza"
+      },
+      "updated": "2021-03-30 07:55:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "80024b1c_6c01e42a",
+      "file_path": "kubernetes/a1policymanagement/resources/config/application_configuration.json",
+      "patchset_number": 5,
+      "line": 11,
+      "message": "No worries. I also don't understand how I could have been so stupid to forget to add a new file to this patchset;)\nJust fixed it. Please check the most recent patchset. Sorry for the confusion.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-30 08:45:40.000000000",
+      "in_reply_to": "82e57e10_68d7dcb4",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fdrools-applications~master~I1c4e5d58126e35a64140c91c0c3afda5e9b3a5bd",
+  "change_id": "I1c4e5d58126e35a64140c91c0c3afda5e9b3a5bd",
+  "_number": 29529,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_c869a3bf",
+      "file_path": "controlloop/common/model-impl/rest/src/main/java/org/onap/policy/rest/RESTManager.java",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "From a coding point of view, this change is fine and will work.\n\nHowever, it turns off certificate checking on the REST calls, with obvious security implications.\n\nI'm not sure if and how much certificates are used in ONAP today. If this is an internal interface then maybe it's OK to turn off certificate checking. However, it its a public deployed REST interface, then it probably isn't a good idea. What are the security rules in ONAP regarding the use of certificates?\n\nFor test purposes it might be inconvenient but testers can check out their own local version and disable checking if they wish.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-01-29 17:20:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e8c01f7e",
+      "file_path": "controlloop/common/model-impl/rest/src/main/java/org/onap/policy/rest/RESTManager.java",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "Hi Liam, I had a similar comment in the counterpart amsterdam review (see my comment at https://gerrit.onap.org/r/#/c/27535/).    \n\nIf my understanding is correct, this is needed in the short term for OOM operation, I suppose to talk to AAI in an OOM context.  I'm not sure what is different in OOM for the hostname not matching the cert.   In this case, the problem will be on the AAI side which serves a certificate that triggers the invalid host check (and just in the OOM environment).\n\nIn general, I think cert management in ONAP and policy, needs to be revisited for all components I would say, and I understand there may be some work on the pipe for certificates.\n\nOne way to resolve this review is by opening a jira ticket to track disabling this functionality, and let this one go through, rather than requiring testers to do manual changes, or we could deny altogether ..  What is your view?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-01-29 18:23:09.000000000",
+      "in_reply_to": "5a93c517_c869a3bf",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_88f2bbd0",
+      "file_path": "controlloop/common/model-impl/rest/src/main/java/org/onap/policy/rest/RESTManager.java",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "Would this also affect VF-C and SO REST calls?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-01-29 18:56:03.000000000",
+      "in_reply_to": "5a93c517_e8c01f7e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c8cf637e",
+      "file_path": "controlloop/common/model-impl/rest/src/main/java/org/onap/policy/rest/RESTManager.java",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "Yes, VFC and SO also use this class; it's a helper class for doing REST calls.\n\nIf it's a thing that the whole certificate management is still not worked out, then I think Jorge's suggestion of opening a JIRA on this issue (Even if it is wider than policy) if this is blocking people.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2018-01-29 19:13:35.000000000",
+      "in_reply_to": "5a93c517_88f2bbd0",
+      "unresolved": false
+    }
+  ]
+}

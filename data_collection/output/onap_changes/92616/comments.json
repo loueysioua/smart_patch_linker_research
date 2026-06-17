@@ -1,0 +1,161 @@
+{
+  "id": "policy%2Fapi~master~I47046fbbd7d319b58cabf57ff470ec0d5246c88a",
+  "change_id": "I47046fbbd7d319b58cabf57ff470ec0d5246c88a",
+  "_number": 92616,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9e001208_80982390",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/provider/CommonModelProvider.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "it looks to me like could use generic methods and parameters to collapse and/or refactor most of these methods - probably only need one flavor of each (may still need all three flavors of these top-level methods, but they can probably be shortened to one-liners invoking a common, generic method)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-08-02 21:58:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a0b84d7c_6234e90e",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/provider/CommonModelProvider.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "Sounds like a good idea but I don't fully get it. Do you mean factory pattern? It would be appreciated if you can expand a little bit more.",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-08-05 14:12:39.000000000",
+      "in_reply_to": "9e001208_80982390",
+      "unresolved": false
+    },
+    {
+      "id": "2a96308f_8f5e352b",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/provider/CommonModelProvider.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "For instance, all of the getDeployedXxxPolicies methods could be replaced with a single method:\n\n    private <T, R> T getDeployedPolicies(List<ToscaPolicyIdentifier> policyIdentifiers,\n                    BiFunctionWithEx<String, String, R> getter, BiConsumer<T, R> consumer,\n                    T data) throws PfModelException {\n\n        if (!policyIdentifiers.isEmpty()) {\n            for (ToscaPolicyIdentifier policyIdentifier : policyIdentifiers) {\n                R result = getter.apply(policyIdentifier.getName(),\n                        policyIdentifier.getVersion().split(\"\\\\.\")[0]);\n                consumer.accept(data, result);\n            }\n        }\n        return data;\n    }\n\nthen it could be invoked like this:\n    \n            Map<String, LegacyGuardPolicyOutput> deployedGuardPolicies =\n                            getDeployedPolicies(policyIdentifiers, modelsProvider::getGuardPolicy, Map::putAll, new HashMap<>());\n\nThat one method could be used in lieu of getDeployedPolicies, getDeployedOpPolicies, and getDeployedGuardPolicies.  A similar thing could be done to replace the constructXxx methods with a single method.  Likewise with the hasXxxPolicyVersion and collectXxx methods.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-08-05 15:00:21.000000000",
+      "in_reply_to": "a0b84d7c_6234e90e",
+      "unresolved": false
+    },
+    {
+      "id": "4c65ce3c_1b31758d",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/provider/CommonModelProvider.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "of course, this test could also be deleted:\n\n    if (!policyIdentifiers.isEmpty())",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-08-05 15:21:14.000000000",
+      "in_reply_to": "2a96308f_8f5e352b",
+      "unresolved": false
+    },
+    {
+      "id": "5c57dedf_04fc4f4d",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/LegacyApiRestController.java",
+      "patchset_number": 2,
+      "line": 494,
+      "message": "In theory, only one policy with a policyId should be deployed.   This will have to change once that is supported in the PAP.   Question:  I assume so, but do regular tosca policies (non-legacy) also return a list for the \"deployed\" API call.   Just asking to make sure the interface is consistent for both for CLAMP to use (they want to test with this fix).",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-08-12 13:50:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2e46c7a4_fc6e61db",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/LegacyApiRestController.java",
+      "patchset_number": 2,
+      "line": 494,
+      "message": "We purposely modified PAP to only allow one version of a policy to be deployed.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-08-13 13:51:03.000000000",
+      "in_reply_to": "5c57dedf_04fc4f4d",
+      "unresolved": false
+    },
+    {
+      "id": "001a94ec_353b78bc",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/LegacyApiRestController.java",
+      "patchset_number": 2,
+      "line": 494,
+      "message": "Oh, so this already went in in El Alto, you're confirming right?   I have some very vague recollection, but wasn't sure.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-08-13 15:04:59.000000000",
+      "in_reply_to": "2e46c7a4_fc6e61db",
+      "unresolved": false
+    },
+    {
+      "id": "04014641_de0460b5",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/LegacyApiRestController.java",
+      "patchset_number": 2,
+      "line": 494,
+      "message": "yes",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-08-13 15:18:09.000000000",
+      "in_reply_to": "001a94ec_353b78bc",
+      "unresolved": false
+    },
+    {
+      "id": "1d149d4f_5b261658",
+      "file_path": "main/src/main/java/org/onap/policy/api/main/rest/LegacyApiRestController.java",
+      "patchset_number": 2,
+      "line": 494,
+      "message": "Only one version of a policy to be deployed in each PDP instance or PDP subgroup or PDP group? which granularity?",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-08-13 15:18:09.000000000",
+      "in_reply_to": "2e46c7a4_fc6e61db",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "id": "oom~master~Idaa4935516237221c90c4cf9141136fa1e104a02",
+  "change_id": "Idaa4935516237221c90c4cf9141136fa1e104a02",
+  "_number": 104402,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "606314a9_adcf22a2",
+      "file_path": "kubernetes/clamp/charts/clamp-backend/values.yaml",
+      "patchset_number": 1,
+      "line": 66,
+      "message": "nope. No new hardcoded passwords. Please use common secret template",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-25 21:48:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "51133168_335a6963",
+      "file_path": "kubernetes/clamp/charts/mariadb/resources/config/mariadb/docker-entrypoint-initdb.d/bulkload/create-tables.sql",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "whitespaces",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-25 21:48:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bd0e50f1_655c5273",
+      "file_path": "kubernetes/clamp/charts/clamp-backend/values.yaml",
+      "patchset_number": 1,
+      "line": 66,
+      "message": "I understand Krzysztof, anyway I did not have any User Story on clamp side to track that for Frankfurt.\nNevermind, i'm not sure of those values anyway.\nHere is what I propose for now:\nI'll kick them from this review so that there is no new visible password added.\n\nAnd I 'll rework the entire file (We still have some for policy/dcae as you can see) in another PR so that no password is visible in this file (i have just created that ticket https://jira.onap.org/browse/CLAMP-796). I'll do it now.\n\nI don't want to block the CL testing on SB-01 due to that.\nDoes it sound reasonable for you ?\n\nAlso, i'm wondering if that rework is really desired because the main problem I see here is that i should not store any basic creds to access DCAE or policy at all, this is a total non sense ! \nI guess the creds from the clamp user should be sent (one way encrypted, or a user certificate?) to policy and dcae, so that they could authenticate/verify the permissions of that user as well. \nI guess the system is totally broken(split brain?) here.\nIs there any common strategy decided for that ? (service mesh?)",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-03-25 22:47:36.000000000",
+      "in_reply_to": "606314a9_adcf22a2",
+      "unresolved": false
+    },
+    {
+      "id": "355a1a25_49a5d312",
+      "file_path": "kubernetes/clamp/charts/mariadb/resources/config/mariadb/docker-entrypoint-initdb.d/bulkload/create-tables.sql",
+      "patchset_number": 1,
+      "line": 183,
+      "message": "Krzysztof,sorry this is an auto generated file.\nI'll reformat it.",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-03-25 22:47:36.000000000",
+      "in_reply_to": "51133168_335a6963",
+      "unresolved": false
+    },
+    {
+      "id": "c5ad696b_286febeb",
+      "file_path": "kubernetes/clamp/charts/clamp-backend/values.yaml",
+      "patchset_number": 1,
+      "line": 66,
+      "message": "Sébastien, the endgoal is not not to have hardcoded and/or viewable credentials in these files.\n\nthe (semi) end goal is that for example CDS generate a password at first install for clamp and store it in a secret. Then CLAMP would use this secret to retrieve the data.\nThis way, every new deployment gets a new password and we can work on securing secrets.\n\nlonger term goal (IMO) would be to have an user (and not a component) credential but it requires a lot of refactoring in every components and in the way to check / verify the creds (here Service Mesh could help also)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-26 07:45:59.000000000",
+      "in_reply_to": "bd0e50f1_655c5273",
+      "unresolved": true
+    }
+  ]
+}

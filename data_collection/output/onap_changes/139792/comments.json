@@ -1,0 +1,76 @@
+{
+  "id": "aai%2Fgraphadmin~master~Iedbad0f01e2ed22bd810066623b8eba0ef79bd1a",
+  "change_id": "Iedbad0f01e2ed22bd810066623b8eba0ef79bd1a",
+  "_number": 139792,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b799cebc_d3493062",
+      "file_path": "src/main/java/org/onap/aai/schema/GenTester.java",
+      "patchset_number": 2,
+      "line": 140,
+      "message": "I would suggest that we fetch the vertex once in order to avoid multiple queries. We can then do some assertions based on the value of it. Gremlin offers `tryNext()` to retrieve an Optional<Vertex> that we can use to handle the different cases:\n```java\nfinal JanusGraph g = graph;\nOptional<Vertex> schemaInitializedVertex = graph.traversal().V().has(SCHEMA_INITIALIZED).tryNext();\nschemaInitializedVertex.ifPresentOrElse((vertex) ->\n\t{\n\t\tif (vertex.property(SCHEMA_INITIALIZED).value().equals(true)) {\n\t\t\tsetSchemaInitializedToFalse(g);\n\t\t}\n\t},\n\t() -> createSchemaInitializedVertex(g));\n```\nYou can use the refactoring function of your IDE to basically put everything that is now in the if bodies into the respective `setSchemaInitializedToFalse` and `createSchemaInitializedVertex` functions",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2024-12-23 09:53:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3fe524a8_7d3f1375",
+      "file_path": "src/main/java/org/onap/aai/schema/GenTester.java",
+      "patchset_number": 2,
+      "line": 140,
+      "message": "The code that is already merged in gerrit has query written as - graph.traversal().V().has(SCHEMA_INITIALIZED).next(), but we observed when cluster had large amount of data, the indexes are not utilized properly.\nOne has to provide key and value in 'has' to make use of composite indexes. This I tested through gremlin console also, \n\ngraph.traversal().V().has(SCHEMA_INITIALIZED,true).next() works very fast as compared to graph.traversal().V().has(SCHEMA_INITIALIZED) which takes very long time.\n\nPlease suggest!",
+      "author": {
+        "account_id": 8486,
+        "name": "Ankita Singhal",
+        "display_name": null,
+        "email": "ankita.f.singhal@accenture.com",
+        "username": "ankita.f.singhal"
+      },
+      "updated": "2024-12-23 10:34:00.000000000",
+      "in_reply_to": "b799cebc_d3493062",
+      "unresolved": true
+    },
+    {
+      "id": "9f9a786d_561cc1ef",
+      "file_path": "src/main/java/org/onap/aai/schema/GenTester.java",
+      "patchset_number": 2,
+      "line": 140,
+      "message": "Committed some changes after refactoring. Plz check",
+      "author": {
+        "account_id": 8486,
+        "name": "Ankita Singhal",
+        "display_name": null,
+        "email": "ankita.f.singhal@accenture.com",
+        "username": "ankita.f.singhal"
+      },
+      "updated": "2024-12-24 07:52:41.000000000",
+      "in_reply_to": "3fe524a8_7d3f1375",
+      "unresolved": true
+    },
+    {
+      "id": "a9686c27_7122cbac",
+      "file_path": "src/main/java/org/onap/aai/schema/GenTester.java",
+      "patchset_number": 2,
+      "line": 140,
+      "message": "Done",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-01-03 12:22:31.000000000",
+      "in_reply_to": "9f9a786d_561cc1ef",
+      "unresolved": false
+    }
+  ]
+}

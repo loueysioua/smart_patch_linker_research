@@ -1,0 +1,110 @@
+{
+  "id": "demo~master~I10f1a3d0e8a8d20409187fb7dddb5c350deffcef",
+  "change_id": "I10f1a3d0e8a8d20409187fb7dddb5c350deffcef",
+  "_number": 29537,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_931e7062",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 349,
+      "message": "DCAEgen2 is not supposed to talk to the proxied openstack while MultiCloud federates 2 OpenStack instance into single one. This design is to make the federation invisible to DCAEgen2. (The only trick thing is that DCAEgen2 has to input the parameters and registration 2 openstack instance to make the federation happen, but that should be the only place that DCAEgen2 knows something about the proxied openstack, and that part might be encapsulated/moved to other place in future",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-30 01:01:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b3192c7b",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 365,
+      "message": "The same comment as above",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-30 01:01:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f3e33403",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 349,
+      "message": "I see. You mean, multicloud will take care of handling designate requests to correct cloud? Where I can see this federation happening?\nIn my case using \"pod25\" is not working The keystone of pod25 is using SSL, will that be a problem. In SSL case do we need any changes while registering the cloud",
+      "author": {
+        "account_id": 747,
+        "name": "Bharath Thiruveedula",
+        "display_name": null,
+        "email": "bharath.thiruveedula@verizon.com",
+        "username": "bharaththiruveedula"
+      },
+      "updated": "2018-01-30 03:55:57.000000000",
+      "in_reply_to": "5a93c517_931e7062",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6ec177e3",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 349,
+      "message": "First of all, make sure you understand this proxy designate feature is for those OpenStack without integrated designate service deployed by default and don't want to do so. So you will have to deploy one more small openstack to run designate service.\nthis VM init scripts registered 2 cloud regions,the first one is pod25dns which is the small openstack, the second one is pod25 which is the bigger one. The cloud owner and cloud region id of pod25dns has been put into the \"cloud-extra-info\" property of request to register pod25. please search this property name and find it out.\nyou mentioned pod25 is using ssl? how about pod25dns which is the one running Designate service? If only pod25 is using ssl, you just replace the \"keystone_url\" the ONAP heat env file with your secured keystone url . If your pod25dns is using ssl, please replace the \"dnsaas_keystone_url\" with corresponding keystone url.\nBut I have to clarify that: multicloud in R1 propably is not supporting keystone with SSL. If you have to use this proxy designate feature, I can support you to do some tricky work to get this done. Please also file a jira to multicloud as well.",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-30 13:53:36.000000000",
+      "in_reply_to": "5a93c517_f3e33403",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0e6f93fe",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 349,
+      "message": "Hi Bin, I understood this concept of proxy openstack. So I already created small openstack with designate installed. So that's why I changed 'pod25' to 'pod25dns'. But as you said, I saw the cloud_extra_info, and now I understood why we used 'pod25' here. Thanks for the clarification.\n\nComing to SSl, yes pod25 openstack is using SSL. But in this case I can't use the actual keystone_url, becuase we don't have support for keystone/v3 in cloudify. So I want to take multicloud approach. \n\nYeah it would be great if you can share that \"tricky\" approach that would be great. I will also add the JIRA issue today",
+      "author": {
+        "account_id": 747,
+        "name": "Bharath Thiruveedula",
+        "display_name": null,
+        "email": "bharath.thiruveedula@verizon.com",
+        "username": "bharaththiruveedula"
+      },
+      "updated": "2018-01-30 14:06:30.000000000",
+      "in_reply_to": "5a93c517_6ec177e3",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_186038a4",
+      "file_path": "boot/dcae2_vm_init.sh",
+      "patchset_number": 1,
+      "line": 349,
+      "message": "Please refer to comments in that jira: https://jira.onap.org/browse/MULTICLOUD-161?focusedCommentId=17840&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-17840",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-31 06:30:13.000000000",
+      "in_reply_to": "5a93c517_0e6f93fe",
+      "unresolved": false
+    }
+  ]
+}

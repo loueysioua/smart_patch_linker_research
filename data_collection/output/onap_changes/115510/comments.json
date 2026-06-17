@@ -1,0 +1,280 @@
+{
+  "id": "policy%2Fmodels~master~I9b8affc4528d756ea925d1291265663148f417d1",
+  "change_id": "I9b8affc4528d756ea925d1291265663148f417d1",
+  "_number": 115510,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9b2633e6_9fdb399c",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "nice!",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-30 18:23:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8fda50aa_a9ce0a96",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderParameters.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "if we make this an \"int\" with a default value of 30, then we can eliminate RETRY_PERIOD_SECONDS_DEFAULT",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-30 18:23:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ff7b6716_6e592f08",
+      "file_path": "models-provider/src/test/java/org/onap/policy/models/provider/PolicyModelsProviderFactoryTest.java",
+      "patchset_number": 1,
+      "line": 216,
+      "message": "can probably use assertThatThrownBy(...).isInstance(...).hasMessage(...)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-30 18:23:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "26c5cdaa_83b51a00",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "Curious if we really need to only perform retries based on fixed search strings? Or just keep trying for any type of error as what we are trying to do is initializing the provider.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2020-11-30 20:10:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c5b64bee_5d9aad82",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "yes, it's needed - TSC wants to distinguish temporary vs permanent issues - see my latest comments on the API review",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-30 20:16:08.000000000",
+      "in_reply_to": "26c5cdaa_83b51a00",
+      "unresolved": true
+    },
+    {
+      "id": "e4effd16_490f74a8",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "Is it a concern that we can't differentiate between a permanently incorrect URL and a temporarily unavailable DB? Both show as \"Can't connect\" exceptions",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-11-30 21:00:14.000000000",
+      "in_reply_to": "c5b64bee_5d9aad82",
+      "unresolved": true
+    },
+    {
+      "id": "72a81e4b_285d8ff3",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "Now that is a concern.  So there's nothing in any of the exception messages indicating \"unknown host\"?\n\nIf we can't distinguish an invalid URL from a DB being down, then we should table this and I'll take it back to the TSC.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-30 21:13:44.000000000",
+      "in_reply_to": "e4effd16_490f74a8",
+      "unresolved": true
+    },
+    {
+      "id": "458f04fb_74e7bf22",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "These are the observed errors connecting to a docker db on a separate IP (VM). These are at about 1s resolution - i.e. it went from 'Connection refused' to 'Success' in a second with no intermediate (e.g. DB not ready) state\n\nNo /etc/hosts entry for mariadb\nInternal Exception: java.sql.SQLNonTransientConnectionException: Could not connect to address=(host=mariadb)(port=3306)(type=master) : mariadb\n... delay while I add entry\n/etc/hosts entry but VM not running\nInternal Exception: java.sql.SQLNonTransientConnectionException: Could not connect to address=(host=mariadb)(port=3306)(type=master) : No route to host (Host unreachable)\n... delay while I start VM\nVM running but DB not running\nInternal Exception: java.sql.SQLNonTransientConnectionException: Could not connect to address=(host=mariadb)(port=3306)(type=master) : Connection refused (Connection refused)\n... delay while I start DB\n... Success!",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 13:36:32.000000000",
+      "in_reply_to": "72a81e4b_285d8ff3",
+      "unresolved": true
+    },
+    {
+      "id": "a8d319a3_e76d5771",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "I wonder if we could take an opposite approach and look for some things we know to be configuration errors, such as credential issues?  I've posted a query about this on onap-discuss, but haven't seen any replies yet.\n\nAnother approach to examining the error message content would be to always retry, but to limit the number of retries before giving up.  Nevertheless, I wouldn't make any more changes until I can get some more clarification and/or direction.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-12-01 13:47:47.000000000",
+      "in_reply_to": "458f04fb_74e7bf22",
+      "unresolved": true
+    },
+    {
+      "id": "32f9227b_a53f0858",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 17:59:23.000000000",
+      "in_reply_to": "9b2633e6_9fdb399c",
+      "unresolved": false
+    },
+    {
+      "id": "133e986e_ce20cca0",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderParameters.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Done",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 17:59:23.000000000",
+      "in_reply_to": "8fda50aa_a9ce0a96",
+      "unresolved": false
+    },
+    {
+      "id": "0634246d_56fac609",
+      "file_path": "models-provider/src/test/java/org/onap/policy/models/provider/PolicyModelsProviderFactoryTest.java",
+      "patchset_number": 1,
+      "line": 216,
+      "message": "Not sure how - I need to check the message of the cause",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 17:59:23.000000000",
+      "in_reply_to": "ff7b6716_6e592f08",
+      "unresolved": true
+    },
+    {
+      "id": "7f6ddfb2_a3b87cf9",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 2,
+      "line": 116,
+      "message": "Playing devil's advocate here, I am questioning why this work is needed.   In OOM deployments, API and other components won't be started until Database is up and provisioned.\n\nIt makes me a little nervous to have an infinite loop here.    I think this may not accomplish the desire intention for some components that may be invoking this function from the initialization thread, that are not yet fully initialized.   In such case, OOM liveness checks may take down the pod anyways.\n\nSafety checks could also be alternatively in .sh entry point rather that in java code but again I am questioning why this is needed in the first place.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-12-01 18:32:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fdb8377d_02185c0a",
+      "file_path": "models-provider/src/test/java/org/onap/policy/models/provider/PolicyModelsProviderFactoryTest.java",
+      "patchset_number": 1,
+      "line": 216,
+      "message": "Oh wait... neat!\n\nDone!",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 19:13:41.000000000",
+      "in_reply_to": "0634246d_56fac609",
+      "unresolved": false
+    },
+    {
+      "id": "52a6afd5_ac192a25",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 2,
+      "line": 116,
+      "message": "This is only called by an explicit request to: createPolicyModelsProviderWithRetry()\nBut your point is well taken - whether we do this here, at a higher level, or at all, and if done, are we sure of the ramifications. This question is still open",
+      "author": {
+        "account_id": 7010,
+        "name": "Gregory Hayes",
+        "display_name": null,
+        "email": "gregory.hayes@est.tech",
+        "username": "gregory.hayes"
+      },
+      "updated": "2020-12-01 19:21:01.000000000",
+      "in_reply_to": "7f6ddfb2_a3b87cf9",
+      "unresolved": true
+    },
+    {
+      "id": "5cadffcf_4d6554e7",
+      "file_path": "models-provider/src/main/java/org/onap/policy/models/provider/PolicyModelsProviderFactory.java",
+      "patchset_number": 2,
+      "line": 116,
+      "message": "Sounds good.   I think this is OK for testing but I don't think we should make it part of general initialization scenario for API and PAP components.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-12-02 14:37:28.000000000",
+      "in_reply_to": "52a6afd5_ac192a25",
+      "unresolved": true
+    }
+  ]
+}

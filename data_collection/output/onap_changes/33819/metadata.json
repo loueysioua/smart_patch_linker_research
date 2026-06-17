@@ -1,0 +1,168 @@
+{
+  "id": "testsuite~master~I5090b8c31cc5d42ae43cc04c557a42e072e1653c",
+  "change_id": "I5090b8c31cc5d42ae43cc04c557a42e072e1653c",
+  "_number": 33819,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-03-02 15:59:37.000000000",
+    "updated": "2018-03-08 16:42:29.000000000",
+    "submitted": "2018-03-08 16:35:16.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1215,
+      "name": "Morgan Richomme",
+      "display_name": null,
+      "email": "morgan.richomme@orange.com",
+      "username": "mrichomme"
+    },
+    "submitter": {
+      "account_id": 37,
+      "name": "Daniel Rose",
+      "display_name": null,
+      "email": "ultimatedogg@gmail.com",
+      "username": "DR695H"
+    }
+  },
+  "subject": "Add tags to  main suite",
+  "commit_message": "Add tags to  main suite\n\nwhen running robot, we got an overall healthcheck results, it could be\ninteresting to have a view on the core, dcae, multicloud, 3rparty and\nAPI (MSB) to quickly identify the problems and eventually not run some\nof the tests if it is known as not supported (e.g. dcae)\nThis patch does not modify the code of the existing test\nIt leverags robotframework tagging mechanism\n\nUsing the OPNFV functest abstraction it is trivial to run them in CI/CD,\npush results to a DB and create a dashboard[1]\n\nthis patch does not modify the code of the existing test\n\n[1]: http://testresults.opnfv.org/onap-testing/amsterdam/functest/status-heat.html\n\nIssue-ID: TEST-80\n\nChange-Id: I5090b8c31cc5d42ae43cc04c557a42e072e1653c\nSigned-off-by: mrichomme <morgan.richomme@orange.com>\n",
+  "change_log": {
+    "entry_count": 10,
+    "entries": [
+      {
+        "id": "5d7e02e20a2ca7ef4565490c74c872e54113e524",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-02 15:59:37.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6a054cd16544c770d678ae7f9254610283854a47",
+        "author": {
+          "account_id": 37,
+          "name": "Daniel Rose",
+          "display_name": null,
+          "email": "ultimatedogg@gmail.com",
+          "username": "DR695H"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-02 16:01:19.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nyou have add some tests again. Since running is based on tags, this means they will run twice.",
+        "patchset_number": 1
+      },
+      {
+        "id": "4af9bcdeb118e044ec2811f81e6456556a26a0ef",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-02 16:05:33.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "d8706a13a0fd3486c05c0ea3969e47be83198ea7",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-02 16:06:20.000000000",
+        "message": "Patch Set 1:\n\n> you have add some tests again. Since running is based on tags, this\n > means they will run twice.\n\nok, I removed the tags for this file, so they should not be triggered",
+        "patchset_number": 1
+      },
+      {
+        "id": "250c42fab111ee1b2c2ebbef24278e0fda25eb21",
+        "author": {
+          "account_id": 37,
+          "name": "Daniel Rose",
+          "display_name": null,
+          "email": "ultimatedogg@gmail.com",
+          "username": "DR695H"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-02 16:07:01.000000000",
+        "message": "Patch Set 2:\n\nbut without a tag how will they be triggered as part of automation?",
+        "patchset_number": 2
+      },
+      {
+        "id": "f85740f8bfecd7218b87286290bdc67ff5f888ca",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-02 16:22:15.000000000",
+        "message": "Patch Set 2:\n\n> but without a tag how will they be triggered as part of automation?\n\nthe goal is not necessarily to trigger them as part as the official automation as the default file with the health tag is already doing the job.\n\nI am using them on my lab (Orange OpenLab). \nThe CI/CD chain is based on gitlab, I just triggered the run of a testing docker though this chain.\nThe testing docker file inherited from OPNFV which provides several possible abstractions including a Robot one (http://functest.readthedocs.io/en/latest/apidoc/functest.html).\nI am using this abstraction to run the tests created in ONAP (I did not create anything new) For the moment I put the \"little\" robot in my repo but it is always better to rely on upstream source: the testuite repo.\n\nUsing the functest docker (for the moment on my private repo (https://hub.docker.com/r/colvert22/functest-onap/), I would like to share the code on an official repo but it sounds complex to contribute in ONAP) includes additional features such as the automatic push to a centralized database (http://testresults.opnfv.org/onap/api/v1/projects/functest/cases) and an automatic basic dashboard. \nAdditionaly this docker has been optimized and \"weights\" 250 Mo without optimization (Still all the OPNFV tests onboarded), which is fine for CI/CD operations\nI made a demo during the weekly integration meeting some weeks ago, the slide deck is here: https://wiki.onap.org/display/DW/Integration+Meeting+Minutes?preview=/6593670/25433913/integration_demo_E2E_chain.pdf",
+        "patchset_number": 2
+      },
+      {
+        "id": "62a19795026a8d3fcd1c2ffa806a32a3f5949c18",
+        "author": {
+          "account_id": 1215,
+          "name": "Morgan Richomme",
+          "display_name": null,
+          "email": "morgan.richomme@orange.com",
+          "username": "mrichomme"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-08 16:31:40.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "cbdd33ba6738ec366a8a1ada4b5269b03720325d",
+        "author": {
+          "account_id": 37,
+          "name": "Daniel Rose",
+          "display_name": null,
+          "email": "ultimatedogg@gmail.com",
+          "username": "DR695H"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-08 16:35:14.000000000",
+        "message": "Patch Set 3: Code-Review+2 Verified+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "93b53ea3306a289544e0a4536d20e63d2db5606e",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-03-08 16:35:16.000000000",
+        "message": "Change has been successfully merged by Daniel Rose",
+        "patchset_number": 3
+      },
+      {
+        "id": "c323281dd349c6031cbf1e46cbc8a889080b8e46",
+        "author": {
+          "account_id": 1201,
+          "name": "Cedric Ollivier",
+          "display_name": null,
+          "email": "cedric.ollivier@orange.com",
+          "username": "ollivier"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-08 16:42:29.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)\n\nThank you",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

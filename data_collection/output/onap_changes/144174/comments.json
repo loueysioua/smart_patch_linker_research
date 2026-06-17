@@ -1,0 +1,192 @@
+{
+  "id": "cps~master~Ic14333386733ced0dd3b0589164174cbe9592718",
+  "change_id": "Ic14333386733ced0dd3b0589164174cbe9592718",
+  "_number": 144174,
+  "change_comments": [
+    {
+      "id": "6f40eb8b_af4c0c49",
+      "patchset_number": 1,
+      "message": "# Integration Test Migration: MockMvc to TestRestTemplate\n\n## Date: 2026-04-30\n\n## Problem\nMockMvc does not properly encode/decode URI path parameters containing `/` characters.\nThis prevented testing with realistic FDN alternate IDs (e.g., `/SubNetwork=Europe/MeContext=node1`)\nwhich are used in production. Postman tests proved it works with a real server using `%2F` encoding.\n\n## Solution\nMigrated the entire integration test suite from MockMvc (WebEnvironment.MOCK) to\nTestRestTemplate (WebEnvironment.RANDOM_PORT) which starts a real embedded Jetty server.\n\n## Key Changes\n\n### New file: `JettyTestConfig.java`\nMirrors the production `JettyConfig` in `cps-application` to allow encoded slashes (`%2F`) in URI paths.\nPermits both `AMBIGUOUS_PATH_SEPARATOR` and `AMBIGUOUS_EMPTY_SEGMENT` Jetty URI compliance violations.\nThis is needed because `cps-application` is not a dependency of `integration-test`.\n\n### Modified: `CpsIntegrationSpecBase.groovy`\n- `@SpringBootTest(webEnvironment = MOCK)` → `RANDOM_PORT`\n- Removed `@AutoConfigureMockMvc` and `MockMvc mvc`\n- Added `@LocalServerPort int port` and `TestRestTemplate restTemplate`\n- Added REST helper methods:\n  - `performGet(path, queryParams, authorization)`\n  - `performPost(path, body, queryParams, authorization)`\n  - `performPut(path, body, queryParams, authorization)`\n  - `performPatch(path, body, contentType, queryParams)`\n  - `performDelete(path, queryParams)`\n  - `performRequest(method, path, body, queryParams, authorization)`\n  - `parseResponseBody(response)` — replaces JsonSlurper/ObjectMapper boilerplate\n  - `buildUri(path, queryParams)` — constructs URI without double-encoding\n  - `buildHeaders(contentType, authorization)`\n\n### Pattern for FDN path variables\n```groovy\ndef encodedRef = URLEncoder.encode(cmHandleReference, 'UTF-8')\ndef response = performGet(\"/ncmp/v1/ch/${encodedRef}/data/ds/ncmp-datastore:passthrough-running\", [...])\n```\nThis keeps `%2F` encoded on the wire, matching how real HTTP clients (Postman, browsers) behave.\n\n### Migrated test specs (12 files)\n- `AlternateIdSpec` — now includes FDN with slashes test case\n- `BearerTokenPassthroughSpec`\n- `DmiUrlEncodingPassthroughSpec`\n- `LegacyBatchDataOperationSpec`\n- `DcmWriteSubJobSpec`\n- `CmHandleGetNorthBoundRestApiSpec`\n- `CmHandleSearchesNorthBoundRestApiSpec`\n- `CmHandleSearchesSouthBoundRestApiSpec`\n- `ModulesRestApiSpec`\n- `PolicyExecutorIntegrationSpec`\n- `ProvMnSRestApiSpec`\n- `ProvMnSExtensionsRestApiSpec`\n\n### Removed\n- `AlternateIdWithFdnSpec.groovy` (standalone proof-of-concept, no longer needed)\n\n## Migration Pattern (old → new)\n```groovy\n// OLD (MockMvc):\nmvc.perform(get('/path').queryParam('key', 'val').contentType(MediaType.APPLICATION_JSON))\n    .andExpect(status().isOk())\n    .andExpect(jsonPath('$.field').value('x'))\n\n// NEW (TestRestTemplate):\ndef response = performGet('/path', [key: 'val'])\nassert response.statusCode == HttpStatus.OK\nassert parseResponseBody(response).field == 'x'\n```\n\n## Notes\n- Performance tests (`/performance/`) don't use REST endpoints — no changes needed there\n- MockMvc is completely removed from the integration-test module\n- The singleton testcontainers (PostgreSQL, Kafka) are unaffected\n- Test execution time is similar (~55s for the REST API specs)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-04-30 16:53:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "22decafd_57492adc",
+      "patchset_number": 1,
+      "message": "Just one question, otherwise looks good",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-05-05 13:05:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "6684ee31_7b42d0cc",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 17,
+      "message": "Should this be CPS-3217?",
+      "author": {
+        "account_id": 4893,
+        "name": "Gerard Nugent",
+        "display_name": null,
+        "email": "gerard.nugent@est.tech",
+        "username": "egernug"
+      },
+      "updated": "2026-05-05 09:42:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6df9afb2_467bed0c",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/inventory/CmHandleSearchesNorthBoundRestApiSpec.groovy",
+      "patchset_number": 1,
+      "line": 75,
+      "message": "Can alternateId be null?",
+      "author": {
+        "account_id": 4893,
+        "name": "Gerard Nugent",
+        "display_name": null,
+        "email": "gerard.nugent@est.tech",
+        "username": "egernug"
+      },
+      "updated": "2026-05-05 09:42:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "00ca6e3e_ea27a2a8",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/base/CpsIntegrationSpecBase.groovy",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "Update Copyright",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-05-05 13:05:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "073ffcb9_64c4498a",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/base/CpsIntegrationSpecBase.groovy",
+      "patchset_number": 1,
+      "line": 105,
+      "message": "NB: Does that need to be defined as int or would def work?",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-05-05 13:05:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "275e547a_d03452d9",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/provmns/ProvMnSRestApiSpec.groovy",
+      "patchset_number": 1,
+      "line": 61,
+      "message": "NB: D=4/E=5",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-05-05 13:05:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b4e6bcb5_de4f11ff",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/base/CpsIntegrationSpecBase.groovy",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-05-06 08:02:56.000000000",
+      "in_reply_to": "00ca6e3e_ea27a2a8",
+      "unresolved": false
+    },
+    {
+      "id": "e255e0d6_e2a5e781",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/base/CpsIntegrationSpecBase.groovy",
+      "patchset_number": 1,
+      "line": 105,
+      "message": "Done",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-05-06 08:02:56.000000000",
+      "in_reply_to": "073ffcb9_64c4498a",
+      "unresolved": false
+    },
+    {
+      "id": "5ea6cbcb_9811a86a",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/inventory/CmHandleSearchesNorthBoundRestApiSpec.groovy",
+      "patchset_number": 1,
+      "line": 75,
+      "message": "it is teh 'outputAlternateId' parameter, I think when the user does not set it in the URL it default to null",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-05-06 08:02:56.000000000",
+      "in_reply_to": "6df9afb2_467bed0c",
+      "unresolved": false
+    },
+    {
+      "id": "fe969023_0a8ab50b",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/ncmp/provmns/ProvMnSRestApiSpec.groovy",
+      "patchset_number": 1,
+      "line": 61,
+      "message": "changed to some=child",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-05-06 08:02:56.000000000",
+      "in_reply_to": "275e547a_d03452d9",
+      "unresolved": false
+    }
+  ]
+}

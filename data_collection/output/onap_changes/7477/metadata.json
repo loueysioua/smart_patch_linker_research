@@ -1,0 +1,168 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Ie185f5d7a8463cb349ac452d8c2b4b05928b3e56",
+  "change_id": "Ie185f5d7a8463cb349ac452d8c2b4b05928b3e56",
+  "_number": 7477,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-08-14 18:43:10.000000000",
+    "updated": "2017-08-15 15:17:44.000000000",
+    "submitted": "2017-08-15 15:13:30.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Support of DB-enabled features",
+  "commit_message": "Support of DB-enabled features\n\nIsolation and data migration support overall and on a per\nfeature basis.\n\npolicy@drools:/opt/app/policy$ policy.sh status\n\n[drools-pdp-controllers]\n L []: Policy Management (no pidfile) is NOT running\n\t1 cron jobs installed.\n\n[features]\nname                 version         status\n----                 -------         ------\neelf                 1.1.0           disabled\nhealthcheck          1.1.0           disabled\nsession-persistence  1.1.0           enabled\n\n[migration]\nsession-persistence: upgrade out-of-sync: 0 -> 201702\n\npolicy@drools:/opt/app/policy$ features enable session-persistence\nsession-persistence: upgrade out-of-sync: 0 -> 201702\n\nname                 version         status\n----                 -------         ------\neelf                 1.1.0           disabled\nhealthcheck          1.1.0           disabled\nsession-persistence  1.1.0           enabled\n\npolicy@drools:/opt/app/policy$ db-migrator -s session-persistence -o upgrade\nupgrade: 0 -> 201702\n\n> upgrade 201701-blah.upgrade.sql\n--------------\ncreate table blah (a varchar(15), b varchar(20))\n--------------\n\n> upgrade 201702-blah2.upgrade.sql\n--------------\ncreate table blah2 (a varchar(15), b varchar(20))\n--------------\n\nsession-persistence: OK: upgrade (201702)\n\npolicy@drools:/opt/app/policy$ db-migrator -s ALL -o report\n+---------------------+---------+\n| name                | version |\n+---------------------+---------+\n| session-persistence | 201702  |\n+---------------------+---------+\n+--------------------------+-----------+---------+---------------------+\n| script                   | operation | success | atTime              |\n+--------------------------+-----------+---------+---------------------+\n| 201701-blah.upgrade.sql  | upgrade   | 1       | 2017-08-14 16:01:32 |\n| 201702-blah2.upgrade.sql | upgrade   | 1       | 2017-08-14 16:01:32 |\n+--------------------------+-----------+---------+---------------------+\n\npolicy@drools:/opt/app/policy$ features disable session-persistence\n\nname                 version         status\n----                 -------         ------\neelf                 1.1.0           disabled\nhealthcheck          1.1.0           disabled\nsession-persistence  1.1.0           disabled\n\npolicy@drools:/opt/app/policy$ db-migrator -s ALL -o downgrade\ndowngrade: 201702 -> 0\n\n> downgrade 201702-blah2.downgrade.sql\n--------------\ndrop table if exists blah2\n--------------\n\n> downgrade 201701-blah.downgrade.sql\n--------------\ndrop table if exists blah\n--------------\n\nsession-persistence: OK: downgrade (0)\n\npolicy@drools:/opt/app/policy$ db-migrator -s ALL -o report\n+---------------------+---------+\n| name                | version |\n+---------------------+---------+\n| session-persistence | 0       |\n+---------------------+---------+\n+----------------------------+-----------+---------+---------------------+\n| script                     | operation | success | atTime              |\n+----------------------------+-----------+---------+---------------------+\n| 201701-blah.upgrade.sql    | upgrade   | 1       | 2017-08-14 16:01:32 |\n| 201702-blah2.upgrade.sql   | upgrade   | 1       | 2017-08-14 16:01:32 |\n| 201701-blah.downgrade.sql  | downgrade | 1       | 2017-08-14 16:13:49 |\n| 201702-blah2.downgrade.sql | downgrade | 1       | 2017-08-14 16:13:49 |\n+----------------------------+-----------+---------+---------------------+\nsession-persistence: OK @ 0\n\nChange-Id: Ie185f5d7a8463cb349ac452d8c2b4b05928b3e56\nIssue-ID: POLICY-96\nSigned-off-by: Jorge Hernandez <jh1730@att.com>\n",
+  "change_log": {
+    "entry_count": 10,
+    "entries": [
+      {
+        "id": "ae8cfef7e0a64ba2c78131611a8e70fba2f69ce0",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-14 18:43:10.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ebdf8d217383a68d0eba2bc0d3556c16988e9e72",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-14 18:45:56.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/86/",
+        "patchset_number": 1
+      },
+      {
+        "id": "34bf6671a3b8078fef13b727cac07e5de71a0266",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-14 18:48:40.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/86/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/86",
+        "patchset_number": 1
+      },
+      {
+        "id": "00ea9f84e8a1cbd0965b1de66c2331ac2d058277",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-14 19:52:37.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nWaiting for Ralph/Kevin to review.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5ac279611f8ae1ad8f730e642cc750d541bad098",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-15 11:35:15.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\n(1 comment)\n\nI have noticed that we now have an implicit requirement that 'mysql' and 'mysqlshow' be available using the default search path for DroolsPDP. This wasn't the case before -- test labs typically have the DB on a separate host, and don't have 'mysql' available on DroolsPDP hosts. The LXCs I have been using for testing do have '/usr/bin/mysql' available, but it is the wrong version -- the correct version is installed elsewhere, and I placed symbolic links in '/home/policy/bin' to put them first in the search path.\n\nIn any case, I believe this new requirement needs to be reflected in installation documents.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f381a850ea4ec4d783663dfd9a665fdd9b44bb82",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-15 15:13:05.000000000",
+        "message": "Patch Set 1:\n\nThanks Ralph, I'll bring it up with internal ATT folks to make sure mysql client (mariadb) is covered as a prereq.   They will also need to do python as well to get the telemetry shell to get feature parity with onap side.\n\nI'll also change the \"warning\" to \"error\" in the message as we talked, effectively the script blocks the enabling of the feature so it is desired behavior.   I'll go ahead and merge, you should see in my next review the echo statement changed then.",
+        "patchset_number": 1
+      },
+      {
+        "id": "94631f9099e6c2b6ccca515f791a5162fa6802fc",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-15 15:13:24.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "8c77544953d95f3eb2e85685ca4852a2fd895703",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-08-15 15:13:30.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 1
+      },
+      {
+        "id": "4ff88a3511badd65483c12150f88cb0e79e48197",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-15 15:14:33.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/59/",
+        "patchset_number": 1
+      },
+      {
+        "id": "805974d05f80caf71c3a6907c0d7a3d045a9e1e9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-15 15:17:44.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/59/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-java/59",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

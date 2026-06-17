@@ -1,0 +1,144 @@
+{
+  "id": "sdc~master~I3af8b9f08dd28b6abdb4df9acdcf9ab2623d10e5",
+  "change_id": "I3af8b9f08dd28b6abdb4df9acdcf9ab2623d10e5",
+  "_number": 110973,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "11a4a42a_2816598e",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "@Sebastien The bug is probably here. It should be `writeIf(!isAtomicComponent(e.component))`.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-08-07 11:07:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06eeb60b_88fef8b7",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "Julien will test that this afternoon and add a test, if it's fine we could abandon the revert.\nSorry, we just want to progress here, we have to many PRs opened and without the tests it's difficult to see if it's stable or not :-)\n\nThanks",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2020-08-07 11:52:23.000000000",
+      "in_reply_to": "11a4a42a_2816598e",
+      "unresolved": true
+    },
+    {
+      "id": "78c2c095_95e63ca2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "I'm afraid it still fails with `writeIf(!isAtomicComponent(e.component))`\n\n```\norg.onap.sdc.tosca.parser.exceptions.SdcToscaParserException: Error: CSAR file bad format. Check the log for details.\n\tat org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory.throwSdcToscaParserException(SdcToscaParserFactory.java:217)\n\tat org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory.init(SdcToscaParserFactory.java:110)\n\tat org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory.getSdcCsarHelper(SdcToscaParserFactory.java:81)\n\tat org.openecomp.sdc.ci.tests.utils.general.AtomicOperationUtils.toscaValidation(AtomicOperationUtils.java:394)\n\tat org.openecomp.sdc.ci.tests.sanity.Onboard.runOnboardToDistributionFlow(Onboard.java:124)\n\tat org.openecomp.sdc.ci.tests.sanity.Onboard.onboardPNFFlow(Onboard.java:84)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)\n\tat org.testng.internal.Invoker.invokeMethod(Invoker.java:583)\n\tat org.testng.internal.Invoker.invokeTestMethod(Invoker.java:719)\n\tat org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:71)\n\tat org.testng.internal.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:14)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n```\n\n\nIf you want to reproduce you can get the full test with\n\n\n```\nsudo ./docker_run.sh -e AUTO -l\nsudo ./docker_run.sh -e AUTO -l -d sdc-sim -sim\nsudo ./docker_run.sh -e AUTO -l -d sdc-api-tests -tad\nfirefox /data/logs/sdc-api-tests/ExtentReport/SDC_CI_Extent_Report.html\n```\n\nI totally agree with you Francis that the best course of action is to reproduce the issue in a test and fix it. But in the mean time, it makes it even more time consumming to review merge requests\nAnother issue is that those tests aren't integrated which how it was missed in the first place",
+      "author": {
+        "account_id": 15,
+        "name": "Julien Bertozzi",
+        "display_name": null,
+        "email": "julien.bertozzi@intl.att.com",
+        "username": "JulienBe"
+      },
+      "updated": "2020-08-07 13:33:17.000000000",
+      "in_reply_to": "06eeb60b_88fef8b7",
+      "unresolved": true
+    },
+    {
+      "id": "b1a7a37e_2e5b33b2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "No worries at all, I am the one who introduced the bug in the first place, and am really sorry for all the trouble.\n\nHave you checked if it works by branching right before this commit? Also it seems the error is different this time (isn't it?). Sébastien initially mentioned a file cannot be retrieved but in this case, it seems to be malformed. Could you please confirm these assumptions?\n\nThanks in advance.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-08-07 16:08:41.000000000",
+      "in_reply_to": "06eeb60b_88fef8b7",
+      "unresolved": true
+    },
+    {
+      "id": "360a6235_78f6ef2b",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "It can happen to anyone, and it was reviewed and merged :)\nYes I tried before the commit, and I didn't had this issue. \nFor the file that can't be reviewed, I believe that it's a misunderstanding, as Seb and I were looking at this issue. For me it's the same issue that I saw on master\n\nThanks for your time !",
+      "author": {
+        "account_id": 15,
+        "name": "Julien Bertozzi",
+        "display_name": null,
+        "email": "julien.bertozzi@intl.att.com",
+        "username": "JulienBe"
+      },
+      "updated": "2020-08-09 18:40:22.000000000",
+      "in_reply_to": "b1a7a37e_2e5b33b2",
+      "unresolved": true
+    },
+    {
+      "id": "341f35bc_39d62f06",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "Hi!\n\nI'm gonna spend the next hour trying to figure out what is going on, and if I don't find anything, let you guys revert this. Is that alright? Or do you need to do this ASAP?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-08-10 11:08:51.000000000",
+      "in_reply_to": "360a6235_78f6ef2b",
+      "unresolved": true
+    },
+    {
+      "id": "f3f6cae2_a8cf66c3",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "I'm not able to run the sanity tests from here despite the instructions in the documentation. I won't have the time to dig further today unfortunately so  let's go on with the revert.\n\nIdeally, a test should be created for this case as nothing prevents us from breaking CsarUtils currently. Considering the high level of technical debt this class contains, this is critical.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-08-10 12:33:49.000000000",
+      "in_reply_to": "341f35bc_39d62f06",
+      "unresolved": false
+    },
+    {
+      "id": "d9439ab1_680ce925",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 1,
+      "line": 498,
+      "message": "Totally agree.\n\nWhat we would like to do is integrate those tests in the toolchain. But they have a lot of technical dept too",
+      "author": {
+        "account_id": 15,
+        "name": "Julien Bertozzi",
+        "display_name": null,
+        "email": "julien.bertozzi@intl.att.com",
+        "username": "JulienBe"
+      },
+      "updated": "2020-08-10 18:26:12.000000000",
+      "in_reply_to": "f3f6cae2_a8cf66c3",
+      "unresolved": false
+    }
+  ]
+}

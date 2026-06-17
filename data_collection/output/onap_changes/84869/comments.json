@@ -1,0 +1,484 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~Ic019b1796e17d24f14f41a817af6e5ecd8c7244b",
+  "change_id": "Ic019b1796e17d24f14f41a817af6e5ecd8c7244b",
+  "_number": 84869,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "0306188a_b67cb3fd",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/ConfigurationModule.kt",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Move merger field between parser and validator to reflect pipe order.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4542f04b_d5fd276c",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 8,
+      "line": 75,
+      "message": "You're repeating the fold from ConfigurationValidator. Since you already know, if we have ssl disabled or not and if all security keys are present in validator, could you think of a way to skip the options in security related fields? You would probably need two different validated security configuration classes (that's related to my comment in partial_configurations). Just an idea.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8fe55394_1384824c",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 8,
+      "line": 85,
+      "message": "You don't need the binding here, since you already know at this point ssl is enabled and the config is valid. Consider the idea i presented in the comment above. You could gain on validated security config without options here.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bd20f927_343fb439",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 8,
+      "line": 103,
+      "message": "You can use \"let\" or \"run\" scope functions to get rid of that invoke (or just extract to method)",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f2a6a6d7_0147a395",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidator.kt",
+      "patchset_number": 8,
+      "line": 93,
+      "message": "Consider moving lambda ouside parentheses",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "aab1c0f1_5bed1931",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidator.kt",
+      "patchset_number": 8,
+      "line": 95,
+      "message": "Consider this version:\nprivate fun <A> validationMessageFrom(invalidFields: List<Validated<String, A>>): String =\n            invalidFields\n                    .map { it as Invalid }\n                    .map { it.e }\n                    .fold(\"\", String::plus)\n                    .let { \"Some required configuration properties are missing: \\n $it\" }\n\nImo it looks cleaner.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1c37f49c_86661b3b",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configurations.kt",
+      "patchset_number": 8,
+      "line": 61,
+      "message": "What do you think about moving validated classes to separate file? Also you could create structure similar to final configuration (introduce validated server and security config) to be more consistent. It could also help to understand what is going on easier.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 11:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "54ed8b00_1f04ced8",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/ConfigurationModule.kt",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-11 12:38:18.000000000",
+      "in_reply_to": "0306188a_b67cb3fd",
+      "unresolved": false
+    },
+    {
+      "id": "82374137_35737253",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 8,
+      "line": 103,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-11 12:38:18.000000000",
+      "in_reply_to": "bd20f927_343fb439",
+      "unresolved": false
+    },
+    {
+      "id": "e7c26c67_8c27a5d3",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidator.kt",
+      "patchset_number": 8,
+      "line": 93,
+      "message": "I felt that way is more understandable\n\nfromOption(something){\n  alsoSomething\n}\n\nlooks for me like I would be calling `.also{}`.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-11 12:38:18.000000000",
+      "in_reply_to": "f2a6a6d7_0147a395",
+      "unresolved": false
+    },
+    {
+      "id": "36cd103b_f9e40333",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidator.kt",
+      "patchset_number": 8,
+      "line": 95,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-11 12:38:18.000000000",
+      "in_reply_to": "aab1c0f1_5bed1931",
+      "unresolved": false
+    },
+    {
+      "id": "130c666b_05a27624",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configurations.kt",
+      "patchset_number": 8,
+      "line": 61,
+      "message": "Done something, have a closer look",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-11 12:38:18.000000000",
+      "in_reply_to": "1c37f49c_86661b3b",
+      "unresolved": false
+    },
+    {
+      "id": "8ef26e14_63d8f5c1",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/model/configuration.kt",
+      "patchset_number": 9,
+      "line": 32,
+      "message": "We don't use that field anymore, since the cbs configuration has its own validation + transformation path.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 13:53:29.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "823fe266_14c16e43",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 9,
+      "line": 32,
+      "message": "Instead of suppressing the warning you can just break the line after base.[fieldName] for each field. It actually doesn't look bad",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 13:53:29.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "dd6ac9ca_ec8250f0",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 9,
+      "line": 94,
+      "message": "Well, i thought either about this:\n\n   private fun determineMaxPayloadSize(routing: List<Route>) =\n            routing.map { it.sink.maxPayloadSizeBytes() }.max()\n                    ?: let {\n                        logger.warn {\n                            \"Failed to determine \\\"maxPayloadSizeBytes\\\" field from routing.\" +\n                                    \" Using default ($DEFAULT_MAX_PAYLOAD_SIZE)\"\n                        }\n                        DEFAULT_MAX_PAYLOAD_SIZE\n                    }\n\nor that:\n\n     private fun useDefaultMaxPayloadSize(): Int {\n        logger.warn {\n            \"Failed to determine \\\"maxPayloadSizeBytes\\\" field from routing. Using default ($DEFAULT_MAX_PAYLOAD_SIZE)\"\n        }\n        return DEFAULT_MAX_PAYLOAD_SIZE\n    }\n\nIf you don't find the second solution better, use \"it\" in the log message instead of fully specifying the constant name, to actually benefit from the \"also\" usage.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 13:53:29.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c2169afe_f2f21d05",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 9,
+      "line": 91,
+      "message": "I really dont think keeping that logic in data class is a good idea. It actually fits well inside the validator.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 13:53:29.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4fd12ca2_b205238a",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/validated_configuration.kt",
+      "patchset_number": 9,
+      "line": 29,
+      "message": "It would be nice to also extract these fields to separate validated class to reflect final config structure.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-11 13:53:29.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4c51f1c_37d56238",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 10,
+      "line": 43,
+      "message": "IMO, more important is that it's validated than it's partial.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-12 06:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a912e8d5_c97d64eb",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 10,
+      "line": 59,
+      "message": "Would extracting this to a method allow us to get rid of @Supress?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-12 06:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "81a24cc5_3923ac36",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 10,
+      "line": 67,
+      "message": "force -> unsafe\n\nWill be more consistent with rest of our code base and more scary to use ;)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-12 06:00:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "957d4e6f_482670a1",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/model/configuration.kt",
+      "patchset_number": 9,
+      "line": 32,
+      "message": "Currently we are not, however we most likely will in near future - there is task assigned to our team for that. Also it makes sense to leave it here to reflect configuration structure.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:04:03.000000000",
+      "in_reply_to": "8ef26e14_63d8f5c1",
+      "unresolved": false
+    },
+    {
+      "id": "f658f571_e8e06593",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 9,
+      "line": 32,
+      "message": "Done another way",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:04:03.000000000",
+      "in_reply_to": "823fe266_14c16e43",
+      "unresolved": false
+    },
+    {
+      "id": "fac45fb0_6cfa9319",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 9,
+      "line": 94,
+      "message": "I benefit from using `also` anyway - by not needing to use return or double-braces ;)\n\nAlso { \n  I don't feel like using `it` makes code more readable\n}.let {\n  Done x2 though\n}",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:04:03.000000000",
+      "in_reply_to": "dd6ac9ca_ec8250f0",
+      "unresolved": false
+    },
+    {
+      "id": "c9cfc4bd_21dab4c4",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 9,
+      "line": 91,
+      "message": "I also dislike this solution a bit, however:\n\n1. I believe method name and body clearly say that usage is \"unsafe\", so user was warned. We can even try to rename it to \"unsafeForceValidated\"\n2. Moving it to Validator would litter this class (now it looks tidied) and would impose antoher Suppress(TooManyFunctions)\n3. This solution does provide great advantage in simplyfing tests - try it yourself with it being private in Validator ;)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:04:03.000000000",
+      "in_reply_to": "c2169afe_f2f21d05",
+      "unresolved": false
+    },
+    {
+      "id": "a3f7108b_1fbcf582",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 10,
+      "line": 43,
+      "message": "yep, copy-paste ;)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:22:33.000000000",
+      "in_reply_to": "d4c51f1c_37d56238",
+      "unresolved": false
+    },
+    {
+      "id": "a3a0ebb5_da36159d",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationTransformer.kt",
+      "patchset_number": 10,
+      "line": 59,
+      "message": "extracting both toServerConfiguration, toCollectorConfiguration did the job (20 lines is TooLong)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:22:33.000000000",
+      "in_reply_to": "a912e8d5_c97d64eb",
+      "unresolved": false
+    },
+    {
+      "id": "9b98e07e_40545109",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 10,
+      "line": 67,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:22:33.000000000",
+      "in_reply_to": "81a24cc5_3923ac36",
+      "unresolved": false
+    },
+    {
+      "id": "6d0b5029_61558257",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/validated_configuration.kt",
+      "patchset_number": 9,
+      "line": 29,
+      "message": "I thought about it, but actually all it does is making more code - we have Transformer for this job of translating a-bit-chaotic ValidatedConfig into full-fledged HvVesConfiguration structure. \n\nValidated config does not need to reflect any 'actual' config as it's not deserialized from json or is not used outside this module.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-12 06:22:33.000000000",
+      "in_reply_to": "4fd12ca2_b205238a",
+      "unresolved": false
+    }
+  ]
+}

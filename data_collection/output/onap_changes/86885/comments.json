@@ -1,0 +1,229 @@
+{
+  "id": "oom~master~I337aaf258b1a3716d97e31ea3f53014738f3db55",
+  "change_id": "I337aaf258b1a3716d97e31ea3f53014738f3db55",
+  "_number": 86885,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7f7c5cdf_3a743301",
+      "file_path": "kubernetes/common/cassandra/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "why is this replacement attempted on run rather than being configured in the YAML?\nWhat if someone configured it differently in their YAML?\nWhy is this different from the way the original aai-cassandra, etc, were configured?",
+      "author": {
+        "account_id": 4341,
+        "name": "Keong Lim",
+        "display_name": null,
+        "email": "keong.lim+onap@gmail.com",
+        "username": "keong"
+      },
+      "updated": "2019-05-03 07:04:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a3763752_d883f381",
+      "file_path": "kubernetes/common/cassandra/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "aai-cassandra was not creating any user.\nBy default cassandra.yaml contains AllowAllAuthenticator as authenticator which allows all the users. AAI was using it with this default behavior only.\nBut SDC creates the asdc_user and we will need this capability.\n\ndocker-entrypoint.sh provides a way to override the config for certain parameters but not for this particular param. Another way (and better) of achieving this could be to modify the docker-entrypoint.sh and mount it using configmap and provide this parameter using env variable.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-03 07:14:45.000000000",
+      "in_reply_to": "7f7c5cdf_3a743301",
+      "unresolved": false
+    },
+    {
+      "id": "6c42323b_8ffcab1f",
+      "file_path": "kubernetes/common/cassandra/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 51,
+      "message": "SDC was changing it as part of their custom cassandra image.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-03 07:16:02.000000000",
+      "in_reply_to": "a3763752_d883f381",
+      "unresolved": false
+    },
+    {
+      "id": "d762d3d4_f3b3fd72",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 71,
+      "message": "Added this new param to be sed in the default docker-entrypoint.sh",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-03 08:37:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ccb8e8f5_ca5979b6",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "Is the find redundant here since you're looking for things files and directories which are NOT owned by cassandra, with the intent of making them owned by cassandra user.\nWhy not just do \nchown cassandra /var/lib/cassandra /var/log/cassandra \"$CASSANDRA_CONFIG\"",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-03 15:15:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "97a5862a_54f31e70",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 26,
+      "message": "Would tokenizing \"hostname -I\" or \"hostname -i\" work cleaner?",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-03 15:15:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "57ad64f7_e7cb870f",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "set the output of this to a variable, it's used several times.",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-03 15:15:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c068efd1_8bd71df9",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 73,
+      "message": "Better name for the var pls",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-03 15:15:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f067c9c4_b269c48b",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 73,
+      "message": "Also, would this work \"${!CASSANDRA_${yaml^^}\"  ?",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-03 15:38:19.000000000",
+      "in_reply_to": "c068efd1_8bd71df9",
+      "unresolved": false
+    },
+    {
+      "id": "14d72906_82bc6273",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "I just took the entrypoint script as it is from from cassandra container.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-06 09:54:19.000000000",
+      "in_reply_to": "ccb8e8f5_ca5979b6",
+      "unresolved": false
+    },
+    {
+      "id": "815c4006_463901c3",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 71,
+      "message": "Only added this param here.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-06 09:54:19.000000000",
+      "in_reply_to": "d762d3d4_f3b3fd72",
+      "unresolved": false
+    },
+    {
+      "id": "cfbdeaf0_9b4d5ccd",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 73,
+      "message": "As stated earlier, this file is from cassandra container itself and it works.",
+      "author": {
+        "account_id": 2763,
+        "name": "Mahendra Raghuwanshi",
+        "display_name": null,
+        "email": "mahendra.raghuwanshi@amdocs.com",
+        "username": "mahendrr"
+      },
+      "updated": "2019-05-06 09:54:19.000000000",
+      "in_reply_to": "f067c9c4_b269c48b",
+      "unresolved": false
+    },
+    {
+      "id": "087df285_27e3e55b",
+      "file_path": "kubernetes/common/cassandra/resources/config/docker-entrypoint.sh",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "ok",
+      "author": {
+        "account_id": 5299,
+        "name": "Oleg Mitsura",
+        "display_name": null,
+        "email": "omitsura@gmail.com",
+        "username": "omimtl"
+      },
+      "updated": "2019-05-06 18:20:15.000000000",
+      "in_reply_to": "14d72906_82bc6273",
+      "unresolved": false
+    }
+  ]
+}

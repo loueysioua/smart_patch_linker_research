@@ -1,0 +1,210 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I7b8180d11077ccf59b21b6484cb58b5522a3df8f",
+  "change_id": "I7b8180d11077ccf59b21b6484cb58b5522a3df8f",
+  "_number": 26263,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-12-13 21:31:58.000000000",
+    "updated": "2017-12-21 18:30:12.000000000",
+    "submitted": "2017-12-21 18:13:51.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1621,
+      "name": "Kevin McKiou",
+      "display_name": null,
+      "email": "km097d@att.com",
+      "username": "km097d"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Fix issues blocking election handler thread",
+  "commit_message": "Fix issues blocking election handler thread\n\nThis bug tracks the AT&T bug 355533.  The symptom was that drools\npdps that were backing each other up were becoming stuck in a\nstandby state.  The cause was that the election handler thread was\nbeing hung by a call to PolicyEngine.manager.deactivate which shuts\ndown the topic endpoints when the drools pdp operational state\ntransitions to disabled. Related problems were that the election\nhandler heartbeat was NOT blocked when the main thread was blocked\nand the IntegrityMonitor forward progress counter was NOT blocked\nfrom incrementing when the election handler thread was blocked.\nThis prevented the correct failover of the drools pdp to another\nhealthy one. This change fixes the two causes of the thread blockage,\nmoves the election handler heartbeat to the main thread and adds an\ninterface (AllSeemsWell) which is called when the election handler\nhas stalled/resumed. The AllSeemsWell interface will block forward\nprogress counter increments when ALLNOTWELL and will resume forward\nprogress counter increments when ALLSEEMSWELL. In addition, it reduces\nthe run time of the StandbyStateManagementTest from approximately 8\nminutes to approximately 2 minutes. Since this changes classes also\nchanged by POLICY-444, this change must be merged before POLICY-444\ncan be merged.\n\nIssue-ID: POLICY-501\nChange-Id: I7b8180d11077ccf59b21b6484cb58b5522a3df8f\nSigned-off-by: Kevin McKiou <km097d@att.com>\n",
+  "change_log": {
+    "entry_count": 13,
+    "entries": [
+      {
+        "id": "ccce1639927b6303b01fae72e60a244aca11e12a",
+        "author": {
+          "account_id": 1621,
+          "name": "Kevin McKiou",
+          "display_name": null,
+          "email": "km097d@att.com",
+          "username": "km097d"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-13 21:31:58.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5f580524e4566a8c0797d338774ad34f902419bb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-13 21:34:50.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/312/",
+        "patchset_number": 1
+      },
+      {
+        "id": "736bd26aab7599d1efe7dbb561b3976bf18b4e94",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-13 21:39:38.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/312/ : FAILURE\n\nUnable to build due to a non-resolvable parent POM. Search logs for \"[FATAL] Non-resolvable parent POM\" to find the logs.\n\nThe fix for this is usually to make sure your poms are pointing to parents that exist. Double check:\n\n * groupId is correct and no typos\n * artifactId is correct and no typos\n * version is correct for branch ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/312/ )\n\nPatch failed to compile in component api-state-management: Compilation failure ( https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/312/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/312",
+        "patchset_number": 1
+      },
+      {
+        "id": "8df03d0b9ccfa4d2aa71818a6716e7b1e4a22245",
+        "author": {
+          "account_id": 1621,
+          "name": "Kevin McKiou",
+          "display_name": null,
+          "email": "km097d@att.com",
+          "username": "km097d"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-15 20:54:57.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nThis will not build until the common repository master branch changes are merged and built since it uses the classes that have been added to that repo/branch.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d0d0f1210402c23f50ab4613bcc9425e808a6df5",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-18 14:23:45.000000000",
+        "message": "Patch Set 1:\n\nOk - will wait for Jorge on the other Code Review then we can kick off the Verify again.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2e391a988cf742f1765f9b89d5d62af93dad12c1",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-18 19:16:31.000000000",
+        "message": "Patch Set 1:\n\nrecheck",
+        "patchset_number": 1
+      },
+      {
+        "id": "7ddc6882b326eeb4aceaa4d2ae8fc3915236b5fe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-18 19:18:46.000000000",
+        "message": "Patch Set 1: -Verified\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/318/",
+        "patchset_number": 1
+      },
+      {
+        "id": "71f178d7e9e520e14833551785aea9dc3b656dd5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-18 19:26:35.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/318/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/318",
+        "patchset_number": 1
+      },
+      {
+        "id": "1eac705812db7eaf42db7e1c450344b9928dbcc8",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-20 14:10:58.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "62644712ed4456ea63bafd2ccdff1860dbea37f3",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-21 18:13:47.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "89432c0a4acfb85e70236f5ac2414b97ef900e5e",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-12-21 18:13:51.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 1
+      },
+      {
+        "id": "40215b6293564dea73d30ad6b0e889fbcc72cb30",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-21 18:22:50.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/152/",
+        "patchset_number": 1
+      },
+      {
+        "id": "3b543e6a2cc2ac11cceed7a769b84477d7428f3a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-21 18:30:12.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/152/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-java/152",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

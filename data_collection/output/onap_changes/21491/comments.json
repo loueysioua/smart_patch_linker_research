@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fdrools-applications~master~Ic74efa74fbb1dc0e01d7c36a06fdaf48fc8a3238",
+  "change_id": "Ic74efa74fbb1dc0e01d7c36a06fdaf48fc8a3238",
+  "_number": 21491,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a2f8d8d_cc9686f0",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 2,
+      "line": 205,
+      "message": "may be a tiny bit safer to do\n\n$event.closedLoopEventStatus != ControlLoopEventStatus.ONSET\n\njust in case there is some other values (which there should not be)",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-10-31 15:27:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_4cb1768e",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 2,
+      "line": 205,
+      "message": "well maybe that should be a different check and a different reject message if it isn't abated. I thought we had that in another method but perhaps that got changed. Its good to track the spurious abatements so we can hopefully get that changed in the future.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2017-10-31 15:39:42.000000000",
+      "in_reply_to": "1a2f8d8d_cc9686f0",
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_6c3f92d7",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 2,
+      "line": 205,
+      "message": "The code as is if we get any value other than abated in the closed loop event status it will fall into line 208 as is a plain catch-all else, under the perhaps wrong assumption that is an onset (unless the ControlLoopEventManager throws an exception in line 212).   I think it may be better as we only want lines 208-260 to be executed only for ONSET to ensure that's the case, and this is the earliest point.\n\nI think the REJECT notification can be changed to account for ABATED and unexpected others by putting it in the message (that goes into the notification message), something like\n\nthrow new ControlLoopException($event.closedLoopEventStatus + \" received with no prior onset\");\n\nIn any case, this version solves the problem, and we don't anticipate to get anything else in a trusted environment with dcae, so I'm Ok with the work.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-10-31 16:03:14.000000000",
+      "in_reply_to": "1a2f8d8d_4cb1768e",
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_8cb75e86",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 2,
+      "line": 205,
+      "message": "Do you think maybe that should be a filter check? Currently the filter for the topic is \"closedLoopEventStatus=.*\" perhaps we should ensure that the filter checks that the eventStatus is either onset or abatement, that way it is binary (ONSET or ABATED). What do you think?",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2017-10-31 16:16:25.000000000",
+      "in_reply_to": "1a2f8d8d_cc9686f0",
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_2f64dce3",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 2,
+      "line": 205,
+      "message": "we could do that an OR regex in the filters.   I don't think is critical though, may be better to not do anything, and let downstream systems know via notification that there is something funky going on getting this messages.   If they are filtered out, they are silently discarded.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-10-31 16:45:52.000000000",
+      "in_reply_to": "1a2f8d8d_8cb75e86",
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_af9facb3",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 4,
+      "line": 206,
+      "message": "If we go this way, since the Exception - e.getMessage() goes into the notification reject message, better to spell out the DCAE event received:\n\nthrow new ControlLoopException($event.closedLoopEventStatus + \" received with no prior onset\");",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-10-31 16:49:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a2f8d8d_afed6c27",
+      "file_path": "controlloop/templates/archetype-cl-amsterdam/src/main/resources/archetype-resources/src/main/resources/__closedLoopControlName__.drl",
+      "patchset_number": 4,
+      "line": 206,
+      "message": "Done",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2017-10-31 17:05:08.000000000",
+      "in_reply_to": "1a2f8d8d_af9facb3",
+      "unresolved": false
+    }
+  ]
+}

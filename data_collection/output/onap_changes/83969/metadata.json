@@ -1,0 +1,790 @@
+{
+  "id": "policy%2Fxacml-pdp~master~Iafa06ae3f1ee195c7da3710a12d9c095c5413ec2",
+  "change_id": "Iafa06ae3f1ee195c7da3710a12d9c095c5413ec2",
+  "_number": 83969,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-04-02 12:51:08.000000000",
+    "updated": "2019-04-06 23:33:12.000000000",
+    "submitted": "2019-04-06 23:24:44.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 805,
+      "name": "Michael Mokry",
+      "display_name": null,
+      "email": "michael.mokry@att.com",
+      "username": "mmokry"
+    },
+    "submitter": {
+      "account_id": 57,
+      "name": "Pamela Dragosh",
+      "display_name": null,
+      "email": "pd1248@att.com",
+      "username": "pdragosh"
+    }
+  },
+  "subject": "Xacml PDP Register/Unregister Changes",
+  "commit_message": "Xacml PDP Register/Unregister Changes\n\n1) Modified activator\n\t- Extend and use ServiceManagerContainer\n\t- add topicSink and topicSource properties to TopicEndpoint\n\tmanager\n2) Added PAP registration class\n3) Added PDP message formatting class\n4) Added PDP State Change listener to listen for state change and send\nback PDP Status.. then start heartbeat if not started already\n5) Added Heartbeat publisher code to send heartbeat status on periodic\ninterval\n6) UPDATE: Made changes to satisfy Jim's review comments\n7) Added code to XacmlPdpApplicationManager to get supportedPolicyTypes\n8) UPDATE: more changes to satisfy Jim's latest review comments\n9) Fixed the failed Junits causing build failure\n10) Made change to use NetworkUtil for getting PdpStatus name value per\nJorge's comment\n\nStill need to in separate review:\n1) Write Junits for new code\n\nRegistration and heartbeat flow as I understand it:\n1) PDP starts and sends initial status to PAP with PASSIVE state\n2) PDP listens for State Change from the PAP\n3) PDP sends updated Active state to the AP\n4) PDP begins sending periodic heartbeat status to the PAP\n\nChange-Id: Iafa06ae3f1ee195c7da3710a12d9c095c5413ec2\nIssue-ID: POLICY-1449\nSigned-off-by: Michael Mokry <michael.mokry@att.com>\n",
+  "change_log": {
+    "entry_count": 54,
+    "entries": [
+      {
+        "id": "e7a96e99e93f6c9f6b67c8bfa4f46a1de9db8d2b",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-02 12:51:08.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d6697b59f5e8e93f3f8605ef6a01d015a62650bf",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 12:53:13.000000000",
+        "message": "Patch Set 1:\n\nNo Builds Executed",
+        "patchset_number": 1
+      },
+      {
+        "id": "c926c4231a09c79ee1f77fc6d0809116c6b94b43",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 13:19:18.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/99/",
+        "patchset_number": 1
+      },
+      {
+        "id": "16afe6ef981602f21d913a86d3aded9316d270e3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 13:23:26.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/99/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/99/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/99",
+        "patchset_number": 1
+      },
+      {
+        "id": "42041069b594aebef2d073fc01138df89499b39e",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 13:42:57.000000000",
+        "message": "Patch Set 1:\n\nGreat thanks!",
+        "patchset_number": 1
+      },
+      {
+        "id": "46b0980bd27cf4e5eabfabbfd4aed75ed7999a95",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 17:53:57.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(8 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "50f02af38bf286035db47b516351fda8251148f0",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 17:54:34.000000000",
+        "message": "Patch Set 1:\n\nnice first pass - now everyone else can copy your code! :-)",
+        "patchset_number": 1
+      },
+      {
+        "id": "78a3b25e1b96ed6251ad471a6b1cae7caf010154",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-03 04:05:19.000000000",
+        "message": "Patch Set 1:\n\nMike - this is good. I was thinking that in my review I add a static class for Xacml Application providers. Similar to the static class for statistics.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8930a605007b4dbcab021d731d6a0242f7551c80",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-04 20:21:45.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "35d215d9358f53892565cdee354694c8e1815f80",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 20:21:59.000000000",
+        "message": "Patch Set 2:\n\nNo Builds Executed",
+        "patchset_number": 2
+      },
+      {
+        "id": "e265ce682b35d3dc0f57afcafd35532de7a7e03a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 20:24:32.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/106/",
+        "patchset_number": 2
+      },
+      {
+        "id": "7f2bfeaff3eae8cd4415f583c4e8c085a1ebf66e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 20:30:05.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/106/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/106/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/106",
+        "patchset_number": 2
+      },
+      {
+        "id": "2c9a5f013cf848113e46ecfa52d6ff04ed894d3e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 21:05:46.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\n(4 comments)\n\nthe only item here that might be a bug is line 77 of XacmlPdpStateChangeListener; I believe the updateState() method returns a new heartbeat object.",
+        "patchset_number": 2
+      },
+      {
+        "id": "c8156f9f3a89a04ecce36e16f7e8bec357aa4efe",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 22:09:09.000000000",
+        "message": "Patch Set 2:\n\nI may have screwed up some of the tests with the new group parameter. And the changes I made in the last review.",
+        "patchset_number": 2
+      },
+      {
+        "id": "19cd1e439f87949a33fc8d4407e6a22edb027b91",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-04 23:20:51.000000000",
+        "message": "Patch Set 2:\n\nWell actually it's looking for properties that are not on the command line.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0b63074a4f9a747bb6ac4391c2a6c6ec6e4d8146",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-05 12:29:09.000000000",
+        "message": "Patch Set 2:\n\nYou need to add the -p option to the properties on the command line...\nThis is how I do it in the activator tests.\n\n        final String[] xacmlPdpConfigParameters =\n            {\"-c\", \"parameters/XacmlPdpConfigParameters.json\", \"-p\", \"parameters/topic.properties\"};",
+        "patchset_number": 2
+      },
+      {
+        "id": "512f781f74b96f9e9ac1c674c4e94afe50d9572a",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-05 12:34:44.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "0fe85ae37fb1856ccdc3e6956f10147f0f2b94b5",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 12:49:05.000000000",
+        "message": "Patch Set 2:\n\n> You need to add the -p option to the properties on the command\n > line...\n > This is how I do it in the activator tests.\n > \n > final String[] xacmlPdpConfigParameters =\n > {\"-c\", \"parameters/XacmlPdpConfigParameters.json\", \"-p\",\n > \"parameters/topic.properties\"};\n\nLooks like quite a few of the JUnits need this new command line. Would you like me to patch this for you? Or do you want to take care of it quick?",
+        "patchset_number": 2
+      },
+      {
+        "id": "24beb50d8d637a08f0f2169f921b47bb65725407",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-05 13:05:08.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "24827072263029eaee230f9643a6a2d6c9d7d7cd",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 13:36:34.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "16a1e31aa24d848fbd934af88de4682b65d9c57e",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 14:51:32.000000000",
+        "message": "Patch Set 2:\n\nMike - how is this going? Do you need help?",
+        "patchset_number": 2
+      },
+      {
+        "id": "5ddc732d282ef21ab25567206e10e23e3c676299",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 15:22:30.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "5823bdc632978940306e71d973a92f8664a06ae2",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 15:34:19.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "4b74980cd03640b71363fab486a7d3863faee88d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 15:35:02.000000000",
+        "message": "Patch Set 3:\n\nNo Builds Executed",
+        "patchset_number": 3
+      },
+      {
+        "id": "a6ca4875e844fc140caac07a27a6d68fdd6c95f1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 15:37:21.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/107/",
+        "patchset_number": 3
+      },
+      {
+        "id": "47c089aaba2921498a064d9d2ef9dd3b2967bb75",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 15:41:12.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/107/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/107",
+        "patchset_number": 3
+      },
+      {
+        "id": "50019975a94f68389782409f45088b34b1f3431a",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 15:51:49.000000000",
+        "message": "Patch Set 3: Code-Review+1\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "a9025b3085df8dda66fd10a8b3dee7f461ac2f3d",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 16:11:42.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "c0aeab2fa946ad9f881bca15782e504c25f66e18",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 16:11:52.000000000",
+        "message": "Patch Set 4:\n\nNo Builds Executed",
+        "patchset_number": 4
+      },
+      {
+        "id": "161a2aca2079445c64c9af03d08842ebe241b403",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 16:14:49.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/108/",
+        "patchset_number": 4
+      },
+      {
+        "id": "d21bd29ea7bd5a9f4b858e843af774b3e1e3f31f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 16:19:01.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/108/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/108",
+        "patchset_number": 4
+      },
+      {
+        "id": "d94ce5793b2df503f1eec67b8a1723e3298ad15d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 16:22:11.000000000",
+        "message": "Patch Set 4: Code-Review+1\n\n(1 comment)",
+        "patchset_number": 4
+      },
+      {
+        "id": "9bbb464a1c52639e2b6d61127c7516382b1d8b19",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 17:06:33.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "0ed856ac3fc63517fb271e78a1b303e5778ac3ea",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 17:07:30.000000000",
+        "message": "Patch Set 5:\n\nNo Builds Executed",
+        "patchset_number": 5
+      },
+      {
+        "id": "e1a194ae24f282c837b3bc7cfe95c56a1d61ba89",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-04-05 17:09:08.000000000",
+        "message": "Patch Set 5:\n\n> (1 comment)\n\nupdateInternalState will terminate the running heartbeat and start a new one with the updated state if the Publisher is alive.",
+        "patchset_number": 5
+      },
+      {
+        "id": "ac0d977c019609113bb4b1da4705981d6b42091f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 17:09:59.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/109/",
+        "patchset_number": 5
+      },
+      {
+        "id": "af961706bb8329a35f42ea983c122b0deb49fa06",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 17:13:56.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/109/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/109",
+        "patchset_number": 5
+      },
+      {
+        "id": "7a983f36137cc53c5474b962932e3825ff772504",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 19:24:47.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "f3b83825e3bbf6a60b6aeb88edf80de2c3b37cbb",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 19:57:18.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "6d1c825f21b2d2bc41ab4b0611b37ebfd497279b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 19:58:44.000000000",
+        "message": "Patch Set 7:\n\nNo Builds Executed",
+        "patchset_number": 7
+      },
+      {
+        "id": "927d3ab556ab3b733cab0c3f43f21c09b33a5e94",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 20:02:11.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/110/",
+        "patchset_number": 7
+      },
+      {
+        "id": "6ecb16ed1f1ba0c147e78adbc87fcdc8b9069059",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 20:05:13.000000000",
+        "message": "Patch Set 7: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/110/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/110/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/110",
+        "patchset_number": 7
+      },
+      {
+        "id": "b91f7c1e295944166eb91a219f1db301dc5b6150",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 20:16:40.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "ae31a6c8b42c0a25424317df48c8113c540fd200",
+        "author": {
+          "account_id": 805,
+          "name": "Michael Mokry",
+          "display_name": null,
+          "email": "michael.mokry@att.com",
+          "username": "mmokry"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-05 21:18:47.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "46d50d7bff72757498b01e94e55d85ddc67bf054",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 21:20:48.000000000",
+        "message": "Patch Set 9:\n\nNo Builds Executed",
+        "patchset_number": 9
+      },
+      {
+        "id": "ca88c410804e9a9243b6f0e4fa7546a643ce0cc6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 21:22:44.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/111/",
+        "patchset_number": 9
+      },
+      {
+        "id": "63de9904cb4e7ef0877918eb6c9c04e3e3fa80f3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 21:26:22.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-verify-java/111/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-verify-java/111",
+        "patchset_number": 9
+      },
+      {
+        "id": "5c6167e6baacfcfa084b1ae6758d741757bd917e",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-05 22:58:31.000000000",
+        "message": "Patch Set 9: Code-Review+1",
+        "patchset_number": 9
+      },
+      {
+        "id": "3ca03f948533769779d022099515b89d3caba05c",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-06 01:06:12.000000000",
+        "message": "Patch Set 9: Code-Review+1\n\n(1 comment)\n\nOn next review we can change the XacmlPdpApplicationManager to use identifier.",
+        "patchset_number": 9
+      },
+      {
+        "id": "2339ee0f3dca697b2176a0a73a8f07aaa007b3b8",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-06 15:55:01.000000000",
+        "message": "Patch Set 9: Code-Review+1",
+        "patchset_number": 9
+      },
+      {
+        "id": "d0390b6374a7f5b1389e706e2e65bd613b627b6f",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-06 16:21:36.000000000",
+        "message": "Patch Set 9: Code-Review+1",
+        "patchset_number": 9
+      },
+      {
+        "id": "97510b72bff1616ed2a77c7f8322de3b77de642b",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-06 16:21:41.000000000",
+        "message": "Patch Set 9: Code-Review+2",
+        "patchset_number": 9
+      },
+      {
+        "id": "118bed675657c5ccc4f8a03695bf2bb4e281858d",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-06 23:24:44.000000000",
+        "message": "Change has been successfully merged by Pamela Dragosh",
+        "patchset_number": 9
+      },
+      {
+        "id": "752c5a53be1b515d4b1db141cda7bc73cc2dd251",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-06 23:33:12.000000000",
+        "message": "Patch Set 9:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-merge-java/31/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-merge-java/31",
+        "patchset_number": 9
+      }
+    ]
+  }
+}

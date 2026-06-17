@@ -1,0 +1,686 @@
+{
+  "id": "ccsdk%2Fsli%2Fcore~master~Ie9d5fb423ae7a67e9aec026c78321537399cc308",
+  "change_id": "Ie9d5fb423ae7a67e9aec026c78321537399cc308",
+  "_number": 7931,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-08-17 20:24:01.000000000",
+    "updated": "2017-09-06 14:57:47.000000000",
+    "submitted": "2017-09-06 14:50:03.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1517,
+      "name": "Ryan Goulding",
+      "display_name": null,
+      "email": "ryandgoulding@gmail.com",
+      "username": "rgoulding"
+    },
+    "submitter": {
+      "account_id": 87,
+      "name": "Dan Timoney",
+      "display_name": null,
+      "email": "dtimoney@att.com",
+      "username": "djtimoney"
+    }
+  },
+  "subject": "Fix service registration for SDNC",
+  "commit_message": "Fix service registration for SDNC\n\nAddresses the inherit race conditions associated with the\nBundleActivator abstraction.  From lessons learned in OpenDaylight\nproject, dependency injection and service injection via Aries Blueprint\nis faster, more deterministic, and has better error messaging than\nusing BundleActivator(s).\n\nThis change addresses several aspects:\n1) DBLIBResourceActivator is changed to DBLIBResourceProvider.\n   This was done in order to imply that this is no longer an\n   Activator or subclass of an Activator.  The class is a POJO.\n2) DBLIBResourceProvider is split from a single monolithic method\n   into several more manageable and better documented methods.\n3) Documentation surrounding the resolution of the DB properties\n   is added so that a developer can more easily identify the\n   strategy (priority) used for resolving properties.\n4) dblib-blueprint.xml is added.  This is used to register the\n   configuration bean (DBLIBResourceProvider), and pass it as\n   an argument to the actual Service (DBLIBResourceManager).\n5) Tests are added to test the functionality and resolution of\n   the properties file loading.\n\nIssue-Id: SDNC-54\nChange-Id: Ie9d5fb423ae7a67e9aec026c78321537399cc308\nSigned-off-by: Ryan Goulding <ryandgoulding@gmail.com>\n",
+  "change_log": {
+    "entry_count": 47,
+    "entries": [
+      {
+        "id": "b567614986464b1408c4c89ce146588ac032c957",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-17 20:24:01.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "75c7e7a538a3386f1e2067b1d5e90d6486c69e57",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:25:08.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/19/ (1/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "4999164b4d166a9f18a0d00fca74c4e50a771d35",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:25:41.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-dashboard-master-verify-java/1/ (2/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "9973b16af663308f57bed4b94c941a4c0c45d415",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:25:42.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-platform-blueprints-master-verify-java/1/ (3/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "5ea85780d920481a708e1c70a8f093655f55d4bf",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:26:01.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-platform-nbapi-master-verify-java/1/ (4/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "4d945127573147111114b9ed857567ddd9a33d74",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:26:23.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-platform-plugins-master-verify-java/1/ (5/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "f434ff25955f6c8a903746b9649b0c8ec425724d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:26:27.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-utils-master-verify-java/1/ (6/6)",
+        "patchset_number": 1
+      },
+      {
+        "id": "8356ab2cfa290e3292e9ecb6980ff89dbc02026a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:30:33.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/19/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/19\n\nhttps://jenkins.onap.org/job/ccsdk-dashboard-master-verify-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-dashboard-master-verify-java/1\n\nhttps://jenkins.onap.org/job/ccsdk-platform-blueprints-master-verify-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-platform-blueprints-master-verify-java/1\n\nhttps://jenkins.onap.org/job/ccsdk-platform-nbapi-master-verify-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-platform-nbapi-master-verify-java/1\n\nhttps://jenkins.onap.org/job/ccsdk-platform-plugins-master-verify-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-platform-plugins-master-verify-java/1\n\nhttps://jenkins.onap.org/job/ccsdk-utils-master-verify-java/1/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-utils-master-verify-java/1",
+        "patchset_number": 1
+      },
+      {
+        "id": "fa897730fa3973e877ab4fb54563bb6ed65ab3c5",
+        "author": {
+          "account_id": 219,
+          "name": "Gildas Lanilis",
+          "display_name": null,
+          "email": "gildaslanilis@gmail.com",
+          "username": "glanilis"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-17 20:44:20.000000000",
+        "message": "Patch Set 1:\n\nAs you do not want this work to be merged in master, you may want to consider using \"Draft Feature\" gerrit capability as documented at https://wiki.onap.org/display/DW/Configuring+Gerrit#ConfiguringGerrit-Submittingadraftfeature",
+        "patchset_number": 1
+      },
+      {
+        "id": "7dec6f1976b2b89272c0a0f64819264bd42450f8",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-18 13:44:22.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "4fc534c9e6816b463aac7216ce800156ee870850",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-18 13:45:17.000000000",
+        "message": "Patch Set 2:\n\n> As you do not want this work to be merged in master, you may want\n > to consider using \"Draft Feature\" gerrit capability as documented\n > at https://wiki.onap.org/display/DW/Configuring+Gerrit#ConfiguringGerrit-Submittingadraftfeature\n\nDrafts don't run through CI.  I purposefully pushed this as a regular patch.  I will take off the \"DO NOT MERGE\" annotation once this is ready.",
+        "patchset_number": 2
+      },
+      {
+        "id": "6bf900ae22862be60273503bfff8595b3422a45f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 13:45:21.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/20/",
+        "patchset_number": 2
+      },
+      {
+        "id": "cc9e3daae46c0c8ecd1f165021d6331fe597f5b0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 13:49:45.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/20/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/20",
+        "patchset_number": 2
+      },
+      {
+        "id": "0530ad13ed94c7f6d985db9da634590f06351a45",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-18 15:28:05.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "fc38b92f80635e6049dadf727c609fd2b51fb88d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:29:32.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/21/",
+        "patchset_number": 3
+      },
+      {
+        "id": "f1daefb9b41efe9399fafa5f54028eb6965bceb1",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-18 15:30:55.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "e1ccf23f1ab1ac411144cab54310a5d0f7109bc4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:31:12.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/21/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/21/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/21",
+        "patchset_number": 3
+      },
+      {
+        "id": "700af9342230663291a217656fd024f7f68e9de0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:32:03.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/22/",
+        "patchset_number": 4
+      },
+      {
+        "id": "f0715cf314d88028cb0464ccccb3d9bb1511b6da",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:36:05.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/22/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/22",
+        "patchset_number": 4
+      },
+      {
+        "id": "c659b35f9d70b32c52e82fca001d509813bcee90",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-18 15:43:21.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "057bd89d815009320bb6feba0d4b8c82dbcfc357",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:44:32.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/23/",
+        "patchset_number": 5
+      },
+      {
+        "id": "200edad0ebf0cee04d24bcd5317ffadcdc4a2cdc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-18 15:48:51.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/23/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/23",
+        "patchset_number": 5
+      },
+      {
+        "id": "ee25d9b58dbe58b71aa04eee0b6dd5d447d8de8e",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-21 12:36:07.000000000",
+        "message": "Patch Set 6: Patch Set 5 was rebased",
+        "patchset_number": 6
+      },
+      {
+        "id": "dfe46f8d5045ad1ad3d20665418a0c3634ddb037",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-21 12:40:31.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/24/",
+        "patchset_number": 6
+      },
+      {
+        "id": "1ee2e23693364dcc584a2771a4e521831c20c451",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-21 12:47:09.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/24/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/24",
+        "patchset_number": 6
+      },
+      {
+        "id": "9893172f300cd2aef991b6cdbd92eb438f36f0eb",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-21 18:34:46.000000000",
+        "message": "Patch Set 6: Code-Review+2",
+        "patchset_number": 6
+      },
+      {
+        "id": "20f595ef58913594b82369055a02185066d23fab",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-21 18:42:24.000000000",
+        "message": "Patch Set 6: Code-Review+1\n\nLooks good to me - I like the idea of moving to blueprints!  I added the original developer - Rich Tabedzki - as a reviewer so he can comment if there are any gotchas that I'm not seeing, but this looks good to me. Thanks!",
+        "patchset_number": 6
+      },
+      {
+        "id": "8b43ff6a29e82e9aaa9e30836b590188f6f3fac5",
+        "author": {
+          "account_id": 1721,
+          "name": "Tom Pantelis",
+          "display_name": null,
+          "email": "tompantelis@gmail.com",
+          "username": "tpantelis"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-21 19:15:25.000000000",
+        "message": "Patch Set 6:\n\n(1 comment)",
+        "patchset_number": 6
+      },
+      {
+        "id": "77e306ada70c7074b6bd0d5af620f294fac44046",
+        "author": {
+          "account_id": 667,
+          "name": "Marcus Williams",
+          "display_name": null,
+          "email": "marcus.williams@intel.com",
+          "username": "mgkwill"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-23 16:20:58.000000000",
+        "message": "Patch Set 6: Code-Review+1\n\n(2 comments)\n\nRyan, Looks good to me. I had a chat with Dan about this patch, I think we are waiting on your affirmative/negative response to Tom before merging.\n\nI did have a couple questions about SDNC vs CCSDK below.",
+        "patchset_number": 6
+      },
+      {
+        "id": "e2366056ec88c194051776ab8f3b2f79b45edefd",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-23 17:23:36.000000000",
+        "message": "Patch Set 6: Code-Review-1\n\nneed to address Tom's comments but currently out sick.",
+        "patchset_number": 6
+      },
+      {
+        "id": "db3a076c297f0282659eec41c28184f80d27526a",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-08-23 17:25:08.000000000",
+        "message": "Patch Set 6:\n\n(1 comment)",
+        "patchset_number": 6
+      },
+      {
+        "id": "466a7df1984ef3dd5436cdf39ad1ca61681869b2",
+        "author": {
+          "account_id": 667,
+          "name": "Marcus Williams",
+          "display_name": null,
+          "email": "marcus.williams@intel.com",
+          "username": "mgkwill"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-08-23 17:27:16.000000000",
+        "message": "Patch Set 6: Code-Review-1\n\n> need to address Tom's comments but currently out sick.\n\nThanks for the response Ryan. We will wait for your update. Hope you are feeling better soon.",
+        "patchset_number": 6
+      },
+      {
+        "id": "ebe1af691628bebc13a4288848c54327732a009a",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-05 15:49:42.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "7e4b2279cba66bf0dacd3d2a5479007542a8e827",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-05 15:50:20.000000000",
+        "message": "Patch Set 7:\n\nTom, Please let me know if this looks like a better approach.  I chose to ignore the \"throws Exception\" stuff since it should be fixed in a separate patch...",
+        "patchset_number": 7
+      },
+      {
+        "id": "91904d21bf818f3b7154f908d04f699c8cb93358",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-05 15:53:09.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/35/",
+        "patchset_number": 7
+      },
+      {
+        "id": "382be161d11a7341aa621bd8c2c30718a7f964fd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-05 16:01:00.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/35/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/35",
+        "patchset_number": 7
+      },
+      {
+        "id": "c860fe92da88e8a1e360007cacf80e55c8ebcbfd",
+        "author": {
+          "account_id": 1721,
+          "name": "Tom Pantelis",
+          "display_name": null,
+          "email": "tompantelis@gmail.com",
+          "username": "tpantelis"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-05 17:32:18.000000000",
+        "message": "Patch Set 7: Code-Review-1\n\n(1 comment)",
+        "patchset_number": 7
+      },
+      {
+        "id": "32fe15c03dc8a6a8554db0f5fd1683b675d25eec",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-06 13:05:54.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "e8e6f36c23faebfb16e3b7c9c441403e3a65fea8",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-06 13:30:09.000000000",
+        "message": "Patch Set 8:\n\n> (1 comment)\n\nGood point;  I did that in the most recent change.  I think this should achieve parity now.  Will work on the other core bundles conversion.",
+        "patchset_number": 8
+      },
+      {
+        "id": "e662cd6c6949e075d584a356c51e08493bfe10f1",
+        "author": {
+          "account_id": 1721,
+          "name": "Tom Pantelis",
+          "display_name": null,
+          "email": "tompantelis@gmail.com",
+          "username": "tpantelis"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 13:41:49.000000000",
+        "message": "Patch Set 8: Code-Review+1",
+        "patchset_number": 8
+      },
+      {
+        "id": "9a58149798b53aaf0186a3b7b2ef93ab95e8e80c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 14:05:43.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/36/",
+        "patchset_number": 8
+      },
+      {
+        "id": "73fb0fffc2bda9449d1b563f44bd9c18d870cbc9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 14:09:57.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-verify-java/36/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-verify-java/36",
+        "patchset_number": 8
+      },
+      {
+        "id": "5f6c160020fde41b8fff32675d7c3cd1516dd8e0",
+        "author": {
+          "account_id": 1517,
+          "name": "Ryan Goulding",
+          "display_name": null,
+          "email": "ryandgoulding@gmail.com",
+          "username": "rgoulding"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-06 14:24:26.000000000",
+        "message": "Patch Set 8: Code-Review+1",
+        "patchset_number": 8
+      },
+      {
+        "id": "2ae28579042ae986deeec5895343228d7c6cf1ca",
+        "author": {
+          "account_id": 87,
+          "name": "Dan Timoney",
+          "display_name": null,
+          "email": "dtimoney@att.com",
+          "username": "djtimoney"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 14:49:01.000000000",
+        "message": "Patch Set 8: Code-Review+2\n\nIf Ton P's okay with this, I'n not about to second guess him ;-)\n\nLooks good - thanks for hanging in there, Ryan!",
+        "patchset_number": 8
+      },
+      {
+        "id": "8f23fb5a5a8248ebd575efa4162cb951efced6b7",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-09-06 14:50:03.000000000",
+        "message": "Change has been successfully merged by Dan Timoney",
+        "patchset_number": 8
+      },
+      {
+        "id": "3d8e5807bd27989356d775d406e1551e85aa6fa5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 14:52:26.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-sli-core-master-merge-java/18/",
+        "patchset_number": 8
+      },
+      {
+        "id": "0b8aea1fd9e8aade9273d65501bc5f1a2918e6d9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-06 14:57:47.000000000",
+        "message": "Patch Set 8:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-sli-core-master-merge-java/18/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-sli-core-master-merge-java/18",
+        "patchset_number": 8
+      }
+    ]
+  }
+}

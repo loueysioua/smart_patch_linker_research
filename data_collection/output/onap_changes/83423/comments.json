@@ -1,0 +1,790 @@
+{
+  "id": "so~master~I3d2264d18b07d7a789b769a6eb2f838a4253673b",
+  "change_id": "I3d2264d18b07d7a789b769a6eb2f838a4253673b",
+  "_number": 83423,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "6f020185_fe03afea",
+      "file_path": "asdc-controller/src/test/java/org/onap/so/asdc/client/ASDCControllerITTest.java",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "not used, please remove",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "55bcc965_acce918e",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegate.java",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "Inject the beans via constructor, this makes the testing easier. \nI also put comments in test classes that relates to this issue.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3fd13ede_b62cddd5",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegate.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "remove throws declaration, it is not needed",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "47c152a9_8147cd2a",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "remove throws declaration, it is not needed",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3eb4fca4_5c71452a",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 67,
+      "message": "remove throws declaration, it is not needed",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "172fe793_f3b50503",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "throws declaration not needed, please remove it",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6ed7fc1a_156010a0",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "This piece of code is duplicated on both subclasses. I would add a method to PrepareCdsCallDelegate class like:\n\n    protected AbstractCDSPropertiesBean prepareCDSPropertiesBean(DelegateExecution delegateExecution,\n            PnfResourceCustomization pnfResourceCustomization, String action, String jsonRequest) {\n        AbstractCDSPropertiesBean cdsPropertiesBean = new AbstractCDSPropertiesBean();\n        cdsPropertiesBean.setBlueprintName(pnfResourceCustomization.getBlueprintName());\n        cdsPropertiesBean.setBlueprintVersion(pnfResourceCustomization.getBlueprintVersion());\n        cdsPropertiesBean.setOriginatorId(ORIGINATOR_ID);\n        cdsPropertiesBean.setActionName(action);\n        cdsPropertiesBean.setMode(MODE);\n        cdsPropertiesBean.setRequestId((String) delegateExecution.getVariable(MSO_REQUEST_ID));\n        cdsPropertiesBean.setSubRequestId((String) delegateExecution.getVariable(PNF_UUID));\n        cdsPropertiesBean.setRequestObject(jsonRequest);\n        return cdsPropertiesBean;\n    }\n\nAnd then just invoke the method here:\n\nreturn prepareCDSPropertiesBean(delegateExecution,\n                pnfResourceCustomization, ACTION_NAME, configAssignRequest.toString());",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f8f41400_abffeeee",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "throws declaration not needed, please remove it",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "297f6454_648095b7",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "This piece of code is duplicated on both subclasses. I would add a method to PrepareCdsCallDelegate class like:\n\n    protected AbstractCDSPropertiesBean prepareCDSPropertiesBean(DelegateExecution delegateExecution,\n            PnfResourceCustomization pnfResourceCustomization, String action, String jsonRequest) {\n        AbstractCDSPropertiesBean cdsPropertiesBean = new AbstractCDSPropertiesBean();\n        cdsPropertiesBean.setBlueprintName(pnfResourceCustomization.getBlueprintName());\n        cdsPropertiesBean.setBlueprintVersion(pnfResourceCustomization.getBlueprintVersion());\n        cdsPropertiesBean.setOriginatorId(ORIGINATOR_ID);\n        cdsPropertiesBean.setActionName(action);\n        cdsPropertiesBean.setMode(MODE);\n        cdsPropertiesBean.setRequestId((String) delegateExecution.getVariable(MSO_REQUEST_ID));\n        cdsPropertiesBean.setSubRequestId((String) delegateExecution.getVariable(PNF_UUID));\n        cdsPropertiesBean.setRequestObject(jsonRequest);\n        return cdsPropertiesBean;\n    }\n\nAnd then just invoke the method here:\n\nreturn prepareCDSPropertiesBean(delegateExecution,\n                pnfResourceCustomization, ACTION_NAME, configDeployRequest.toString());",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "48ef8e17_16848640",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegateTest.java",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "I think there is no need to run this test with SpringJUnit4ClassRunner, these tests take more time. Look at the other testing class of delegate objects in this package, they run without spring env. \n\nMake a constructor injection in ConfigCheckerDelegate class to test it easier.\n\nexample: CreateRelationTest",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bf1b8611_8b822819",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "the same issue as in ConfigCheckerDelegateTest, there is no need to run it with SpringJUnit4ClassRunner",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "11fae88a_38679329",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "not used, please remove",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "980b82db_6b142874",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "declaration not needed, please remove",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cf8353d1_5642dc76",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "the same issue as in ConfigCheckerDelegateTest, there is no need to run it with SpringJUnit4ClassRunner.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b82ed54e_3b75b542",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "not used, please remove",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "88e59005_fbebe409",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "declaration not needed, please remove",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-03-27 16:43:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cd40832a_d4dd7dd0",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "config-deploy should use \"async\" mode, so may have to move constant from base class to child classes.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2019-03-27 18:31:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b82b222c_2d13af0b",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "This value shall not be taken from the model. It shall be the PNF name in AAI. This custom workflow will use correlation-ID as the PNF name.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2019-03-27 18:31:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "95feb50d_43894804",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "Correlation-ID is the PNF name. pnf-id shall match AAI entry for this PNF, it is UUID.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2019-03-27 18:31:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b97fb050_26a7ab0f",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "PNF name shall not be taken from model. It shall match AAI entry. Currently correlation-ID is used to assign PNF name.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2019-03-27 18:31:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1c33d62a_f5234b9f",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "pnf-id shall match AAI entry, it is UUID.",
+      "author": {
+        "account_id": 5279,
+        "name": "Oskar Malm",
+        "display_name": null,
+        "email": "oskar.malm@ericsson.com",
+        "username": "eoskmal"
+      },
+      "updated": "2019-03-27 18:31:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "41bce1e9_2fa98a3a",
+      "file_path": "asdc-controller/src/test/java/org/onap/so/asdc/client/ASDCControllerITTest.java",
+      "patchset_number": 1,
+      "line": 109,
+      "message": "I need this to check the watchdog component distribution table. didn't have time to write code. Now it's added.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "6f020185_fe03afea",
+      "unresolved": false
+    },
+    {
+      "id": "ed821cbf_2335c4fd",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegate.java",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "Try the spring testing, IMO, it's better to standard junit and mockito.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "55bcc965_acce918e",
+      "unresolved": false
+    },
+    {
+      "id": "76f1ef12_0795d9b5",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegate.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "check my comments regarding throws runtimeexception.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "3fd13ede_b62cddd5",
+      "unresolved": false
+    },
+    {
+      "id": "8e89e378_ebebaa72",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "cd40832a_d4dd7dd0",
+      "unresolved": false
+    },
+    {
+      "id": "62bec259_5d3622d3",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "47c152a9_8147cd2a",
+      "unresolved": false
+    },
+    {
+      "id": "955365cb_1273bb0a",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareCdsCallDelegate.java",
+      "patchset_number": 1,
+      "line": 67,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "3eb4fca4_5c71452a",
+      "unresolved": false
+    },
+    {
+      "id": "2803354a_8c8cb262",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "I removed some of the throws exception. I understand there is no need to throw runtimeexception, but some times I prefer to explicitly use it so developers are aware of it by reading the code.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "172fe793_f3b50503",
+      "unresolved": false
+    },
+    {
+      "id": "c2091f8a_715467e5",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "b82b222c_2d13af0b",
+      "unresolved": false
+    },
+    {
+      "id": "b5f1369b_a42b41ab",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "95feb50d_43894804",
+      "unresolved": false
+    },
+    {
+      "id": "bac23761_42846bc9",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "6ed7fc1a_156010a0",
+      "unresolved": false
+    },
+    {
+      "id": "ea715080_e7f60802",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "f8f41400_abffeeee",
+      "unresolved": false
+    },
+    {
+      "id": "92867b7f_4ac5e70c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "b97fb050_26a7ab0f",
+      "unresolved": false
+    },
+    {
+      "id": "f4dad0ed_0f32791b",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "1c33d62a_f5234b9f",
+      "unresolved": false
+    },
+    {
+      "id": "98f1ea08_44e03d8c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegate.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "297f6454_648095b7",
+      "unresolved": false
+    },
+    {
+      "id": "744c5a80_542dd59d",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/ConfigCheckerDelegateTest.java",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "Try to use SpringJunit4classRunner to refactor the CreateRelationTest and you can see some performance improvement. If not mistake, I can see at least 3x faster. But use the full applicationContext, just use the classes required for testing.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "48ef8e17_16848640",
+      "unresolved": false
+    },
+    {
+      "id": "d5780b09_edcdcc9c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Check previous comment.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "bf1b8611_8b822819",
+      "unresolved": false
+    },
+    {
+      "id": "2f857880_9fe1e220",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "11fae88a_38679329",
+      "unresolved": false
+    },
+    {
+      "id": "899dc656_518fe68b",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegateTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "Check previous comment regarding throws runtime exception.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "980b82db_6b142874",
+      "unresolved": false
+    },
+    {
+      "id": "eb05073c_ada378e3",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Check previous comment.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "cf8353d1_5642dc76",
+      "unresolved": false
+    },
+    {
+      "id": "d18228b2_96e9a85c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Done",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "b82ed54e_3b75b542",
+      "unresolved": false
+    },
+    {
+      "id": "d730cdce_bbfef606",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigDeployDelegateTest.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "check previous comment.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-01 13:59:13.000000000",
+      "in_reply_to": "88e59005_fbebe409",
+      "unresolved": false
+    },
+    {
+      "id": "053139f4_42ad9c3c",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Throws declaration should not be used in case of unchecked exception. Runtime exceptions can occur anywhere in a program, and adding throws declaration in every method would reduce a program's clarity. When user looks at \"throws Exception\" declaration he expects Checked Exception. If you really want to inform user about runtime exception, put @throws in javadoc.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-04-03 12:49:42.000000000",
+      "in_reply_to": "2803354a_8c8cb262",
+      "unresolved": false
+    },
+    {
+      "id": "e73e72ae_b88fa262",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "why this is commented?",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2019-04-03 12:49:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "37236ad2_aeb90b77",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/main/java/org/onap/so/bpmn/infrastructure/pnf/delegate/PrepareConfigAssignDelegate.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "I agreed with you regarding throw unchecked exception, and I removed most of that. With 'throw exception' in method def, the comment auto-generate will contain the @throws Exception automatically, that's one of the benefit:)",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-03 13:07:13.000000000",
+      "in_reply_to": "053139f4_42ad9c3c",
+      "unresolved": false
+    },
+    {
+      "id": "5bb6ff2f_41ad6c78",
+      "file_path": "bpmn/so-bpmn-infrastructure-common/src/test/java/org/onap/so/bpmn/infrastructure/pnf/dmaap/PnfEventReadyDmaapClientTest.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "Please take a look at PnfEventReadyDmaapClient class, I made one change in the unregister method. The reason I made that change is all the following activities are being inited and used twice due to more threads in my integration test. Please take a look at the CreateVcpeResCustServiceSimplifiedTest class, I have a logic to notify the WaitForDmaapPnfReadyNotification. without that signal, the test just hang. \n\nAs told you designed the PNF workflow, right? Do you mind take a look and let me know is it required to execute runnable.run() in the unregister? Should we remove the thread instead? \n\nI am not intended to beak the existing PNF workflow, that's why I add that change to commit.",
+      "author": {
+        "account_id": 5014,
+        "name": "Xuefeng Xie",
+        "display_name": null,
+        "email": "henry.xie@ericsson.com",
+        "username": "eeginux"
+      },
+      "updated": "2019-04-03 13:07:13.000000000",
+      "in_reply_to": "e73e72ae_b88fa262",
+      "unresolved": false
+    }
+  ]
+}

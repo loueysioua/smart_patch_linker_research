@@ -1,0 +1,42 @@
+{
+  "id": "oom~master~Id97a64708803b72ab88362ccc5b88970661146e6",
+  "change_id": "Id97a64708803b72ab88362ccc5b88970661146e6",
+  "_number": 106492,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "cb73b2db_a8289d01",
+      "file_path": "kubernetes/policy/charts/pdp/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 131,
+      "message": "this is a great catch!  There is a part though that it seems to me have an issue as I am looking at lines 58 and 59, the preprocessing only happens on the \"pe\" volume, and the \"pe\" volume does not have the \"pdp.conf\", \"pdplp.conf\", etc .. , I think it only has \"base.conf\", so the substitution will only apply to base.conf.\n\nIt seems to me that the same type of preprocessing has to be done in the files from the \"pe-pdp\" mount as well.  The problem is that for this image is that the provisioning of a container is split between the policy chart and this subchart, so 2 configmaps make the configuration for this component.   May be you know of a good solution to it, or Krzysztof, Dominik, may have a suggestion on how best to go about it?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-04-23 16:33:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c487c94c_57bdd7cd",
+      "file_path": "kubernetes/policy/charts/pdp/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 176,
+      "message": "nope. This one has to stay. There are 2 different config maps with different content:\n{{ include \"common.release\" . }}-pe-configmap\n{{ include \"common.fullname\" . }}-pe-configmap\n\ndon't ask me why someone used such vague naming convention. It's just the way it is...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-23 22:27:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

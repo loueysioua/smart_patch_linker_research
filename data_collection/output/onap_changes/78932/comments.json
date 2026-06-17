@@ -1,0 +1,229 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fdatafile~master~Ia5f41e75716d309f47dce5f5273b739f7e6d136a",
+  "change_id": "Ia5f41e75716d309f47dce5f5273b739f7e6d136a",
+  "_number": 78932,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a755c919_2541b243",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 182,
+      "message": "Will this behaviour not loose messages? We have collected them from MR so we will not get them again. And we do not handle them here, so they will be lost. To not loose messages, the ones not handled here must be stored in some way and handled before the new ones collected from MR when there are threads available again.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2019-02-22 10:09:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3001ae97_574a236b",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 182,
+      "message": "No, this is where messages are fetched. So if the collector is \"too busy\" it will not fetch any new messages. \n\nI think the name of this and many other functions can be improved. I think we should try to get rid of aberiviations (like Dmaap, which does not add much value here).",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-22 10:45:03.000000000",
+      "in_reply_to": "a755c919_2541b243",
+      "unresolved": false
+    },
+    {
+      "id": "dd343190_ddbce408",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 182,
+      "message": "Ah, yes I see that now.\nMaybe it would be clearer if the work is done in the if clause if the number of current tasks is lower than the maximum, instead of returning here?",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2019-02-22 11:16:58.000000000",
+      "in_reply_to": "3001ae97_574a236b",
+      "unresolved": false
+    },
+    {
+      "id": "2558a7a5_7c23b557",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "I'm not sure if this will work in case of error in the flux. doOnNext won't be called in such scenario and we can loose one \"virtual slot\" in the scheduler. You are handling some of these errors (handle*Error methods) but it won't be hard to introduce an invalid code in the future versions of this code.\n\nI can see a few solutions here:\n* Use Schedulers.newParallel(parallelism) instead of newElastic, if you think it's OK here. Then we can omit this manual counting altogether.\n* Maybe Reactor resource management (by means of Flux.using method) can be utilized here.\n* Decrement only in onSuccess and onError methods.\n* Use doFinally instead of manually decrementing the counter in every case. Will need to monitor for negative numbers as filter on shouldBePublished can remove some entries.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-25 11:04:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5ac6af4f_ff7027c2",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "It is true that onNext is not invoked when there is an error. \n\nThere are two other cases that can fail, which is handled by .onErrorResume (see collectFileFromXnf and publishToDataRouter). \nSo when the retrying of these tasks has given up, the counter is decreased and an empty flux is returned (by the onErrorResume handler), to remove with the next.\n\nIn these two cases the counter is also decreased (see handleCollectFailure resp. handlePublishFailure). \n\nAs far as I have been able to test so far this works fine. \n\nI was thinking about having the two .onErrorResume in this function to make that more clear but I figured that it was more readable to put the error handling in the collectFileFromXnf resp. publishToDataRouter functions instead.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-25 13:01:04.000000000",
+      "in_reply_to": "2558a7a5_7c23b557",
+      "unresolved": false
+    },
+    {
+      "id": "b656c258_0c0f1273",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "I do not want to remove the counter. Its purpose is prevent an excessive queue of events to process in this process. \nAs long as this process has \"enough\" ongoing tasks, it will not fetch any new events (which is done by polling, in function consumeMessagesFromDmaap).",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-25 13:09:29.000000000",
+      "in_reply_to": "5ac6af4f_ff7027c2",
+      "unresolved": false
+    },
+    {
+      "id": "770742f9_e9b87836",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 103,
+      "message": "My point is that it may work and looks pretty OK, but is not very maintainable. Someone in the future might not test it so thoroughly as you did.\n\nAfter rethinking, I came to another conclusion.\n\nIn rx you usually just subscribe to the events and reactor does stream \"throttling\" for you, keeping the threads busy. So you create a Flux emitting events consumed from DMaaP, then parallelize it, collect files and push back to DMaaP finally subscribing. Rx requests new events only if downstream subscribers can process them (backpressure mechanism). That is the precise problem which reactive streams tries to solve, see http://www.reactive-streams.org/ \"Problem\" section. So generally speaking, if done correctly (no blocking, single flow), the reactor framework should handle resource utilization for you. As an additional benefit we would get rid of this counting and (as a result) of handling error cases separately.\n\nWhat do you think? Can we refactor the code in this MR?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-26 06:56:39.000000000",
+      "in_reply_to": "b656c258_0c0f1273",
+      "unresolved": false
+    },
+    {
+      "id": "a1d469a6_26fba709",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "should 10 be configurable?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-27 13:41:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "524d48f5_ede8606e",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "In some previous systems I have been working with, it would would have been a parameter that can be changed during system integration without rebuilding any binary. \n\nIn this SW these kind of parameters are so far hard coded. \nMax number of threads, this parameter, how often new VES events are polled etc.\nThis particular parameter has not big impact (I assume).\n\nI think this is a general question. What is your view?",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-27 13:56:41.000000000",
+      "in_reply_to": "a1d469a6_26fba709",
+      "unresolved": false
+    },
+    {
+      "id": "b8663b1f_89453251",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "what is the purpose of these empty comments?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-03-07 15:36:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "218e5ff7_04b117af",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisherTest.java",
+      "patchset_number": 2,
+      "line": 66,
+      "message": "what is the purpose of these empty comments?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-03-07 15:36:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "40109db9_759ee0bb",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "It is to get each function on a new line, \nPreviously the eclipsen specific directive \n'@formatter off' was used. \n\nThe team decided to change to this method instead, which should work for any IDE.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-03-07 16:12:25.000000000",
+      "in_reply_to": "b8663b1f_89453251",
+      "unresolved": false
+    },
+    {
+      "id": "419f09ba_dce8db0d",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisherTest.java",
+      "patchset_number": 2,
+      "line": 66,
+      "message": "See previous answer.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-03-07 16:12:25.000000000",
+      "in_reply_to": "218e5ff7_04b117af",
+      "unresolved": false
+    }
+  ]
+}

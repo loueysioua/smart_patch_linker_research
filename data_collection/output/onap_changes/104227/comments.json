@@ -1,0 +1,178 @@
+{
+  "id": "oom~master~I05f43e3dad93d6f0fbf575657ea41082e7c91053",
+  "change_id": "I05f43e3dad93d6f0fbf575657ea41082e7c91053",
+  "_number": 104227,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a0264222_5f4648ec",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "I'm not sure if we can follow this pattern.\nI've seen at least one service where both prefixes are used...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-03-24 16:12:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "90f1f36e_9b86e25f",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "I let it this way, I'll work on it tomorrow :)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-03-25 22:08:06.000000000",
+      "in_reply_to": "a0264222_5f4648ec",
+      "unresolved": true
+    },
+    {
+      "id": "c2d0baba_4bd7a853",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 6,
+      "line": 123,
+      "message": "The idea looks fine but the problem is that this is already in use and changes that you are making are not backward compatible...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-01 21:54:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e83afc3d_5ae8d046",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "Done",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:41:02.000000000",
+      "in_reply_to": "90f1f36e_9b86e25f",
+      "unresolved": false
+    },
+    {
+      "id": "1c1d6300_4049e1c8",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 6,
+      "line": 123,
+      "message": "you're right L58 use $dot.Values.service.nodePortPrefix and not $dot.Values.nodePortPrefix",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-02 07:41:02.000000000",
+      "in_reply_to": "c2d0baba_4bd7a853",
+      "unresolved": false
+    },
+    {
+      "id": "75fb103a_4d96efa5",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 8,
+      "line": 55,
+      "message": "never mentioned in the documentation above",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-03 22:35:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "11eb6c6d_27e5d8a7",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 8,
+      "line": 60,
+      "message": "Don't you think that this will create a lot of mess in our charts?\n\nThink what we have now. Only 2 global values that has to be replaced if you want more than one onap instance in a single cluster. Every service decides whether to use prefix or prefixExt.\n\nAfter this change every service would need to specify nodePortPrefix as a value (number) which will result in absolute mess if you would like to have 2 onaps in single cluster.\n\nSo what I'd suggest at bare minimum to make the service specific field templateable (if number use it if string execute tpl) so that someone may easily reference one of global values.\n\nBTW\nWhat's the goal of having a precedence between global prefix and global prefixExt? Are we ever going to have situation that global prefix is not defined?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-03 22:35:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b0633c40_59e86086",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 8,
+      "line": 60,
+      "message": "What's the situation today:\n* we have two \"prefix\" (302 and 304) that are currently named \"nodePortPrefix\" and \"nodePortPrefixExt\" in onap/values.yaml.\n* some service may uses these 2 values\n* most services are created by hand in ONAP.\n\nSo I wanted to make a template to have consistent (and them easier to upgrade when needed) service definition.\nIn order to take into account the above requirements, I need to (in order to be backward compatible with already used service definitions with these templates):\n* check if the service globally needs the \"Ext\" prefix\n* or if one of the port needs the \"Ext\" prefix\n\nIf yes, I use the override, the global or local version of Ext (we have an error here)\nIf not, I use the override, the global or local version of \"normal\".\n\n\nHonnestly, I don't see how we can do simpler, knowing the definition will be complicated only when nodeportext is used (at port level or service level). And portNodePortExt is a Boolean saying that we want to use nodePortPrefixExt and not noedePortPrefix.\n\n\nThe only simplification in code will be to have port level only feature.\n\n\nMaybe the name fooled you, I can replace $port.nodePortExt (L128) by $port.useNodePortExt and same for service?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-06 08:26:18.000000000",
+      "in_reply_to": "11eb6c6d_27e5d8a7",
+      "unresolved": true
+    },
+    {
+      "id": "a0a9e60e_6b1f9313",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 8,
+      "line": 60,
+      "message": "oh I think that now I understand. You were right it was because of the naming convention that I didn't expect. Resolve the above commit and I'll merge next PS",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-06 22:34:06.000000000",
+      "in_reply_to": "b0633c40_59e86086",
+      "unresolved": false
+    },
+    {
+      "id": "ac5d8e2f_fc4e175a",
+      "file_path": "kubernetes/common/common/templates/_service.tpl",
+      "patchset_number": 8,
+      "line": 55,
+      "message": "on line 43 it is",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-14 14:28:01.000000000",
+      "in_reply_to": "75fb103a_4d96efa5",
+      "unresolved": false
+    }
+  ]
+}

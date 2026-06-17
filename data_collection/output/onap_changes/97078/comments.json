@@ -1,0 +1,195 @@
+{
+  "id": "policy%2Fxacml-pdp~master~I18d50a8746ede792ec9507ab98125383c5914ba1",
+  "change_id": "I18d50a8746ede792ec9507ab98125383c5914ba1",
+  "_number": 97078,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "0eff3b2f_af9fea3d",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/XacmlPdpRestController.java",
+      "patchset_number": 1,
+      "line": 178,
+      "message": "Provided that you only use \"abbrev\", I think the following will be best:\n\n@DefaultValue(\"false\") @QueryParam(\"abbrev\") boolean abbrev",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-10-15 01:17:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "89e87b07_a99a1367",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/XacmlPdpRestController.java",
+      "patchset_number": 1,
+      "line": 180,
+      "message": "The if statement can be removed and this will be:\n\n DecisionProvider decisionProvider = new DecisionProvider(abrev);\n\nor you could create directly the decisionProvide in line 184 inline, and make it one-liner.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-10-15 01:17:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b927ec78_d7780a17",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "this method, I think is unnecessary based on my previous comment",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-10-15 01:17:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4148bab_e6ca1417",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/XacmlPdpRestController.java",
+      "patchset_number": 1,
+      "line": 178,
+      "message": "It was suggested that we use a List to pass all of the parameters given in the case that (in the future) another application might want to apply other parameters",
+      "author": {
+        "account_id": 1757,
+        "name": "Ali Hockla",
+        "display_name": null,
+        "email": "ah999m@att.com",
+        "username": "ah999m"
+      },
+      "updated": "2019-10-15 12:58:38.000000000",
+      "in_reply_to": "0eff3b2f_af9fea3d",
+      "unresolved": false
+    },
+    {
+      "id": "9f4e1024_26e15766",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/XacmlPdpRestController.java",
+      "patchset_number": 1,
+      "line": 178,
+      "message": "Right.  The parameters that are relevant are dependent on the application that actually provides the decision, thus the whole map must be passed down.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-15 13:29:03.000000000",
+      "in_reply_to": "d4148bab_e6ca1417",
+      "unresolved": false
+    },
+    {
+      "id": "b6dab3d7_953d8ee1",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/XacmlPdpRestController.java",
+      "patchset_number": 1,
+      "line": 180,
+      "message": "I think its better to just send the params down. The appliations decide what they need. So no need for the if.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-10-15 14:55:12.000000000",
+      "in_reply_to": "89e87b07_a99a1367",
+      "unresolved": false
+    },
+    {
+      "id": "e093bb0b_fd15944b",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "I would rather the application have the request params sent to it. Its the place that decides which query params matter.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-10-15 14:55:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "982e4665_2ae69152",
+      "file_path": "main/src/main/java/org/onap/policy/pdpx/main/rest/provider/DecisionProvider.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "So a little confused now.. kind of going back to solution #1 that we discussed last week, if passing the request params into the applicationServiceProvider, unless we abbreviate the decision results in the applicationServiceProvider itself, we'd have to keep passing it (or just the \"abbrev\" parameter) down to the translator in order to modify the decision results from where it gets populated (StdCombinedPolicyResultsTranslator.scanObligations())..",
+      "author": {
+        "account_id": 1757,
+        "name": "Ali Hockla",
+        "display_name": null,
+        "email": "ah999m@att.com",
+        "username": "ah999m"
+      },
+      "updated": "2019-10-15 19:55:07.000000000",
+      "in_reply_to": "e093bb0b_fd15944b",
+      "unresolved": true
+    },
+    {
+      "id": "052da99e_c0715b19",
+      "file_path": "applications/monitoring/src/main/java/org/onap/policy/xacml/pdp/application/monitoring/MonitoringPdpApplication.java",
+      "patchset_number": 3,
+      "line": 158,
+      "message": "remove \".toString()\" - LOGGER will do that automatically",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-17 21:44:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7f3fcdfd_ec73555b",
+      "file_path": "applications/monitoring/src/main/java/org/onap/policy/xacml/pdp/application/monitoring/MonitoringPdpApplication.java",
+      "patchset_number": 3,
+      "line": 158,
+      "message": "If you can change it to \"unsupported query param for Monitoring application\". If \"abbrev\" exists, but is set to false then it is supported.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-10-17 22:30:56.000000000",
+      "in_reply_to": "052da99e_c0715b19",
+      "unresolved": false
+    },
+    {
+      "id": "3a5bb630_3d1e3739",
+      "file_path": "applications/monitoring/src/main/java/org/onap/policy/xacml/pdp/application/monitoring/MonitoringPdpApplication.java",
+      "patchset_number": 3,
+      "line": 158,
+      "message": "Thanks, Jim!\n\nGot it, I'll modify the if statement then bc if \"abbrev\" exists but is set to false then this else clause will be executed \n(ex. Invalid query param: {abbrev=[false]})",
+      "author": {
+        "account_id": 1757,
+        "name": "Ali Hockla",
+        "display_name": null,
+        "email": "ah999m@att.com",
+        "username": "ah999m"
+      },
+      "updated": "2019-10-18 12:58:10.000000000",
+      "in_reply_to": "7f3fcdfd_ec73555b",
+      "unresolved": false
+    }
+  ]
+}

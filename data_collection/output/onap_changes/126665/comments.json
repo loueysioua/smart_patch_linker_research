@@ -1,0 +1,93 @@
+{
+  "id": "sdc~master~I437bf9cc5952f4d21e5bda60875ada27dcc9cd66",
+  "change_id": "I437bf9cc5952f4d21e5bda60875ada27dcc9cd66",
+  "_number": 126665,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d17531d1_677424da",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/user/UserBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "Hi Jeff, can you explain how this addresses the problem",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-01-21 09:14:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "577350e5_fe8d9f24",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/user/UserBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "Hey Michael, encoding to base64 is the last step of encrypting and the first step of decrypting, so this is done to check if the string being decrypted is actually in base64. It won't work 100% all the time since some strings might just happen to be base64, so it would fail the decrypt and the decrypt error would still appear in the logs.",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-01-24 09:06:04.000000000",
+      "in_reply_to": "d17531d1_677424da",
+      "unresolved": true
+    },
+    {
+      "id": "ebe2e369_8209e825",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/user/UserBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "The issue you are having in fact it is because the org.onap.portalsdk.core.onboarding.util.CipherUtil class is logging a decryption failure as an error and then throwing the exception. Therefore, you want to avoid calling the method if the string is not a base64, correct?\n\nI would recommend to use the Apache commons library (I think we use in the project) to check that: https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/binary/Base64.html#isBase64-byte-.\n\nWe could disable logging for that specific class if wanted.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-01-24 11:32:57.000000000",
+      "in_reply_to": "577350e5_fe8d9f24",
+      "unresolved": true
+    },
+    {
+      "id": "e4127be2_76c4a4eb",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/user/UserBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "Yeah that's the idea André. \n\nI tested that method and it will evaluate something like \"jh003\" as true which it shouldn't be. According to the documentation it \"Tests a given byte array to see if it contains only valid characters within the Base64 alphabet. Currently the method treats whitespace as valid.\", so this will give a lot of false positives I believe.",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-01-24 14:10:20.000000000",
+      "in_reply_to": "ebe2e369_8209e825",
+      "unresolved": true
+    },
+    {
+      "id": "542d117d_c789e8c1",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/user/UserBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 91,
+      "message": "I see... Not sure if there is a better way to check it.\nSo, for now, I would say that you should separate what you are doing here in a new method, maybe \"boolean isUserBase64Encoded(String userId)\" which should never break (make sure no exceptions will happen no matter the input, safer to put in a try catch). Also, add unit tests to check it.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-01-24 15:03:09.000000000",
+      "in_reply_to": "e4127be2_76c4a4eb",
+      "unresolved": true
+    }
+  ]
+}

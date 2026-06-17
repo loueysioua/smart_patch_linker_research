@@ -1,0 +1,342 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~I0e33d9d766683b369b9c9dfe2dfa3f79b318c9ee",
+  "change_id": "I0e33d9d766683b369b9c9dfe2dfa3f79b318c9ee",
+  "_number": 122518,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2021-07-08 11:06:19.000000000",
+    "updated": "2021-07-23 13:43:33.000000000",
+    "submitted": "2021-07-23 13:31:04.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 5335,
+      "name": "Krystian  Kedron",
+      "display_name": null,
+      "email": "k.kedron@partner.samsung.com",
+      "username": "krystian"
+    },
+    "submitter": {
+      "account_id": 93,
+      "name": "Vijay Venkatesh Kumar",
+      "display_name": null,
+      "email": "vijayv81@gmail.com",
+      "username": "vv770d"
+    }
+  },
+  "subject": "Fix dcaepolicyplugin dependency",
+  "commit_message": "Fix dcaepolicyplugin dependency\n\nIn offline environment\nand define it in more generic way\n\nIssue-ID: DCAEGEN2-2854\nSigned-off-by: Krystian Kedron <k.kedron@partner.samsung.com>\nChange-Id: I0e33d9d766683b369b9c9dfe2dfa3f79b318c9ee\n",
+  "change_log": {
+    "entry_count": 22,
+    "entries": [
+      {
+        "id": "24c74fd3e8192c6cffdbbdb26c5506ec5c415a43",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-08 11:06:19.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "82830743a587e53e9e968335214c6c3d97e90604",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-08 11:08:05.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/407/",
+        "patchset_number": 1
+      },
+      {
+        "id": "0ca3c3e0b64adab08c97795dcb6699d783c357ed",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-08 11:19:11.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/407/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-plugins-master-verify-java/407",
+        "patchset_number": 1
+      },
+      {
+        "id": "cf37801e9ff6079a348de795026ad6ff551fa31e",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-13 13:58:03.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nChange by itself looks fine, wondering though if we need version also to be bumped.. Possibly CM container rebuild should suffice to pull updated type file directly (under same plugin version)?\n\nJack - Any thoughts?",
+        "patchset_number": 1
+      },
+      {
+        "id": "f37cd0d6e6cd2812e695759b07e8b5ab84c97316",
+        "author": {
+          "account_id": 511,
+          "name": "Jack Lucas",
+          "display_name": null,
+          "email": "jflos@sonoris.net",
+          "username": "jackl"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 20:54:58.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1: Code-Review+1\n> \n> Change by itself looks fine, wondering though if we need version also to be bumped.. Possibly CM container rebuild should suffice to pull updated type file directly (under same plugin version)?\n> \n> Jack - Any thoughts?\n\nIf we don't bump the version number, then when this change is merged, the updated types file will\nreplace the existing one in the Nexus raw repo.  The next time the CM container is rebuilt, it will\npull the updated types file. \n\nI think it's safest, though, to bump the version number here, then update /scripts/get-plugins.sh in the cm-container directory in the deployments repo (the script lists which versions of plugins/type files will get built into the cm-container so they can be uploaded to CM at deployment time), bump the version of the cm-container, release the new version of the cm-container, and--finally--update the OOM chart to use the new version.   It's a long process, but it guarantees that we will get the change we expect.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9c03f9b71b5b7d46fb57ceb6e11ba67746290d7a",
+        "author": {
+          "account_id": 511,
+          "name": "Jack Lucas",
+          "display_name": null,
+          "email": "jflos@sonoris.net",
+          "username": "jackl"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-19 20:58:21.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> > Patch Set 1: Code-Review+1\n> > \n> > Change by itself looks fine, wondering though if we need version also to be bumped.. Possibly CM container rebuild should suffice to pull updated type file directly (under same plugin version)?\n> > \n> > Jack - Any thoughts?\n> \n> If we don't bump the version number, then when this change is merged, the updated types file will\n> replace the existing one in the Nexus raw repo.  The next time the CM container is rebuilt, it will\n> pull the updated types file. \n> \n> I think it's safest, though, to bump the version number here, then update /scripts/get-plugins.sh in the cm-container directory in the deployments repo (the script lists which versions of plugins/type files will get built into the cm-container so they can be uploaded to CM at deployment time), bump the version of the cm-container, release the new version of the cm-container, and--finally--update the OOM chart to use the new version.   It's a long process, but it guarantees that we will get the change we expect.\n\nActually, since OOM always uses released containers, we will have to build and release a new version of the cm-container to pick up this change, so we might as well bump the version here.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9d3dc192c560bba2ae4346c63029cb6b94724112",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-20 15:06:20.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n> Patch Set 1:\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1: Code-Review+1\n> > > \n> > > Change by itself looks fine, wondering though if we need version also to be bumped.. Possibly CM container rebuild should suffice to pull updated type file directly (under same plugin version)?\n> > > \n> > > Jack - Any thoughts?\n> > \n> > If we don't bump the version number, then when this change is merged, the updated types file will\n> > replace the existing one in the Nexus raw repo.  The next time the CM container is rebuilt, it will\n> > pull the updated types file. \n> > \n> > I think it's safest, though, to bump the version number here, then update /scripts/get-plugins.sh in the cm-container directory in the deployments repo (the script lists which versions of plugins/type files will get built into the cm-container so they can be uploaded to CM at deployment time), bump the version of the cm-container, release the new version of the cm-container, and--finally--update the OOM chart to use the new version.   It's a long process, but it guarantees that we will get the change we expect.\n> \n> Actually, since OOM always uses released containers, we will have to build and release a new version of the cm-container to pick up this change, so we might as well bump the version here.\n\nFine by me. \n\nKrystian - Pls bump up the plugin version as well with this change",
+        "patchset_number": 1
+      },
+      {
+        "id": "6f66372fab5aaad3bb7a377ac20ed35111e64c2f",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-21 10:19:52.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0dbaaeb0a56151b948fc28ba8c8c577e0e97ef32",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-21 10:20:22.000000000",
+        "message": "Patch Set 2:\n\n> Patch Set 1: Code-Review-1\n> \n> > Patch Set 1:\n> > \n> > > Patch Set 1:\n> > > \n> > > > Patch Set 1: Code-Review+1\n> > > > \n> > > > Change by itself looks fine, wondering though if we need version also to be bumped.. Possibly CM container rebuild should suffice to pull updated type file directly (under same plugin version)?\n> > > > \n> > > > Jack - Any thoughts?\n> > > \n> > > If we don't bump the version number, then when this change is merged, the updated types file will\n> > > replace the existing one in the Nexus raw repo.  The next time the CM container is rebuilt, it will\n> > > pull the updated types file. \n> > > \n> > > I think it's safest, though, to bump the version number here, then update /scripts/get-plugins.sh in the cm-container directory in the deployments repo (the script lists which versions of plugins/type files will get built into the cm-container so they can be uploaded to CM at deployment time), bump the version of the cm-container, release the new version of the cm-container, and--finally--update the OOM chart to use the new version.   It's a long process, but it guarantees that we will get the change we expect.\n> > \n> > Actually, since OOM always uses released containers, we will have to build and release a new version of the cm-container to pick up this change, so we might as well bump the version here.\n> \n> Fine by me. \n> \n> Krystian - Pls bump up the plugin version as well with this change\n\nSure, done.",
+        "patchset_number": 2
+      },
+      {
+        "id": "e7be22506c8ff01148811eecfdfc8a864624a5be",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 10:21:34.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/408/",
+        "patchset_number": 2
+      },
+      {
+        "id": "c84cb48ac08256793b41e7dc46be221cb79a0bf0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 10:31:04.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/408/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-plugins-master-verify-java/408",
+        "patchset_number": 2
+      },
+      {
+        "id": "05b212f8bbdbbc1a83d18d1c442388cb37c82c7d",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-21 10:33:17.000000000",
+        "message": "Patch Set 2:\n\nI already create the reference commit: https://gerrit.onap.org/r/c/dcaegen2/deployments/+/122780\n\nBut about this step: \n - \"bump the version of the cm-container, release the new version of the cm-container\"\nWere I can find same information how to properly do that?",
+        "patchset_number": 2
+      },
+      {
+        "id": "8e7966973e8c2d714c93131b9ac857ee6d54e0d8",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-21 11:01:41.000000000",
+        "message": "Topic set to fix-dcaeplugin-dependency",
+        "patchset_number": 2
+      },
+      {
+        "id": "95a7cf22c7d2961431bde21744b742f194e1e5c1",
+        "author": {
+          "account_id": 7353,
+          "name": "Marcin Wilk",
+          "display_name": null,
+          "email": "m.wilk@samsung.com",
+          "username": "mwilk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 11:09:23.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "6d53392708afd7e254c985ba90a85ec832e0a7e9",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-21 20:19:15.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\nnew version 1.1.1 should also be updated on clamp-policy/pom.xml and clamp-policy/setup.py",
+        "patchset_number": 2
+      },
+      {
+        "id": "c06fcef67f150750b2ebb363b49d57e1f36f2c7f",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-23 09:10:38.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "052cc4a19b390df590b11accfc188a65c309731e",
+        "author": {
+          "account_id": 5335,
+          "name": "Krystian  Kedron",
+          "display_name": null,
+          "email": "k.kedron@partner.samsung.com",
+          "username": "krystian"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-07-23 09:10:59.000000000",
+        "message": "Patch Set 3:\n\n> Patch Set 2: Code-Review-1\n> \n> new version 1.1.1 should also be updated on clamp-policy/pom.xml and clamp-policy/setup.py\n\ndone",
+        "patchset_number": 3
+      },
+      {
+        "id": "756c14c428ecc0a4bc8e5c8053ecfb84d2d68914",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-23 09:12:14.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/409/",
+        "patchset_number": 3
+      },
+      {
+        "id": "10b85f61cca6d61675f1f417a80bb18f9df1003c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-23 09:22:30.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-plugins-master-verify-java/409/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-plugins-master-verify-java/409",
+        "patchset_number": 3
+      },
+      {
+        "id": "27492edfd9000ac809abb4d7f9fd03bc975d847d",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-23 13:31:01.000000000",
+        "message": "Patch Set 3: Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "2a4322a45ca59c9de224720be6d1d6cf6fa94511",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-23 13:31:04.000000000",
+        "message": "Change has been successfully merged by Vijay Venkatesh Kumar",
+        "patchset_number": 3
+      },
+      {
+        "id": "7bf285f88b1d64406b54cb2e652d25495a830cb0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-07-23 13:43:33.000000000",
+        "message": "Patch Set 3:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-plugins-master-merge-java/150/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-plugins-master-merge-java/150",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

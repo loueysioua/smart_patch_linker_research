@@ -1,0 +1,218 @@
+{
+  "id": "cps~master~Ie692663706b378022ec0d621d92ca5054bad8d1b",
+  "change_id": "Ie692663706b378022ec0d621d92ca5054bad8d1b",
+  "_number": 139321,
+  "change_comments": [
+    {
+      "id": "e2254323_b860ad29",
+      "patchset_number": 1,
+      "message": "just one question but it is not blocking",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-11-05 08:34:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "06f9acd6_bd9f61ad",
+      "patchset_number": 1,
+      "message": "To be honest I got lost a bit while reviewing. Since the related wiki page have Performance - Outstanding mentioned Consuming 250K messsages with 5 partition but I haven't seen neither the produce-avc-event.js creating 5 partitons ( I checked it on our kafka-ui by monitoring profile- there was only default partition that is 0) nor CmAvcEventConsumer has been modified to consume messages from 5 different partitions. I think, I need a bit clarification to understand the intention on this commit for myself.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 16:44:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "45d57c86_4cd00197",
+      "patchset_number": 1,
+      "message": "these are just once-off-test and in order to have a more accurate result I did the testing in my local using 250K messages.\nNot everybody has to do with 250K messages , 100k is enough. Just to get more sample data it was done like that.\n\nThe test is not supposed to create 5 partitions. Its just local testing data just to get some figures and prove that it has no impact on the performance.\nMoreover its just testing kafka capabilities.\n\nMain thing we are doing in the production code is just reusing the key from source topic and populating to the target topic while consuming the messages.\n\nAnyways I can demo the ordering bit to the team once this is merged.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-06 16:55:51.000000000",
+      "in_reply_to": "06f9acd6_bd9f61ad",
+      "unresolved": false
+    },
+    {
+      "id": "586caf9a_db8e50f2",
+      "patchset_number": 1,
+      "message": "what I understood the current CmAvcEventConsumer can consume from multiple partitions of dmi-cm-events (e.g if it configured with 5 partitions). We dont have to change any consumer config e.g. group in our application, right?",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 17:08:39.000000000",
+      "in_reply_to": "45d57c86_4cd00197",
+      "unresolved": false
+    },
+    {
+      "id": "73a528a8_e20b4d26",
+      "patchset_number": 1,
+      "message": "yes thats correct.\nwe just consume from one topic and forward to another.\neg : we could be reading from a source topic ( with 3 partitions ) and forwarding to target topic ( with 5 partitions )\n\nits just that we are retaining the same key during reading from source key and while forwarding to target key is to preserve the order. Messages are guaranteed to be ordered in a particular partition.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-06 17:21:40.000000000",
+      "in_reply_to": "586caf9a_db8e50f2",
+      "unresolved": false
+    },
+    {
+      "id": "42b671bb_79009ccd",
+      "patchset_number": 1,
+      "message": "Some NB comments, thanks for clarifications.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 17:23:48.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "a4a91470_06a9a712",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "always worry a bit about random. It means the same key could be used multipel times... Could that cause an issue with the test?!\nWhy dont you just use sequential? Maybe you cant because you need to send many more events then available elements....",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-11-05 08:34:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1ab8ac16_780152c5",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "I was thinking more like a realistic test here , thats why I did my testing with a limited network size ( with 10 n/w element ) and yes the duplicate key is intended. The reason being with mutiple kafka partition , when the events would be sent. So all the messages belonging to a n/w element should fall in the same partition everytime ( which kafka will guarantee as we are making n/w element id as the key ). So when the messages are consumed in parallel there would be no out of order elements with respect to the n/w element.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-06 10:38:37.000000000",
+      "in_reply_to": "a4a91470_06a9a712",
+      "unresolved": true
+    },
+    {
+      "id": "c8286611_e515ee65",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "This could be a plain function instead of lambda",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-11-06 11:27:19.000000000",
+      "in_reply_to": "1ab8ac16_780152c5",
+      "unresolved": true
+    },
+    {
+      "id": "e64b2aac_8747d989",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "NB: sendKafkaMessage same as below",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 17:22:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "50b8bbe5_6ef99308",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "So 10 unique event keys means 10 partitions in dmi-cm-events topit, right?",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 17:22:55.000000000",
+      "in_reply_to": "c8286611_e515ee65",
+      "unresolved": true
+    },
+    {
+      "id": "23806d42_59e5010c",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "NB: sendKafkaMessage since it sends only a message at at time.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-11-06 17:22:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "04a1d041_3d27b6bc",
+      "file_path": "k6-tests/once-off-test/kafka/produce-avc-event.js",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "possibly..\nbasically we dont care.\n10 dmi plugins could be emitting the notifications on 5 partitions OR\n10 dmi plugins could be emitting the notifications on 1 partition.\n\nBut kafka guarantees that if an event from dmi-1 goes to partition#1 , then further events from the dmi-1 would be going to the same partition. ( also that doesnt mean that dmi-2 cannot publish to partition#1 )",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-11-06 17:59:15.000000000",
+      "in_reply_to": "50b8bbe5_6ef99308",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "testsuite~master~I5ecbc22b607379e061b9c3f4ded51635100a180b",
+  "change_id": "I5ecbc22b607379e061b9c3f4ded51635100a180b",
+  "_number": 105168,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a4ad9b08_4bf3c979",
+      "file_path": "docker/Dockerfile",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "doenst this have to go in /var/opt/ONAP/demo or is later copied/linked into that path ?",
+      "author": {
+        "account_id": 29,
+        "name": "Brian Freeman",
+        "display_name": null,
+        "email": "bf1936@att.com",
+        "username": "bdfreeman1421"
+      },
+      "updated": "2020-04-06 16:51:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9efec21e_84da87ac",
+      "file_path": "docker/Dockerfile",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "Could you set this and following repositories as build arg, so that one could easily build docker image from modified repositories?",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-04-08 06:22:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "76ab228b_2523582b",
+      "file_path": "docker/Dockerfile",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "not 100% sure I get your point\n\nheatbridge , python-testing-utils, testuite and demo are needed, there are not optional to build the image used by the robot pod\nyou want to get the possibility to customize each component using different tags provided as argument?\nso add\n\nARG HEATBRIDGE_TAG=master\nARG PYTHON_TESTING_UTILS_TAG=master\n....\n\nand use these tags here\n\nso you shall be able to buil adding --build-arg HEATBRIDGE_TAG=my_customized_tag\n\nor do you have something different in mind?",
+      "author": {
+        "account_id": 1215,
+        "name": "Morgan Richomme",
+        "display_name": null,
+        "email": "morgan.richomme@orange.com",
+        "username": "mrichomme"
+      },
+      "updated": "2020-04-09 08:48:48.000000000",
+      "in_reply_to": "9efec21e_84da87ac",
+      "unresolved": true
+    },
+    {
+      "id": "ca726a01_7bb6c8a7",
+      "file_path": "docker/Dockerfile",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "Sorry for not being clear. I've meant adding parameters (with defaults equal to current values) for repositories url like `HEATBRIDGE_REPO=git+https://git.onap.org/testsuite/heatbridge.git`.\nThis would enable building robot image for local test purposes from local changes without the need of modifying Dockerfile. What I mean, is you can modify something in testsuite/demo/heatbridge repo and check modified robot container without the need of pushing it upstream (creating review). Example flow you can do is:\n > git init --bare ../loc.git\n > git remote add loc ../loc.git\n > git push loc master\n > git -C ../loc.git/ update-server-info\n > cd ../ && python3 -m http.server 8000\nServing your modified git repo locally, and later build docker image passing relevant build arg to download from there, eg: `docker build --build-arg DEMO_REPO=http://some_ip:8000/loc.git`\n\nHopefully I've described it better now 😊?",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-04-09 10:59:15.000000000",
+      "in_reply_to": "76ab228b_2523582b",
+      "unresolved": true
+    }
+  ]
+}

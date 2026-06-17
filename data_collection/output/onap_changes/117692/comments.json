@@ -1,0 +1,1776 @@
+{
+  "id": "policy%2Fpap~master~I65f8bf46f230afb9d4b6937cb89af1d9f05d2fbd",
+  "change_id": "I65f8bf46f230afb9d4b6937cb89af1d9f05d2fbd",
+  "_number": 117692,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "66e20e99_07e9ab0a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupDeployProvider.java",
+      "patchset_number": 2,
+      "line": 181,
+      "message": "Maybe these lists should be moved into SessionData?  That would eliminate the need to pass them to makeUpdate(), because it could extract them from the SessionData instead.  It would also eliminate the need to update the lists AND invoke trackDeploy/trackUndeploy here.  Also wouldn't need the changes to upgradeGroup() in the Base Provider class.\n\nIt would require a change to trackDeploy() to pass the full policy and not just the identifier.\n\nsonar: these lists should appear before the first method definition in the class.\n\nBTW: as there is typically only ever one instance of this class, these lists mean that the class is not re-entrant.  For the most part, that doesn't matter, because a synchronization lock prevents the data from being updated by more than one invocation at a time.  Nevertheless, it would be better to not rely on that.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 12:17:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e96208f7_5b5d8619",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupDeployProvider.java",
+      "patchset_number": 2,
+      "line": 277,
+      "message": "can addPolicies() be called more than once for a given REST call?  If so, we probably don't want to clear them.  Could make deployedPolicies a Map and undeployedPolicies a Set, then it wouldn't matter if duplicates were added.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 12:17:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c40de621_d2222ad0",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeleteProvider.java",
+      "patchset_number": 2,
+      "line": 198,
+      "message": "just use \"policy1\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 12:17:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e1a4ad64_d1e41556",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 3,
+      "line": 100,
+      "message": "This will put the whole policies in the new list as well. But we need to only put the \"delta\" here.\nAlso, shouldn't we set the policiesToBeUndeployed list here as well?\nAnd also we need to differentiate between registration flow vs rest call flow. As mentioned in the design wiki.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-12 17:14:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "948a571d_b86d8753",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/ProviderBase.java",
+      "patchset_number": 3,
+      "line": null,
+      "message": "Do we really need to change the formatting of the file?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-12 17:14:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5b891005_889fb455",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeployProvider.java",
+      "patchset_number": 3,
+      "line": 637,
+      "message": "shouldn't this still work as we are not removing the original list?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-12 17:14:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6652118a_ca87f7e5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "maybe make this a Map<Ident,Policy>, to avoid duplicates",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3df2cf15_7a629ca6",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "maybe make this a Set<Ident>, to avoid duplicates",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b6a13b55_aba86ffc",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 463,
+      "message": "I think there's a policy.getId() that can be used instead",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "80d9cde0_c1aaa197",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeleteProvider.java",
+      "patchset_number": 3,
+      "line": 197,
+      "message": "remove this - we want to compare the whole list",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c534b9a4_ae5f4ae7",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeleteProvider.java",
+      "patchset_number": 3,
+      "line": 197,
+      "message": "remove this - we want to compare the whole list",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0e3025b2_d5949697",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 3,
+      "line": 579,
+      "message": "trailing spaces",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e3438c9c_c2c20775",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 3,
+      "line": 582,
+      "message": "add code to verify that the policy is now in the deploy or undeploy lists",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-12 17:41:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "51532b6d_e16aff97",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/ProviderBase.java",
+      "patchset_number": 3,
+      "line": null,
+      "message": "This was done automatically by my IDE. I will change it back to the original format.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "948a571d_b86d8753",
+      "unresolved": true
+    },
+    {
+      "id": "e68ed74d_747cd7ca",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "6652118a_ca87f7e5",
+      "unresolved": false
+    },
+    {
+      "id": "e0e2c2c4_dc69549c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "3df2cf15_7a629ca6",
+      "unresolved": false
+    },
+    {
+      "id": "04666996_bdd539a3",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/SessionData.java",
+      "patchset_number": 3,
+      "line": 463,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "b6a13b55_aba86ffc",
+      "unresolved": false
+    },
+    {
+      "id": "fffce620_abeb58a6",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeleteProvider.java",
+      "patchset_number": 3,
+      "line": 197,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "80d9cde0_c1aaa197",
+      "unresolved": false
+    },
+    {
+      "id": "ac423858_d8d81952",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeleteProvider.java",
+      "patchset_number": 3,
+      "line": 197,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "c534b9a4_ae5f4ae7",
+      "unresolved": false
+    },
+    {
+      "id": "6c03e771_840eef34",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPdpGroupDeployProvider.java",
+      "patchset_number": 3,
+      "line": 637,
+      "message": "Correct. I removed this in the first changes and forgot to add it back. My bad.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "5b891005_889fb455",
+      "unresolved": true
+    },
+    {
+      "id": "0ff4299f_878fe085",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 3,
+      "line": 579,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "0e3025b2_d5949697",
+      "unresolved": false
+    },
+    {
+      "id": "bb325ca3_1580e235",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 3,
+      "line": 582,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-14 21:45:44.000000000",
+      "in_reply_to": "e3438c9c_c2c20775",
+      "unresolved": false
+    },
+    {
+      "id": "e129d5f0_74b67b5f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 5,
+      "line": 105,
+      "message": "We also need \"else\" block to set the policiesToBeDeployed list with all the policies in subgroup.\nSame as - update.setPolicies(getToscaPolicies(subGroup, databaseProvider));\n\nAnd make sure, policiesToBeUndeployed is empty in this case.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-15 15:51:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4b865928_35d7070c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 5,
+      "line": 105,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-15 16:38:07.000000000",
+      "in_reply_to": "e129d5f0_74b67b5f",
+      "unresolved": false
+    },
+    {
+      "id": "eb45ccd7_54daa110",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "I see that you are creating a new instance of SessionData. Will this have the details of what was requested by an individual REST API call? Example - only \"abc\" policy was requested to deploy.\n\nAlso, I am not sure at line 104, 105 how are you differentiating between multiple REST calls to deploy and undeploy policies.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-15 17:54:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "899ba4a3_4f1eead5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "createPdpUpdateMessage() is only used by the heartbeat/registration class, so it should be OK to create a SessionData here.  However, one could argue that the code that invokes this should perhaps be modified to use SessionData rather than invoking databaseProvider.getPdpGroups(groupName) directly.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 14:59:14.000000000",
+      "in_reply_to": "eb45ccd7_54daa110",
+      "unresolved": true
+    },
+    {
+      "id": "1b7a69a5_f0561c47",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 108,
+      "message": "this is not needed, though I'm ok with it since it makes it clear how this branch differs from the other",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 14:59:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e2eef3a_5f732375",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 6,
+      "line": 584,
+      "message": "sonar seems to prefer:\n\n  assertThat(xxx).contains(yyy)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 14:59:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "319fb99d_b824edd7",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-16 16:14:41.000000000",
+      "in_reply_to": "899ba4a3_4f1eead5",
+      "unresolved": false
+    },
+    {
+      "id": "c6d1a9af_9785eedd",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 108,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-16 16:14:41.000000000",
+      "in_reply_to": "1b7a69a5_f0561c47",
+      "unresolved": false
+    },
+    {
+      "id": "e36dfa07_d5b79ca1",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestSessionData.java",
+      "patchset_number": 6,
+      "line": 584,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-16 16:14:41.000000000",
+      "in_reply_to": "9e2eef3a_5f732375",
+      "unresolved": false
+    },
+    {
+      "id": "364cf668_9a54adc5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 105,
+      "message": "only invoke this once and re-use it",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 19:00:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "df9c454c_10108386",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 7,
+      "line": 54,
+      "message": "with the introduction of SessionData, this class can be revised, replacing:\n- calls to databaseProvider.getFilteredPdpGroups() with calls to data.getGroup(); and\n- calls to databaseProvider.updatePdpSubGroup() with calls to data.update() and data.updateDb()\n\nfor that matter, probably a lot of the places where databaseProvider is being passed, databaseProvider could be replaced by the SessionData object",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 19:00:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6282430c_709ef2dd",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 7,
+      "line": 138,
+      "message": "won't this cause an NPE?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 19:00:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c32fd6da_84da293b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 7,
+      "line": 122,
+      "message": "will throw an NPE",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 19:00:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a9aca721_a0088d19",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "In that case, do we still need the \"boolean register\"?\nAnd where are the other PDP_UPDATE messages created for REST based policy deployments?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 20:02:19.000000000",
+      "in_reply_to": "319fb99d_b824edd7",
+      "unresolved": false
+    },
+    {
+      "id": "6f5d15c2_518cac73",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "Do we still need this? \nAs only registration & state change flow calls this method. And in both cases we need to send all the policies in the subgroup. So essentially remove the if/else and just keep the line 105 & 106.\n\nInfact in that case SessionData is also not needed anymore.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 20:02:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7741c29c_ca0ec991",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 6,
+      "line": 96,
+      "message": "pls ignore this comment:)",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 20:03:49.000000000",
+      "in_reply_to": "a9aca721_a0088d19",
+      "unresolved": false
+    },
+    {
+      "id": "820c0163_4c40ec93",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "So do I remove these changes?",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-16 20:13:30.000000000",
+      "in_reply_to": "6f5d15c2_518cac73",
+      "unresolved": true
+    },
+    {
+      "id": "9707ef5e_424d59cf",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 105,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-16 20:13:30.000000000",
+      "in_reply_to": "364cf668_9a54adc5",
+      "unresolved": false
+    },
+    {
+      "id": "2f77c6ed_bde83a5f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "I am okay with the removal as we don't need it anymore.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 21:26:36.000000000",
+      "in_reply_to": "820c0163_4c40ec93",
+      "unresolved": true
+    },
+    {
+      "id": "13259204_dc756cd5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "yes, it looks like you can remove session data changes.  For register:\n  deploy = full = all\n  undeploy = null\n\nFor heartbeat:\n  full = all\n  deploy = all - (policies that the PDP already has)\n  undeploy = (policies that the PDP already has) - all\n\nLooks like these \"set\" operations should maybe be done by the invoker, in which case, the databaseProvider and register parameters could be removed and the full, deploy, and undeploy sets passed in, instead.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-16 21:35:44.000000000",
+      "in_reply_to": "2f77c6ed_bde83a5f",
+      "unresolved": true
+    },
+    {
+      "id": "2ef28691_13fa6686",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "For heartbeat I think:\nundeploy = null",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 22:19:27.000000000",
+      "in_reply_to": "13259204_dc756cd5",
+      "unresolved": true
+    },
+    {
+      "id": "1660901b_6be343a3",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 7,
+      "line": 94,
+      "message": "Ignore my previous comment. I didn't realize \"-\" as mathematical subtraction 😄",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-16 22:22:07.000000000",
+      "in_reply_to": "2ef28691_13fa6686",
+      "unresolved": true
+    },
+    {
+      "id": "73528bde_a5032dd5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 7,
+      "line": 290,
+      "message": "This would be always considered as registration flow as per the changes in PdpMessageGenerator. But this won't be a problem once Jim's comments are implemented. Better to find policies to deploy/undeploy in this class.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-02-17 13:47:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "64c16d75_1d0b8950",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 7,
+      "line": 121,
+      "message": "Currently during ACTIVE to PASSIVE state change we are sending the full list of policies to the PDP via PDP_UPDATE message. And with delta changes, we still continue to send the full list under policiesToBeDeployed list. Which makes an extra operation for the PDPs. Ideally, we must send full list under policiesToBeUndeployed in this case, so that PDPs undeploy the policy and then gracefully move to PASSIVE.\nThis also brings another discussion of how the PDPs are handling PASSIVE state. Do they lose all their policies, keep them deployed but don't consume events, etc. And also need to revisit our definitions of states in PDPs.\nWe can skip it for the scope of this delta work. As the behaviour remains same like before.\nBut good to have a JIRA opened for Istanbul release to streamline the states in PDP engine.\nThoughts?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-19 17:25:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0f52a250_78afd4b0",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 7,
+      "line": 121,
+      "message": "when all we're doing is changing state, I don't think we should change the policy list on the PDP.  In fact, it seems to me that we may want to be able to deploy policies to passive PDPs so that they're ready when we the PDPs are made active.\nHmm, that makes me rethink the idea of removing status records when a PDP is made passive.  The user may wish to check the deployment status before choosing to bring a group online.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 18:27:01.000000000",
+      "in_reply_to": "64c16d75_1d0b8950",
+      "unresolved": true
+    },
+    {
+      "id": "fd87d3ab_c587a21a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 7,
+      "line": 138,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": "6282430c_709ef2dd",
+      "unresolved": false
+    },
+    {
+      "id": "48ec11c8_39c77d04",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 245,
+      "message": "couple of issues:\n1) this is an O(N^2) operation; if we used Set and/or Map instead, then it could be made O(N) or O(NlogN).  Once that's done, Set operations could be used instead of the loop\n2) this updates \"policies\", which is stored in both policies & policiesToBeUndeployed; it should not update the original list.  A simple option would be to only make a copy of policies and update the copy IF:\n\n  message.getPolicies().isEmpty()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d737b56b_b6f23a5b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 341,
+      "message": "trailing space",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c12c4928_5305f047",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 132,
+      "message": "getMessage() (i.e., the old update message)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e549fb5b_1f7180e6",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 142,
+      "message": "getMessage() (i.e., the old update message)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9dd3d37f_f5e2a2c6",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 157,
+      "message": "move this after line 123",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c9ccee0c_0fac8000",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 178,
+      "message": "should sort the lists by policy id so it works even if things are reordered, or use a Map",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4378b833_25a3e496",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 181,
+      "message": "should sort the lists by policy id so it works even if things are reordered, or use a HashSet",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e9b8e88f_518a26c1",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 184,
+      "message": "should probably test and return between each step, to avoid the extra overhead when it isn't needed",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7bc216f9_85967903",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 7,
+      "line": 122,
+      "message": "no longer an issue",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": "c32fd6da_84da293b",
+      "unresolved": false
+    },
+    {
+      "id": "2a00d669_9d17f243",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 8,
+      "line": 135,
+      "message": "extract this common method",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:10:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6298c72f_471a3504",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 329,
+      "message": "update junit test to verify that these lists are properly populated",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:18:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8597547e_32489d3a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 8,
+      "line": 124,
+      "message": "update junit test to verify that these lists are properly populated",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-19 20:18:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "13e81a0b_ae579960",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 7,
+      "line": 121,
+      "message": "I believe that's the current behavior at start up, PAP sends an update message with all policies while PDP is in passive, and afterwards sends the state change message to move it to active.    This means that the PDPs need to cache the \"deployed\" policies until PAP tell it to go active.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-02-19 23:01:26.000000000",
+      "in_reply_to": "0f52a250_78afd4b0",
+      "unresolved": true
+    },
+    {
+      "id": "9ca9eca4_5d98dae4",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 245,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "48ec11c8_39c77d04",
+      "unresolved": false
+    },
+    {
+      "id": "08e6bc95_aafc03d8",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 329,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "6298c72f_471a3504",
+      "unresolved": false
+    },
+    {
+      "id": "bd1e2306_9d58a757",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 8,
+      "line": 341,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "d737b56b_b6f23a5b",
+      "unresolved": false
+    },
+    {
+      "id": "52fc4c60_42b61b6a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 132,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "c12c4928_5305f047",
+      "unresolved": false
+    },
+    {
+      "id": "c7b05698_a25be139",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "e549fb5b_1f7180e6",
+      "unresolved": false
+    },
+    {
+      "id": "34039779_49fb6cf9",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 157,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "9dd3d37f_f5e2a2c6",
+      "unresolved": false
+    },
+    {
+      "id": "1020fe85_e31ab83b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 178,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "c9ccee0c_0fac8000",
+      "unresolved": false
+    },
+    {
+      "id": "ed94ab60_0352a5be",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 181,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "4378b833_25a3e496",
+      "unresolved": false
+    },
+    {
+      "id": "38a82e1c_ffe64fa2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 8,
+      "line": 184,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "e9b8e88f_518a26c1",
+      "unresolved": false
+    },
+    {
+      "id": "376de87d_632e8af3",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 8,
+      "line": 124,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "8597547e_32489d3a",
+      "unresolved": false
+    },
+    {
+      "id": "68d5fb8e_f10e9d2b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 8,
+      "line": 135,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 13:46:15.000000000",
+      "in_reply_to": "2a00d669_9d17f243",
+      "unresolved": false
+    },
+    {
+      "id": "09c2b85c_d84c9e38",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 9,
+      "line": 100,
+      "message": "tabs",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "94e3a4e4_1dd36f01",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 239,
+      "message": "can just use keyset.removeAll()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3b9d504d_32582893",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 244,
+      "message": "can probably just use: policies.keyset",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9063011b_73560585",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 186,
+      "message": "move this after line 176",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6e0eaa94_c151b993",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 190,
+      "message": "move this after line 181",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "be4389f1_a2e24405",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 198,
+      "message": "can just make this:\n\n  return ...",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7479eced_de68da38",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 9,
+      "line": 127,
+      "message": "use a shared getToscaPolicies() instead",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 13:55:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f2d96faf_dc83724b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 9,
+      "line": 100,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "09c2b85c_d84c9e38",
+      "unresolved": false
+    },
+    {
+      "id": "5afcde16_89902116",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 239,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "94e3a4e4_1dd36f01",
+      "unresolved": false
+    },
+    {
+      "id": "69a3673a_102e91c3",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 244,
+      "message": "still missing this",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "3b9d504d_32582893",
+      "unresolved": true
+    },
+    {
+      "id": "85fe86c5_18c441c2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 186,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "9063011b_73560585",
+      "unresolved": false
+    },
+    {
+      "id": "ca491cd6_d649471d",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 190,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "6e0eaa94_c151b993",
+      "unresolved": false
+    },
+    {
+      "id": "c80ec2ae_42c18990",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 198,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": "be4389f1_a2e24405",
+      "unresolved": false
+    },
+    {
+      "id": "e64fd77f_2c4b6c1b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 10,
+      "line": 127,
+      "message": "these lines are no longer needed, right?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 15:41:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "aee6f59e_56c3276b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 9,
+      "line": 100,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "09c2b85c_d84c9e38",
+      "unresolved": false
+    },
+    {
+      "id": "36f2dbf2_96415677",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 239,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "94e3a4e4_1dd36f01",
+      "unresolved": false
+    },
+    {
+      "id": "d637b2a8_72b3a208",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 9,
+      "line": 244,
+      "message": "policies in this case is a list of policies, so I'm collecting a list of identifiers for this.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "3b9d504d_32582893",
+      "unresolved": true
+    },
+    {
+      "id": "79447add_db9a9b5a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 186,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "9063011b_73560585",
+      "unresolved": false
+    },
+    {
+      "id": "26a86bf9_0206282e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 190,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "6e0eaa94_c151b993",
+      "unresolved": false
+    },
+    {
+      "id": "3ef456da_59974036",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 9,
+      "line": 198,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "be4389f1_a2e24405",
+      "unresolved": false
+    },
+    {
+      "id": "37e17a71_64038371",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 9,
+      "line": 127,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 16:40:12.000000000",
+      "in_reply_to": "7479eced_de68da38",
+      "unresolved": false
+    },
+    {
+      "id": "5cbb0670_0f90805e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 11,
+      "line": 159,
+      "message": "not necessary - line 123 makes them the same",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 17:45:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0dd4939e_357ff215",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupStateChangeProvider.java",
+      "patchset_number": 10,
+      "line": 127,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 17:45:19.000000000",
+      "in_reply_to": "e64fd77f_2c4b6c1b",
+      "unresolved": false
+    },
+    {
+      "id": "c49586d0_07248ec4",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/comm/msgdata/UpdateReqTest.java",
+      "patchset_number": 11,
+      "line": 293,
+      "message": "trailing spaces\n\nthere should be a setting in the IDE to removing trailing spaces when saving",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 17:45:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "64091d78_5a335e27",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 11,
+      "line": 159,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 17:48:47.000000000",
+      "in_reply_to": "5cbb0670_0f90805e",
+      "unresolved": false
+    },
+    {
+      "id": "6e6054eb_96771045",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/comm/msgdata/UpdateReqTest.java",
+      "patchset_number": 11,
+      "line": 293,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 17:48:47.000000000",
+      "in_reply_to": "c49586d0_07248ec4",
+      "unresolved": false
+    },
+    {
+      "id": "47afafe2_7ed63711",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 12,
+      "line": 116,
+      "message": "I'm still seeing a trailing space here",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 18:22:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b713b705_8bf865c4",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpMessageGenerator.java",
+      "patchset_number": 12,
+      "line": 116,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-02-22 18:35:07.000000000",
+      "in_reply_to": "47afafe2_7ed63711",
+      "unresolved": false
+    },
+    {
+      "id": "3a6433ac_87976965",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 13,
+      "line": 326,
+      "message": ".values() is a collection, not a list, thus this generates a ClassCastException in the CSIT.  Sounds like we need some more junits",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 19:08:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5e5a5af8_12879e57",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatusMessageHandler.java",
+      "patchset_number": 13,
+      "line": 326,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 21:11:19.000000000",
+      "in_reply_to": "3a6433ac_87976965",
+      "unresolved": false
+    },
+    {
+      "id": "481f7401_2b2eedd9",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/comm/PdpHeartbeatListenerTest.java",
+      "patchset_number": 14,
+      "line": 234,
+      "message": "This test is guaranteed to always succeed, unless the list is null, so doesn't really add any value.  I was thinking more of a junit where a non-empty policiesToBeDeployed was passed to sendPdpMessage(); that would have detected the class cast exception when it tried to convert the values to a List.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-02-22 21:11:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a5dcdef9_3b3226d8",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/comm/PdpHeartbeatListenerTest.java",
+      "patchset_number": 14,
+      "line": 234,
+      "message": "Agree\n@Wayne - I am going ahead with this one, please raise another review to fix the junit.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-02-23 14:40:45.000000000",
+      "in_reply_to": "481f7401_2b2eedd9",
+      "unresolved": true
+    }
+  ]
+}

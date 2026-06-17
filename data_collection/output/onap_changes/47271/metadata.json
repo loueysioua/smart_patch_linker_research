@@ -1,0 +1,266 @@
+{
+  "id": "oom~master~Ife365ac8e8b7812c1fe4fa0764739511c3c6eb55",
+  "change_id": "Ife365ac8e8b7812c1fe4fa0764739511c3c6eb55",
+  "_number": 47271,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-11 20:11:25.000000000",
+    "updated": "2018-05-15 11:32:38.000000000",
+    "submitted": "2018-05-15 10:53:25.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 131,
+      "name": "Mandeep Khinda",
+      "display_name": null,
+      "email": "Mandeep.Khinda@gmail.com",
+      "username": "mkhinda"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "enforcing helm and kubernetes version requirements",
+  "commit_message": "enforcing helm and kubernetes version requirements\n\nhelm 2.8.x\nk8s 1.7.14+ and 1.8.9+\n\nversions selected because of:\nhttps://github.com/kubernetes/kubernetes/issues/60814\n\nIssue-ID: OOM-1075\n\nChange-Id: Ife365ac8e8b7812c1fe4fa0764739511c3c6eb55\nSigned-off-by: Mandeep Khinda <mandeep.khinda@amdocs.com>\n",
+  "change_log": {
+    "entry_count": 17,
+    "entries": [
+      {
+        "id": "7626b488a440bd2deeec7360f6a933fdeaed5b53",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-11 20:11:25.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8a8a09044990d0be33006ad3a05887c7e8289fd3",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-11 20:15:05.000000000",
+        "message": "Patch Set 1: Verified+1\n\nTested a lower helm version install/upgrade.  It worked.  I don't have a K8s 1.7 or something lower than 1.8.8 to test that side of it.\n\nhelm version\nClient: &version.Version{SemVer:\"v2.7.2\", GitCommit:\"8478fb4fc723885b155c924d1c8c410b7a9444e6\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.7.2\", GitCommit:\"8478fb4fc723885b155c924d1c8c410b7a9444e6\", GitTreeState:\"clean\"}\n\n\nhelm upgrade -i dev local/onap --namespace onap -f onap/resources/environments/disable-allcharts.yaml --dry-run\n\nRelease \"dev\" does not exist. Installing it now.\nError: Chart incompatible with Tiller v2.7.2",
+        "patchset_number": 1
+      },
+      {
+        "id": "c9b2ca986a9cf43a361173099b2752d51855d155",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-13 06:08:54.000000000",
+        "message": "Patch Set 1:\n\nI do have k8s version 1.7.7:\n[root@kubernetes-master-borislavto-2282-05-01-18 ~]# k version\nClient Version: version.Info{Major:\"1\", Minor:\"7\", GitVersion:\"v1.7.3\", GitCommit:\"2c2fe6e8278a5db2d15a013987b53968c743f2a1\", GitTreeState:\"clean\", BuildDate:\"2017-08-03T07:00:21Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nServer Version: version.Info{Major:\"1\", Minor:\"7\", GitVersion:\"v1.7.16\", GitCommit:\"e8846c1d7e7e632d4bd5ed46160eff3dc4c993c5\", GitTreeState:\"clean\", BuildDate:\"2018-04-04T08:47:13Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nThe only problem I have is with aai cassandra statefulSet dns resolution and resources not able to connect to the same cassandra.\nWhy do we insist on k8s version?",
+        "patchset_number": 1
+      },
+      {
+        "id": "eaeec5ac03e7564b29ac99e8e2e1502d7eed6fe7",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-14 14:52:07.000000000",
+        "message": "Patch Set 1:\n\nBorislav, I went with K8s 1.8 because that was the version the integration team and documentation are testing on.  \n\nThe other reason I selected k8s 1.8 is because as of k8s 1.8 a patch for a CVE made all injected volumes read only and this exposed some problems with some containers that were trying to modify volumes/configmaps injected by k8s.  I see that this was also introduced in 1.7.14 so I will include k8s 1.8 and 1.7 above those versions.\n\nAny issues with requiring helm 2.8?",
+        "patchset_number": 1
+      },
+      {
+        "id": "3993452e3c4e3bb0b4f75e7676e5d895c1b888a6",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-14 15:01:19.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "7cf6b4154d9142f5c51556a6a2cbc8ba81c013d5",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-14 17:45:39.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "c8d5b0d9372985751641ae684fdbc24f21886ee0",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-14 17:45:57.000000000",
+        "message": "Patch Set 2:\n\n> Borislav, I went with K8s 1.8 because that was the version the\n > integration team and documentation are testing on.\n > \n > The other reason I selected k8s 1.8 is because as of k8s 1.8 a\n > patch for a CVE made all injected volumes read only and this\n > exposed some problems with some containers that were trying to\n > modify volumes/configmaps injected by k8s.  I see that this was\n > also introduced in 1.7.14 so I will include k8s 1.8 and 1.7 above\n > those versions.\n > \n > Any issues with requiring helm 2.8?",
+        "patchset_number": 2
+      },
+      {
+        "id": "cb36646943e3801268707d7f43d52227c11d5038",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 10:53:18.000000000",
+        "message": "Patch Set 2: Code-Review+2 Verified+1\n\nVerified on k8s 1.7.16",
+        "patchset_number": 2
+      },
+      {
+        "id": "33deafd2245e0cfacae8c8b9b5861374b55f90b7",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-15 10:53:25.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 2
+      },
+      {
+        "id": "69e5ace0803676308fd10e68aff2e9cbaf3001d5",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:24:45.000000000",
+        "message": "Patch Set 2:\n\nStrangely, after this commit merge deployment started failing on my v1.7.16 env.\n[root@kubernetes-master-borislavto-2282-05-01-18 kubernetes]# kubectl version\nClient Version: version.Info{Major:\"1\", Minor:\"7\", GitVersion:\"v1.7.3\", GitCommit:\"2c2fe6e8278a5db2d15a013987b53968c743f2a1\", GitTreeState:\"clean\", BuildDate:\"2017-08-03T07:00:21Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nServer Version: version.Info{Major:\"1\", Minor:\"7\", GitVersion:\"v1.7.16\", GitCommit:\"e8846c1d7e7e632d4bd5ed46160eff3dc4c993c5\", GitTreeState:\"clean\", BuildDate:\"2018-04-04T08:47:13Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\n[root@kubernetes-master-borislavto-2282-05-01-18 kubernetes]# helm version\nClient: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\n[root@kubernetes-master-borislavto-2282-05-01-18 kubernetes]# helm upgrade -i aaa local/onap --namespace onap -f onap/resources/environments/disable-allcharts.yaml --set global.pullPolicy=IfNotPresent\nRelease \"aaa\" does not exist. Installing it now.\nError: Chart requires kubernetesVersion: ^1 ~1.7.14 || ~1.8.9 which is incompatible with Kubernetes v1.7.16\n\nPropose to revert until further analysis.",
+        "patchset_number": 2
+      },
+      {
+        "id": "503a3aa44b91f1b59b0382efd8d9b31866233939",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:26:26.000000000",
+        "message": "Patch Set 2:\n\nSame on Rancher:\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# k version\nClient Version: version.Info{Major:\"1\", Minor:\"10\", GitVersion:\"v1.10.1\", GitCommit:\"d4ab47518836c750f9949b9e0d387f20fb92260b\", GitTreeState:\"clean\", BuildDate:\"2018-04-12T14:26:04Z\", GoVersion:\"go1.9.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nServer Version: version.Info{Major:\"1\", Minor:\"8+\", GitVersion:\"v1.8.10-rancher1\", GitCommit:\"66aaf7681d4a74778ffae722d1f0f0f42c80a984\", GitTreeState:\"clean\", BuildDate:\"2018-03-20T16:02:56Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# helm version\nClient: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# helm upgrade -i aaa local/onap --namespace onap -f onap/resources/environments/disable-allcharts.yaml --set global.pullPolicy=IfNotPresent\nError: UPGRADE FAILED: Chart requires kubernetesVersion: ^1 ~1.7.14 || ~1.8.9 which is incompatible with Kubernetes v1.8.10-rancher1",
+        "patchset_number": 2
+      },
+      {
+        "id": "5062c75e2dcf95521e07e571ce99dc8a313f07ca",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:30:10.000000000",
+        "message": "Patch Set 2:\n\nSame on k8s v1.10\n[root@kubernetes-master-borislavto-13099-05-13-18 kubernetes]# kubectl version\nClient Version: version.Info{Major:\"1\", Minor:\"10\", GitVersion:\"v1.10.0\", GitCommit:\"fc32d2f3698e36b93322a3465f63a14e9f0eaead\", GitTreeState:\"clean\", BuildDate:\"2018-03-26T16:55:54Z\", GoVersion:\"go1.9.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nServer Version: version.Info{Major:\"1\", Minor:\"10\", GitVersion:\"v1.10.2\", GitCommit:\"81753b10df112992bf51bbc2c2f85208aad78335\", GitTreeState:\"clean\", BuildDate:\"2018-04-27T09:10:24Z\", GoVersion:\"go1.9.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\n[root@kubernetes-master-borislavto-13099-05-13-18 kubernetes]# helm version\nClient: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\n[root@kubernetes-master-borislavto-13099-05-13-18 kubernetes]# helm upgrade -i aaa local/onap --namespace onap -f onap/resources/environments/disable-allcharts.yaml --set global.pullPolicy=IfNotPresent\nRelease \"aaa\" does not exist. Installing it now.\nError: Chart requires kubernetesVersion: ^1 ~1.7.14 || ~1.8.9 which is incompatible with Kubernetes v1.10.2",
+        "patchset_number": 2
+      },
+      {
+        "id": "6d6d14e440e7fd0e9782076095e9e6e486f0a12a",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:31:28.000000000",
+        "message": "Patch Set 2: Reverted\n\nThis patchset was reverted in change: I27d2a5328e85912cf005daeee482858ac3cc6e2c",
+        "patchset_number": 2
+      },
+      {
+        "id": "c9ba51a51958611254e46a04346e66038bf9dbd6",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:31:36.000000000",
+        "message": "Patch Set 2: Reverted\n\nThis patchset was reverted in change: I722dcc28ba6dd9f77393fe7905d4681abf5e7d59",
+        "patchset_number": 2
+      },
+      {
+        "id": "ae8cb1af8b143d0df2363bd55bd25094c36b3fc7",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:31:45.000000000",
+        "message": "Patch Set 2: Reverted\n\nThis patchset was reverted in change: I77315d759e56f2be7b8945bc94fb951353a86854",
+        "patchset_number": 2
+      },
+      {
+        "id": "a0cf41530abe693c468e79790bdce6584d120cd8",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:32:06.000000000",
+        "message": "Patch Set 2: Reverted\n\nThis patchset was reverted in change: I93d7e0906ca12372c316fd679eead3f83957f94a",
+        "patchset_number": 2
+      },
+      {
+        "id": "10f6960f63ac3448e606926b94dee47ac57ce42b",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 11:32:38.000000000",
+        "message": "Patch Set 2: Reverted\n\nThis patchset was reverted in change: I652c407687a8d97cf014eeb9581bb231e842a4b6",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "sdc~master~I1af31c1f14d72fbc30a026f7ae787ae9d4b03b36",
+  "change_id": "I1af31c1f14d72fbc30a026f7ae787ae9d4b03b36",
+  "_number": 106992,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d22c0727_8401b7b7",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "I'm sorry to ask, but what is the purpose of this test? The `createInterface` function returns an implementation of `ComponentDao`. No matter the implementation returned, it should stick to `ComponentDao`'s inherent contract. therefore, from the caller perspective, it should not matter which implementation is chosen. What do you think?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 18:53:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a24a9d82_55b182e1",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "Testing concrete implementation of ComponentDao.\nAgree, not much to test, implemented simplest way, open for suggestion.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-01 19:55:30.000000000",
+      "in_reply_to": "d22c0727_8401b7b7",
+      "unresolved": true
+    },
+    {
+      "id": "fe84859f_5ba51a9a",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "I would instead not add this test, as overall, it mainly adds more code to maintain without providing much benefit. However it would be interesting to have a test for ComponentDaoZusammenImpl. This may have to be done in a different change though.\n\nOverall, I avoid testing implementation details and favor API/Interface details. So anything that needs to be exposed must be tested, the implementations details do not need that. In order to ensure that all the implementations of an interface satisfy its contract, a contract-test has to be created.\n\nConcretely, this is done using an abstract class. I put an example here: https://gist.github.com/FrancisToth/14ab5620910787c9318dd90ac1fea351\n\nThe idea is to create a contract used to test all the common properties of the interface against each implementation.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-01 20:28:59.000000000",
+      "in_reply_to": "a24a9d82_55b182e1",
+      "unresolved": true
+    },
+    {
+      "id": "a0a53490_842e0e69",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "Agree we should create create \"contract-test\" for ComponentDaoZusammenImpl and others, but this is out of scope for this change.\nHowever, cannot agree for this TC, just for testing getInstance() and createInterface(), I think, it good enough, without any additional complexity. From caller perspective, I except to get ComponentDaoZusammenImpl and not any other implementation of interface when I call ComponentDaoFactoryImpl, right? What do you think?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-02 11:23:13.000000000",
+      "in_reply_to": "fe84859f_5ba51a9a",
+      "unresolved": true
+    },
+    {
+      "id": "a26e91ec_886f8e64",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "I think this goes back to test an implementation detail which is not considered as a best practice. This is well documented as shown by googling \"test against interface not implementation\".\n\nIf the goal is to ensure that the caller gets always a ComponentDaoZusammenImpl back then I would rather return one than a `VersionableDao`. As if this is only possible implementation, then what is the point of having an interface in the first place?\n```\npublic class ComponentDaoFactoryImpl extends ComponentDaoFactory {\n  private static final ComponentDaoZusammenImpl INSTANCE = new ComponentDaoZusammenImpl(\n      ZusammenAdaptorFactory.getInstance().createInterface());\n\n  @Override\n  public ComponentDaoZusammenImpl createInterface() {\n    return INSTANCE;\n  }\n}\n\n//...\n@Test\nvoid createInterface() {\n\t\n  final ComponentDaoZusammenImpl testSubject = ComponentDaoFactoryImpl.getInstance().createInterface();\n  assertNotNull(testSubject);\n  assertSame(ComponentDaoZusammenImpl.class, testSubject.getClass());\n}\n```\nBut in that case, the test does not make sense anymore. You'd be guaranteed to get a `ComponentDaoFactoryImpl` whenever `createInterface` is called by the type system itself. \n\nSecondly, as it test an implementation detail, this test would have to be modified whenever we decide to return another kind of implementation. So it would increase the efforts required to introduce a new change for no real benefit. In other words, adding a test is still adding some code which at some point will have to be maintained.\n\nAlso, this breaks the encapsulation of the `ComponentDaoFactoryImpl` class, as it exposes its internal aspects. Encapsulation as you probably know is also a fundamental object oriented principle.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-02 12:38:05.000000000",
+      "in_reply_to": "a0a53490_842e0e69",
+      "unresolved": true
+    },
+    {
+      "id": "d25bfded_ae895ee9",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "By the way, I hope you are ok debating about this. I don't want to sound like someone too picky or over-argumentative. If this is the case, I apologize, my goal is just to help and learn 😊",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-02 12:43:53.000000000",
+      "in_reply_to": "a26e91ec_886f8e64",
+      "unresolved": true
+    },
+    {
+      "id": "7c4ca01c_a495aafd",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "hard to disagree \"we are here just to help and learn 😊\".",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-02 13:41:48.000000000",
+      "in_reply_to": "d25bfded_ae895ee9",
+      "unresolved": true
+    },
+    {
+      "id": "30b24a55_cef12b68",
+      "file_path": "openecomp-be/lib/openecomp-sdc-vendor-software-product-lib/openecomp-sdc-vendor-software-product-core/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/dao/impl/ComponentDaoFactoryImplTest.java",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-02 13:42:17.000000000",
+      "in_reply_to": "7c4ca01c_a495aafd",
+      "unresolved": false
+    }
+  ]
+}

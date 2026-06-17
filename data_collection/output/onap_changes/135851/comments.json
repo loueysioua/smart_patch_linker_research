@@ -1,0 +1,511 @@
+{
+  "id": "cps~master~I756ed8beee4ea44c9aed37382ff9a0a4f7154809",
+  "change_id": "I756ed8beee4ea44c9aed37382ff9a0a4f7154809",
+  "_number": 135851,
+  "change_comments": [
+    {
+      "id": "6c9cd26f_02f1518b",
+      "patchset_number": 1,
+      "message": "good to see a early preview and now I can give you some suggestions\n\n\nmy main issue is the use of dmiPluginTrustLevelCache I think it is more complicated then it needs to be I dont need you  need properties but just a map of dmi(Data?!)Server names to status(enum)\n\nalso out code should be consistent in using the name 'dmi' or 'dmiPLugin' it is very inconsistent now.\nRelated to this you need to understand that the dmi plugin is split in a model and a date service which are you monitoering here?! I am note sure I think this is a Stakehodler question ie open issue!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ac95f3e5_474c0a0a",
+      "patchset_number": 1,
+      "message": "As discussed regarding the approach.\n- we dont really need the Application Events here and we can way better using the scheduler which calls the dmi plugin after pre-configured time and check the status of the dmi-plugin\n- in my opinion we wont be having that much number of dmi-plugins in the network. ( dmi-plugins would be managing thousands of devices ) but here we dont care about the number of devices. we just want healthcheck of dmi-plugins only.\n- Look at the ModuleSyncWatchdog to get an idea and an example approach for you.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2023-08-30 11:23:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "95d65a8e_da55cc38",
+      "patchset_number": 1,
+      "message": "You are right. If there were not thousands of DMI plugins, there would be no need to have a multi-threaded (currently 3), parallel, DMI plugin availability check approach. \n\nI can revert the current solution to a Spring's @Scheduled(fixedDelayString=30000) annotation-based solution.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "ac95f3e5_474c0a0a",
+      "unresolved": false
+    },
+    {
+      "id": "3c618523_4bbb576d",
+      "patchset_number": 1,
+      "message": "I'll raise a patch set regarding my replies to your reviews...",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:39:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "69387277_e52005e5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "legacy, remove any usage of 'var' when modifying this class",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c252cbe0_0fff9168",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "dmiPluginBaseUrl",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c47457e_07d5a683",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 75,
+      "message": "we agreed long time back never to use 'var'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c7170428_8c22fb01",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "as per our convention never abbreviate\n'response' or 'jsonNode' or maybe something more specific to indicate what is is...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ac79c987_eac6b360",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 79,
+      "message": "I presume we hardcode/define the response in the DMI so there should be no need for 'ignoreCase'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "60901f15_cd5961e5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "its is not critical so I would log it as a warning",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a9d99f70_7355e579",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "when using maps try to use teh valuePerKey namign convention, evn withmaps of maps\n\nin this case something like trustLevelPerDmiPer???  I am not sure yet but you should know\nI now have seen it and suggesting: trustLevelPropertiesPerDmi(Plugin)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4ac4b807_e555c650",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "why is trustlevel implemented here as a strign and not an enum ?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "01b00523_a13e304a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 49,
+      "message": "not sure about this use of the word 'control' I think it is incorrect. Need to read the remainder of the code but I think 'WatchDog' might  be more appropriate (adn used befoer)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f722d10b_c9fe797b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "why is this defined in this calls only to be passed on, can it not simply be declared in the task ?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d931421e_51e55bde",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "DmiPluginHealthChecker or DMiPluginWatchDog\n(we are NOT controlling anything only checking!)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "34b2d0d9_c0b44566",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "trustLevelPropertiesPerDmi(Plugin)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6bc39e3b_325463d1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "why is the healtheck URL stored in a properties map can it not simply be generated based on the name?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-08-30 07:37:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8418804e_fcdcb3e0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "69387277_e52005e5",
+      "unresolved": false
+    },
+    {
+      "id": "589997d9_b50aec95",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 73,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "c252cbe0_0fff9168",
+      "unresolved": false
+    },
+    {
+      "id": "cde019d6_6f16ee3f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 75,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "7c47457e_07d5a683",
+      "unresolved": false
+    },
+    {
+      "id": "4bab9752_bdf90189",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "c7170428_8c22fb01",
+      "unresolved": false
+    },
+    {
+      "id": "443e12ca_436b9d44",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 79,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "ac79c987_eac6b360",
+      "unresolved": false
+    },
+    {
+      "id": "51f5210d_5b79e66d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/client/DmiRestClient.java",
+      "patchset_number": 1,
+      "line": 84,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "60901f15_cd5961e5",
+      "unresolved": false
+    },
+    {
+      "id": "9865f0ae_e70ba1a2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "will do change this in my previous commit.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "4ac4b807_e555c650",
+      "unresolved": true
+    },
+    {
+      "id": "6cbe9345_afdbedb6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "will do change this in my previous commit.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "a9d99f70_7355e579",
+      "unresolved": true
+    },
+    {
+      "id": "327959b4_854ee451",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "01b00523_a13e304a",
+      "unresolved": false
+    },
+    {
+      "id": "4c770db9_30698c60",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlService.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "You are right, both method parameters are redundant since they are defined as beans and can be injected from DMiPluginWatchDog itself.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "f722d10b_c9fe797b",
+      "unresolved": false
+    },
+    {
+      "id": "c5006152_c60ebe12",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "d931421e_51e55bde",
+      "unresolved": false
+    },
+    {
+      "id": "26099e13_ddc96a9c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "will change this in my previous commit, and then I will update this commit as well.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "34b2d0d9_c0b44566",
+      "unresolved": true
+    },
+    {
+      "id": "7f868165_ad4f457a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/trustlevel/dmiavailability/DmiAvailabilityControlTask.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "As per a discussion with Priyank a moment ago, I'll be using Dmi plugin's service name as a base Dmi plugin URL.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-08-30 11:38:49.000000000",
+      "in_reply_to": "6bc39e3b_325463d1",
+      "unresolved": true
+    }
+  ]
+}

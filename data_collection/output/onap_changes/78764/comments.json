@@ -1,0 +1,382 @@
+{
+  "id": "oom%2Foffline-installer~master~I3d3da9381b0e804f511ee854c41554b924d18883",
+  "change_id": "I3d3da9381b0e804f511ee854c41554b924d18883",
+  "_number": 78764,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2124d67e_54d4b280",
+      "file_path": "ansible/resources.yml",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "Won't we get longer play time due to all tasks 'skipped' for resources[0] host after \n\n  when:\n    - inventory_hostname in groups.infrastructure\n\nin roles/resource-data/tasks/main.yml?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-20 12:55:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "876ebbc4_6b6156dd",
+      "file_path": "ansible/roles/resource-data/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Are you renaming this var for a particular reason? I find plainly aliasing well known vars somehow disturbing.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-20 12:55:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "93381474_c90fe9c3",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 1,
+      "line": 7,
+      "message": "Could you please explain what does 'Wrapper' in above context mean? Why are you constantly passing the same variables while calling another tasks file?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-20 12:55:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0a68722d_a0dc11c2",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 1,
+      "line": 13,
+      "message": "Isn't it superfluous declaration? It has a point?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-20 12:55:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9773c5fd_732d73a3",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 1,
+      "line": 14,
+      "message": "Same as in roles/resource-data/tasks/main.yml - renaming once again? Why? Very disturbing IMO.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-20 12:55:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7ea98ecd_2d762957",
+      "file_path": "ansible/resources.yml",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "Yes.\nDo you think it's long time?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-20 16:56:58.000000000",
+      "in_reply_to": "2124d67e_54d4b280",
+      "unresolved": true
+    },
+    {
+      "id": "b4bb41b7_92e1d5d9",
+      "file_path": "ansible/roles/resource-data/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "I find it much more disturbing to have global variables. Coming from real programming languages it's quite painful in ansible to accept that madness.\nTo keep thing at least little bit sane for submodules called (in this case upload_resources.yml and that one further calls unarchive-resource.yml and then unarchive-{{ transport }}-resource.yml) it's good to keep \"passed parameters\" explicit. Ones saying that I broke that rule already in unarchive-resource.yml module where variables are not explicitly given to called \"unarchive-{{ transport }}-resource.yml\" but they are going as global vars. But it's mentioned in the comments.\n\nSo the reason is modularity as usually writing modules usable in many places, however called can always set that variable to some value. So no special reason. \nI would either keep explicit variables or relax it everywhere.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-20 16:56:58.000000000",
+      "in_reply_to": "876ebbc4_6b6156dd",
+      "unresolved": true
+    },
+    {
+      "id": "e63e4699_2f9ab5a2",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 1,
+      "line": 7,
+      "message": "I think already explained in previous comment.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-20 16:56:58.000000000",
+      "in_reply_to": "93381474_c90fe9c3",
+      "unresolved": true
+    },
+    {
+      "id": "dac61b41_bfed4669",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 1,
+      "line": 13,
+      "message": "same",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-20 16:56:58.000000000",
+      "in_reply_to": "0a68722d_a0dc11c2",
+      "unresolved": true
+    },
+    {
+      "id": "ce47721c_56cfc3ad",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 1,
+      "line": 14,
+      "message": "Being explicit usually is not a problem. Having long loop of calls and then rely on global var set somewhere can also be difficult to follow.\n\nI'm ok to change all of the variables global where it make sense as it's ok in ansible (very bad practice in any programming language). As ansible is not a programming language.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-20 16:56:58.000000000",
+      "in_reply_to": "9773c5fd_732d73a3",
+      "unresolved": true
+    },
+    {
+      "id": "7715e923_14696421",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "what if user specified directory that was already present before execution?",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-25 14:38:41.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d0f3e342_33817170",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "yes that's a problem. Same problem with the original code.\nRelates to bad idempotence here because of using shell command to transfer.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-26 08:46:21.000000000",
+      "in_reply_to": "7715e923_14696421",
+      "unresolved": false
+    },
+    {
+      "id": "f9ff0c6e_008dd5aa",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "I am curious how you will solve this - there was a reason why I made it like this - I said already that is idempotent enough - other option is to override it every time (danger and slow) or do checksum on every file in source and target and sync it - safe but difficult and slow...prove me wrong",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-02-26 13:14:11.000000000",
+      "in_reply_to": "d0f3e342_33817170",
+      "unresolved": false
+    },
+    {
+      "id": "0bacae26_93818be5",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "Yes the problem remains.\nIt's not going to be addressed in this commit and will be exactly same level with original code.\n\nWe need to address that (if needed) in separate commit.\n\nThe problem is not easy and maybe that is the reason why no Ansible module handle this. \nI agree it might be enough idempotence for us.\n\nIf we want to make it better we could implement our own Ansible module for this.\nFirst study available Ansible modules for this and why they do not address this.\nMaybe fork one of them having most of the needed functionality rather than creating our own from cratch?\nSome kind of checksum checking I guess most generic... Maybe store the checksum of the extracted package to some (user defined) file in the target host and module can use that to check the new tar.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-26 16:02:36.000000000",
+      "in_reply_to": "f9ff0c6e_008dd5aa",
+      "unresolved": false
+    },
+    {
+      "id": "8dfe3e45_f6bffc2b",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "yesterday on the meeting, someone proposed to add a \"signal\" file, that playbook is done...it is almost the same function like what that dir. check does but this file would be created after successfull run, it will help, it is not perfect solution, but it is easy and solves the issues someone had with current solution",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-02-27 09:40:35.000000000",
+      "in_reply_to": "0bacae26_93818be5",
+      "unresolved": false
+    },
+    {
+      "id": "30ed2a31_fcb16e2b",
+      "file_path": "ansible/roles/resource-data/tasks/unarchive-resource.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "you can also at the end of the upload change dir name, for example onap_temp to onap without any new flag files",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-02-28 12:17:20.000000000",
+      "in_reply_to": "8dfe3e45_f6bffc2b",
+      "unresolved": false
+    },
+    {
+      "id": "50d841e5_4d37b3dd",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "not all the systems have nfs named that way, vide Ubuntu",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-02-28 12:17:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "424f3061_5c493c5a",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "This offline installer's codebase was designed for RedHat family OSes so no need care about this. It'll be addressed at implementing Debian like distros.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-02-28 14:44:12.000000000",
+      "in_reply_to": "50d841e5_4d37b3dd",
+      "unresolved": false
+    },
+    {
+      "id": "55fe7bd5_02209999",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "yes will be addressed in another commit.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-28 17:15:56.000000000",
+      "in_reply_to": "424f3061_5c493c5a",
+      "unresolved": false
+    },
+    {
+      "id": "b371f6ff_4c9733ff",
+      "file_path": "ansible/roles/resource-data/tasks/upload_resources.yml",
+      "patchset_number": 2,
+      "line": 8,
+      "message": "@Bartek you have already addressed similar problem in your change 79115 for same codebase\n@Samuli ok for me",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-03-01 07:38:24.000000000",
+      "in_reply_to": "55fe7bd5_02209999",
+      "unresolved": false
+    },
+    {
+      "id": "e6dbc1ca_40448fa1",
+      "file_path": "ansible/roles/resource-data/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "don't know if this is right commit for it but\nsetting get_checksum: no for stat module will save noticable amount of time",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-01 15:24:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fb7835ec_30e44ff5",
+      "file_path": "ansible/roles/resource-data/tasks/main.yml",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "yeah not correct commit, but can do that. That's nice detail.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-03 11:55:57.000000000",
+      "in_reply_to": "e6dbc1ca_40448fa1",
+      "unresolved": false
+    }
+  ]
+}

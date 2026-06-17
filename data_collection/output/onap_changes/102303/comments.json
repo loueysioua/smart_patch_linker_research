@@ -1,0 +1,552 @@
+{
+  "id": "policy%2Fpap~master~Ifda17a4486e1bce1ce0f523cc1984519b7fbc1aa",
+  "change_id": "Ifda17a4486e1bce1ce0f523cc1984519b7fbc1aa",
+  "_number": 102303,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "41f2356f_99d00967",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "knowing a little more about java's asynchronous threads, this parallelStream() call needs to be done a different way, because it will block the ForkJoinPool while it performs the REST calls - should never do blocking I/O in a parallelStream()\n\nnow that I think about it, this should only invoke getHttpClients() once and then cache the result, reusing it on each call to fetch().",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-25 13:43:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1f88db93_7a501efe",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "shouldn't do this - because the factory is a singleton, it will impact anything else using managed HttpClients",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-25 13:43:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b4de3a16_61c2e65f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 154,
+      "message": "shouldn't assume that all clients in the factory are clients of interest to health check.  Need to create a list from those returned by build()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-25 13:43:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f2b4a0e1_a75386f5",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckControllerV1.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "need an @After or @AfterClass to restore the parameters to their original value",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-25 13:43:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b8e25ad4_e205e66b",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 216,
+      "message": "FYI: could make this static",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-25 13:43:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8ac88bd7_53547e5e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Can you outline the workings of a few things here: \n- what components use http for the healthcheck?  \n- How does this work for the parallel stream, \n- if executed in parallel, how does the result get put together uniformly for all components?   \n- why the reference to itself in this method?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-02-25 13:53:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "eb36087e_6d8c2c3b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "Is this right to destroy the factory each time the health status need to be exercised?   If so, it must be masking a bug.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-02-25 13:53:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ffc33317_15ba89d2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "can you remind me what is for the \"replaceIpWithHostname\" ?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-02-25 13:53:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e811b231_fe7408e0",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "Hi Jim,\n\nOK, thanks for the information. Maybe we can just use regular sequence call since we only have clients to call. Or any other suggestion to make it better?\n\nI agree, we should rework on all usages of HttpClientFactory.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "41f2356f_99d00967",
+      "unresolved": false
+    },
+    {
+      "id": "2eb6b910_bb43ca2a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Hi Jorge,\n(1) it calls policy-api and policy-distribution for their health report.\n(2) Using parallel stream to call two components in parallel to reduce response time.\n(3) After two components return response, the reports will be put in a shared Map.\n(4) forEach need a function with one argument. fetchPolicyComponentHealthStatus has actually two arguments, one is *this*, one is httpClient. \"this::fetchPolicyComponentHealthStatus\" is the way to bind *this* as the first argument to fetchPolicyComponentHealthStatus.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "8ac88bd7_53547e5e",
+      "unresolved": false
+    },
+    {
+      "id": "e8dbaf7a_a27e0731",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "I agree. It tried to fix the problem of repeating calling to getHttpClients. It does not work well.\nPolicyComponentsHealthCheckProvider is created per request. \nhttps://git.onap.org/policy/pap/tree/main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckControllerV1.java#n85",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "1f88db93_7a501efe",
+      "unresolved": false
+    },
+    {
+      "id": "b0f94c16_56cc1427",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "Yes, it was to mask a bug, and failed :-)",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "eb36087e_6d8c2c3b",
+      "unresolved": false
+    },
+    {
+      "id": "67ee6318_642c3b2e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 154,
+      "message": "Yes, I will rework on this.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "b4de3a16_61c2e65f",
+      "unresolved": false
+    },
+    {
+      "id": "5914f42a_1eef1c1c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "I do not quite understand why we need this. Seems it is for untypical deployment.\nThere was a discussion in this review. Any one could help to clarify?\nhttps://gerrit.onap.org/r/c/policy/pap/+/99193/1/packages/policy-pap-tarball/src/main/resources/etc/defaultConfig.json",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "ffc33317_15ba89d2",
+      "unresolved": false
+    },
+    {
+      "id": "7d25d720_1056b30d",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckControllerV1.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Ack",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "f2b4a0e1_a75386f5",
+      "unresolved": false
+    },
+    {
+      "id": "203f52fc_568953be",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 216,
+      "message": "Ack",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 06:06:09.000000000",
+      "in_reply_to": "b8e25ad4_e205e66b",
+      "unresolved": false
+    },
+    {
+      "id": "204f2a5d_7d9cfde5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 3,
+      "line": 119,
+      "message": "There's a lot of indentation here, I think it will throw a Sonar issue. Have you installed the SonarLint plugin onto your Eclipse?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2020-02-26 08:56:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "30136b9a_9d5deb54",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 3,
+      "line": 119,
+      "message": "Yes, I use IntelliJ and have installed SonarLint. But there's a problem like this. I'm still trouble shooting on this.\n1 source files to be analyzed\nUnable to create symbol table for : C:\\Users\\ehuajin\\nordix\\pap\\main\\src\\main\\java\\org\\onap\\policy\\pap\\main\\rest\\PolicyComponentsHealthCheckProvider.java\njava.lang.IllegalArgumentException: Unsupported class file major version 55\n...\n\nI formatted the code before commit. It looks good to me, 4 spaces, no tab, 120 chars per line. Could you indicate which line is in problem? Is that line 110 and 112, 8 spaces indentation?",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-26 09:16:27.000000000",
+      "in_reply_to": "204f2a5d_7d9cfde5",
+      "unresolved": true
+    },
+    {
+      "id": "2364b405_7cf0af13",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 3,
+      "line": 119,
+      "message": "Aah yes, there is a bug in the latest released SonarLint plugin and Lombok. This was discussed by Jim Hahn on the Policy Rocketchat but you may not be on there yet.\n\nHere's the fix:\nanyone running into issues with sonarlint, lombok, and eclipse 2019? I was and went looking on the web for a fix just this morning, and found a lombok patch to fix it that was released just this morning - good timing! https://github.com/rzwitserloot/lombok/issues/2351",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2020-02-26 09:27:38.000000000",
+      "in_reply_to": "30136b9a_9d5deb54",
+      "unresolved": true
+    },
+    {
+      "id": "3872d96c_deaf9033",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 120,
+      "message": "Nesting too deep - may be why part of it was in a separate method. Notably the nested try-catch will be caught by sonar.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-02-26 12:41:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d86e894b_9b9a2364",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 98,
+      "message": "here's an alternative suggestion: move the client properties up and have the Activator configure them.  Then all we need here is a list of client names.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-26 14:35:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "40cf032d_4ae4e593",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 220,
+      "message": "static?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-26 14:35:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "96ca59ea_d1a02ace",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Thank you for explaining!   Gotcha is calling fetchPolicyComponentHealthStatus with no \"s\", I thought it was calling this same method (which has the name but with \"s\") and was amazed that was working, calling itself recursively.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-02-27 00:50:03.000000000",
+      "in_reply_to": "2eb6b910_bb43ca2a",
+      "unresolved": false
+    },
+    {
+      "id": "2fd5de80_ce120d88",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "Not sure about the background, but I don't see a reason to replace with an IP, I think it will be more confusing, as the hostnames used in docker/kubernetes pretty much tells you the component that is working with.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-02-27 00:50:03.000000000",
+      "in_reply_to": "5914f42a_1eef1c1c",
+      "unresolved": false
+    },
+    {
+      "id": "70065d5e_562e7544",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 98,
+      "message": "Could you elaborate on this? \nHttpClientConfigException indicates some configuration issue. Can we just fail to start (fail fast) if the exception happens? And it is not good to see many \"httpClient creation error\" in logs.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-27 02:39:16.000000000",
+      "in_reply_to": "d86e894b_9b9a2364",
+      "unresolved": false
+    },
+    {
+      "id": "28391394_692f3d4a",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 120,
+      "message": "Yes, it should be in a function, thanks",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-27 02:39:16.000000000",
+      "in_reply_to": "3872d96c_deaf9033",
+      "unresolved": false
+    },
+    {
+      "id": "d5a4cf04_8ed1f38d",
+      "file_path": "main/src/test/java/org/onap/policy/pap/main/rest/TestPolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 4,
+      "line": 220,
+      "message": "Can we keep it here? I want keep the definition close to usage. \nAlso it is trivial to create the object.\nclass StandardCoder() {\n   ...\n    public StandardCoder() {\n    }\n   ...\n}",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-27 02:39:16.000000000",
+      "in_reply_to": "40cf032d_4ae4e593",
+      "unresolved": false
+    },
+    {
+      "id": "be413db7_d8b108d0",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 2,
+      "line": 164,
+      "message": "Yes, I agree. But it should not be a problem in normal deployment.\nI'm also not sure why we need URL here.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-02-27 02:56:01.000000000",
+      "in_reply_to": "2fd5de80_ce120d88",
+      "unresolved": false
+    },
+    {
+      "id": "66de91b7_4ff43e9e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 8,
+      "line": 103,
+      "message": "we should probably add a backlog JIRA to do this in parallel",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-28 13:29:05.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "410c1576_f381e582",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 8,
+      "line": 111,
+      "message": "could just include it in the client list and then eliminate this block of code",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-02-28 13:29:05.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5b658549_00c0b62e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 8,
+      "line": 103,
+      "message": "Yes, it is good to reduce the latency. Do we have async HTTP client available to use in the project? That would be better than using extra threads for parallel.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-03-02 03:54:42.000000000",
+      "in_reply_to": "66de91b7_4ff43e9e",
+      "unresolved": false
+    },
+    {
+      "id": "b15b1e51_638ca81d",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PolicyComponentsHealthCheckProvider.java",
+      "patchset_number": 8,
+      "line": 111,
+      "message": "It could be an option. One concern is so we have to put those rest parameters in config file. It is a bit confusing to put PAP itself's information in PAP's config file.",
+      "author": {
+        "account_id": 6351,
+        "name": "Huaxing Jin",
+        "display_name": null,
+        "email": "huaxing.jin@est.tech",
+        "username": "huaxing"
+      },
+      "updated": "2020-03-02 03:54:42.000000000",
+      "in_reply_to": "410c1576_f381e582",
+      "unresolved": false
+    }
+  ]
+}

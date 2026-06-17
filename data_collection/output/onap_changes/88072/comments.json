@@ -1,0 +1,484 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~I5ef7b792226da09eb7cc0ea441f528e236e41053",
+  "change_id": "I5ef7b792226da09eb7cc0ea441f528e236e41053",
+  "_number": 88072,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "231bbea2_64dfd3f4",
+      "file_path": "pom.xml",
+      "patchset_number": 7,
+      "line": 236,
+      "message": "extract version to maven-property and reuse here and below",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "10c8bc47_61b26fb4",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 51,
+      "message": "can be replaced with import",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "73c8e1c5_204481e2",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "I don't know about conventions, but adding this \"TestContainers\" stem is making it quite long, maybe \"TCIT\" or even \"CIT\" suffix would be sufficient, what you think?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "93baea41_3af0c730",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 61,
+      "message": "MessageRouterSubscriberTestContainersIT",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "faea0373_a460006e",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 100,
+      "message": "Extracting this to something along\n```\nprivate static final String DMAAP_ERROR_RESPONSE_FORMAT = \"%s\\n\" +\n            \"{\" +\n            \"\\\"mrstatus\\\":3001,\" +\n            \"\\\"helpURL\\\":\\\"http://onap.readthedocs.io\\\",\" +\n            \"\\\"message\\\":\\\"No such topic exists.-[%s]\\\",\" +\n            \"\\\"status\\\":404\" +\n            \"}\";\n```\n\nwill improve readability.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7c841f58_5370017f",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "To avoid getting this array from nowhere, you could \n```\n    private static final List<String> messageBatchItems = Arrays.asList(\"I\", \"like\", \"pizza\");\n    private static final Flux<JsonPrimitive> messageBatch = Flux.fromIterable(messageBatchItems)\n            .map(JsonPrimitive::new);\n\n... (subscriber_shouldGetCorrectResponse)\n        final JsonArray expectedItems = getAsJsonArray(messageBatchItems);\n\n... (new method, Gson probably should be extracted as constant)\n    private JsonArray getAsJsonArray(List<String> list) {\n        String listsJsonString = new Gson().toJson(list);\n        return new JsonParser().parse(listsJsonString).getAsJsonArray();\n    }\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-21 10:11:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "866060a7_096e0c4b",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 100,
+      "message": "Shouldn't it be named `DMAAP_404_ERROR_RESPONSE_FORMAT'? And instead of \"%s\\n\" maybe stick with \"404 Not Found\\n\"? I suppose that error message \n`{\\\"mrstatus\\\":3001,\\\"helpURL\\\":\\\"http://onap.readthedocs.io\\\",\\\"message\\\":\\\"No such topic exists.-[%s]\\\",\\\"status\\\":404}`\nlooks like that only for this error type",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 04:48:47.000000000",
+      "in_reply_to": "faea0373_a460006e",
+      "unresolved": true
+    },
+    {
+      "id": "91e9a0ed_5ddd4a0b",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 100,
+      "message": "You are absolutely right :)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-05-22 05:29:13.000000000",
+      "in_reply_to": "866060a7_096e0c4b",
+      "unresolved": false
+    },
+    {
+      "id": "b7507d66_1b60c8ee",
+      "file_path": "pom.xml",
+      "patchset_number": 7,
+      "line": 236,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "231bbea2_64dfd3f4",
+      "unresolved": false
+    },
+    {
+      "id": "e97ddb75_ea4b628b",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "10c8bc47_61b26fb4",
+      "unresolved": false
+    },
+    {
+      "id": "07d427e1_acab3d78",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "73c8e1c5_204481e2",
+      "unresolved": false
+    },
+    {
+      "id": "c25cd715_2854be57",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "93baea41_3af0c730",
+      "unresolved": false
+    },
+    {
+      "id": "87f85000_8ddd5c70",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 100,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "91e9a0ed_5ddd4a0b",
+      "unresolved": false
+    },
+    {
+      "id": "0762a752_00f01087",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberTestContainersIT.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-22 05:37:08.000000000",
+      "in_reply_to": "7c841f58_5370017f",
+      "unresolved": false
+    },
+    {
+      "id": "0b0361c1_8ce8e33c",
+      "file_path": "rest-services/dmaap-client/pom.xml",
+      "patchset_number": 13,
+      "line": 76,
+      "message": "Scope is already defined in dependency management section of parent pom",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-22 12:44:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "62a61b65_4ca19f0b",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 65,
+      "message": "This will throw NPE when check failed. Omitting this will also throw NPE. So what's the point of calling requireNonNull in this particular case?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-22 12:44:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9dc4c379_90c49e8d",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 78,
+      "message": "Is there a way of using just URL/resource and NOT using java.io.File?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-22 12:44:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "71a0c1e2_e21a0d79",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 65,
+      "message": "IntelliJ suggested that, so I thought it was a good idea ;).\nIf both solutions throw NPE, should I handle it in different way or omit `Objects.requireNonNull()` to simplify and let it throw that exception?",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 06:33:30.000000000",
+      "in_reply_to": "62a61b65_4ca19f0b",
+      "unresolved": false
+    },
+    {
+      "id": "d8a4c311_3a05ec74",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 78,
+      "message": "I haven't found that option neither in the official documentation nor in examples.",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 06:33:30.000000000",
+      "in_reply_to": "9dc4c379_90c49e8d",
+      "unresolved": false
+    },
+    {
+      "id": "c76f437a_8ed49aa9",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 65,
+      "message": "As it's a test I think we can live with NPE here. However it might be beneficial to exract static method which will throw a more meaningful exception/message.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-24 10:19:31.000000000",
+      "in_reply_to": "71a0c1e2_e21a0d79",
+      "unresolved": false
+    },
+    {
+      "id": "9a40c077_650fc6e0",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 78,
+      "message": "ok",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-24 10:19:31.000000000",
+      "in_reply_to": "d8a4c311_3a05ec74",
+      "unresolved": false
+    },
+    {
+      "id": "cecb21cc_55ecc9fc",
+      "file_path": "rest-services/dmaap-client/pom.xml",
+      "patchset_number": 13,
+      "line": 76,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 10:56:48.000000000",
+      "in_reply_to": "0b0361c1_8ce8e33c",
+      "unresolved": false
+    },
+    {
+      "id": "48cf73e1_36a254d4",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 65,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 10:56:48.000000000",
+      "in_reply_to": "c76f437a_8ed49aa9",
+      "unresolved": false
+    },
+    {
+      "id": "ff015978_413893dd",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 13,
+      "line": 78,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 10:56:48.000000000",
+      "in_reply_to": "9a40c077_650fc6e0",
+      "unresolved": false
+    },
+    {
+      "id": "a2756c60_8f4d3588",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 15,
+      "line": 143,
+      "message": "This can be passed as a method parameter so it could be potentially reused for other resources.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-24 12:44:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cddcecc4_9e40e12a",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 15,
+      "line": 147,
+      "message": "Usually instead of throwing and catching NPE we can just check if the result is null with simple if statement. One of the reasons is performance (stack trace collection).",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-05-24 12:44:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "212cdfc5_b4728fd9",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 15,
+      "line": 143,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 13:50:35.000000000",
+      "in_reply_to": "a2756c60_8f4d3588",
+      "unresolved": false
+    },
+    {
+      "id": "11b069e9_ab38d3e9",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterSubscriberCIT.java",
+      "patchset_number": 15,
+      "line": 147,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-05-24 13:50:35.000000000",
+      "in_reply_to": "cddcecc4_9e40e12a",
+      "unresolved": false
+    }
+  ]
+}

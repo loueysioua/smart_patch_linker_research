@@ -1,0 +1,448 @@
+{
+  "id": "policy%2Fcommon~master~I6c2339e49f0348a50b87c7a26f4cba20c7a38cb6",
+  "change_id": "I6c2339e49f0348a50b87c7a26f4cba20c7a38cb6",
+  "_number": 77605,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2019-01-30 20:14:23.000000000",
+    "updated": "2019-03-06 12:11:53.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 4965,
+      "name": "Krzysztof Opasiak",
+      "display_name": null,
+      "email": "k.opasiak@samsung.com",
+      "username": "kopasiak"
+    },
+    "submitter": null
+  },
+  "subject": "Fix race condition while stopping the thread",
+  "commit_message": "Fix race condition while stopping the thread\n\nWhen executing stop() and start() right after each other or\nin parallel by different threads the busPollerthread may not\nnotice its change and keep executing. Example:\n\nThread #1  \t      \t   \t      Thread #2\n       \t\t\t\t      inside fetch()\nthis.alive = false; [stop()]\nthis.alive = true; [start()]\n\n\t\t\t\t\t// false\n\t\t\t\t\tif (!alive) {\n\t\t\t\t\t   break;\n\t\t\t\t\t}\n\nEven through yield() is used in stop() it doesn't guarantee\ncorrectness.\n\nLet's fix this by using thread interrupt to ensure that request to\nstop the thread never gets lost\n\nChange-Id: I6c2339e49f0348a50b87c7a26f4cba20c7a38cb6\nIssue-ID: POLICY-1387\nSigned-off-by: Krzysztof Opasiak <k.opasiak@samsung.com>\n",
+  "change_log": {
+    "entry_count": 30,
+    "entries": [
+      {
+        "id": "b56325b0e73b3a0347375336a7cf554b75e837d6",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-30 20:14:23.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2c8d6713d0aa088fd70fb3c2553b8701d47ffb04",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 20:18:33.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/396/",
+        "patchset_number": 1
+      },
+      {
+        "id": "344ed499be2256b12a7d184b52af12180459960d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 20:23:43.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/396/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/396",
+        "patchset_number": 1
+      },
+      {
+        "id": "d15501ab34eca1aa34210b4512f0fa27d3688dac",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-30 21:13:37.000000000",
+        "message": "Uploaded patch set 2: Patch Set 1 was rebased.",
+        "patchset_number": 2
+      },
+      {
+        "id": "37546b9b6a4d900bb8963d2cea9f3e8d4e6ffff3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 21:15:50.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/398/",
+        "patchset_number": 2
+      },
+      {
+        "id": "1ced968e51a41300749fb13ee9394324ff3e84ee",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 21:19:51.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/398/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/398",
+        "patchset_number": 2
+      },
+      {
+        "id": "8b31fb135a8804a5e5bc991fecaa35fa652e8c1a",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 14:55:42.000000000",
+        "message": "Uploaded patch set 3: Patch Set 2 was rebased.",
+        "patchset_number": 3
+      },
+      {
+        "id": "db1b1a153483cdd6fe75e70aab8aa98edb6423e3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:59:45.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/406/",
+        "patchset_number": 3
+      },
+      {
+        "id": "c1ab6e855a5a6b6b5e6e9e77877ad8b9bb137757",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 15:04:49.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/406/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/406",
+        "patchset_number": 3
+      },
+      {
+        "id": "1b4e716dba48d08e2f3629c78e5ed70314efe3d2",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-01-31 20:18:05.000000000",
+        "message": "Uploaded patch set 4: Patch Set 3 was rebased.",
+        "patchset_number": 4
+      },
+      {
+        "id": "484ed2a166a75989e889c3353404aea5f25ef7b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 20:21:41.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/418/",
+        "patchset_number": 4
+      },
+      {
+        "id": "fe75f1c0a89228e753b7bf2c0ee39e6bed684761",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 20:25:46.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/418/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/418",
+        "patchset_number": 4
+      },
+      {
+        "id": "37914c78ef1633e8f1a1d903b66b2f565c2a5d7b",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-08 15:09:41.000000000",
+        "message": "Uploaded patch set 5: Patch Set 4 was rebased.",
+        "patchset_number": 5
+      },
+      {
+        "id": "9e42286f79de08476af1cd7b6130d53a8b79b7f8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-08 15:12:05.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/428/",
+        "patchset_number": 5
+      },
+      {
+        "id": "ecb5dafaf657dcbdcebd8c343e79e727cd8a7702",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-08 15:16:29.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/428/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/428",
+        "patchset_number": 5
+      },
+      {
+        "id": "f89a8ab899ecbaac340438f7f7a537393f18b096",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-13 19:45:12.000000000",
+        "message": "Patch Set 6: Patch Set 5 was rebased",
+        "patchset_number": 6
+      },
+      {
+        "id": "984c5d233f1123628ec42d955baca7f5b2c2c4e3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-13 19:47:28.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/448/",
+        "patchset_number": 6
+      },
+      {
+        "id": "4290a8e653ec8e50cbd06c7f24924cebda6b45af",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-13 19:52:30.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/448/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/448",
+        "patchset_number": 6
+      },
+      {
+        "id": "d22dec0c0e68b34fa6b763fcc54e2bd0f90dadd1",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-13 19:53:48.000000000",
+        "message": "Patch Set 6:\n\nThanks for the patch Krzysztof, what level of testing have you been able to do for these changes? Have you been able to trigger this scenario synthetically against the dmaap and cambria libraries?",
+        "patchset_number": 6
+      },
+      {
+        "id": "5f1c210e2b86415663d914d033373e9fde3b148d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-13 20:18:01.000000000",
+        "message": "Patch Set 6: Code-Review-1\n\n(3 comments)",
+        "patchset_number": 6
+      },
+      {
+        "id": "e196a24566723fbcea321820eaed6305c54c9123",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-13 20:27:03.000000000",
+        "message": "Patch Set 6:\n\n(1 comment)",
+        "patchset_number": 6
+      },
+      {
+        "id": "60a3d3aa51650632b8846c541319dc2c92f92167",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-14 10:07:44.000000000",
+        "message": "Patch Set 6: Code-Review+1\n\n(4 comments)\n\n@Jorge Hernandez\n\nNope I wasn't. I found those bugs by reading the code in order to understand what it does and why and then I simply extracted the class and tested it manually by mocking other interactions",
+        "patchset_number": 6
+      },
+      {
+        "id": "8a6f0894b26180d7d6c2b0ec13ab8e12a925b88d",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-14 10:07:50.000000000",
+        "message": "Patch Set 6: -Code-Review",
+        "patchset_number": 6
+      },
+      {
+        "id": "27b3deebff34a5c970c2e8e56c6bd65752c18b03",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-14 18:09:25.000000000",
+        "message": "Patch Set 6: Code-Review-1\n\n(4 comments)",
+        "patchset_number": 6
+      },
+      {
+        "id": "a5e54929f889c121e27b3dc931f617249d6fd8cf",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-14 20:33:39.000000000",
+        "message": "Patch Set 6: -Code-Review\n\n> (4 comments)\n\nPersonally, I'd create a subclass of Thread containing everything it needs, including a \"stop\" flag, implemented via a CountDownLatch.  Create and store the thread object when it's running.  Stop it and store null when done.  Don't bother with interrupts.  Could also override isAlive() to check that it's non-null and the thread, itself, is alive.",
+        "patchset_number": 6
+      },
+      {
+        "id": "e49671ec6879020416f55983b981bf18701452da",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-14 20:51:07.000000000",
+        "message": "Patch Set 6:\n\n> > (4 comments)\n > \n > Personally, I'd create a subclass of Thread containing everything\n > it needs, including a \"stop\" flag, implemented via a\n > CountDownLatch.  Create and store the thread object when it's\n > running.  Stop it and store null when done.  Don't bother with\n > interrupts.  Could also override isAlive() to check that it's\n > non-null and the thread, itself, is alive.\n\nand, of course, the run() method would be moved into the thread subclass",
+        "patchset_number": 6
+      },
+      {
+        "id": "1d471ed517650567021cca1d37e9b48e3cc74fa3",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-19 14:22:14.000000000",
+        "message": "Patch Set 6:\n\nKrizysztof, are you ok with the suggestions?",
+        "patchset_number": 6
+      },
+      {
+        "id": "473f8640104793227da7e28c345aa6270555c7b2",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-02-19 15:24:56.000000000",
+        "message": "Patch Set 6:\n\nyeah, I'm ok with that. Just need to allocate some time to get back to this task. I'll send an update till eow",
+        "patchset_number": 6
+      },
+      {
+        "id": "22bddaeda3968dfdc1e18121a140c84a8469c3ad",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-25 12:31:03.000000000",
+        "message": "Patch Set 6:\n\nHi Kryzysztof - any update on this? ONAP does not like code reviews sitting for more than 36 business hours.",
+        "patchset_number": 6
+      },
+      {
+        "id": "d54e9813800bdeae813b57248c75a8ac1fced10b",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-06 12:11:53.000000000",
+        "message": "Abandoned\n\nPer ONAP requirements abandoning due to >36 hour inactivity. Please re-submit when you have time. Thanks!",
+        "patchset_number": 6
+      }
+    ]
+  }
+}

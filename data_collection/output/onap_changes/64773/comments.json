@@ -1,0 +1,297 @@
+{
+  "id": "oom~master~I5f827b23707b336df3771638fbe8dfc87367ea05",
+  "change_id": "I5f827b23707b336df3771638fbe8dfc87367ea05",
+  "_number": 64773,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_0a12ef56",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "Why was this change?",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-09-05 14:37:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_2a1ecb5f",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "This should be a hard-coded value.",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-09-05 14:43:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_4a86a7dc",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "Yes, this should be the external port that ND is exposing, (9530), not the service port of context aggregator itself",
+      "author": {
+        "account_id": 2015,
+        "name": "Geora Barsky",
+        "display_name": null,
+        "email": "georab@amdocs.com",
+        "username": "georab"
+      },
+      "updated": "2018-09-05 16:26:04.000000000",
+      "in_reply_to": "1a76adc5_2a1ecb5f",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_2d1ee55f",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "Please change it to \nserver.port={{ .Values.config.ctxBuilderExternalPort }}\nit will be in sync with the latest commit https://gerrit.onap.org/r/#/c/62147/5",
+      "author": {
+        "account_id": 2015,
+        "name": "Geora Barsky",
+        "display_name": null,
+        "email": "georab@amdocs.com",
+        "username": "georab"
+      },
+      "updated": "2018-09-05 17:05:46.000000000",
+      "in_reply_to": "1a76adc5_4a86a7dc",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_2dfca571",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "Now that I understand why this was changed.  Have we tested this change with at least one of the context builders?",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-09-05 18:23:14.000000000",
+      "in_reply_to": "1a76adc5_0a12ef56",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_8df5b958",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "agreed.",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-05 18:46:15.000000000",
+      "in_reply_to": "1a76adc5_2d1ee55f",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_6df05d67",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 1,
+      "line": 78,
+      "message": "I am trying to test this. \nAfter changes from the comments, I have not been able to install pomba!! \nI am aiming to test with NDCTX builder. \n\nThe other issue I had (might have again once installation goes well) is that event is not being consumed by CTXT aggr.",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-05 18:46:15.000000000",
+      "in_reply_to": "1a76adc5_2dfca571",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_da96f84b",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 13,
+      "message": "This has to be increased. A \"error = java.net.SocketTimeoutException: Read timed out\" is thrown at Context Aggregator, because it does not receive response form NDCTXT builder in 15 seconds.  \nMy tests take less than 20 seconds.  \nTested successfully with 50 seconds (both timeouts set to 50000).",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-07 17:37:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_baebfcda",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 1,
+      "line": 14,
+      "message": "/network-discovery/service/context",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-07 17:37:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_fa7ad422",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "In the current code, the password can not be the obfuscated one.  It is NDCTX builder, which does not want the API with obfuscated password. \nIt works well if here we just put plain test password.  \n\nNeed to open a bug with NDCTX builder.",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-07 17:37:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_7a3804ef",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "Good note, but it doesn't affect this review.",
+      "author": {
+        "account_id": 3479,
+        "name": "Prudence Au",
+        "display_name": null,
+        "email": "prudence.au@amdocs.com",
+        "username": "pau2882"
+      },
+      "updated": "2018-09-07 19:07:31.000000000",
+      "in_reply_to": "1a76adc5_fa7ad422",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_1c1b0bcb",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "Recommend changing this to \"networkdiscovery-contextbuilder\".",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-10 03:25:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_08b98514",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "ctxBuilderExternalPort.\nwill fix this in the next patch.",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-10 15:36:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_131536e4",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 3,
+      "line": null,
+      "message": "needs a license....",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-09-10 18:22:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_93e066fb",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 3,
+      "line": 45,
+      "message": "Geora's review is changing these to admin..is that the right thing to put now from the beginning?",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-09-10 18:22:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_13c3f657",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/resources/config/builders/networkdiscovery.properties",
+      "patchset_number": 3,
+      "line": null,
+      "message": "done",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-10 18:30:23.000000000",
+      "in_reply_to": "1a76adc5_131536e4",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_53cdee83",
+      "file_path": "kubernetes/pomba/charts/pomba-contextaggregator/values.yaml",
+      "patchset_number": 3,
+      "line": 45,
+      "message": "I think so. I will send another patch set.",
+      "author": {
+        "account_id": 2399,
+        "name": "Mohammadreza Pasandideh",
+        "display_name": null,
+        "email": "mohammadreza.pasandideh@amdocs.com",
+        "username": "moreza"
+      },
+      "updated": "2018-09-10 18:30:23.000000000",
+      "in_reply_to": "1a76adc5_93e066fb",
+      "unresolved": false
+    }
+  ]
+}

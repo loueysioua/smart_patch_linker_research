@@ -1,0 +1,59 @@
+{
+  "id": "oom%2Foffline-installer~master~I6b23512746171fdeaac3883fb61695db2c48c3ab",
+  "change_id": "I6b23512746171fdeaac3883fb61695db2c48c3ab",
+  "_number": 100578,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7db3bf01_0e8e6164",
+      "file_path": "build/package.py",
+      "patchset_number": 1,
+      "line": 94,
+      "message": "The overall idea is ok but this code could fail with KeyError due to lack of input data validation. I'd suggest two options:\n\n1.enclose this section in 'try' clause and catch KeyError exception and produce error msg and fail\n\n2.(preferred by me) add \"nargs\" parameter to \"parser.add_argument('--add-metadata',(...)\" call with value of 2; then parse_args() will succeed only if \"--add-metadata key val\" is passed failing fast if only key will be passed (so early data validation); it will also produce list for you automatically so no splitting needed afterwards. Just adjust 'default' accordingly then and the condition in 92.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-01-22 07:36:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cb45f0d4_2045c15f",
+      "file_path": "build/package.py",
+      "patchset_number": 1,
+      "line": 94,
+      "message": "Ack",
+      "author": {
+        "account_id": 5626,
+        "name": "Ondřej Šmalec",
+        "display_name": null,
+        "email": "o.smalec@partner.samsung.com",
+        "username": "ondrej.smalec"
+      },
+      "updated": "2020-01-22 08:11:57.000000000",
+      "in_reply_to": "7db3bf01_0e8e6164",
+      "unresolved": false
+    },
+    {
+      "id": "96c45504_72a64856",
+      "file_path": "build/package.py",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "Even prettier would be\n\n    if len(metadata):\n        build_info['Build_info'].update({[metadata[0]]: metadata[1]})\n\nbut it's ok :)",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-01-22 09:17:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

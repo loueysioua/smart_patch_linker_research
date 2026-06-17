@@ -1,0 +1,140 @@
+{
+  "id": "policy%2Fmodels~master~I68e803fcfa14c0676b1ce190a291d8adec8ddd92",
+  "change_id": "I68e803fcfa14c0676b1ce190a291d8adec8ddd92",
+  "_number": 121759,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2021-06-08 21:34:29.000000000",
+    "updated": "2021-07-07 14:57:30.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 811,
+      "name": "Jim Hahn",
+      "display_name": null,
+      "email": "jrh3@att.com",
+      "username": "jrh3"
+    },
+    "submitter": null
+  },
+  "subject": "PoC to improve performance of tosca models",
+  "commit_message": "PoC to improve performance of tosca models\n\nAs this is a PoC, it does not include any new or updated junit tests\n(except to fix those broken by the changes).  This also means there is\ncloned/similar code that could be eliminated with a bit of refactoring.\n\nTried a number of different things in an attempt to improve the\nperformance of policy-models.\n\nWith these changes, I saw the tosca models portion of the API REST calls\nspeed up by 2-3x, the query of a single policy type by 6x, and the query\nof all policy types by 12x; everything was in the 100-200ms range (on my\nlaptop).\n\nMade the following changes, all of which improved performance:\n\n- Added validation flag to addFragment() to avoid validating when\n  retrieving from the DB; this code was obviated by the next change:\n\n- Created EntityTree class which is used to build a graph of all\n  connections.  This is used to simplify and improve the performance of\n  the getCascadedXxx() methods.  It also had the side effect of\n  eliminating the validation code during retrieval (though it would be\n  easy to add validation back into the tree with minimal performance\n  impact).  Another side effect was that get-latest-version became a\n  single dip in a HashMap\n\n- Stored PdpSubgroups as a BLOB within PdpGroup, as PAP always needs the\n  PdpGroup anyway\n\n- Stored the various fields of ToscaServiceTemplate as BLOBs.  This\n  was fairly straightforward, though had to remember to store the\n  superclass \"metadata\" as a BLOB, too.  This netted a significant\n  performance boost, but eventually modified the code further:\n\n- Stored the various fields of ToscaServiceTemplate as a single BLOB.\n  This resulted in an even more significant performance boost.  However,\n  this proved to be a bit tricky: had to mark the fields @Transient to\n  prevent JPA from putting them in the DB.  This meant that they had to\n  be copied to/from the shared data structure when invoking merge().\n  Unfortunately, the @PreUpdate and @PostLoad annotations only work when\n  going to/from the DB, not to/from merge().  As a result, had to\n  introduce a PfUpdateable interface so that the DefaultPfDao could do\n  those steps manually\n\nIssue-ID: POLICY-2874\nChange-Id: I68e803fcfa14c0676b1ce190a291d8adec8ddd92\nSigned-off-by: Jim Hahn <jrh3@att.com>\n",
+  "change_log": {
+    "entry_count": 8,
+    "entries": [
+      {
+        "id": "f788cc019f2eab532ee6dda4bbc981a9a8090568",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-06-08 21:34:29.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "84631b6ad4d9bd2036b1595abac2bded2164ca8d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-06-08 21:35:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/1538/",
+        "patchset_number": 1
+      },
+      {
+        "id": "182952a7941728e7d56546aa73e97722ccb8c85d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-06-08 21:38:09.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/1538/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/policy-models-master-verify-java/1538/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/1538",
+        "patchset_number": 1
+      },
+      {
+        "id": "eb031fbf818e2b96eb6a51347aff31386ac3f381",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-06-08 22:36:13.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "d1e341e4c0da1294040312b769e73c0f07201265",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-06-08 22:37:44.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-models-master-verify-java/1539/",
+        "patchset_number": 2
+      },
+      {
+        "id": "79b10c6c77ab072987269e4fd24f21152fa8943c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2021-06-08 22:43:47.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-models-master-verify-java/1539/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-models-master-verify-java/1539",
+        "patchset_number": 2
+      },
+      {
+        "id": "c19dc879d5db2fb45349ac57e79d4fceab05c0f2",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2021-06-09 13:54:01.000000000",
+        "message": "Patch Set 2:\n\nJust for your purview - not necessarily planning to officially include any of this, but at least we know what's possible",
+        "patchset_number": 2
+      },
+      {
+        "id": "09f2e138e4be1919abbad5afbccbeb681c870203",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2021-07-07 14:57:30.000000000",
+        "message": "Abandoned",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

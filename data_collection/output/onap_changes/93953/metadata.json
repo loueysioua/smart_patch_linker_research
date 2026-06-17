@@ -1,0 +1,1588 @@
+{
+  "id": "policy%2Fdocker~master~If54e7ee6ac432a999844d3584e146a90e2247323",
+  "change_id": "If54e7ee6ac432a999844d3584e146a90e2247323",
+  "_number": 93953,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-08-20 12:00:03.000000000",
+    "updated": "2019-09-13 17:08:31.000000000",
+    "submitted": "2019-09-06 09:00:02.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 3621,
+      "name": "Paul-Ionut Vaduva",
+      "display_name": null,
+      "email": "paul.vaduva@enea.com",
+      "username": "pvaduva"
+    },
+    "submitter": {
+      "account_id": 57,
+      "name": "Pamela Dragosh",
+      "display_name": null,
+      "email": "pd1248@att.com",
+      "username": "pdragosh"
+    }
+  },
+  "subject": "Multiplatform support for policy",
+  "commit_message": "Multiplatform support for policy\n\nAdd multiplatfrom support for policy-base\nand policy-common docker images:\n   - the pom.xml files are modified to push and pull from dockerhub instead\n     of nexus repository (as nexus lacks support for manifest list)\n   - for each image that is built with maven, an arch suffix is added to the\n     tag. The currently supported architectures are amd64 and arm64.\n   - the creation of the timestamped tag is moved from the pom.xml files to\n     the docker_push_manifest.sh script\n   - for each image built via the Jenkins CI jobs, the docker_push_manifest.sh\n     is called. The script pushes a manifest list for each tag, plus it\n     creates the timestamp tags for SNAPSHOT or STAGING images,\n     depending on what job called the script (merge job, or stag job)\n\nFor using the images, the name of the manifest list is to be used (which\nis the same as the current images in nexus)\n\nIssue-ID: POLICY-1997\nChange-Id: If54e7ee6ac432a999844d3584e146a90e2247323\nSigned-off-by: Paul Vaduva <Paul.Vaduva@enea.com>\nSigned-off-by: Cristina Pauna <cristina.pauna@enea.com>\nSigned-off-by: Alexandru Avadanii <Alexandru.Avadanii@enea.com>\n",
+  "change_log": {
+    "entry_count": 111,
+    "entries": [
+      {
+        "id": "ad58ea4f3bbb43ef65911cfbff0a013c8a6a300e",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-20 12:00:03.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "71f6cc14f91598cc4e7a7c0560055b6f7fcc11a5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 12:03:01.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/26/",
+        "patchset_number": 1
+      },
+      {
+        "id": "f5bfc31b5b79141d0b57b0b4c6a116220fd70b2a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 12:04:32.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/26/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/26",
+        "patchset_number": 1
+      },
+      {
+        "id": "70f43040b81169164bbe4eb711b4a9af0b61dbb9",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-20 12:07:40.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nThis patch will have to be merged in conjunction with:\nhttps://gerrit.onap.org/r/c/ci-management/+/92707\nand preferably with all related ones",
+        "patchset_number": 1
+      },
+      {
+        "id": "943295092cddc6cfee36bd0ea5bac39ce41aac4a",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-20 13:04:34.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "691583dc1c655700a8ab2126ef3eca275b10c09d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 13:06:38.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/27/",
+        "patchset_number": 2
+      },
+      {
+        "id": "657b704ceb275335097850e0ddc487c86b25b10e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-20 13:07:57.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/27/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/27",
+        "patchset_number": 2
+      },
+      {
+        "id": "4fb7e6d50fb7c17f78b0707834c352923e632763",
+        "author": {
+          "account_id": 3621,
+          "name": "Paul-Ionut Vaduva",
+          "display_name": null,
+          "email": "paul.vaduva@enea.com",
+          "username": "pvaduva"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-08-21 14:39:42.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\nTo be merged only in conjunction with \nhttps://gerrit.onap.org/r/c/ci-management/+/92707\nHowever review can start from policy team.",
+        "patchset_number": 2
+      },
+      {
+        "id": "2e3ea7c874de3da8935a08ae1b8e9f41d047c347",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 15:25:22.000000000",
+        "message": "Patch Set 2:\n\n(6 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "3cb1a5a3ef0bb03491821d3b9028ed0fbcc06d8d",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 15:58:26.000000000",
+        "message": "Patch Set 2:\n\n(3 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "c6818a8d6235ed4306f9728aa00e14d458e8fcbb",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-27 17:28:04.000000000",
+        "message": "Patch Set 2:\n\n(11 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "5a9f85fa684123e16cbd2d60d6137326b3fefb5d",
+        "author": {
+          "account_id": 159,
+          "name": "Rashmi Pujar",
+          "display_name": null,
+          "email": "rashmi.c.pujar@gmail.com",
+          "username": "rashmi.pujar"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-28 17:21:55.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "9f82efa673c161cce034758cbd1afcc2fc0e963d",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 11:23:18.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "fd55174022d3622efc42a320553c6ee4b0eda069",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 11:25:30.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/28/",
+        "patchset_number": 3
+      },
+      {
+        "id": "c40cd6f7527a234453767fc47918a82805c1b002",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 11:27:34.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/28/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/28",
+        "patchset_number": 3
+      },
+      {
+        "id": "7f08dc937f771c6e7a0e41707d7ef7a667cfaed8",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 12:26:32.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "789444e1e740ae07137ee33f5429b80bd6f1b5cd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 12:28:59.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/29/",
+        "patchset_number": 4
+      },
+      {
+        "id": "5b041f093f7b55186e093fbc9c48b0bf18505289",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 12:30:31.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/29/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/29",
+        "patchset_number": 4
+      },
+      {
+        "id": "2089a9468a837e09d85acb767b6c3970b1734e14",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 13:07:06.000000000",
+        "message": "Patch Set 4:\n\n(4 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "029168725df4ce605a55a2bde133f49453447fe6",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 13:08:57.000000000",
+        "message": "Patch Set 4:\n\n(8 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "ec4d7a66322f5810a1c7ff6d3278554469c234eb",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 13:17:37.000000000",
+        "message": "Patch Set 4:\n\n(4 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "77e1f37836aedd588b982494431fb034dd2c3830",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 13:17:48.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "20a3e4c81a07f4d81200aca5dca88f772d6d92c1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 13:21:32.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/30/",
+        "patchset_number": 5
+      },
+      {
+        "id": "8fae7d4cfadc8ddb7381878376e3a282ba2d491f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 13:23:38.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/30/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/30",
+        "patchset_number": 5
+      },
+      {
+        "id": "f576c8c3744bae9e02e9df1cef2ce88540f261a5",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 14:35:39.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "f49de14f3d1b2efc748f5da47f3028fc52b780bb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 14:39:19.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/31/",
+        "patchset_number": 6
+      },
+      {
+        "id": "4e3f6125c7076ffd7c0d8920567f49fc56536742",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 14:40:44.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/31/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/31",
+        "patchset_number": 6
+      },
+      {
+        "id": "55a80d8e3d3c399d075a1b07312bb32cae9b97aa",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 14:52:51.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "c6ef45ebfe258a721f993fbfca2d46e83fd5d1f5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 14:55:41.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/32/",
+        "patchset_number": 7
+      },
+      {
+        "id": "8970bd82f558ffa2cc7c2290c21d9de755353223",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-29 14:58:00.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/32/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/32",
+        "patchset_number": 7
+      },
+      {
+        "id": "556188b312fdf22d2db7260b2d2b37dac5b39056",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-29 22:43:19.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "7f9091fbe7d0cd044775f4b187acd3f04a8f31d4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 00:14:10.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/33/",
+        "patchset_number": 8
+      },
+      {
+        "id": "61a113ac11f565368b68747537d243ea5eb7a3fa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 00:16:28.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/33/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/33",
+        "patchset_number": 8
+      },
+      {
+        "id": "e1a4aaa8025f77309a2673c0dca69fa5c74f310b",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 00:51:13.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "96f95b1e07ab56e9a6ad54207d8ca0061ab2f2ab",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 00:54:15.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/34/",
+        "patchset_number": 9
+      },
+      {
+        "id": "574b77e86be9ad560d8f316217e06bd882b49dd3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 00:55:30.000000000",
+        "message": "Patch Set 9: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/34/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/34",
+        "patchset_number": 9
+      },
+      {
+        "id": "a4d45bb9390d040de37665dc47473bf843daf965",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 01:04:19.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "ff8915369c22c0cb1912ffde1bdc1605fc0a6805",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:06:57.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/35/",
+        "patchset_number": 10
+      },
+      {
+        "id": "e7328f73221a57ceba533827a3de97407bf2d5ef",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:08:25.000000000",
+        "message": "Patch Set 10: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/35/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/35",
+        "patchset_number": 10
+      },
+      {
+        "id": "d3d504e8e0207019a3aacbf32b03bd46fe7be53a",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 01:10:50.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "4a0e0f31db1e67ce75bb4553abaa881b4b73aea9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:13:46.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/36/",
+        "patchset_number": 11
+      },
+      {
+        "id": "94e33855e4e1664b35a4aa199875cedeb7d8a0e6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:15:34.000000000",
+        "message": "Patch Set 11: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/36/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/36",
+        "patchset_number": 11
+      },
+      {
+        "id": "7d940fbac224ce79e0f99e4cb61dfe3a12752153",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 01:42:56.000000000",
+        "message": "Uploaded patch set 12.",
+        "patchset_number": 12
+      },
+      {
+        "id": "289fc34a7fa9d0da0446280f67a07fc76f8b7cba",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:44:38.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/37/",
+        "patchset_number": 12
+      },
+      {
+        "id": "6dd8057fda5d6934a06ca5f6de0ab0d40a07cb54",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 01:46:04.000000000",
+        "message": "Patch Set 12: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/37/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/37",
+        "patchset_number": 12
+      },
+      {
+        "id": "ee82c4e696de935802869ac3b9c7095b0025eb50",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 11:47:09.000000000",
+        "message": "Uploaded patch set 13.",
+        "patchset_number": 13
+      },
+      {
+        "id": "470867180e35e0e6c42b62923a45ff5bafb02e0d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 11:51:33.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/38/",
+        "patchset_number": 13
+      },
+      {
+        "id": "5d55fc1bacd278bb760b6c01615811c0b2ac9a61",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 11:52:53.000000000",
+        "message": "Patch Set 13: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/38/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/38",
+        "patchset_number": 13
+      },
+      {
+        "id": "844f0df244abcedfe7e909fc2185432d6bf71e50",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 12:07:47.000000000",
+        "message": "Patch Set 13:\n\n(1 comment)",
+        "patchset_number": 13
+      },
+      {
+        "id": "feebb6924c01de9913e5443a2b28036342c18a4d",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 12:11:03.000000000",
+        "message": "Patch Set 13:\n\n(1 comment)",
+        "patchset_number": 13
+      },
+      {
+        "id": "96b717444fd82f860332731d34295a14d6987d4b",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 13:17:11.000000000",
+        "message": "Patch Set 14: Published edit on patch set 13.",
+        "patchset_number": 14
+      },
+      {
+        "id": "fa428311a2f9e6341c9f3e70093a2c0546cacc78",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 13:20:30.000000000",
+        "message": "Patch Set 14:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/39/",
+        "patchset_number": 14
+      },
+      {
+        "id": "6a41084227786f287ad11d181475f097dd5dc61c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 13:22:24.000000000",
+        "message": "Patch Set 14: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/39/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/39",
+        "patchset_number": 14
+      },
+      {
+        "id": "bfa7a06c05939358411fc7fccb5b541ccd71d5f7",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 14:09:32.000000000",
+        "message": "Uploaded patch set 15.",
+        "patchset_number": 15
+      },
+      {
+        "id": "a70a35f688d8be3375a10b4868cf6f8116e02fb4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:12:04.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/40/",
+        "patchset_number": 15
+      },
+      {
+        "id": "7dd730ab2a4084c4bea8855e8e943ff12ad0f3de",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:13:04.000000000",
+        "message": "Patch Set 15: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/40/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/40",
+        "patchset_number": 15
+      },
+      {
+        "id": "b15f2cf5f03dc58a5b1a03f35f27ace5c3156864",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 14:28:36.000000000",
+        "message": "Uploaded patch set 16.",
+        "patchset_number": 16
+      },
+      {
+        "id": "b4d794431abe5cfb9bd6c43d14c27c59e36da7b9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:32:41.000000000",
+        "message": "Patch Set 16:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/41/",
+        "patchset_number": 16
+      },
+      {
+        "id": "570f7b51bea3e13813115d6b6ca7654c885987cb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:34:21.000000000",
+        "message": "Patch Set 16: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/41/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/41",
+        "patchset_number": 16
+      },
+      {
+        "id": "64ceddea831f7fe5d41451997cf2a7532370e09c",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 14:34:48.000000000",
+        "message": "Uploaded patch set 17.",
+        "patchset_number": 17
+      },
+      {
+        "id": "d8acba4fa81b45a8129f2336537841740fc9c167",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:38:07.000000000",
+        "message": "Patch Set 17:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/42/",
+        "patchset_number": 17
+      },
+      {
+        "id": "1abd62cf9d47cf21ff9b11dbd02c0d0153a74961",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:39:25.000000000",
+        "message": "Patch Set 17: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/42/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/42",
+        "patchset_number": 17
+      },
+      {
+        "id": "6e5d28145d60615bf72def759d855d5ec0b971e8",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-30 14:39:54.000000000",
+        "message": "Uploaded patch set 18.",
+        "patchset_number": 18
+      },
+      {
+        "id": "6140cd022361ff1d7305bb81523580c5f25248f7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:42:31.000000000",
+        "message": "Patch Set 18:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/43/",
+        "patchset_number": 18
+      },
+      {
+        "id": "860eaa05f653d0f9b98783cc03feede3634dd58c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 14:43:56.000000000",
+        "message": "Patch Set 18: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/43/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/43",
+        "patchset_number": 18
+      },
+      {
+        "id": "9587ab45ae70f4c88968aeb6b1c980ea3a18b3b9",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 15:20:53.000000000",
+        "message": "Patch Set 15:\n\n(10 comments)",
+        "patchset_number": 15
+      },
+      {
+        "id": "e7be3b6e0dba473d9bc894a88f795892facd660b",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 18:16:26.000000000",
+        "message": "Patch Set 18:\n\n(6 comments)",
+        "patchset_number": 18
+      },
+      {
+        "id": "823ff5832dd0b3b0d3c5aabbe772add2f0dcb6d9",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-30 18:28:40.000000000",
+        "message": "Patch Set 18:\n\n(1 comment)",
+        "patchset_number": 18
+      },
+      {
+        "id": "92bc92631d9c347d354cb8e7505dfe736fa74e17",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 00:03:43.000000000",
+        "message": "Patch Set 19: Published edit on patch set 18.",
+        "patchset_number": 19
+      },
+      {
+        "id": "1b62af88bb4ddc4cfa6b01cd848d2fabe4efcd2d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 00:06:49.000000000",
+        "message": "Patch Set 19:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/44/",
+        "patchset_number": 19
+      },
+      {
+        "id": "610d4405e208ab1357976702de36207c1891817c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 00:08:42.000000000",
+        "message": "Patch Set 19: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/44/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/44",
+        "patchset_number": 19
+      },
+      {
+        "id": "fd04d6caff2f66fb58e1bec29887ec24d7bf15e5",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-08-31 00:28:06.000000000",
+        "message": "Patch Set 20: Published edit on patch set 19.",
+        "patchset_number": 20
+      },
+      {
+        "id": "f5e1ca521c72d0f43a865f0efc1c3968af945b06",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 00:30:31.000000000",
+        "message": "Patch Set 20:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/45/",
+        "patchset_number": 20
+      },
+      {
+        "id": "61f39ae10878dfc4e0a1f07de655406f6dad1972",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-08-31 00:32:00.000000000",
+        "message": "Patch Set 20: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/45/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/45",
+        "patchset_number": 20
+      },
+      {
+        "id": "6323c14bf446567f38331d320337363276968b40",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 16:45:27.000000000",
+        "message": "Uploaded patch set 21.",
+        "patchset_number": 21
+      },
+      {
+        "id": "3be9a2ab559b12a8e5836fed05019e27c2d316ae",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 16:49:08.000000000",
+        "message": "Patch Set 21:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/46/",
+        "patchset_number": 21
+      },
+      {
+        "id": "00a924ce56dc402c97a5ce1de6c5265c27405a7d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 16:50:40.000000000",
+        "message": "Patch Set 21: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/46/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/46",
+        "patchset_number": 21
+      },
+      {
+        "id": "4c25d9d2e1e8560e0e8fd557235ea9193e428346",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 20:06:37.000000000",
+        "message": "Uploaded patch set 22.",
+        "patchset_number": 22
+      },
+      {
+        "id": "2987eab00bbf23c6842b5b1464ddd578e79ad60c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 20:08:42.000000000",
+        "message": "Patch Set 22:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/47/",
+        "patchset_number": 22
+      },
+      {
+        "id": "b00a480b2c1ba89b96ad4f58dad7e026c9d1b25a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 20:10:00.000000000",
+        "message": "Patch Set 22: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/47/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/47",
+        "patchset_number": 22
+      },
+      {
+        "id": "38ef015b98f044bfbeef8abb74710324cc9b855e",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-02 20:49:15.000000000",
+        "message": "Uploaded patch set 23.",
+        "patchset_number": 23
+      },
+      {
+        "id": "12c75ca4b7e44e1138755715af9a38fceb5529cb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 20:50:54.000000000",
+        "message": "Patch Set 23:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/48/",
+        "patchset_number": 23
+      },
+      {
+        "id": "27697ac8997f877299415fed1863945a37be9a43",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-02 20:52:17.000000000",
+        "message": "Patch Set 23: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/48/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/48",
+        "patchset_number": 23
+      },
+      {
+        "id": "b7631eb14b9691bef987422e77388c0a16d23dd6",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-03 09:06:31.000000000",
+        "message": "Uploaded patch set 24.",
+        "patchset_number": 24
+      },
+      {
+        "id": "86adee966eb8ee1ca237c86bf72eae1e22d88f56",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 09:09:30.000000000",
+        "message": "Patch Set 24:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/49/",
+        "patchset_number": 24
+      },
+      {
+        "id": "4a9e6d71c73feca567fb6df168e234b8aea34668",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 09:10:47.000000000",
+        "message": "Patch Set 24: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/49/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/49",
+        "patchset_number": 24
+      },
+      {
+        "id": "b6f943dc047b378ac7652c6f6bd5a26fcc8e14eb",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-03 16:02:56.000000000",
+        "message": "Uploaded patch set 25.",
+        "patchset_number": 25
+      },
+      {
+        "id": "6c38b0dca00d52cebfd5c8a9296517b63dec4f6b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 16:05:43.000000000",
+        "message": "Patch Set 25:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/50/",
+        "patchset_number": 25
+      },
+      {
+        "id": "2f65560891f2380d12ac75986d0e581a86d40b5e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 16:07:00.000000000",
+        "message": "Patch Set 25: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/50/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/50",
+        "patchset_number": 25
+      },
+      {
+        "id": "d8bad2729fb831df7fab6e82fde072ddf3940821",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-03 16:25:25.000000000",
+        "message": "Patch Set 25: Code-Review+1",
+        "patchset_number": 25
+      },
+      {
+        "id": "258c546f3ac7c660ef1cbb2f1016d0e4bb6e385f",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 15:39:58.000000000",
+        "message": "Patch Set 25:\n\n(4 comments)\n\nCristina, if you can help us out with this that would be great. We have elalto branch working.\n\nCan you add the main pom.xml and bump that to 2.0.0-SNAPSHOT and also point to our released policy/parent 3.0.1 (eg remove the SNAPSHOT)",
+        "patchset_number": 25
+      },
+      {
+        "id": "e232c8e25edba8b623beee8b834d90a2661a7337",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:12:58.000000000",
+        "message": "Patch Set 25:\n\n(4 comments)",
+        "patchset_number": 25
+      },
+      {
+        "id": "925d51eeb2a36eacb0e09d1e4de36228d23d204d",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-05 19:13:14.000000000",
+        "message": "Uploaded patch set 26.",
+        "patchset_number": 26
+      },
+      {
+        "id": "783992ef891a108c6e277ec3f1a8a2232549f0f7",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-05 19:15:09.000000000",
+        "message": "Uploaded patch set 27.",
+        "patchset_number": 27
+      },
+      {
+        "id": "e296cb67eb8f3d7f829b4557499d4b20e3270a4f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:15:12.000000000",
+        "message": "Patch Set 26:\n\nNo Builds Executed",
+        "patchset_number": 26
+      },
+      {
+        "id": "1051ac641b3168283779b770fd88597d97722f9a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:18:59.000000000",
+        "message": "Patch Set 27:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/53/",
+        "patchset_number": 27
+      },
+      {
+        "id": "02f2e3ff4314ccc26ba422cd272938ce67714f4f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:20:21.000000000",
+        "message": "Patch Set 27: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/53/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/53",
+        "patchset_number": 27
+      },
+      {
+        "id": "d3100fe2c9223b269ac0fd12f7b03c909698ca26",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:21:46.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "47775dae1a6edc505210c4d3fa36996c48447788",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 19:49:44.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "3be7d811bd743a59a9268dad83d1bc1be28197f9",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-05 22:16:33.000000000",
+        "message": "Patch Set 27: Code-Review+1",
+        "patchset_number": 27
+      },
+      {
+        "id": "5912a8d6a709b4e62c5fafd9a86dd3c9ab47a0f0",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 08:59:45.000000000",
+        "message": "Patch Set 27: Code-Review+2\n\nOk here we go",
+        "patchset_number": 27
+      },
+      {
+        "id": "663c77e2f64d278ef39008deb8bffd69cefe8894",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-09-06 09:00:02.000000000",
+        "message": "Change has been successfully merged by Pamela Dragosh",
+        "patchset_number": 27
+      },
+      {
+        "id": "341ae2a894c88c94805a9c72b21f4dc48999c42a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 09:02:27.000000000",
+        "message": "Patch Set 27:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-merge-java/17/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-merge-java/17",
+        "patchset_number": 27
+      },
+      {
+        "id": "96d46fae73c3728256ab99272d290d441170607d",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-06 09:10:55.000000000",
+        "message": "Patch Set 27:\n\n> Patch Set 27: Code-Review+2\n> \n> Ok here we go\n\nThanks a lot Pam! \nThe changes will be visible only after the ci-management patch gets merged.",
+        "patchset_number": 27
+      },
+      {
+        "id": "cdaa839f00819282c0f2310bcb64dcecb263da94",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-10 13:24:30.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      },
+      {
+        "id": "4b1f80d4ddf6aef6d00b03bc1315e96cc1b639fd",
+        "author": {
+          "account_id": 4711,
+          "name": "Eric Ball",
+          "display_name": null,
+          "email": "eball@linuxfoundation.org",
+          "username": "eball"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-10 18:55:01.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      },
+      {
+        "id": "61ab1bf73d72c33cda1e931dd675644350f370a1",
+        "author": {
+          "account_id": 4711,
+          "name": "Eric Ball",
+          "display_name": null,
+          "email": "eball@linuxfoundation.org",
+          "username": "eball"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-10 20:27:14.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      },
+      {
+        "id": "7b4cbe625e79c16e24ae39955d8d3320905018e0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-10 20:48:26.000000000",
+        "message": "Patch Set 27:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-multiarch-master-merge-java/3/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-multiarch-master-merge-java/3",
+        "patchset_number": 27
+      },
+      {
+        "id": "1d59efc98f6a2b219f6d92577a673d8b468752f5",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-11 18:30:44.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      },
+      {
+        "id": "948394d4cceaa7eaf78b571dac59536927d3efdb",
+        "author": {
+          "account_id": 5109,
+          "name": "Cristina Pauna",
+          "display_name": null,
+          "email": "cristina.pauna@enea.com",
+          "username": "cristinapauna"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-13 16:46:27.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      },
+      {
+        "id": "e548e7f06add08a9356f41323b079dbd7f329ec8",
+        "author": {
+          "account_id": 5695,
+          "name": "Alexandru Avadanii",
+          "display_name": null,
+          "email": "Alexandru.Avadanii@enea.com",
+          "username": "AlexandruAvadanii"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-09-13 17:08:31.000000000",
+        "message": "Patch Set 27:\n\nremerge",
+        "patchset_number": 27
+      }
+    ]
+  }
+}

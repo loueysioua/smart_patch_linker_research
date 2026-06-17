@@ -1,0 +1,93 @@
+{
+  "id": "music%2Fmdbc~master~I9801656a32480c26b39dea5ae59fd27053d92f29",
+  "change_id": "I9801656a32480c26b39dea5ae59fd27053d92f29",
+  "_number": 83638,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4c922a23_ec5b0f45",
+      "file_path": "mdbc-server/src/main/java/org/onap/music/mdbc/ownership/OwnershipAndCheckpoint.java",
+      "patchset_number": 2,
+      "line": 336,
+      "message": "I am also concerned to add a new lock for the current partition, because it would be release in case of failure, which shouldn't be a requirement, when we try to acquire new locks, we end up releasing even the lock that we had before, see line 307 of this code.",
+      "author": {
+        "account_id": 4900,
+        "name": "Enrique Saurez ",
+        "display_name": null,
+        "email": "enrique.saurez@gmail.com",
+        "username": "esaurez"
+      },
+      "updated": "2019-03-28 19:16:56.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f41e8e50_4e8cd443",
+      "file_path": "mdbc-server/src/main/java/org/onap/music/mdbc/ownership/OwnershipAndCheckpoint.java",
+      "patchset_number": 2,
+      "line": 339,
+      "message": "This should be only if newLocks doesn't contain the lock, it could already be own by a previous iteration with a different partition. So maybe we can split the if condition into \n1) partition.isLocked()&&partition.getMRIIndex().equals(uuid)|| !row.getIsLatest()\nHere we set it to own and add it to new locks\n2)  newLocks.containsKey(uuid)\nHere we just add it to the \"toOwn\"",
+      "author": {
+        "account_id": 4900,
+        "name": "Enrique Saurez ",
+        "display_name": null,
+        "email": "enrique.saurez@gmail.com",
+        "username": "esaurez"
+      },
+      "updated": "2019-03-28 19:16:56.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f6d6e25c_0f253653",
+      "file_path": "mdbc-server/src/main/java/org/onap/music/mdbc/ownership/OwnershipAndCheckpoint.java",
+      "patchset_number": 2,
+      "line": 336,
+      "message": "we need to release this row if we end up merging a row we already own into a new partition. I will be more careful in cleaning up the failure case",
+      "author": {
+        "account_id": 4079,
+        "name": "Brendan Tschaen",
+        "display_name": null,
+        "email": "bptschaen@gmail.com",
+        "username": "bptschaen"
+      },
+      "updated": "2019-03-28 19:26:28.000000000",
+      "in_reply_to": "4c922a23_ec5b0f45",
+      "unresolved": false
+    },
+    {
+      "id": "db0be4eb_b7d7c375",
+      "file_path": "mdbc-server/src/main/java/org/onap/music/mdbc/ownership/OwnershipAndCheckpoint.java",
+      "patchset_number": 2,
+      "line": 339,
+      "message": "Since we are putting into a map, won't we just end up overwriting what is already there? Meaning we just hold on to the information from iteration to iteration",
+      "author": {
+        "account_id": 4079,
+        "name": "Brendan Tschaen",
+        "display_name": null,
+        "email": "bptschaen@gmail.com",
+        "username": "bptschaen"
+      },
+      "updated": "2019-03-28 19:26:28.000000000",
+      "in_reply_to": "f41e8e50_4e8cd443",
+      "unresolved": false
+    },
+    {
+      "id": "b44e3858_511cdd5d",
+      "file_path": "mdbc-server/src/main/java/org/onap/music/mdbc/ownership/OwnershipAndCheckpoint.java",
+      "patchset_number": 2,
+      "line": 339,
+      "message": "The lock may not be the same as the lock hold by the partition.",
+      "author": {
+        "account_id": 4900,
+        "name": "Enrique Saurez ",
+        "display_name": null,
+        "email": "enrique.saurez@gmail.com",
+        "username": "esaurez"
+      },
+      "updated": "2019-03-28 19:30:39.000000000",
+      "in_reply_to": "db0be4eb_b7d7c375",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "id": "aai%2Faai-common~master~I3707533b94e77d221389af97baae133d90bdb985",
+  "change_id": "I3707533b94e77d221389af97baae133d90bdb985",
+  "_number": 144183,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2026-05-04 05:49:20.000000000",
+    "updated": "2026-05-13 08:23:54.000000000",
+    "submitted": "2026-05-13 08:08:10.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 8473,
+      "name": "ONAP github2gerrit",
+      "display_name": null,
+      "email": "releng+onap-gh2gerrit@linuxfoundation.org",
+      "username": "onap.gh2gerrit"
+    },
+    "submitter": {
+      "account_id": 2701,
+      "name": "Lukasz Rajewski",
+      "display_name": null,
+      "email": "lukasz.rajewski@t-mobile.pl",
+      "username": "rajewluk"
+    }
+  },
+  "subject": "Bump com.google.code.gson:gson from 2.9.1 to 2.14.0",
+  "commit_message": "Bump com.google.code.gson:gson from 2.9.1 to 2.14.0\n\n## Release notes\n\nSourced from com.google.code.gson:gson's releases.\n\nGson 2.14.0\nWhat's Changed\n\nAdd type adapters for java.time classes by @​eamonnmcmanus in google/gson#2948\nWhen the java.time API is available, Gson automatically can read and write instances of classes like Instant and Duration. The format it uses essentially freezes the JSON representation that ReflectiveTypeAdapterFactory established by default, based on the private fields of java.time classes. That's not a great representation, but it is understandable. Changing it to anything else would break compatibility with systems that are expecting the current format.\nWith this change, Gson no longer tries to access private fields of these classes using reflection. So it is no longer necessary to run with --add-opens for these classes on recent JDKs.\n\nRemove com.google.gson.graph by @​eamonnmcmanus in google/gson#2990.\nThis package was not part of any released artifact and depended on Gson internals in potentially problematic ways.\n\nValidate that strings being parsed as integers consist of ASCII characters by @​eamonnmcmanus in google/gson#2995\nPreviously, strings could contain non-ASCII Unicode digits and still be parsed as integers. That's inconsistent with how JSON numbers are treated.\n\nFix duplicate key detection when first value is null by @​andrewstellman in google/gson#3006\nThis could potentially break code that was relying on the incorrect behaviour. For example, this JSON string was previously accepted but will no longer be: {&quot;foo&quot;: null, &quot;foo&quot;: bar}.\n\nRemove Serializable from internal Type implementation classes. by @​eamonnmcmanus in google/gson#3011\nThe nested classes ParameterizedTypeImpl, GenericArrayTypeImpl, and WildcardTypeImpl in GsonTypes are implementations of the corresponding types (without Impl) in java.lang.reflect. For some reason, they were serializable, even though the java.lang.reflect implementations are not. Having unnecessarily serializable classes could conceivably have been a security problem if they were part of a larger exploit using serialization. (We do not consider this a likely scenario and do not suggest that you need to update Gson just to get this change.)\n\nAdd LegacyProtoTypeAdapterFactory. by @​eamonnmcmanus in google/gson#3014\nThis is not part of any released artifact, but may be of use when trying to fix code that is currently accessing the internals of protobuf classes via reflection.\n\nMake AppendableWriter do flush and close if delegation object supports by @​MukjepScarlet in google/gson#2925\n\nOther less visible changes\n\nAdd default capacity to EnumTypeAdapter maps by @​MukjepScarlet in google/gson#2959\nrefactor: move derived adapters from Gson to TypeAdapters by @​MukjepScarlet in google/gson#2951\nOptimize new Gson() by @​MukjepScarlet in google/gson#2864\n\nNew Contributors\n\n@​ThirdGoddess made their first contribution in google/gson#2944\n@​lmj798 made their first contribution in google/gson#2988\n@​Eng-YasminKotb made their first contribution in google/gson#3005\n@​andrewstellman made their first contribution in google/gson#3006\n\nFull Changelog: https://github.com/google/gson/compare/gson-parent-2.13.2...gson-parent-2.14.0\nGson 2.13.2\nThe main changes in this release are just newer dependencies.\n\n... (truncated)\n\n## Changelog\n\nSourced from com.google.code.gson:gson's changelog.\n\nChange Log\nThe change log for versions newer than 2.10 is available only on the GitHub Releases page.\nVersion 2.10\n\nSupport for serializing and deserializing Java records, on Java ≥ 16. (google/gson#2201)\nAdd JsonArray.asList and JsonObject.asMap view methods (google/gson#2225)\nFix TypeAdapterRuntimeTypeWrapper not detecting reflective TreeTypeAdapter and FutureTypeAdapter (google/gson#1787)\nImprove JsonReader.skipValue() (google/gson#2062)\nPerform numeric conversion for primitive numeric type adapters (google/gson#2158)\nAdd Gson.fromJson(..., TypeToken) overloads (google/gson#1700)\nFix changes to GsonBuilder affecting existing Gson instances (google/gson#1815)\nMake JsonElement conversion methods more consistent and fix javadoc (google/gson#2178)\nThrow UnsupportedOperationException when JsonWriter.jsonValue is not supported (google/gson#1651)\nDisallow JsonObject Entry.setValue(null) (google/gson#2167)\nFix TypeAdapter.toJson throwing AssertionError for custom IOException (google/gson#2172)\nConvert null to JsonNull for JsonArray.set (google/gson#2170)\nFixed nullSafe usage. (google/gson#1555)\nValidate TypeToken.getParameterized arguments (google/gson#2166)\nFix #1702: Gson.toJson creates CharSequence which does not implement toString (google/gson#1703)\nPrefer existing adapter for concurrent Gson.getAdapter calls (google/gson#2153)\nImprove ArrayTypeAdapter for Object[] (google/gson#1716)\nImprove AppendableWriter performance (google/gson#1706)\n\n## Commits\n\n3ff35d6 [maven-release-plugin] prepare release gson-parent-2.14.0\na3024fd Bump the maven group with 13 updates (#3002)\n5689ffe Bump the github-actions group across 1 directory with 3 updates (#3018)\n48db33c Add LegacyProtoTypeAdapterFactory. (#3014)\n53d703e Update outdated comment regarding serializable types (#3012)\n0189b72 Remove Serializable from internal Type implementation classes. (#3011)\nf4d371d Fix duplicate key detection when first value is null (#3006)\n27d9ba1 Fix typo in README (JPMS dependencies section) (#3005)\n1fa9b7a Validate that strings being parsed as integers consist of ASCII characters (#\nb7d5954 Add iterator fail-fast tests for LinkedTreeMap.clear() (#2992)\nAdditional commits viewable in compare view\n\n![Dependabot compatibility score](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nIssue-ID: CIMAN-33\nSigned-off-by: dependabot[bot] <support@github.com>\nChange-Id: I3707533b94e77d221389af97baae133d90bdb985\nGitHub-PR: https://github.com/onap/aai-aai-common/pull/37\nGitHub-Hash: dc2f307754a500e1\nSigned-off-by: onap.gh2gerrit <releng+onap-gh2gerrit@linuxfoundation.org>\n",
+  "change_log": {
+    "entry_count": 13,
+    "entries": [
+      {
+        "id": "a0acd9485aebe7e7872d513e1cf637055bae7bc5",
+        "author": {
+          "account_id": 8473,
+          "name": "ONAP github2gerrit",
+          "display_name": null,
+          "email": "releng+onap-gh2gerrit@linuxfoundation.org",
+          "username": "onap.gh2gerrit"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 05:49:20.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2f12bf6f36028610479e32064d17e5a8cdc3587b",
+        "author": {
+          "account_id": 8473,
+          "name": "ONAP github2gerrit",
+          "display_name": null,
+          "email": "releng+onap-gh2gerrit@linuxfoundation.org",
+          "username": "onap.gh2gerrit"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-05-04 05:49:24.000000000",
+        "message": "Patch Set 1:\n\nGHPR: https://github.com/onap/aai-aai-common/pull/37 | Action-Run: https://github.com/onap/aai-aai-common/actions/runs/25303248568",
+        "patchset_number": 1
+      },
+      {
+        "id": "e5ce7e74b9313f34d43341a99fa304f624167f36",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 05:49:30.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25303264475",
+        "patchset_number": 1
+      },
+      {
+        "id": "60e017dbb798dffa37f2d050cdc700fa9b0a3ffc",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 05:49:35.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25303263847",
+        "patchset_number": 1
+      },
+      {
+        "id": "57f55590fa473ffad7280c355d09c2c698b16bb0",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 05:50:03.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25303264475",
+        "patchset_number": 1
+      },
+      {
+        "id": "11c85009a8e4d54938ce5a6433ec91e2d7178024",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 05:50:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1622/",
+        "patchset_number": 1
+      },
+      {
+        "id": "08bf987c2eacfdd5b3befbc1a89a65f10eb86344",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-04 05:51:15.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25303263847",
+        "patchset_number": 1
+      },
+      {
+        "id": "3c8f52c65fdd2a339252c7ff992d291a9ecfe6f3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-04 05:57:04.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1622/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1622",
+        "patchset_number": 1
+      },
+      {
+        "id": "ac7c9fe681f1c721cdb0a6be8e328a6a3c24eba6",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-13 08:08:10.000000000",
+        "message": "Patch Set 1: Code-Review+2\n\nCode-Review +2",
+        "patchset_number": 1
+      },
+      {
+        "id": "f1c362fde0eb58abb9e46da136d33ef4b4d8b810",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-13 08:08:10.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 1
+      },
+      {
+        "id": "31841696e81a5bdb1e8c0df73c10854ba758dc8c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-13 08:09:03.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/25786706802",
+        "patchset_number": 1
+      },
+      {
+        "id": "a41dbde24c577026447c2ef218a97e8ee15e5a14",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-05-13 08:10:50.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/25786706802",
+        "patchset_number": 1
+      },
+      {
+        "id": "94edc1d480b5ce3fa96e0e697df6ec602d84034b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-05-13 08:23:54.000000000",
+        "message": "Patch Set 1:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-merge-java/748/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/aai-aai-common-master-merge-java/748/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-merge-java/748",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

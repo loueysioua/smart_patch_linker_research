@@ -1,0 +1,110 @@
+{
+  "id": "policy%2Fmodels~master~Id65f769c2f308c6b56e79978bd50b84f2e0b3d02",
+  "change_id": "Id65f769c2f308c6b56e79978bd50b84f2e0b3d02",
+  "_number": 82938,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "62b15a65_88a6752f",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatus.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "How does this change work for the PDPs?  It got a bit more complicated by changing it from List<String> to List<PfConceptKey> for PDP clients.\n\nNot sure if there are DB dependencies, etc .. that come with it, but ideally would like to avoid DB or unnecessary dependencies.\n\nCan this class be extended somehow and leave the original if the keys are needed by PAP?\n\nLet me know your thoughts.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-03-21 20:08:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5912772c_c4bc7295",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatus.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "It kind of depends.  The idea was that some drools-pdps might support one version of a policy-type, while others might support additional versions.  If that's true, then the PDP must provide both the policy type & version.  However, if that's not true, then it seems like the version should be optional, in which case, the PAP would assume that the PDP supports all versions of the given policy type.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-21 20:27:02.000000000",
+      "in_reply_to": "62b15a65_88a6752f",
+      "unresolved": false
+    },
+    {
+      "id": "1ebdafc1_d0e9c9e2",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatus.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "I think that's problematic for the PDPs, especifically because the PfConcept* pulls in the DB stuff and a bit of complexity.   The only thing that would be needed in the worse case would be 2  string fields: version, and policy-types, and this is much more.\n\nCan we think of a way to not require the PDPs to not use the PfConcept* objects?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-03-21 20:41:22.000000000",
+      "in_reply_to": "5912772c_c4bc7295",
+      "unresolved": false
+    },
+    {
+      "id": "86762375_5d21565b",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatus.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "It doesn't appear to me that PfConcept pulls in any DB stuff.  In fact, it's pom has no dependencies.  PfConceptKey is simply a pair, a name and version, which seems to precisely fit this case.\n\nIn a previous meeting, it was suggested that we use PfConceptKey, since it seemed like a perfect fit.  Nevertheless, it would be easy enough to create a new class, if that would be preferred.  If we go that route, the question still stands, should the version be required?  If it isn't required, does than mean the PDP supports any version?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-21 20:54:57.000000000",
+      "in_reply_to": "1ebdafc1_d0e9c9e2",
+      "unresolved": false
+    },
+    {
+      "id": "70f7976f_b4ff3ae9",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatus.java",
+      "patchset_number": 5,
+      "line": 56,
+      "message": "Unless I am missing something I think it does ..  check this out:\n\nhttps://git.onap.org/policy/models/tree/models-base/src/main/java/org/onap/policy/models/base/PfConceptKey.java\n\n..\n\nimport javax.persistence.Column;\nimport javax.persistence.Embeddable;\n...\n\n    @Column(name = NAME_TOKEN, length = 128)\n    private String name;\n\n    @Column(name = VERSION_TOKEN, length = 128)\n    private String version;\n...\n\nhttps://git.onap.org/policy/models/tree/pom.xml\n\n        <dependency>\n            <groupId>org.eclipse.persistence</groupId>\n            <artifactId>eclipselink</artifactId>\n        </dependency>\n\n...\n\nI don't really think these classes are best for plain protocol communication between PAP and PDP.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-03-21 23:37:50.000000000",
+      "in_reply_to": "86762375_5d21565b",
+      "unresolved": false
+    },
+    {
+      "id": "c307a6c6_4044969a",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/Policy.java",
+      "patchset_number": 8,
+      "line": 38,
+      "message": "We don't need this class as we will be using ToscaPolicy",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 11:13:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

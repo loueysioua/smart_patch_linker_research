@@ -1,0 +1,1014 @@
+{
+  "id": "cps~master~I4219d38e20395b502ed4c9c466cc5a8eec0a7882",
+  "change_id": "I4219d38e20395b502ed4c9c466cc5a8eec0a7882",
+  "_number": 143682,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2026-03-26 13:23:36.000000000",
+    "updated": "2026-04-14 15:02:51.000000000",
+    "submitted": "2026-04-14 14:52:16.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 4893,
+      "name": "Gerard Nugent",
+      "display_name": null,
+      "email": "gerard.nugent@est.tech",
+      "username": "egernug"
+    },
+    "submitter": {
+      "account_id": 8171,
+      "name": "Sean Beirne",
+      "display_name": "Seán Beirne",
+      "email": "sean.beirne@est.tech",
+      "username": "seanbeirne"
+    }
+  },
+  "subject": "Implement ReadRequestExaminer for data job read routing",
+  "commit_message": "Implement ReadRequestExaminer for data job read routing\n\n- Add ReadRequestExaminer to classify data node selectors into\n  broadcast, per-DMI, and error groups\n- Support exact id selectors resolved via AlternateIdMatcher\n  and FDN extraction from JexParser\n- Support contains(id, \"...\") selectors via new partial match\n  search on the alternate ID cache\n- Add extractContainsValue to JexParser for parsing contains\n  expressions on ManagedElement and MeContext\n- Add getCmHandleIdsByAlternateIdContaining to AlternateIdMatcher\n  for substring search across all alternate IDs\n- Wire ReadRequestExaminer into DataJobServiceImpl.readDataJob\n  returning ClassifiedSelectors\n- Update DataJobService interface return type from void to\n  ClassifiedSelectors\n- Add read endpoint to DataJobControllerForTest at\n  POST /do-not-use/dataJobs/read\n- Add tests for all new and modified components\n\nIssue-ID: CPS-2889\n\nChange-Id: I4219d38e20395b502ed4c9c466cc5a8eec0a7882\nSigned-off-by: egernug <gerard.nugent@est.tech>\n",
+  "change_log": {
+    "entry_count": 70,
+    "entries": [
+      {
+        "id": "0aec7255fe86e7edf2a4fef98fe18ec4614ef7f3",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:23:36.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6fab6056848508030c1b059ba33b9355bc029386",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:23:49.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/23596639567",
+        "patchset_number": 1
+      },
+      {
+        "id": "69fd5db187d7a3b75cc883efb8f8e9fcd4bf4f45",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:23:54.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/23596640707",
+        "patchset_number": 1
+      },
+      {
+        "id": "9cc29d50afa3ac7b09d6f46527dcedcce1a9d94b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:24:22.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/23596640707",
+        "patchset_number": 1
+      },
+      {
+        "id": "d3346a594fd31f6445260934b051b46ceeaddfe9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 13:24:31.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9771/ (1/2)",
+        "patchset_number": 1
+      },
+      {
+        "id": "d3327ad0b3d65ee9a8b6693a13762e7932515bc7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 13:26:14.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11505/ (2/2)",
+        "patchset_number": 1
+      },
+      {
+        "id": "a2e9fd4068fd0e41bb8b40ecb1d35f3dbd1a7a90",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:27:58.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/23596639567",
+        "patchset_number": 1
+      },
+      {
+        "id": "d830ebe1e56cd7a633c6381b628336d6a6e1e5e2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 13:37:56.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9771/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/cps-sonar-verify/9771/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9771\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11505/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11505",
+        "patchset_number": 1
+      },
+      {
+        "id": "47c988af64251096cb5ccd8215720c805013c50a",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:48:35.000000000",
+        "message": "Uploaded patch set 2.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 2
+      },
+      {
+        "id": "ea1f6346a275c90b084f8a4ce911cff5a91d74f0",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:48:47.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/23597817835",
+        "patchset_number": 2
+      },
+      {
+        "id": "ada7c47988a5b1465f99a11d8b4a96d22c246b14",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:48:49.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/23597819341",
+        "patchset_number": 2
+      },
+      {
+        "id": "1c00ecaf7ab99cecc4d6b1c49e4f4da2a33194a2",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:49:18.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/23597819341",
+        "patchset_number": 2
+      },
+      {
+        "id": "26bfa6a89ff20cfa4fe7afc5e67abadf6a6c3020",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 13:50:25.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9772/ (1/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "176ecb98cd94854b600a14c5afccefcabc584d77",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-03-26 13:51:02.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/23597817835",
+        "patchset_number": 2
+      },
+      {
+        "id": "1d326dc91f05da043cec3a1ff4631e2e18f4cd1f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 13:51:05.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11506/ (2/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "78495c6fc698d75536b4d9a8d9f415f07e2b509c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-26 14:03:27.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9772/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9772\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11506/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11506",
+        "patchset_number": 2
+      },
+      {
+        "id": "ba0698ef7cf0182c6a5e4d780151789db9a83e71",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-03-30 08:07:51.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\n(20 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "d3f4cf476628024ec252699461dd2a528c5fb567",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-08 15:39:37.000000000",
+        "message": "Uploaded patch set 3.\n\nOutdated Votes:\n* Code-Review-1 (copy condition: \"changekind:NO_CHANGE OR changekind:TRIVIAL_REBASE OR is:MIN\")\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 3
+      },
+      {
+        "id": "c4242f257f3b80cd4040cadd80c9f398d7730916",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-08 15:39:52.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24144207076",
+        "patchset_number": 3
+      },
+      {
+        "id": "3337cb5a4b95512de5fa61f81285ee5ef1852281",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-08 15:40:00.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24144208930",
+        "patchset_number": 3
+      },
+      {
+        "id": "c269c2de4cde31f951cf55e8dad4b387b014c9ad",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-08 15:40:29.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24144208930",
+        "patchset_number": 3
+      },
+      {
+        "id": "cae600e49d42d2525b2c79f161ea7b0af183c41d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-08 15:40:48.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9802/ (1/2)",
+        "patchset_number": 3
+      },
+      {
+        "id": "c6967aad5b57d57c2eac86df1b9769c5718feb2c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-08 15:41:52.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11535/ (2/2)",
+        "patchset_number": 3
+      },
+      {
+        "id": "4596dbfbd362d04f9bf3544b38bfc1007e8d6543",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-08 15:45:24.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24144207076",
+        "patchset_number": 3
+      },
+      {
+        "id": "98a36ec74c4681518d820ebb4807f96a87c2d7b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-08 15:52:23.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9802/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9802\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11535/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11535",
+        "patchset_number": 3
+      },
+      {
+        "id": "a78c108d459b9cc0ac7067464184fe83bcd2b114",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-09 14:48:42.000000000",
+        "message": "Uploaded patch set 4.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 4
+      },
+      {
+        "id": "3fb9fa3041fa5684d7da2f995a99a706435197bf",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-09 14:48:51.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9805/ (1/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "0b736efd8a7972f3cff7479b52be7537229457cd",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-09 14:48:56.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24196672403",
+        "patchset_number": 4
+      },
+      {
+        "id": "8d9f2ce3eab443ae220090ca606e80fa1e0d13b9",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-09 14:48:56.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24196674234",
+        "patchset_number": 4
+      },
+      {
+        "id": "e6df95bb015f121649c783a7dfcfaaa9fbe55289",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-09 14:49:28.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24196674234",
+        "patchset_number": 4
+      },
+      {
+        "id": "4d0f6cba5730ad92fb53009052ace5e9cd83b19a",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-09 14:52:11.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24196672403",
+        "patchset_number": 4
+      },
+      {
+        "id": "c43bd87bcdf91047094bc685d552a1444d930d51",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-09 14:54:11.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11538/ (2/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "69bc96b2bf2fe36d5a96e8d1f5c74b5d898dfb3d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-09 18:01:06.000000000",
+        "message": "Patch Set 4: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9805/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/cps-sonar-verify/9805/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9805\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11538/ : FAILURE\n\nBuild took too long to execute. Rerunning may solve the issue ( https://jenkins.onap.org/job/cps-master-verify-java/11538/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11538",
+        "patchset_number": 4
+      },
+      {
+        "id": "96e1ffd93cf2c76c1f5e7fd3713feab069fc7f46",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-04-10 10:19:08.000000000",
+        "message": "Patch Set 4:\n\n(16 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "7e720bcccb66b7b04d4504e330a6aaad5004da7a",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-04-10 11:11:14.000000000",
+        "message": "Patch Set 4:\n\n(1 comment)",
+        "patchset_number": 4
+      },
+      {
+        "id": "985abbbceb621bfeb3aa9eeaaca0bce7b0ded2db",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-10 11:11:25.000000000",
+        "message": "Patch Set 4: -Verified\n\nSTARTED: https://github.com/onap/.github/actions/runs/24240121142",
+        "patchset_number": 4
+      },
+      {
+        "id": "4d77a1a515391cbac65804783ae21fdac604de32",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-10 11:11:26.000000000",
+        "message": "Patch Set 4: -Verified\n\nSTARTED: https://github.com/onap/.github/actions/runs/24240121849",
+        "patchset_number": 4
+      },
+      {
+        "id": "39ca8177ca9ba90dbc6a7c32ae50faab3093f300",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-10 11:11:58.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24240121849",
+        "patchset_number": 4
+      },
+      {
+        "id": "de08577c97768b0d53b4029e3ac5419fedfe7cf7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-10 11:12:06.000000000",
+        "message": "Patch Set 4: -Verified\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9807/ (1/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "7ed7e25e60c30edfb1e958edcb1708d81820e2e6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-10 11:13:04.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11540/ (2/2)",
+        "patchset_number": 4
+      },
+      {
+        "id": "70fe1ec9f6cc6c69836d73d0a3d79bb99b60dcbc",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-10 11:15:37.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24240121142",
+        "patchset_number": 4
+      },
+      {
+        "id": "f3cbbad6b3bb6bbcb6ea4da449283e0d77af1d64",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-10 11:23:30.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9807/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9807\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11540/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11540",
+        "patchset_number": 4
+      },
+      {
+        "id": "41e292f477d2c3f3f482251f12f113e699645689",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-13 08:30:19.000000000",
+        "message": "Patch Set 4:\n\n(19 comments)",
+        "patchset_number": 4
+      },
+      {
+        "id": "f38bb854f8532bf8a7c7a808876eca6bdcb2c5ee",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-13 10:07:07.000000000",
+        "message": "Uploaded patch set 5.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 5
+      },
+      {
+        "id": "eb7cfa98c53148c9f7fd5561e9bd2e70e7fff2a6",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-13 10:07:20.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24337702428",
+        "patchset_number": 5
+      },
+      {
+        "id": "d3a2bf9ce11a9def4753597087151f4f33672eaf",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-13 10:07:20.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24337703393",
+        "patchset_number": 5
+      },
+      {
+        "id": "05fb07ffd1c922cffd5efb295547b63dce4b0dd8",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-04-13 10:07:49.000000000",
+        "message": "Patch Set 5:\n\n(18 comments)",
+        "patchset_number": 5
+      },
+      {
+        "id": "216fa248fca9d94654518dae5dc7c17e88dbba47",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-13 10:07:52.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24337703393",
+        "patchset_number": 5
+      },
+      {
+        "id": "76b43e63fc79d9ed2c81b6945d9753e972108a28",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-13 10:07:57.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9812/ (1/2)",
+        "patchset_number": 5
+      },
+      {
+        "id": "b4d0256b01a0cde230d3f3079f869ce9cd9d495d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-13 10:08:41.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11545/ (2/2)",
+        "patchset_number": 5
+      },
+      {
+        "id": "aa787fc4f41129bca3607dc8a746aa54084dff17",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-13 10:11:29.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24337702428",
+        "patchset_number": 5
+      },
+      {
+        "id": "fe86e2537cef66fadf9f7d7d86e8b2e5c227daef",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-13 10:19:57.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9812/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9812\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11545/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11545",
+        "patchset_number": 5
+      },
+      {
+        "id": "868f648a6eeb1c51708231ea3f8ecd4450822d49",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-13 14:23:00.000000000",
+        "message": "Patch Set 5: Code-Review+1\n\n(6 comments)",
+        "patchset_number": 5
+      },
+      {
+        "id": "bd523563ea4c09a34f3b1528fe647253d15ac938",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 10:58:51.000000000",
+        "message": "Uploaded patch set 6.\n\nOutdated Votes:\n* Code-Review+1 (copy condition: \"changekind:NO_CHANGE OR changekind:TRIVIAL_REBASE OR is:MIN\")\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 6
+      },
+      {
+        "id": "ac46784a7ffc5edd053c7b13a06d0e425d1238d7",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 10:59:02.000000000",
+        "message": "Patch Set 6:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24395246910",
+        "patchset_number": 6
+      },
+      {
+        "id": "b8cde0c76e9272defbda6c1981c62a2359340585",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 10:59:02.000000000",
+        "message": "Patch Set 6:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24395246000",
+        "patchset_number": 6
+      },
+      {
+        "id": "1e30d6a4d8507166e6ba361e5906db706bc77b91",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 10:59:28.000000000",
+        "message": "Patch Set 6: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24395246910",
+        "patchset_number": 6
+      },
+      {
+        "id": "d5e5796c8c9414913d11b412a154dff0b119cfb4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 11:00:05.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/cps-sonar-verify/9818/ (1/2)",
+        "patchset_number": 6
+      },
+      {
+        "id": "8cf540ec7ed9d5a72ca03b231a133f554773c7dc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 11:01:09.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/cps-master-verify-java/11551/ (2/2)",
+        "patchset_number": 6
+      },
+      {
+        "id": "671f57b1eeb219d5e737a25a7d5f76b213dff942",
+        "author": {
+          "account_id": 4893,
+          "name": "Gerard Nugent",
+          "display_name": null,
+          "email": "gerard.nugent@est.tech",
+          "username": "egernug"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-04-14 11:01:16.000000000",
+        "message": "Patch Set 6:\n\n(2 comments)",
+        "patchset_number": 6
+      },
+      {
+        "id": "23a6de71b22cf18d3f69271cf26513229f6ea56d",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 11:03:12.000000000",
+        "message": "Patch Set 6: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24395246000",
+        "patchset_number": 6
+      },
+      {
+        "id": "eaee036ce4b469e687066e0beb8ff37da77368d2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 11:13:04.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-sonar-verify/9818/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-sonar-verify/9818\n\nhttps://jenkins.onap.org/job/cps-master-verify-java/11551/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-verify-java/11551",
+        "patchset_number": 6
+      },
+      {
+        "id": "7e7a796201cf038bdfaceaec1122b073b47aa60b",
+        "author": {
+          "account_id": 6639,
+          "name": "Toine Siebelink",
+          "display_name": null,
+          "email": "toine.siebelink@est.tech",
+          "username": "ToineSiebelink"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 13:39:02.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "b7231ead1f539c55953ad3ea0238bfe52df796c9",
+        "author": {
+          "account_id": 7931,
+          "name": "Lee Anjella Macabuhay",
+          "display_name": null,
+          "email": "lee.anjella.macabuhay@est.tech",
+          "username": "emaclee"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 14:47:44.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "90c362f9c667bfa87363572a6f97d2f3e7f4bf4e",
+        "author": {
+          "account_id": 8171,
+          "name": "Sean Beirne",
+          "display_name": "Seán Beirne",
+          "email": "sean.beirne@est.tech",
+          "username": "seanbeirne"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 14:51:59.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "c17b7a3a3e38c7cbef24d9f908b1496593895131",
+        "author": {
+          "account_id": 8171,
+          "name": "Sean Beirne",
+          "display_name": "Seán Beirne",
+          "email": "sean.beirne@est.tech",
+          "username": "seanbeirne"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 14:52:10.000000000",
+        "message": "Patch Set 6: Code-Review+2",
+        "patchset_number": 6
+      },
+      {
+        "id": "66beea03da9aa065f95a81f171c464323ba33464",
+        "author": {
+          "account_id": 8171,
+          "name": "Sean Beirne",
+          "display_name": "Seán Beirne",
+          "email": "sean.beirne@est.tech",
+          "username": "seanbeirne"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 14:52:16.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 6
+      },
+      {
+        "id": "510fc49ef218f3637ee134ebedf5d26869bb760b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 14:52:28.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/24405968110",
+        "patchset_number": 1
+      },
+      {
+        "id": "681bd94c8357f89da559a6d16c94e6f0e3086cf5",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-04-14 14:53:57.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/24405968110",
+        "patchset_number": 1
+      },
+      {
+        "id": "bd335f95ca47e397c9c4d638d0b394358c288c8a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-04-14 15:02:51.000000000",
+        "message": "Patch Set 6:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/cps-master-merge-java/2180/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-master-merge-java/2180\n\nhttps://jenkins.onap.org/job/cps-merge-verification-maven-master/2045/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/cps-merge-verification-maven-master/2045",
+        "patchset_number": 6
+      }
+    ]
+  }
+}

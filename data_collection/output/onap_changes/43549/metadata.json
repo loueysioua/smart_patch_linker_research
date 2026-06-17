@@ -1,0 +1,294 @@
+{
+  "id": "oom~master~I099bd717fb488fab9ab1af78f8f445202fd1f117",
+  "change_id": "I099bd717fb488fab9ab1af78f8f445202fd1f117",
+  "_number": 43549,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-04-18 15:28:23.000000000",
+    "updated": "2018-05-28 13:57:02.000000000",
+    "submitted": "2018-05-15 18:45:27.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2541,
+      "name": "Jasmine Wen",
+      "display_name": null,
+      "email": "jasmine.wen@amdocs.com",
+      "username": "jasmineWen"
+    },
+    "submitter": {
+      "account_id": 131,
+      "name": "Mandeep Khinda",
+      "display_name": null,
+      "email": "Mandeep.Khinda@gmail.com",
+      "username": "mkhinda"
+    }
+  },
+  "subject": "VNFSDK - use common postgres",
+  "commit_message": "VNFSDK - use common postgres\n\nIssue-ID: OOM-751\n\nChange-Id: I099bd717fb488fab9ab1af78f8f445202fd1f117\nSigned-off-by: jasmineWen <jasmine.wen@amdocs.com>\n",
+  "change_log": {
+    "entry_count": 19,
+    "entries": [
+      {
+        "id": "76eb5c46af7bd010fa52c8e38f096ed9c455b812",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-18 15:28:23.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e34cd89b16cd333d3ee049d7258465a811c46680",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-20 13:47:43.000000000",
+        "message": "Patch Set 1:\n\nThere is a permission issue when reference postgres DB in this way\n\nInstall postgres DB alone, it works fine: \nhelm install local/postgres --namespace onap --name dev \n\ndatafiles are written, /pgdata shows 777:  \nroot@k8s1:/stage/oom/kubernetes/common/postgres# ls -ltr /dockerdata-nfs/onap/postgres/data0/dev-postgres-0\ntotal 128\n-rw------- 1 26 tape     3 Apr 19 13:39 PG_VERSION\ndrwx------ 2 26 tape  4096 Apr 19 13:39 pg_twophase\n\n......\nroot@k8s1:/stage/oom/kubernetes# kubectl exec -it dev-postgres-0 -n onap -- /bin/sh\nsh-4.2$\nsh-4.2$ ls -ld /pgdata\ndrwxrwxrwx 3 root root 4096 Apr 19 13:39 /pgdata\nsh-4.2$ id\nuid=26(postgres) gid=26(postgres) groups=26(postgres)\n\nWhen reference postgres in vnfsdk, it does not work:\nhelm install local/onap --namespace onap1 --name dev1 \n\nlog shows 'permission denied', and /pgdata shows 755, cannot be written by postgres user, and DB is not up,  \nroot@k8s1:/stage/oom/kubernetes# kubectl logs dev1-vnfsdk-db-0 -n onap1\n....\nmkdir: cannot create directory '/pgdata/dev1-vnfsdk-db-0': Permission denied\nsh-4.2$ ls -ld /pgdata\ndrwxr-xr-x 2 root root 4096 Apr 19 13:44 /pgdata\nsh-4.2$ id\nuid=26(postgres) gid=26(postgres) groups=26(postgres)\n...\nroot@k8s1:/stage/oom/kubernetes/appc# ls -ltr /dockerdata-nfs/onap1/vnfsdk/data0\ntotal 0\nroot@k8s1:/stage/oom/kubernetes/appc# ls -ltr /dockerdata-nfs/onap1/postgres/data0\ntotal 0",
+        "patchset_number": 1
+      },
+      {
+        "id": "d2f5cf50a7894c02067ed675832c7a4c1416f1cb",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-20 14:04:22.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)\n\nPlease adjust Nexus references.  We moved refrepo from onap/refrepo to onap/vnfsdk/refrepo.",
+        "patchset_number": 1
+      },
+      {
+        "id": "99bfe98086f1145989ccad41e99a0c8ba76ab866",
+        "author": {
+          "account_id": 161,
+          "name": "Roger Maitland",
+          "display_name": null,
+          "email": "Roger.Maitland@amdocs.com",
+          "username": "rogerm"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-14 19:38:47.000000000",
+        "message": "Patch Set 1:\n\nThis change seems valuable still but I don't think we should make any more changes until after Beijing is released.  Does that make sense?",
+        "patchset_number": 1
+      },
+      {
+        "id": "baee17d864034476a696f4ba179f841af5322a61",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 07:56:25.000000000",
+        "message": "Patch Set 1:\n\n> This change seems valuable still but I don't think we should make\n > any more changes until after Beijing is released.  Does that make\n > sense?\n\nI think this specific change is important. \nIt re-defines persistent volume hostPath location, which is important.\nIt also removes unneeded subchart.\nPlease note Chris's comment though.",
+        "patchset_number": 1
+      },
+      {
+        "id": "be579c6904b74e82f8f1dcfe193462a373110a6a",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 09:17:40.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "73a308e86ec4a7a3b5d63d72e3655adc595288b6",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 15:15:22.000000000",
+        "message": "Patch Set 2:\n\npod is not running though: \nroot@k8s1:/stage/oom751/kubernetes# kubectl get pods --all-namespaces\nNAMESPACE     NAME                                   READY     STATUS             RESTARTS   AGE\n..........\nonap          dev-robot-6cc48c696b-brh76             1/1       Running            0          6m\nonap          dev-vnfsdk-65fb98987d-nrlsb            0/1       Init:0/1           0          6m\nonap          dev-vnfsdk-postgres-0                  1/1       Running            0          6m\nonap          dev-vnfsdk-postgres-1                  0/1       CrashLoopBackOff   5          4m\nroot@k8s1:/stage/oom751/kubernetes# kubectl logs dev-vnfsdk-postgres-1 -n onap\nTue May 15 15:09:16 UTC 2018\nsetting PGROOT to  /usr/pgsql-10\nchown: cannot access '/pgwal/dev-vnfsdk-postgres-1-wal': No such file or directory\nUser id is...\nuid=26(postgres) gid=26(postgres) groups=26(postgres)\n1 is ordinal\nSetting PG_MODE to replica.\npod \"dev-vnfsdk-postgres-1\" not labeled\npod \"dev-vnfsdk-postgres-1\" not labeled\nWorking on replica...\nTue May 15 15:09:17 UTC 2018\n2018-05-15 11:09:17 EDT [63]: [1-1] user=,db=,app=,client=LOG:  pgaudit extension initialized\n2018-05-15 11:09:17 EDT [63]: [2-1] user=,db=,app=,client=LOG:  listening on IPv4 address \"0.0.0.0\", port 5432\n2018-05-15 11:09:17 EDT [63]: [3-1] user=,db=,app=,client=LOG:  listening on IPv6 address \"::\", port 5432\n2018-05-15 11:09:17 EDT [63]: [4-1] user=,db=,app=,client=LOG:  listening on Unix socket \"/tmp/.s.PGSQL.5432\"\n2018-05-15 11:09:17 EDT [63]: [5-1] user=,db=,app=,client=PANIC:  could not read from control file: Success\nExiting...at end\n/opt/cpm/bin/start.sh: line 498:    63 Aborted                 (core dumped) postgres -D $PGDATA",
+        "patchset_number": 2
+      },
+      {
+        "id": "ed3ba528f46e666dec913cc8919086c0b020d502",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 15:33:48.000000000",
+        "message": "Patch Set 2:\n\n> pod is not running though:\n > root@k8s1:/stage/oom751/kubernetes# kubectl get pods\n > --all-namespaces\n > NAMESPACE     NAME                                   READY    \n > STATUS             RESTARTS   AGE\n > ..........\n > onap          dev-robot-6cc48c696b-brh76             1/1      \n > Running            0          6m\n > onap          dev-vnfsdk-65fb98987d-nrlsb            0/1      \n > Init:0/1           0          6m\n > onap          dev-vnfsdk-postgres-0                  1/1      \n > Running            0          6m\n > onap          dev-vnfsdk-postgres-1                  0/1      \n > CrashLoopBackOff   5          4m\n > root@k8s1:/stage/oom751/kubernetes# kubectl logs dev-vnfsdk-postgres-1\n > -n onap\n > Tue May 15 15:09:16 UTC 2018\n > setting PGROOT to  /usr/pgsql-10\n > chown: cannot access '/pgwal/dev-vnfsdk-postgres-1-wal': No such\n > file or directory\n > User id is...\n > uid=26(postgres) gid=26(postgres) groups=26(postgres)\n > 1 is ordinal\n > Setting PG_MODE to replica.\n > pod \"dev-vnfsdk-postgres-1\" not labeled\n > pod \"dev-vnfsdk-postgres-1\" not labeled\n > Working on replica...\n > Tue May 15 15:09:17 UTC 2018\n > 2018-05-15 11:09:17 EDT [63]: [1-1] user=,db=,app=,client=LOG: \n > pgaudit extension initialized\n > 2018-05-15 11:09:17 EDT [63]: [2-1] user=,db=,app=,client=LOG: \n > listening on IPv4 address \"0.0.0.0\", port 5432\n > 2018-05-15 11:09:17 EDT [63]: [3-1] user=,db=,app=,client=LOG: \n > listening on IPv6 address \"::\", port 5432\n > 2018-05-15 11:09:17 EDT [63]: [4-1] user=,db=,app=,client=LOG: \n > listening on Unix socket \"/tmp/.s.PGSQL.5432\"\n > 2018-05-15 11:09:17 EDT [63]: [5-1] user=,db=,app=,client=PANIC: \n > could not read from control file: Success\n > Exiting...at end\n > /opt/cpm/bin/start.sh: line 498:    63 Aborted                \n > (core dumped) postgres -D $PGDATA\n\nThat is a bit strange.\nDo you have a clean environment?\nOn my rancher I get:\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# date\nTue May 15 15:32:08 UTC 2018\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# kubectl get pods -n onap\nNAME                          READY     STATUS    RESTARTS   AGE\naaa-vnfsdk-665d5b46d6-t8lff   1/1       Running   0          3m\naaa-vnfsdk-postgres-0         1/1       Running   0          3m\naaa-vnfsdk-postgres-1         1/1       Running   0          3m\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# ls /dockerdata-nfs/aaa/vnfsdk/data\ndata0/ data1/\nroot@borislav-new-rancher:~/onap/master/oom/kubernetes# ls /dockerdata-nfs/aaa/vnfsdk/data*/*\n/dockerdata-nfs/aaa/vnfsdk/data0/aaa-vnfsdk-postgres-0:\nbase              global        pg_dynshmem  pg_ident.conf  pg_logical    pg_notify    pg_serial     pg_stat      pg_subtrans  pg_twophase  pg_wal   postgresql.auto.conf  postmaster.opts\ncurrent_logfiles  pg_commit_ts  pg_hba.conf  pg_log         pg_multixact  pg_replslot  pg_snapshots  pg_stat_tmp  pg_tblspc    PG_VERSION   pg_xact  postgresql.conf       postmaster.pid\n\n/dockerdata-nfs/aaa/vnfsdk/data1/aaa-vnfsdk-postgres-1:\nbackup_label.old  current_logfiles  pg_commit_ts  pg_hba.conf    pg_log      pg_multixact  pg_replslot  pg_snapshots  pg_stat_tmp  pg_tblspc    PG_VERSION  pg_xact               postgresql.conf  postmaster.pid\nbase              global            pg_dynshmem   pg_ident.conf  pg_logical  pg_notify     pg_serial    pg_stat       pg_subtrans  pg_twophase  pg_wal      postgresql.auto.conf  postmaster.opts  recovery.conf",
+        "patchset_number": 2
+      },
+      {
+        "id": "aa6f0bf14feeceb2ae2b2b70ad5720007399a55b",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 15:52:15.000000000",
+        "message": "Patch Set 2:\n\n> > pod is not running though:\n > > root@k8s1:/stage/oom751/kubernetes# kubectl get pods\n > > --all-namespaces\n > > NAMESPACE     NAME                                   READY\n > > STATUS             RESTARTS   AGE\n > > ..........\n > > onap          dev-robot-6cc48c696b-brh76             1/1\n > > Running            0          6m\n > > onap          dev-vnfsdk-65fb98987d-nrlsb            0/1\n > > Init:0/1           0          6m\n > > onap          dev-vnfsdk-postgres-0                  1/1\n > > Running            0          6m\n > > onap          dev-vnfsdk-postgres-1                  0/1\n > > CrashLoopBackOff   5          4m\n > > root@k8s1:/stage/oom751/kubernetes# kubectl logs\n > dev-vnfsdk-postgres-1\n > > -n onap\n > > Tue May 15 15:09:16 UTC 2018\n > > setting PGROOT to  /usr/pgsql-10\n > > chown: cannot access '/pgwal/dev-vnfsdk-postgres-1-wal': No such\n > > file or directory\n > > User id is...\n > > uid=26(postgres) gid=26(postgres) groups=26(postgres)\n > > 1 is ordinal\n > > Setting PG_MODE to replica.\n > > pod \"dev-vnfsdk-postgres-1\" not labeled\n > > pod \"dev-vnfsdk-postgres-1\" not labeled\n > > Working on replica...\n > > Tue May 15 15:09:17 UTC 2018\n > > 2018-05-15 11:09:17 EDT [63]: [1-1] user=,db=,app=,client=LOG:\n > > pgaudit extension initialized\n > > 2018-05-15 11:09:17 EDT [63]: [2-1] user=,db=,app=,client=LOG:\n > > listening on IPv4 address \"0.0.0.0\", port 5432\n > > 2018-05-15 11:09:17 EDT [63]: [3-1] user=,db=,app=,client=LOG:\n > > listening on IPv6 address \"::\", port 5432\n > > 2018-05-15 11:09:17 EDT [63]: [4-1] user=,db=,app=,client=LOG:\n > > listening on Unix socket \"/tmp/.s.PGSQL.5432\"\n > > 2018-05-15 11:09:17 EDT [63]: [5-1] user=,db=,app=,client=PANIC:\n > > could not read from control file: Success\n > > Exiting...at end\n > > /opt/cpm/bin/start.sh: line 498:    63 Aborted\n > > (core dumped) postgres -D $PGDATA\n > \n > That is a bit strange.\n > Do you have a clean environment?\n > On my rancher I get:\n > root@borislav-new-rancher:~/onap/master/oom/kubernetes# date\n > Tue May 15 15:32:08 UTC 2018\n > root@borislav-new-rancher:~/onap/master/oom/kubernetes# kubectl get\n > pods -n onap\n > NAME                          READY     STATUS    RESTARTS   AGE\n > aaa-vnfsdk-665d5b46d6-t8lff   1/1       Running   0          3m\n > aaa-vnfsdk-postgres-0         1/1       Running   0          3m\n > aaa-vnfsdk-postgres-1         1/1       Running   0          3m\n > root@borislav-new-rancher:~/onap/master/oom/kubernetes# ls\n > /dockerdata-nfs/aaa/vnfsdk/data\n > data0/ data1/\n > root@borislav-new-rancher:~/onap/master/oom/kubernetes# ls\n > /dockerdata-nfs/aaa/vnfsdk/data*/*\n > /dockerdata-nfs/aaa/vnfsdk/data0/aaa-vnfsdk-postgres-0:\n > base              global        pg_dynshmem  pg_ident.conf \n > pg_logical    pg_notify    pg_serial     pg_stat      pg_subtrans \n > pg_twophase  pg_wal   postgresql.auto.conf  postmaster.opts\n > current_logfiles  pg_commit_ts  pg_hba.conf  pg_log        \n > pg_multixact  pg_replslot  pg_snapshots  pg_stat_tmp  pg_tblspc   \n > PG_VERSION   pg_xact  postgresql.conf       postmaster.pid\n > \n > /dockerdata-nfs/aaa/vnfsdk/data1/aaa-vnfsdk-postgres-1:\n > backup_label.old  current_logfiles  pg_commit_ts  pg_hba.conf   \n > pg_log      pg_multixact  pg_replslot  pg_snapshots  pg_stat_tmp \n > pg_tblspc    PG_VERSION  pg_xact               postgresql.conf \n > postmaster.pid\n > base              global            pg_dynshmem   pg_ident.conf \n > pg_logical  pg_notify     pg_serial    pg_stat       pg_subtrans \n > pg_twophase  pg_wal      postgresql.auto.conf  postmaster.opts \n > recovery.conf\n\nMultiple retries still succeed. Jasmine, please retest.",
+        "patchset_number": 2
+      },
+      {
+        "id": "6f5a4558d4e779edc947e8c627b7b39c9e0bb026",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 16:20:58.000000000",
+        "message": "Patch Set 2:\n\nokay, I retried with following commands, got same result: \n\nrm -rf oom751 \ngit clone http://gerrit.onap.org/r/oom  oom751\ncd oom751/kubernetes\ngit fetch https://gerrit.onap.org/r/oom refs/changes/49/43549/2 && git checkout FETCH_HEAD \nmake all \nhelm delete dev --purge=true \nkubectl delete namespace onap --cascade=true \nhelm upgrade -i dev local/onap --namespace onap -f onap/resources/environments/disable-allcharts.yaml --set robot.enabled=true --set vnfsdk.enabled=true --set consul.enabled=true\n\nroot@k8s1:/stage/oom751/kubernetes# kubectl get pods --all-namespaces\nNAMESPACE     NAME                                   READY     STATUS             RESTARTS   AGE\nkube-system   heapster-76b8cd7b5-82knf               1/1       Running            0          92d\nkube-system   kube-dns-5d7b4487c9-vfsth              3/3       Running            0          92d\nkube-system   kubernetes-dashboard-f9577fffd-ffqd8   1/1       Running            0          92d\nkube-system   monitoring-grafana-997796fcf-s6str     1/1       Running            0          92d\nkube-system   monitoring-influxdb-56fdcd96b-frb62    1/1       Running            0          92d\nkube-system   tiller-deploy-54bcc55dd5-p64tv         1/1       Running            0          2h\nonap          dev-consul-7dcbb89b4c-fd4dj            1/1       Running            1          8m\nonap          dev-consul-server-69965fcc48-n2fwh     1/1       Running            0          8m\nonap          dev-robot-6cc48c696b-2kx5r             1/1       Running            0          8m\nonap          dev-vnfsdk-65fb98987d-ssg9k            0/1       Init:0/1           0          8m\nonap          dev-vnfsdk-postgres-0                  1/1       Running            0          8m\nonap          dev-vnfsdk-postgres-1                  0/1       CrashLoopBackOff   6          8m\nroot@k8s1:/stage/oom751/kubernetes# kubectl logs dev-vnfsdk-postgres-1 -n onap\nTue May 15 16:16:19 UTC 2018\nsetting PGROOT to  /usr/pgsql-10\nchown: cannot access '/pgwal/dev-vnfsdk-postgres-1-wal': No such file or directory\nUser id is...\nuid=26(postgres) gid=26(postgres) groups=26(postgres)\n1 is ordinal\nSetting PG_MODE to replica.\npod \"dev-vnfsdk-postgres-1\" not labeled\npod \"dev-vnfsdk-postgres-1\" not labeled\nWorking on replica...\nTue May 15 16:16:20 UTC 2018\n2018-05-15 12:16:20 EDT [65]: [1-1] user=,db=,app=,client=LOG:  pgaudit extension initialized\n2018-05-15 12:16:20 EDT [65]: [2-1] user=,db=,app=,client=LOG:  listening on IPv4 address \"0.0.0.0\", port 5432\n2018-05-15 12:16:20 EDT [65]: [3-1] user=,db=,app=,client=LOG:  listening on IPv6 address \"::\", port 5432\n2018-05-15 12:16:20 EDT [65]: [4-1] user=,db=,app=,client=LOG:  listening on Unix socket \"/tmp/.s.PGSQL.5432\"\n2018-05-15 12:16:20 EDT [65]: [5-1] user=,db=,app=,client=PANIC:  could not read from control file: Success\n/opt/cpm/bin/start.sh: line 498:    65 Aborted                 (core dumped) postgres -D $PGDATA\nExiting...at end\n\n\nmy environment: \nroot@k8s1:/stage/oom751/kubernetes# helm version\nClient: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\", GitTreeState:\"clean\"}\nroot@k8s1:/stage/oom751/kubernetes# kubectl version\nClient Version: version.Info{Major:\"1\", Minor:\"9\", GitVersion:\"v1.9.3\", GitCommit:\"d2835416544f298c919e2ead3be3d0864b52323b\", GitTreeState:\"clean\", BuildDate:\"2018-02-07T12:22:21Z\", GoVersion:\"go1.9.2\", Compiler:\"gc\", Platform:\"linux/amd64\"}\nServer Version: version.Info{Major:\"1\", Minor:\"8+\", GitVersion:\"v1.8.5-rancher1\", GitCommit:\"6cb179822b9f77893eac5612c91a0ed7c0941b45\", GitTreeState:\"clean\", BuildDate:\"2017-12-11T17:40:37Z\", GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}",
+        "patchset_number": 2
+      },
+      {
+        "id": "00934027cc04ef702c7a2de7a6fd6d4e692f95c0",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 16:58:32.000000000",
+        "message": "Patch Set 2:\n\n> okay, I retried with following commands, got same result:\n > \n > rm -rf oom751\n > git clone http://gerrit.onap.org/r/oom  oom751\n > cd oom751/kubernetes\n > git fetch https://gerrit.onap.org/r/oom refs/changes/49/43549/2 &&\n > git checkout FETCH_HEAD\n > make all\n > helm delete dev --purge=true\n > kubectl delete namespace onap --cascade=true\n > helm upgrade -i dev local/onap --namespace onap -f\n > onap/resources/environments/disable-allcharts.yaml --set\n > robot.enabled=true --set vnfsdk.enabled=true --set\n > consul.enabled=true\n > \n > root@k8s1:/stage/oom751/kubernetes# kubectl get pods\n > --all-namespaces\n > NAMESPACE     NAME                                   READY    \n > STATUS             RESTARTS   AGE\n > kube-system   heapster-76b8cd7b5-82knf               1/1      \n > Running            0          92d\n > kube-system   kube-dns-5d7b4487c9-vfsth              3/3      \n > Running            0          92d\n > kube-system   kubernetes-dashboard-f9577fffd-ffqd8   1/1      \n > Running            0          92d\n > kube-system   monitoring-grafana-997796fcf-s6str     1/1      \n > Running            0          92d\n > kube-system   monitoring-influxdb-56fdcd96b-frb62    1/1      \n > Running            0          92d\n > kube-system   tiller-deploy-54bcc55dd5-p64tv         1/1      \n > Running            0          2h\n > onap          dev-consul-7dcbb89b4c-fd4dj            1/1      \n > Running            1          8m\n > onap          dev-consul-server-69965fcc48-n2fwh     1/1      \n > Running            0          8m\n > onap          dev-robot-6cc48c696b-2kx5r             1/1      \n > Running            0          8m\n > onap          dev-vnfsdk-65fb98987d-ssg9k            0/1      \n > Init:0/1           0          8m\n > onap          dev-vnfsdk-postgres-0                  1/1      \n > Running            0          8m\n > onap          dev-vnfsdk-postgres-1                  0/1      \n > CrashLoopBackOff   6          8m\n > root@k8s1:/stage/oom751/kubernetes# kubectl logs dev-vnfsdk-postgres-1\n > -n onap\n > Tue May 15 16:16:19 UTC 2018\n > setting PGROOT to  /usr/pgsql-10\n > chown: cannot access '/pgwal/dev-vnfsdk-postgres-1-wal': No such\n > file or directory\n > User id is...\n > uid=26(postgres) gid=26(postgres) groups=26(postgres)\n > 1 is ordinal\n > Setting PG_MODE to replica.\n > pod \"dev-vnfsdk-postgres-1\" not labeled\n > pod \"dev-vnfsdk-postgres-1\" not labeled\n > Working on replica...\n > Tue May 15 16:16:20 UTC 2018\n > 2018-05-15 12:16:20 EDT [65]: [1-1] user=,db=,app=,client=LOG: \n > pgaudit extension initialized\n > 2018-05-15 12:16:20 EDT [65]: [2-1] user=,db=,app=,client=LOG: \n > listening on IPv4 address \"0.0.0.0\", port 5432\n > 2018-05-15 12:16:20 EDT [65]: [3-1] user=,db=,app=,client=LOG: \n > listening on IPv6 address \"::\", port 5432\n > 2018-05-15 12:16:20 EDT [65]: [4-1] user=,db=,app=,client=LOG: \n > listening on Unix socket \"/tmp/.s.PGSQL.5432\"\n > 2018-05-15 12:16:20 EDT [65]: [5-1] user=,db=,app=,client=PANIC: \n > could not read from control file: Success\n > /opt/cpm/bin/start.sh: line 498:    65 Aborted                \n > (core dumped) postgres -D $PGDATA\n > Exiting...at end\n > \n > \n > my environment:\n > root@k8s1:/stage/oom751/kubernetes# helm version\n > Client: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\",\n > GitTreeState:\"clean\"}\n > Server: &version.Version{SemVer:\"v2.8.2\", GitCommit:\"a80231648a1473929271764b920a8e346f6de844\",\n > GitTreeState:\"clean\"}\n > root@k8s1:/stage/oom751/kubernetes# kubectl version\n > Client Version: version.Info{Major:\"1\", Minor:\"9\",\n > GitVersion:\"v1.9.3\", GitCommit:\"d2835416544f298c919e2ead3be3d0864b52323b\",\n > GitTreeState:\"clean\", BuildDate:\"2018-02-07T12:22:21Z\",\n > GoVersion:\"go1.9.2\", Compiler:\"gc\", Platform:\"linux/amd64\"}\n > Server Version: version.Info{Major:\"1\", Minor:\"8+\",\n > GitVersion:\"v1.8.5-rancher1\", GitCommit:\"6cb179822b9f77893eac5612c91a0ed7c0941b45\",\n > GitTreeState:\"clean\", BuildDate:\"2017-12-11T17:40:37Z\",\n > GoVersion:\"go1.8.3\", Compiler:\"gc\", Platform:\"linux/amd64\"}\n\nIs the dockerdata-nfs clean before the deployment?",
+        "patchset_number": 2
+      },
+      {
+        "id": "e418ba6a990e2dfb4ec7003dbc8403f790459d10",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 18:45:25.000000000",
+        "message": "Patch Set 2: Code-Review+2 Verified+1\n\nLooks good.  things come up.\n\nkubectl get pods --show-all|grep vnfsdk\ndev-vnfsdk-689bd49b8d-khbtt                    1/1       Running             0          5m\ndev-vnfsdk-postgres-0                          1/1       Running             0          6m\ndev-vnfsdk-postgres-1                          1/1       Running             0          3m\n\n\n18:43 $ kubectl -n onap logs dev-vnfsdk-689bd49b8d-khbtt\n\nEnvironment Variables:\nSERVICE_IP=10.42.222.80\n\n{\n    \"defaultServer\":\n    {\n        \"host\":\"\",\n        \"port\":\"80\"\n    },\n    \"ConnectTimeout\":\"300000\",\n    \"thread\":\"10\",\n    \"idletimeout\":\"500000\",\n    \"timeout\":\"300000\"\n}{\n  \"serviceName\": \"vnfsdk-marketplace\",\n  \"version\": \"v1\",\n  \"url\": \"/openoapi/vnfsdk-marketplace/v1\",\n  \"protocol\": \"REST\",\n  \"visualRange\": \"0\",\n  \"nodes\": [\n    {\n      \"ip\": \"10.42.222.80\",\n      \"port\": \"8702\",\n      \"ttl\": 0\n    }\n  ]\n}\n# Copyright 2017 Huawei Technologies Co., Ltd.\n\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n\n#     http://www.apache.org/licenses/LICENSE-2.0\n\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\nIP=\nPORT=80\nTomcat started.\n * Starting nginx nginx",
+        "patchset_number": 2
+      },
+      {
+        "id": "a1545afc7cb999342218ac5bf0e9191539711bd5",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-15 18:45:27.000000000",
+        "message": "Change has been successfully merged by Mandeep Khinda",
+        "patchset_number": 2
+      },
+      {
+        "id": "dcaf3038b2ac68f22e8b0fb53c1da6c21cd71d7e",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-24 17:57:41.000000000",
+        "message": "Patch Set 2:\n\nPlease back out this change.  It breaks our healthcheck.\n\nhttps://jenkins.onap.org/view/External%20Labs/job/lab-tlab-beijing-oom-deploy/310/robot/",
+        "patchset_number": 2
+      },
+      {
+        "id": "449fd6482553524dfc50f089714a8bb752138cbe",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-24 18:13:33.000000000",
+        "message": "Patch Set 2:\n\nHi Chris, \n\nI logged into VNFSDK pod, check the environment env. \npreviously you modified image nexus3.onap.org:10001/onap/vnfsdk/refrepo:1.1-STAGING-latest to use POSTGRES_SERVICE_HOST to talk to database. \n\nAfter switching to common postgres DB, this environment variable is changed to : VNFSDK_DBSET_SERVICE_HOST. \n\nan option is to change this variable in the image to accomodate the change.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0ac03cac91f37a38e6ce53b6f4f63ecc798d5739",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 18:07:42.000000000",
+        "message": "Patch Set 2:\n\nJasmine,\n(1) what are the db credentials? \n(2) How much isolation do we have from the rest of ONAP? Since we are pre-onboarding, we should be treated as a quarantined area.\nThanks,\nChris",
+        "patchset_number": 2
+      },
+      {
+        "id": "24dc8ffdfe87f24394656f401c4d1a03ecf92642",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:34:14.000000000",
+        "message": "Patch Set 2:\n\nHi Chris, \n\nusername & passwords are : \n  pgUserName: testuser\n  pgDatabase: userdb\n  pgPrimaryPassword: password\n  pgUserPassword: password\n  pgRootPassword: password\n\nfor each component using common postgres DB, they have their own persistent volumes mounted at directory like.../$(release_name)/$(component_name)\nso the data won't interfere with each other. \n\nI didn't find the initialization table here though, looks like the initialization script need to be run by applications. \nroot@k8s1:/stage/oom751/kubernetes# kubectl exec -it dev-vnfsdk-postgres-0 -n onap -- /bin/sh\nsh-4.2$ psql userdb\npsql (10.3)\nType \"help\" for help.\n\nuserdb=# \\l\n                             List of databases\n   Name    |  Owner   | Encoding  | Collate | Ctype |   Access privileges\n-----------+----------+-----------+---------+-------+-----------------------\n postgres  | postgres | SQL_ASCII | C       | C     |\n template0 | postgres | SQL_ASCII | C       | C     | =c/postgres          +\n           |          |           |         |       | postgres=CTc/postgres\n template1 | postgres | SQL_ASCII | C       | C     | =c/postgres          +\n           |          |           |         |       | postgres=CTc/postgres\n userdb    | postgres | SQL_ASCII | C       | C     | =Tc/postgres         +\n           |          |           |         |       | postgres=CTc/postgres+\n           |          |           |         |       | testuser=CTc/postgres\n(4 rows)\nuserdb=#  select current_database();\n current_database\n------------------\n userdb\n(1 row)\nuserdb=# \\dt\nDid not find any relations.",
+        "patchset_number": 2
+      },
+      {
+        "id": "840b3edad51ee4377c3cb2dd19ae8a61722bd0d6",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 19:42:54.000000000",
+        "message": "Patch Set 2:\n\nOK.  This is requiring too many updates to vnfsdk too late in the release cycle.  Would you please back out this change until  AFTER Beijing?  We would like to run on our postgres container, which is already set up.\n\nThanks!",
+        "patchset_number": 2
+      },
+      {
+        "id": "e5671f3e5046ed08774ff234beaf8ebe1a3cb6ec",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-28 13:57:02.000000000",
+        "message": "Patch Set 2:\n\nokay, talked with Roger, I will back out this change.",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

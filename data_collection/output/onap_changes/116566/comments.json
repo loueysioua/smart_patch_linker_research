@@ -1,0 +1,331 @@
+{
+  "id": "policy%2Fmodels~master~Id0a37c42ea4e74f07b47e1694c4f8291c35879c9",
+  "change_id": "Id0a37c42ea4e74f07b47e1694c4f8291c35879c9",
+  "_number": 116566,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "27a3981e_fb142461",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/authorative/concepts/ToscaConceptIdentifierOptVersion.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "This means a small change to the JSON on the PAP-PDP communication but I think it is worth it in order to make the class generally usable.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-04 16:34:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "54331e20_fd006651",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/authorative/concepts/ToscaConceptIdentifierOptVersion.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "This is also used in the clamp-policy API, so I would prefer not to change the serialized names.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-01-04 20:52:07.000000000",
+      "in_reply_to": "27a3981e_fb142461",
+      "unresolved": true
+    },
+    {
+      "id": "cf795f4d_46ca472a",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PapPolicyIdentifier.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "This class is used to serialize and deserialize IDs in the \"policy-id\" \"policy-version\" format used on PAP-PDP communication. I has no getters or setters so GSON serialization and deserialization is used for instantiation. The getGenericIdentifier() method converts an instance of the class  into a regular ToscaConceptIdentifierOptVersion instance",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 13:52:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8c80ea21_4233f85c",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "This keeps the serialization and deserialization using \"policy-id\" and \"policy-version\" IDs.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 13:52:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea752686_3a19deff",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Providing getPolicies() and setPolicies() methods that work in ToscaConceptIdentifierOptVersion IDs isolates the use of PapPolicyIdentifier ids to PAP/PDP communication only.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 13:52:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "81ff658a_7b37965e",
+      "file_path": "models-pap/src/test/java/org/onap/policy/models/pap/concepts/TestModels.java",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "We need to remove this class from POJO testing because we have overridden the getters and setters to work with regular IDs.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 13:52:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "049ab71f_78fbdfbe",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/authorative/concepts/ToscaConceptIdentifierOptVersion.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "OK, I have tried a different approach.\n\nIt would be nice to create a subclass of ToscaConceptIdentifierOptVersion that would handle the different names for serialization/deserialization of the policy identifier name/version \"policy-id\" and \"policy-version\" used on the PAP-PDP communication. However, this can't be done  because the only name to change the @SerializedName would to be to introduce new name/version fields on the subclass and this would shadow the name/version fields in the base class.\n\nSo what I ahve done instead is to introduce a new class called PapPolicyIdentifier in models-pap. This class acts as a serialization/deserialization class for the ToscaConceptIdentifierOptVersion class. It is used to serialize and deserailze the messages on the PAP/PDP communication and is used as the members on the PdpDeployPolicies class. Have a look at that class to see what you think of that.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 13:52:16.000000000",
+      "in_reply_to": "54331e20_fd006651",
+      "unresolved": true
+    },
+    {
+      "id": "bf4efdd7_f2cc9aa3",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "could provide a constructor that takes a ToscaConceptIdentifierOptVersion, and possibly one that takes a ToscaConceptIdentifier.  That would have a secondary benefit of reducing this lambda to simply:\n\n  PapPolicyIdentifier::new",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-01-05 16:50:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ee4e7470_da954548",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PapPolicyIdentifier.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "cf795f4d_46ca472a",
+      "unresolved": false
+    },
+    {
+      "id": "8ee3f8e7_9b436fa0",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "8c80ea21_4233f85c",
+      "unresolved": false
+    },
+    {
+      "id": "7f28aeae_0ebaa2a1",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "ea752686_3a19deff",
+      "unresolved": false
+    },
+    {
+      "id": "4c7e0fd1_48210c77",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpDeployPolicies.java",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "bf4efdd7_f2cc9aa3",
+      "unresolved": false
+    },
+    {
+      "id": "63b29184_717092b2",
+      "file_path": "models-pap/src/test/java/org/onap/policy/models/pap/concepts/TestModels.java",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "81ff658a_7b37965e",
+      "unresolved": false
+    },
+    {
+      "id": "fac5738d_742ccd6e",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/authorative/concepts/ToscaConceptIdentifierOptVersion.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-05 19:24:10.000000000",
+      "in_reply_to": "049ab71f_78fbdfbe",
+      "unresolved": false
+    },
+    {
+      "id": "894f2085_518335e8",
+      "file_path": "models-pap/src/test/java/org/onap/policy/models/pap/concepts/TestModels.java",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "so then we probably need to add some junits for the class.  Note: I don't think any tests are needed for lombok-generated methods, as lombok.config excludes these methods from sonar coverage.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-01-05 19:41:03.000000000",
+      "in_reply_to": "63b29184_717092b2",
+      "unresolved": true
+    },
+    {
+      "id": "c877f232_aa3d8851",
+      "file_path": "models-pap/src/test/java/org/onap/policy/models/pap/concepts/TestModels.java",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "I already added a specific class to test PdPDeployPolicies called PdpDeployPoliciesTest, which gives nearly complete coverage.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-06 10:11:23.000000000",
+      "in_reply_to": "894f2085_518335e8",
+      "unresolved": false
+    },
+    {
+      "id": "b17a14af_90712d14",
+      "file_path": "models-pap/src/test/java/org/onap/policy/models/pap/concepts/TestModels.java",
+      "patchset_number": 2,
+      "line": 53,
+      "message": "oh, duh, my bad.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-01-06 12:00:53.000000000",
+      "in_reply_to": "c877f232_aa3d8851",
+      "unresolved": false
+    },
+    {
+      "id": "3e75ffcf_7550f572",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PapPolicyIdentifier.java",
+      "patchset_number": 4,
+      "line": 6,
+      "message": "New File? License update?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2021-01-06 14:02:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f6de86ec_dc9dd1ca",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PapPolicyIdentifier.java",
+      "patchset_number": 4,
+      "line": 6,
+      "message": "Done",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-01-06 14:21:28.000000000",
+      "in_reply_to": "3e75ffcf_7550f572",
+      "unresolved": false
+    }
+  ]
+}

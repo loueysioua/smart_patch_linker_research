@@ -1,0 +1,1147 @@
+{
+  "id": "policy%2Fapex-pdp~master~Icdde66ef87d9feab83ccb1cf99a64d7870bcaaaa",
+  "change_id": "Icdde66ef87d9feab83ccb1cf99a64d7870bcaaaa",
+  "_number": 120536,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "6a51968b_9ef362d1",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "So we're changing from setting the full list of policies to deploy to doing a delta?\n\nSo if an existing policy is not on either the polsToDeploy or polsToUndeploy lists, it now stays deployed?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-04-15 12:20:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "550e0cc2_51cfa64e",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "That's correct. \n\nPAP now does the filtering of the policies to eliminate the need for the PDPs to do this any longer. PDPs now just know about the policies to either deploy or undeploy. \n\nSo yes - if a policy is not on either of the deploy or undeploy lists it will remain deployed and untouched.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-15 12:30:38.000000000",
+      "in_reply_to": "6a51968b_9ef362d1",
+      "unresolved": true
+    },
+    {
+      "id": "14435e68_8ba5ae55",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "should remove those that are already \"running\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0d07edea_9ecfcd91",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "should remove those that are not \"running\", or add a null check after line 102",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "709cc253_bdfc323c",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "we have a design decision to make here - do we return:\n1) the policies that were touched (i.e., both deployed and undeployed); or\n2) the complete list of running policies; or\n3) just those that are being deployed\n#1 and #3 result in shorter response messages and are sufficient for PAP to determine if the PDP did what was requested.  However, it would be insufficient for PAP to address any inconsistencies until the next heartbeat is sent.  This might also be an issue if we support multiple PAPs.\nNote: the current PAP code expects #2",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9cffc158_e48eceb2",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "doesn't this registry entry need to be the complete list of policies?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1f6e206c_6fa715b1",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 147,
+      "message": "I assume it's ok to invoke this, even if it's already running.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8958aa07_d8ef43eb",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 231,
+      "message": "this logic doesn't seem quite right - seems like the context won't necessarily be equal to both the deployed and the undeployed list",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "47449ee4_9fad3d62",
+      "file_path": "services/services-onappf/src/test/java/org/onap/policy/apex/services/onappf/comm/TestPdpStateChangeListener.java",
+      "patchset_number": 2,
+      "line": 127,
+      "message": "will it compile if \"<>\" is used on lines 127 & 128?\n\nsame question for cases below",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 13:15:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4edbe89c_c064b223",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "This particular setting will in effect have the list of policies going back in the heartbeat and in response (when the state is PASSIVE).\nSo, keeping this single list having both policies to be deployed+undeployed doesn't make sense.\nEither separate lists should be sent to PAP(maybe sensible only when sending a response PDPStatus), or only the deployed ones(maybe sensible in case of heartbeats) should be sent.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 13:33:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cf75a181_96d491b2",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 144,
+      "message": "this is wrong. say for e.g. already 3 policies are running, and in the PDPUPdate msg, all 3 are in policiesToBeUndeployed list, then this if statement should essentially be true.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 13:33:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "66b451fa_a0fda706",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 185,
+      "message": "this will not be sufficient anymore for this condition, as there could be only some undeployments that failed and that will have to be captured in the message.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 13:33:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d6d45840_2c0af45d",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 231,
+      "message": "this is not correct as well. the request is already handled only if the policiesToBedeployed are already deployed in the engine && policiesToBeUndeployed are not deployed in the engine",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 13:33:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06d2d150_e07f75cf",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "Agreed! and just making this change will not be enough! this will require some improvements.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 13:38:39.000000000",
+      "in_reply_to": "14435e68_8ba5ae55",
+      "unresolved": true
+    },
+    {
+      "id": "44a53d7c_b0134643",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "When there are policies that are to be deployed in APEX-PDP, and the state is now changing from PASSIVE to ACTIVE, then this list is used, so this should be okay.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 14:27:29.000000000",
+      "in_reply_to": "9cffc158_e48eceb2",
+      "unresolved": true
+    },
+    {
+      "id": "0cb8a032_7dcc53cb",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "what if two PDP-UPDATE messages are processed before an ACTIVATE message is processed?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-15 14:30:20.000000000",
+      "in_reply_to": "44a53d7c_b0134643",
+      "unresolved": true
+    },
+    {
+      "id": "316246b3_30b35102",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "Oh yes, when you mentioned complete list, I thought deployed+undeployed list.\nAgreed, this should be what is already there in the registry+policiesToBeDeployed received in the current PDPUPDATE",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-15 15:32:24.000000000",
+      "in_reply_to": "0cb8a032_7dcc53cb",
+      "unresolved": true
+    },
+    {
+      "id": "6ab141c9_8d34f7c1",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Good stuff!",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-04-22 13:23:40.000000000",
+      "in_reply_to": "550e0cc2_51cfa64e",
+      "unresolved": false
+    },
+    {
+      "id": "057ea9f3_d700b8e9",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 98,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "06d2d150_e07f75cf",
+      "unresolved": false
+    },
+    {
+      "id": "304665f7_2b5c91bc",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "0d07edea_9ecfcd91",
+      "unresolved": false
+    },
+    {
+      "id": "eaab8329_fabf6eef",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "4edbe89c_c064b223",
+      "unresolved": false
+    },
+    {
+      "id": "94fdd747_63cb516b",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "Chose to go with option #3. Is this preferred or should a different approach be taken? Does this require additional changes in PAP?",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "709cc253_bdfc323c",
+      "unresolved": true
+    },
+    {
+      "id": "bb02c366_eba89be4",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "316246b3_30b35102",
+      "unresolved": false
+    },
+    {
+      "id": "c5b1a4df_c3e94cd3",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 144,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "cf75a181_96d491b2",
+      "unresolved": false
+    },
+    {
+      "id": "e9478a70_75d939de",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 185,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "66b451fa_a0fda706",
+      "unresolved": false
+    },
+    {
+      "id": "8ee980a1_b42e8cce",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 231,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "8958aa07_d8ef43eb",
+      "unresolved": false
+    },
+    {
+      "id": "89bddaaa_eb8b8a8a",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 231,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "d6d45840_2c0af45d",
+      "unresolved": false
+    },
+    {
+      "id": "df3ceb5b_6bf69d88",
+      "file_path": "services/services-onappf/src/test/java/org/onap/policy/apex/services/onappf/comm/TestPdpStateChangeListener.java",
+      "patchset_number": 2,
+      "line": 127,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-26 10:36:09.000000000",
+      "in_reply_to": "47449ee4_9fad3d62",
+      "unresolved": false
+    },
+    {
+      "id": "3a008607_7ff7f7c5",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 93,
+      "message": "maybe add a comment on lines 93 & 94 indicating that these list will be modified in place",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d892f065_cac7ec78",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "can't remember: does this need to be synchronized?  Or does the invoker take care of that?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "63c1ab90_23af67e5",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 108,
+      "message": "policy.getIdentifier()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f54a84c2_2fae8ad9",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 2,
+      "line": 100,
+      "message": "right now, #3 would require a minor change to PAP to have it compare the returned list against the delta deployment list instead of against the full list (which is what it does now).  However, the PDPs would have to send back ALL of the  policy deployments that were requested (i.e., without removing those that are already deployed).\nwhen we decide how to support multiple PAPs, we may opt for option #2, but changes related to that could wait until then.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": "94fdd747_63cb516b",
+      "unresolved": false
+    },
+    {
+      "id": "1dd92a4a_c914149a",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 101,
+      "message": "could make this a new ArrayList() and then replace lines 102-106 with just line 105",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ebc9ccb2_f02bbaa9",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 150,
+      "message": "shouldn't this be containsAny() (if there is such a method)?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "59d92130_9dbfaa90",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 152,
+      "message": "if these lists are empty, is there any need to call stop()?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3021d8c0_cfd41ac9",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 194,
+      "message": "is this condition needed?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a75725c8_601367ad",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "is this condition needed?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5098e761_a792c322",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 241,
+      "message": "containsAny()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-26 13:37:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f616647_d796ba68",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "As I mentioned earlier, this cannot be simply updated with the new list to be deployed. Already deployed ones also should be there. Otherwise heartbeats will not have the right information with all the policies running in the engine..",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-26 14:25:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e9cf9531_26cfd7d6",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 150,
+      "message": "This condition is okay, because stopping the core engine completely can be done only when there are no policies to run.So, all runningPolicies should be in the undeployed list to stop the engine.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-26 14:25:37.000000000",
+      "in_reply_to": "ebc9ccb2_f02bbaa9",
+      "unresolved": true
+    },
+    {
+      "id": "202b774a_3b63b6b0",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 153,
+      "message": "I don't think this is a condition for stopping the engine. What if already some policies are running, and PAP sends a PDP_UPDATE message with both lists empty? In this case, it shouldn't affect the current policies.\nAgree with Jim.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-26 14:25:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "666f8456_6fa42cd3",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "The condition to check if 'no policiesToBeUndeployed are still running' need to be here to capture any undeployment failures. But this condition doesn't seem right to me. need something like containsAny",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-26 14:25:37.000000000",
+      "in_reply_to": "a75725c8_601367ad",
+      "unresolved": true
+    },
+    {
+      "id": "c2a5efb0_9471d1f8",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 206,
+      "message": "This one may need improvement, as these messages covers only deployment failures. But if it is complicated, then maybe I am okay to leave it as it is, because undeployment failures rarely happen.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-26 14:25:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eb1cfb6f_41fb5611",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 93,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "3a008607_7ff7f7c5",
+      "unresolved": false
+    },
+    {
+      "id": "3c687db2_940a4c94",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 108,
+      "message": ".getIdentifier() is not needed here as policiesToUnDeploy is a list of ToscaConceptIdentifier. \n\nLine #102 uses .getIdentifier() because policiesToDeploy is a list of ToscaPolicy.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "63c1ab90_23af67e5",
+      "unresolved": true
+    },
+    {
+      "id": "04482f58_38be55a5",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 97,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "2f616647_d796ba68",
+      "unresolved": false
+    },
+    {
+      "id": "0b5aa4eb_5253bbbb",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 101,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "1dd92a4a_c914149a",
+      "unresolved": false
+    },
+    {
+      "id": "b62bad96_903837f0",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 150,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "e9cf9531_26cfd7d6",
+      "unresolved": false
+    },
+    {
+      "id": "e55ceb75_eafb6f5f",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 152,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "59d92130_9dbfaa90",
+      "unresolved": false
+    },
+    {
+      "id": "28121c51_c4259003",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 153,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "202b774a_3b63b6b0",
+      "unresolved": false
+    },
+    {
+      "id": "bbb40f27_b361bc09",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 194,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "3021d8c0_cfd41ac9",
+      "unresolved": false
+    },
+    {
+      "id": "52df4c52_37a80d69",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 195,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "666f8456_6fa42cd3",
+      "unresolved": false
+    },
+    {
+      "id": "2a48c174_67a495de",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 3,
+      "line": 241,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 11:35:13.000000000",
+      "in_reply_to": "5098e761_a792c322",
+      "unresolved": false
+    },
+    {
+      "id": "ffe2d81b_fb1afe39",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 4,
+      "line": 100,
+      "message": "This seems to be unused.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-27 12:12:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "799d156e_e3f0bc1f",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 4,
+      "line": 105,
+      "message": "This will cause ConcurrentModificationException. Use removeIf instead.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-27 12:12:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "26822070_4bbf21bf",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "Probably this needs an extra condition to check if policiesToBeDeployed list is empty too. Otherwise they will be ignored",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-27 12:12:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "86cb9385_7dbaa314",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 252,
+      "message": "white space.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-27 12:12:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "91b73fcb_d2c56261",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 4,
+      "line": 100,
+      "message": "It is being used on the line just below this, #101. policiesToDeploy is being assigned the value of polsToDeploy which is passed as an argument. \n\npoliciesToDeploy is then being used to store the filtered list of policies.",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 12:49:34.000000000",
+      "in_reply_to": "ffe2d81b_fb1afe39",
+      "unresolved": true
+    },
+    {
+      "id": "37a719c5_5ac1e8c6",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 4,
+      "line": 105,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 12:49:34.000000000",
+      "in_reply_to": "799d156e_e3f0bc1f",
+      "unresolved": false
+    },
+    {
+      "id": "a3cfce8c_71b5d444",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 12:49:34.000000000",
+      "in_reply_to": "26822070_4bbf21bf",
+      "unresolved": false
+    },
+    {
+      "id": "58707e2b_1687775f",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 252,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 12:49:34.000000000",
+      "in_reply_to": "86cb9385_7dbaa314",
+      "unresolved": false
+    },
+    {
+      "id": "8c8fa8c8_b76bdc26",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 3,
+      "line": 108,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-27 13:01:00.000000000",
+      "in_reply_to": "3c687db2_940a4c94",
+      "unresolved": false
+    },
+    {
+      "id": "3fc8f748_5f424f19",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 5,
+      "line": 103,
+      "message": "this needs to be negated",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-27 13:01:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c3306168_f998d58f",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "question: by this point, won't the list of running policies have been updated?  If so, we could simply check if that list is empty and, if so, stop the engine",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-27 13:01:00.000000000",
+      "in_reply_to": "a3cfce8c_71b5d444",
+      "unresolved": true
+    },
+    {
+      "id": "abe85a2c_44855ba4",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 251,
+      "message": "\"Checks\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-04-27 13:01:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb6d7a75_af05dfd1",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/PdpUpdateMessageHandler.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "No Jim. The runningPolicies in apexEngineHandler gets updated after line 150 is called.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-04-27 13:10:09.000000000",
+      "in_reply_to": "c3306168_f998d58f",
+      "unresolved": true
+    },
+    {
+      "id": "bd50b296_87ef4dc5",
+      "file_path": "services/services-onappf/src/main/java/org/onap/policy/apex/services/onappf/handler/ApexEngineHandler.java",
+      "patchset_number": 5,
+      "line": 103,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-04-27 14:21:56.000000000",
+      "in_reply_to": "3fc8f748_5f424f19",
+      "unresolved": false
+    }
+  ]
+}

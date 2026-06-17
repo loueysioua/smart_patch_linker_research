@@ -1,0 +1,246 @@
+{
+  "id": "oom%2Foffline-installer~master~I9a106a1c141b1053db6ac892e2dcecd4e646fd5b",
+  "change_id": "I9a106a1c141b1053db6ac892e2dcecd4e646fd5b",
+  "_number": 87233,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "038c0273_000d345e",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "should not need to run as root.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-08 11:46:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c3079e37_705088a2",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 42,
+      "message": "make a function out of this as exactly the same code is now copy-pasted below to run play-xxx",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-08 11:46:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e9ec9fe7_612b9acb",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "root",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-08 11:46:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "02c2e8cd_4a273660",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "It has to be. Molecule image can not be created as other user. We already talked about it: docker user group on community vm has group id 999, on molecule base image this group id is already used.",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-08 13:17:28.000000000",
+      "in_reply_to": "038c0273_000d345e",
+      "unresolved": false
+    },
+    {
+      "id": "8e76fe0c_2db0c1d2",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 42,
+      "message": "fixed",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-08 13:17:28.000000000",
+      "in_reply_to": "c3079e37_705088a2",
+      "unresolved": false
+    },
+    {
+      "id": "d9a31ce6_21494d1e",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "1) was mainly thinking that pre-build images would be done as non-root user (in docker group) like in dev env\n${LOCAL_PATH}/../images/docker/build-all.sh\n\n2) Considering molecule docker image\nOur Dockerfile has functionality (sshpass) that is needed and it's in image only with non-root user, not with root.\nIf there is some clash of Ids, that must be worked out. I did not get that.\n\n3) We probably will need to change ci-molecule.sh and set MOLECULE_CONTAINER default value to false i.e. because we cannot run all tests with molecule-container. That's because at least infra play has step that restarts host's docker. \nOr set that variable to false for those kind of tests in calling wrapper (not so nice). Let's see.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-09 06:53:39.000000000",
+      "in_reply_to": "02c2e8cd_4a273660",
+      "unresolved": false
+    },
+    {
+      "id": "c5d37dbc_6ff3115a",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "1) can be done however as this vms are gone right after the build we do not care, do we?\n2) On the community jenkins slave docker group has: \"docker:x:999:jenkins\"\nWhen running base image for molecule-dev docker: cat /etc/group | grep 999 outcome is :\"ping:x:999:\"\nThen when trying to build image, at the step of adding new group there is an error : \"groupadd: GID '999' already exists\" >>> I will make small adjustment to Dockerfile that will fix it.\n3) this makes case 2) sort of irrelevant. I started to work on virtenv option but it was taking much more to set up environment before running any test.",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-09 07:58:09.000000000",
+      "in_reply_to": "d9a31ce6_21494d1e",
+      "unresolved": false
+    },
+    {
+      "id": "072d2292_ad4dbe31",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 36,
+      "message": "double space\nBTW could it be a more eloquent variable instead of i?",
+      "author": {
+        "account_id": 5000,
+        "name": "Tom�? Levora",
+        "display_name": "Tomáš Levora",
+        "email": "tomas.levora@gmail.com",
+        "username": "Tomas.Levora"
+      },
+      "updated": "2019-05-09 13:40:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7dc1d1c9_57aa2289",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 38,
+      "message": "double space",
+      "author": {
+        "account_id": 5000,
+        "name": "Tom�? Levora",
+        "display_name": "Tomáš Levora",
+        "email": "tomas.levora@gmail.com",
+        "username": "Tomas.Levora"
+      },
+      "updated": "2019-05-09 13:40:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "09a6081c_018272ec",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "sort -u could save one op",
+      "author": {
+        "account_id": 5000,
+        "name": "Tom�? Levora",
+        "display_name": "Tomáš Levora",
+        "email": "tomas.levora@gmail.com",
+        "username": "Tomas.Levora"
+      },
+      "updated": "2019-05-09 13:40:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2b9260cc_6cb10a5c",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-09 13:54:43.000000000",
+      "in_reply_to": "c5d37dbc_6ff3115a",
+      "unresolved": false
+    },
+    {
+      "id": "ffac608d_2d10ee5f",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-09 13:54:43.000000000",
+      "in_reply_to": "072d2292_ad4dbe31",
+      "unresolved": false
+    },
+    {
+      "id": "ba12aca1_721e875a",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 38,
+      "message": "Done",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-09 13:54:43.000000000",
+      "in_reply_to": "7dc1d1c9_57aa2289",
+      "unresolved": false
+    },
+    {
+      "id": "9f8cf227_67f62107",
+      "file_path": "offline-installer-review.sh",
+      "patchset_number": 5,
+      "line": 54,
+      "message": "good idea, done",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-09 13:54:43.000000000",
+      "in_reply_to": "09a6081c_018272ec",
+      "unresolved": false
+    }
+  ]
+}

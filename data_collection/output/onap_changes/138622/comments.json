@@ -1,0 +1,649 @@
+{
+  "id": "cps~master~I8daa4a2ad8310de10e35fdc50351deb85fd3ffd0",
+  "change_id": "I8daa4a2ad8310de10e35fdc50351deb85fd3ffd0",
+  "_number": 138622,
+  "change_comments": [
+    {
+      "id": "de081ed5_2c164df5",
+      "patchset_number": 2,
+      "message": "Nice refactoring and better use of manager!\nBut some legacy (naming) issues are getting worse and need to be addressed now",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a0deeb24_e8bdc36f",
+      "patchset_number": 4,
+      "message": "a blocking comment.\nwhat do u guys think ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-08-15 15:16:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "049fb881_8ee54fc9",
+      "patchset_number": 6,
+      "message": "recheck",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-19 15:56:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "8ec1108d_cf1c30b2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "legacy issues (that are getting worse now)\n1) when we talked about this feature we used the word 'device' for clarification and clearly distinguishing it from the 'dmi service' Whoever for consistency a 'device' in NCMP is a 'Cm Handle' and that is the term that should be sued in variabel names, method names and java dox!\n2) method names are too logn and have redundant words like 'handle' and 'of'. The names dont need to be sentences just keywords and relevant verbs wil do,\n\nso instead of handleRegistrationOfSomething just 'registerSomething' is much clearer...\n\nsee suggestions below",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f85261fc_2aca5091",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "if think these method names are a bit OTT  (dont forget the context of the classname:TrustLevel manager)\nthis one can be just 'registerDmiPLugin'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4c6fc45f_20a176b6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "too much duplication in the if/else blocks, just store the only real difference:\n\nfinal dmiServiceName\nif (...) {\n   dmiServiceName= dmiPluginRegistration.getDmiPlugin()\n} else {\n   dmiServiceName= dmiPluginRegistration.getDmiDataPlugin()\n}\ntrustLevelPerDmiPlugin.put(dmiServiceName, TrustLevel.COMPLETE);",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8fb8ccb4_b749799f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "registerCmHandles (not suer why we started using the word 'device' as an alternate for 'CmHandle'. We should be consistent...)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1fe45a1_72ca308b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "updateDmiTrustLevel\nor\nupdateDmi  (trustlevel is also a parameter and what else would a trustlevel manager update)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6fd503aa_1ee2130e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 105,
+      "message": "cmHandleTrustLevel",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e150ad3_130d8d07",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 120,
+      "message": "CmHandle",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ed13f75c_2e0c2c4b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "CmHandle",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "33810231_7497c0c7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 142,
+      "message": "CmHandle",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "48f523a9_92d622fa",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 147,
+      "message": "cm handle",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3771272d_3bd0e4a1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 152,
+      "message": "removeCmHandles",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7710ea90_7f320a03",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 158,
+      "message": "you cant know why it is not there also I wouldn't log this as a warning, just debug level will do\nlog.debug(\"Removed Cm handle: {} is not in trust level cache\", cmHandleId);",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7f4a110_44b86822",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "in groovy you can easily combine this into 1 line:\ndef dmiPluginRegistration = new DmiPluginRegistration(dmiPLugin: 'dmi-1')",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a1a3d7ad_cf74583d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 43,
+      "message": "make better sentence",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2b4c583d_ca77040c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "use 'assert' keyword",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "321a7672_6fedb140",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "dont want to see the word 'device' anywhere anymore :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-08-06 17:06:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0c85fd30_bd7658ea",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "8ec1108d_cf1c30b2",
+      "unresolved": false
+    },
+    {
+      "id": "bc5b7fe8_e2045f84",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "f85261fc_2aca5091",
+      "unresolved": false
+    },
+    {
+      "id": "e026e6cd_e719cd41",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "4c6fc45f_20a176b6",
+      "unresolved": false
+    },
+    {
+      "id": "b0e223fa_76fcb867",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "8fb8ccb4_b749799f",
+      "unresolved": false
+    },
+    {
+      "id": "683ac6cb_22849114",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 99,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "b1fe45a1_72ca308b",
+      "unresolved": false
+    },
+    {
+      "id": "8ec82cdd_7e367aa2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 105,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "6fd503aa_1ee2130e",
+      "unresolved": false
+    },
+    {
+      "id": "0016608a_4ef4f3ca",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 120,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "9e150ad3_130d8d07",
+      "unresolved": false
+    },
+    {
+      "id": "aca0b244_be1d4219",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "ed13f75c_2e0c2c4b",
+      "unresolved": false
+    },
+    {
+      "id": "1ac8694c_d2bcf2d6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "33810231_7497c0c7",
+      "unresolved": false
+    },
+    {
+      "id": "adbcd43c_3a769018",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 147,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "48f523a9_92d622fa",
+      "unresolved": false
+    },
+    {
+      "id": "9eb49277_431717cb",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 152,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "3771272d_3bd0e4a1",
+      "unresolved": false
+    },
+    {
+      "id": "0c001a6c_f5db0f0c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManager.java",
+      "patchset_number": 2,
+      "line": 158,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "7710ea90_7f320a03",
+      "unresolved": false
+    },
+    {
+      "id": "6332f58a_d3a70b5c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "e7f4a110_44b86822",
+      "unresolved": false
+    },
+    {
+      "id": "3a372a0d_c99c6fbd",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "a1a3d7ad_cf74583d",
+      "unresolved": false
+    },
+    {
+      "id": "c8f6f845_2535c857",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "2b4c583d_ca77040c",
+      "unresolved": false
+    },
+    {
+      "id": "d68825ca_cb55e453",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/impl/inventory/trustlevel/TrustLevelManagerSpec.groovy",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-08-13 11:33:29.000000000",
+      "in_reply_to": "321a7672_6fedb140",
+      "unresolved": false
+    },
+    {
+      "id": "49f5f224_00ef2f99",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleRegistrationService.java",
+      "patchset_number": 4,
+      "line": 151,
+      "message": "do u think we should also be deleting batch by batch ??\nwhat if 1 batch passes and the others have failed?? we would end up deleting all the trust levels of the cmhandles.. right ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-08-15 15:16:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b0f0b78b_776dae28",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleRegistrationService.java",
+      "patchset_number": 4,
+      "line": 151,
+      "message": "Good catch! I propose moving this into 'batchDeleteCmHandlesFromDbAndModuleSyncMap' and the corresponding individual retry method 'deleteCmHandleFromDbAndModuleSyncMap'.\n\nJust rename the methods to (batch)DeleteCmHandlesFromDbAndCaches.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-08-15 19:37:55.000000000",
+      "in_reply_to": "49f5f224_00ef2f99",
+      "unresolved": true
+    },
+    {
+      "id": "f67c7c71_7c0a293e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/impl/inventory/CmHandleRegistrationService.java",
+      "patchset_number": 4,
+      "line": 151,
+      "message": "Done",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-08-19 15:23:19.000000000",
+      "in_reply_to": "b0f0b78b_776dae28",
+      "unresolved": false
+    }
+  ]
+}

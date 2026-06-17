@@ -1,0 +1,326 @@
+{
+  "id": "cps~master~Ic99632983aff2c40df81421d782cf98ec600fc41",
+  "change_id": "Ic99632983aff2c40df81421d782cf98ec600fc41",
+  "_number": 137491,
+  "change_comments": [
+    {
+      "id": "4938b2c5_cde41270",
+      "patchset_number": 3,
+      "message": "Nothing objectionable there",
+      "author": {
+        "account_id": 4893,
+        "name": "Gerard Nugent",
+        "display_name": null,
+        "email": "gerard.nugent@est.tech",
+        "username": "egernug"
+      },
+      "updated": "2024-03-13 09:54:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6c35b391_85389c4d",
+      "patchset_number": 3,
+      "message": "I will block it for a while.\nThe person who raised the bug want to do one more test and then we will get confirmation on the timeout timing to be set.\nIdeally I am thinking to keep it as 60secs or more.\nAnyways we have provided a configurable parameter , so the team doing testing shall be able to tune it for themselves.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-13 10:03:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "dc1fc8c8_c4a137b6",
+      "patchset_number": 3,
+      "message": "Will set the parameter for notification.async.executor.time-out-value-in-ms to something appropriate after confirmation.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-13 14:04:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "a63f5bb9_a88af075",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/operations/DmiDataOperations.java",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "2024",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-08 13:18:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7b738db6_fa90c61e",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/operations/DmiDataOperationsSpec.groovy",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Keep the test, but remove the async PollingConditions stuff. Test will pass like this:\n\n\n    def 'Execute (async) data operation from DMI service.'() {\n        given: 'collection of yang model cm Handles and data operation request'\n            mockYangModelCmHandleCollectionRetrieval([yangModelCmHandleProperty])\n            def dataOperationBatchRequestJsonData = TestUtils.getResourceFileContent('dataOperationRequest.json')\n            def dataOperationRequest = spiedJsonObjectMapper.convertJsonString(dataOperationBatchRequestJsonData, DataOperationRequest.class)\n            dataOperationRequest.dataOperationDefinitions[0].cmHandleIds = [cmHandleId]\n        and: 'a positive response from DMI service when it is called with valid request parameters'\n            def responseFromDmi = new ResponseEntity<Object>(HttpStatus.ACCEPTED)\n            def expectedDmiBatchResourceDataUrl = \"ncmp/v1/data/topic=my-topic-name\"\n            def expectedBatchRequestAsJson = '{\"operations\":[{\"operation\":\"read\",\"operationId\":\"operational-14\",\"datastore\":\"ncmp-datastore:passthrough-operational\",\"options\":\"some option\",\"resourceIdentifier\":\"some resource identifier\",\"cmHandles\":[{\"id\":\"some-cm-handle\",\"cmHandleProperties\":{\"prop1\":\"val1\"}}]}]}'\n            mockDmiRestClient.postOperationWithJsonData(expectedDmiBatchResourceDataUrl, _, READ.operationName, NO_AUTH_HEADER) >> responseFromDmi\n            dmiServiceUrlBuilder.getDataOperationRequestUrl(_, _) >> expectedDmiBatchResourceDataUrl\n        when: 'get resource data for group of cm handles are invoked'\n            objectUnderTest.requestResourceDataFromDmi('my-topic-name', dataOperationRequest, 'requestId', NO_AUTH_HEADER)\n        then: 'the post operation was called and ncmp generated dmi request body json args'\n            1 * mockDmiRestClient.postOperationWithJsonData(expectedDmiBatchResourceDataUrl, expectedBatchRequestAsJson, READ, NO_AUTH_HEADER)\n    }",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-08 13:18:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ba952e67_4c2d03fd",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/operations/DmiDataOperations.java",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-08 13:56:49.000000000",
+      "in_reply_to": "a63f5bb9_a88af075",
+      "unresolved": false
+    },
+    {
+      "id": "1186cd19_30c8d706",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/operations/DmiDataOperationsSpec.groovy",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-08 13:56:49.000000000",
+      "in_reply_to": "7b738db6_fa90c61e",
+      "unresolved": false
+    },
+    {
+      "id": "dd310703_576716dc",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 14,
+      "message": "no longer the case. I will  update it when I raise the next patch with the updated timing.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-13 14:04:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "61cef1c8_ed0bc72e",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/handlers/NcmpDatastoreRequestHandler.java",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "NB: should this not be the same default as in the Yaml ie 60,000 ?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-03-14 10:56:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "164cb99b_fbf03bcf",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "q: what does tshi qualifier do?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-03-14 10:56:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a6e98ae2_6d6ae0c2",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/handlers/NcmpDatastoreRequestHandler.java",
+      "patchset_number": 5,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-14 11:00:52.000000000",
+      "in_reply_to": "61cef1c8_ed0bc72e",
+      "unresolved": false
+    },
+    {
+      "id": "fc84a92c_b8982097",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "Without the qualifier the threads are been picked from the common thread pools utilized by other operations as well which makes it non-deterministic.\nNow we are explicitly marking here to use a dedicated thread pool we have to publish the events. Brings finer control to us.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-14 11:00:52.000000000",
+      "in_reply_to": "164cb99b_fbf03bcf",
+      "unresolved": true
+    },
+    {
+      "id": "04643686_3f863ac1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-03-14 13:26:42.000000000",
+      "in_reply_to": "fc84a92c_b8982097",
+      "unresolved": false
+    },
+    {
+      "id": "da301318_6e803c1b",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 14,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-14 13:30:49.000000000",
+      "in_reply_to": "dd310703_576716dc",
+      "unresolved": false
+    },
+    {
+      "id": "65bb7603_3f110bb0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "I'm very skeptical that this @Async even works in most places we use it.\n\nI ask Copilot, it says:\n> No, the @Async annotation in Spring does not work for static methods. It is specifically designed for non-static methods within Spring beans.\n\nFrom what I read previously, it has serious limitations due to the Spring Proxy-based mechanisms (Spring has to intercept the call to see the @Async at runtime), e.g.\n- it only works on public instance methods of Spring-managed beans\n- self-invocation doesn't work - i.e. if you call from the same class, call won't be proxied and hence won't be async",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-14 13:30:49.000000000",
+      "in_reply_to": "fc84a92c_b8982097",
+      "unresolved": true
+    },
+    {
+      "id": "95b0fe1c_b932e266",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "yeah.. didnt noticed its a static method.\nalso its not managed by spring.\nso no use of @Async annotation thr.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-14 13:54:20.000000000",
+      "in_reply_to": "65bb7603_3f110bb0",
+      "unresolved": true
+    },
+    {
+      "id": "a4743b4e_24e4800b",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "this is really a -1 comment... Dont hesitate to use -1 when needed....",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2024-03-14 13:58:41.000000000",
+      "in_reply_to": "95b0fe1c_b932e266",
+      "unresolved": true
+    },
+    {
+      "id": "81fe6725_904b8ca2",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "@Async annotation was already there.\nBut I thought it should use the correct thread pool , but later we noticed its on the static method which is not managed by spring hence no use of annotation here.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-14 14:11:46.000000000",
+      "in_reply_to": "a4743b4e_24e4800b",
+      "unresolved": true
+    },
+    {
+      "id": "ee556ae6_930eb6d0",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/utils/data/operation/ResourceDataOperationRequestUtils.java",
+      "patchset_number": 5,
+      "line": 126,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-15 10:04:53.000000000",
+      "in_reply_to": "81fe6725_904b8ca2",
+      "unresolved": false
+    }
+  ]
+}

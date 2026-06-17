@@ -1,0 +1,382 @@
+{
+  "id": "sdc~master~Id620eef55ffb6849006e8a7bc063709150628e76",
+  "change_id": "Id620eef55ffb6849006e8a7bc063709150628e76",
+  "_number": 130151,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8bf67cdb_1a42e26f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 1,
+      "line": 395,
+      "message": "can an existing method be re-used rather than creating a new one, e.g. importAllNormativeResource",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-04 18:53:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8724743e_7bb10c7b",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 1,
+      "line": 395,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-05 13:54:32.000000000",
+      "in_reply_to": "8bf67cdb_1a42e26f",
+      "unresolved": false
+    },
+    {
+      "id": "aa8c8166_7cdde80f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 204,
+      "message": "Split this method:\npublic void importAllNormativeResource(final String resourcesYaml, final NodeTypesMetadataList nodeTypesMetadataList, final User user, final boolean createNewVersion, final boolean needLock)\nand \npublic void importAllNormativeResource(final  Map<String, Object> nodeTypesYamlMap, final NodeTypesMetadataList nodeTypesMetadataList, final User user, final boolean createNewVersion, final boolean needLock)\nThe first method above will call the second method and the second method shall also be called from SericeImportBusinssLogic so there is no need to convert the nodeTypesToCreate to a String and back again",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-08 14:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3d7e8cf4_43463f82",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 206,
+      "message": "I think the reading of the metadata should happen as part of the reading of the csar in CsarInfo getNodeTypesUsed rather than splitting this functionality, you would have somthing like:\n            mainTemplateImports.entrySet().forEach(entry -> {\n                final Map<String, Object> types = getTypesFromTemplate(entry.getValue(), TypeUtils.ToscaTagNamesEnum.NODE_TYPES, nodeTypesUsed);\n                final NodeTypeMetadata metadata = getMetaDataFromTemplate();\n                getTypesFromTemplate(entry.getValue(), TypeUtils.ToscaTagNamesEnum.NODE_TYPES, nodeTypesUsed);\nand return a type containginng both the map and the metadata",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-08 14:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f53d62f_ecd7e810",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 209,
+      "message": "We shouldnt force the file names has to be in this format. Using the suggestion above just read the metadata from the file the type is defined in, provided it is present and the type is VFC.\n\nWe will also need to hanld the case where the metadata is not provided by providing default value",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-08 14:15:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dd9391c6_14f2ab96",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 204,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-10 10:10:20.000000000",
+      "in_reply_to": "aa8c8166_7cdde80f",
+      "unresolved": false
+    },
+    {
+      "id": "ad66bb5e_2c2e79ab",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 206,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-10 10:10:20.000000000",
+      "in_reply_to": "3d7e8cf4_43463f82",
+      "unresolved": false
+    },
+    {
+      "id": "07d83670_d305de26",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ResourceImportManager.java",
+      "patchset_number": 3,
+      "line": 209,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-10 10:10:20.000000000",
+      "in_reply_to": "2f53d62f_ecd7e810",
+      "unresolved": false
+    },
+    {
+      "id": "ed4a2867_d8f64360",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 199,
+      "message": "only use the metadata from the template if the resource type is present and equal to VFC",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dcab5fa6_8f7d49e7",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 225,
+      "message": "extract to new method called something like createMetadataFromTemplate\nMethods should be kept short to improve code readability and maintainability",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6b7bbe52_037a8b0b",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 252,
+      "message": "extract to new method called something like createDefaultMetadata",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2b2175eb_efebdadd",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 253,
+      "message": "set the vendorName to:\nService <service metadata name>\nand vendorRelease to 1",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e84a36a_de3231de",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 297,
+      "message": "change to createNodeTypes.\nFrom the point of view of this method doesnt matter if we creating them because they used or for some other reason",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "74008309_fce8f850",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 304,
+      "message": "I think this should all be done as part of the ServiceCsarInfo. I will send you suggestion how to achieve it",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "92e6f787_fef517c1",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 316,
+      "message": "why the check on \"proxy\"?",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2022-08-11 10:33:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a33f07e5_4332edd2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 199,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "ed4a2867_d8f64360",
+      "unresolved": false
+    },
+    {
+      "id": "65a48ffb_e833d767",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 225,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "dcab5fa6_8f7d49e7",
+      "unresolved": false
+    },
+    {
+      "id": "7f765504_7aa8a4df",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 252,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "6b7bbe52_037a8b0b",
+      "unresolved": false
+    },
+    {
+      "id": "cd262ed2_de699396",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/csar/ServiceCsarInfo.java",
+      "patchset_number": 4,
+      "line": 253,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "2b2175eb_efebdadd",
+      "unresolved": false
+    },
+    {
+      "id": "b3988a08_818825c7",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 297,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "9e84a36a_de3231de",
+      "unresolved": false
+    },
+    {
+      "id": "7520b0ac_a11e686f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 304,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "74008309_fce8f850",
+      "unresolved": false
+    },
+    {
+      "id": "40dacc78_35380578",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ServiceImportBusinessLogic.java",
+      "patchset_number": 4,
+      "line": 316,
+      "message": "It's leftover code from when I was testing something. I will remove it.",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-08-11 15:25:27.000000000",
+      "in_reply_to": "92e6f787_fef517c1",
+      "unresolved": false
+    }
+  ]
+}

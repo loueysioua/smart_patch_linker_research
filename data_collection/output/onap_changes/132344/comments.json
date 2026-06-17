@@ -1,0 +1,110 @@
+{
+  "id": "dcaegen2%2Fservices~kohn~Iac3e66e8d12a817681c15100ba80d2efee8e0498",
+  "change_id": "Iac3e66e8d12a817681c15100ba80d2efee8e0498",
+  "_number": 132344,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ba4f330a_7fcbba14",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/KpiComputation.java",
+      "patchset_number": 1,
+      "line": 122,
+      "message": "You are scanning the end of the string twice (contains() and lastIndexOf(), This can be changed to:\n\nint dotLocation = anyString.lastIndexOf(\".\");\nif (dotLocation != -1) {\n  value = anyString.substring(dotLocation + 1);",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-11-29 13:56:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "abff48cd_261c34d3",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/RatioKpiComputation.java",
+      "patchset_number": 1,
+      "line": 110,
+      "message": "There is still a bug here if operand is not assigned a value within the above loop. Probably the easiest fix is to change the operand initialization above to:\n\nString operand = \"\";\n\nAlternatively, test for null explicitly. See the next comment for an alternative that fixes this and another issue.",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-11-29 13:56:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "aa8f3830_ce626c20",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/RatioKpiComputation.java",
+      "patchset_number": 1,
+      "line": 114,
+      "message": "this log message is not the opposite of the test. I suggest changing the order of tests to:\n\nif (operand == null || operand.isEmpty()) {\n  logger.info(\"operand is empty\");\n} else if (operand.contains(\".\")) {\n  snssai = operand.substring(operand.lastIndexOf(\".\") + 1);\n}\n\nNote that if this is in a tight loop and becomes time-critical, this has the issue that operand is scanning the end of the string twice for \".\". So another formulation would be:\n\nif (operand == null || operand.isEmpty()) {\n  logger.info(\"operand is empty\");\n} else {\n  int dotLocation = operand.lastIndexOf(\".\");\n  if (dotLocation != -1) {\n    snssai = operand.substring(dotLocation + 1);\n  }\n}",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-11-29 13:56:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "67966557_66ad1a0b",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/KpiComputation.java",
+      "patchset_number": 1,
+      "line": 122,
+      "message": "DCAEGEN2-3317 filed",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-12-02 04:02:04.000000000",
+      "in_reply_to": "ba4f330a_7fcbba14",
+      "unresolved": false
+    },
+    {
+      "id": "19f1aa78_8fc69c18",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/RatioKpiComputation.java",
+      "patchset_number": 1,
+      "line": 110,
+      "message": "DCAEGEN2-3317 filed",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-12-02 04:02:04.000000000",
+      "in_reply_to": "abff48cd_261c34d3",
+      "unresolved": false
+    },
+    {
+      "id": "223c4c17_a2612662",
+      "file_path": "components/kpi-computation-ms/src/main/java/org/onap/dcaegen2/kpi/computation/RatioKpiComputation.java",
+      "patchset_number": 1,
+      "line": 114,
+      "message": "DCAEGEN2-3317 filed",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2022-12-02 04:02:04.000000000",
+      "in_reply_to": "aa8f3830_ce626c20",
+      "unresolved": false
+    }
+  ]
+}

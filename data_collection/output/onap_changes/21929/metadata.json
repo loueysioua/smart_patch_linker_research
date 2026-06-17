@@ -1,0 +1,280 @@
+{
+  "id": "policy%2Fdrools-applications~master~I665b9cfaa684493e39e731102d4d43ecb39fad7c",
+  "change_id": "I665b9cfaa684493e39e731102d4d43ecb39fad7c",
+  "_number": 21929,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-11-02 18:44:53.000000000",
+    "updated": "2017-11-03 14:15:54.000000000",
+    "submitted": "2017-11-03 14:09:27.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1759,
+      "name": "Temoc Rodriguez",
+      "display_name": null,
+      "email": "cr056n@att.com",
+      "username": "cr056n"
+    },
+    "submitter": {
+      "account_id": 57,
+      "name": "Pamela Dragosh",
+      "display_name": null,
+      "email": "pd1248@att.com",
+      "username": "pdragosh"
+    }
+  },
+  "subject": "Write to DB on guard deny",
+  "commit_message": "Write to DB on guard deny\n\nWhen an operations was denied by guard, it was not writing to the DB at\nall. Only in the deny case we start the operation, then\nsetOperationHasGuardDeny, then finish the operation. Had to add start\noperation just before finishing it. This allows the write to occur at\nsetOperationHasGuardDeny.\n\nIssue-ID: POLICY-345\nChange-Id: I665b9cfaa684493e39e731102d4d43ecb39fad7c\nSigned-off-by: Temoc Rodriguez <cr056n@att.com>\n",
+  "change_log": {
+    "entry_count": 18,
+    "entries": [
+      {
+        "id": "59b53df2946fc03b587d3bb2e35cc6f3e755703a",
+        "author": {
+          "account_id": 1759,
+          "name": "Temoc Rodriguez",
+          "display_name": null,
+          "email": "cr056n@att.com",
+          "username": "cr056n"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-11-02 18:44:53.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "904a5250ba5b68a990f8da83f5b65fa217a269e8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 18:47:52.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-verify-java/413/",
+        "patchset_number": 1
+      },
+      {
+        "id": "d4320fd26a9d2afd4771d02c535ee7916b041746",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 18:50:46.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-verify-java/413/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-verify-java/413",
+        "patchset_number": 1
+      },
+      {
+        "id": "56deebc26f117b8e3deb2a811a5dd9b24f39e065",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 19:59:40.000000000",
+        "message": "Patch Set 1:\n\nAt this point in the release, it is critical not to introduce any undesired side effects, goal is to release next week, and that is tested against all 4 use cases with guard and without guard enabled.  One question that comes to mind if there are side effects with guard disabled on the .drl of new changes?",
+        "patchset_number": 1
+      },
+      {
+        "id": "47906e1cb7fa215395757fae26be4b9d6a892136",
+        "author": {
+          "account_id": 1441,
+          "name": "Chenfei Gao",
+          "display_name": null,
+          "email": "cgao@research.att.com",
+          "username": "cgao"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 20:27:04.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nI don't think this changes to .drl will have side effects with guard disabled case from what I understand. If guard disabled, guard response is always \"permit\", it will not go into this \"else\" block.",
+        "patchset_number": 1
+      },
+      {
+        "id": "12efff9dac1708147899fe80407aa1c5cfb6aa64",
+        "author": {
+          "account_id": 1759,
+          "name": "Temoc Rodriguez",
+          "display_name": null,
+          "email": "cr056n@att.com",
+          "username": "cr056n"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-11-02 20:42:42.000000000",
+        "message": "Patch Set 1:\n\nThat is a good question Jorge. The only possible way this new code runs is if the connection to pdp-x is successful and it returns deny. So it will not run on guard disabled. But when it does run, it starts the operation, sets response, writes to db, adds the current operation to the operationHistory linkedlist, and finishes the operation. Those are the areas where we should be concerned if there are side effects, if any. It does the same stuff as the other 'response handlers' so it should be ok. Additionally, if any clean up / tear-down rules in the drl need to be run, I am not 100% about them occurring after the operation is denied since this behavior is brand new.",
+        "patchset_number": 1
+      },
+      {
+        "id": "4ed53d68487d466a584cd082a085dc21900e2671",
+        "author": {
+          "account_id": 1713,
+          "name": "Charles Cole",
+          "display_name": null,
+          "email": "cc847m@att.com",
+          "username": "cc847m"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 20:51:35.000000000",
+        "message": "Patch Set 1:\n\n(2 comments)",
+        "patchset_number": 1
+      },
+      {
+        "id": "94b3e9e63ec853c896056ade4d8ef306cf509e42",
+        "author": {
+          "account_id": 1759,
+          "name": "Temoc Rodriguez",
+          "display_name": null,
+          "email": "cr056n@att.com",
+          "username": "cr056n"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-11-02 21:11:34.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "ccf6e380e483a09d874756ac598a65e1380d9954",
+        "author": {
+          "account_id": 1759,
+          "name": "Temoc Rodriguez",
+          "display_name": null,
+          "email": "cr056n@att.com",
+          "username": "cr056n"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-11-02 22:34:30.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "76d4719c8fa1421cb5778fcfe513060be4a04149",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 22:35:28.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-verify-java/417/",
+        "patchset_number": 2
+      },
+      {
+        "id": "1314a4a08657bd6fd841e211afff22c0212f0474",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-02 22:38:06.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-verify-java/417/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-verify-java/417",
+        "patchset_number": 2
+      },
+      {
+        "id": "0448dfbcd7b52d01fd0a9d374d3d63385d347caa",
+        "author": {
+          "account_id": 1645,
+          "name": "Drew Magnusen",
+          "display_name": null,
+          "email": "dm741q@att.com",
+          "username": "dm741q"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 12:27:16.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "0e1c3b0d7f1cd26b935b59412807abd93bdc319c",
+        "author": {
+          "account_id": 1713,
+          "name": "Charles Cole",
+          "display_name": null,
+          "email": "cc847m@att.com",
+          "username": "cc847m"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 13:22:48.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "b826fac41d43dc8cc399b70b685aa29a347f708d",
+        "author": {
+          "account_id": 1677,
+          "name": "Daniel Cruz",
+          "display_name": null,
+          "email": "dc443y@att.com",
+          "username": "dc443y"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 13:33:54.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\nLooks fine. In the future we may consider refactoring this. I think startOperation is taking care of too many tasks. It would be better to separate the logic where the requests are retried and constructed (this should stay in the startOperation method) and the setting of the operation (should be moved to it's own function). If we have setting the operation in its own method we could call it in the constructor of the operation manager so that by the time we need to check the current operation in the case of a guard deny, it will not be null and start operation does not have to be called twice. This is ideal as the intent of startOperation is for actors specifically, it becomes confusing if we start adding in logic to handle non actors.",
+        "patchset_number": 2
+      },
+      {
+        "id": "85b28ee4b8fd043e32eb1e0be580a10aeb456dc2",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 14:09:24.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "499ca86f3b6217072203839e12485f9eff623222",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-11-03 14:09:27.000000000",
+        "message": "Change has been successfully merged by Pamela Dragosh",
+        "patchset_number": 2
+      },
+      {
+        "id": "cdba1292b17dceb14ce958edbf77b54cb3f2edb1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 14:12:15.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-merge-java/166/",
+        "patchset_number": 2
+      },
+      {
+        "id": "f5f6953a5309561e371ec3f4e0d69c95a1a7af71",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-03 14:15:54.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-merge-java/166/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-merge-java/166",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

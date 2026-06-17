@@ -1,0 +1,195 @@
+{
+  "id": "so~master~I3e1e8b7534c1ffa36b0383b52ca9ea547f5bac7e",
+  "change_id": "I3e1e8b7534c1ffa36b0383b52ca9ea547f5bac7e",
+  "_number": 107954,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "77b466e5_57f5610c",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 1,
+      "line": 108,
+      "message": "When iterating, you have to be sure that relatedToProperty element has property-key set as - \"service-instance.service-instance-name\". Then you may get service instance name.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 13:13:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "30b9ff79_a6b2a91a",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 114,
+      "message": "service-instance.service-instance-id",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 15:49:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "22726973_ca3d9adc",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "This whole code is for preparing error message, I would seperate it to private method. My proposal:\n\n   private void isRelatedToService(org.onap.aai.domain.yang.Pnf pnfFromAai) throws Exception {\n        if (pnfFromAai.getRelationshipList() != null) {\n            for (Relationship relationship : pnfFromAai.getRelationshipList().getRelationship()) {\n                if (relationship.getRelatedTo().equals(\"service-instance\")) {\n                    String errorMessage = prepareRelationErrorMessage(pnfFromAai, relationship);\n                    logger.error(errorMessage);\n                    throw new Exception(errorMessage);\n                }\n            }\n        }\n    }\n\n    private String prepareRelationErrorMessage(org.onap.aai.domain.yang.Pnf pnfFromAai, Relationship relationship) {\n        String serviceInstanceName = \"\";\n        String serviceInstanceId = \"\";\n        for (RelatedToProperty relatedToProperty : relationship.getRelatedToProperty()) {\n            if (relatedToProperty.getPropertyKey().equals(\"service-instance.service-instance-name\")) {\n                serviceInstanceName = relatedToProperty.getPropertyValue();\n                break;\n            }\n        }\n        for (RelationshipData relationshipData : relationship.getRelationshipData()) {\n            if (relationshipData.getRelationshipKey().equals(\"service-instance.service-instance-id\")) {\n                serviceInstanceId = relationshipData.getRelationshipValue();\n               break;\n            }\n        }\n        return String.format(\n                \"Pnf with name %s exist with orchestration status %s and is related to %s service with certain service-instance-id: %s\",\n                pnfFromAai.getPnfName(), pnfFromAai.getOrchestrationStatus(), serviceInstanceName, serviceInstanceId);\n    }",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 15:49:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0628d5b4_8345d82b",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 125,
+      "message": "Here is not good place to throw exception. If you find a relation \"service-instance\", but not find a instance name for some reason, the exception should be also thrown.",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 15:49:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "da50b7ef_49a7f922",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/resources/__files/BuildingBlocks/aaiPnf.json",
+      "patchset_number": 2,
+      "line": 4,
+      "message": "Inventoried should not happen in case of relation, give more representative case, like \"Active\".",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 15:49:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1513df46_1e4a4cc0",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/resources/__files/BuildingBlocks/aaiPnf.json",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "service-instance.service-instance-id",
+      "author": {
+        "account_id": 2789,
+        "name": "Lukasz Muszkieta",
+        "display_name": null,
+        "email": "lukasz.muszkieta@nokia.com",
+        "username": "lukaszM"
+      },
+      "updated": "2020-05-20 15:49:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "90f8090a_a8c85b1d",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 114,
+      "message": "Done",
+      "author": {
+        "account_id": 6222,
+        "name": "Mateusz Harazin",
+        "display_name": null,
+        "email": "mateusz.harazin@nokia.com",
+        "username": "mateuszharazin"
+      },
+      "updated": "2020-05-21 06:35:13.000000000",
+      "in_reply_to": "30b9ff79_a6b2a91a",
+      "unresolved": false
+    },
+    {
+      "id": "7e08d4d6_118efb54",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 124,
+      "message": "Done",
+      "author": {
+        "account_id": 6222,
+        "name": "Mateusz Harazin",
+        "display_name": null,
+        "email": "mateusz.harazin@nokia.com",
+        "username": "mateuszharazin"
+      },
+      "updated": "2020-05-21 06:35:13.000000000",
+      "in_reply_to": "22726973_ca3d9adc",
+      "unresolved": false
+    },
+    {
+      "id": "e2055d8f_f8bdcbd3",
+      "file_path": "bpmn/so-bpmn-tasks/src/main/java/org/onap/so/client/orchestration/AAIPnfResources.java",
+      "patchset_number": 2,
+      "line": 125,
+      "message": "Done",
+      "author": {
+        "account_id": 6222,
+        "name": "Mateusz Harazin",
+        "display_name": null,
+        "email": "mateusz.harazin@nokia.com",
+        "username": "mateuszharazin"
+      },
+      "updated": "2020-05-21 06:35:13.000000000",
+      "in_reply_to": "0628d5b4_8345d82b",
+      "unresolved": false
+    },
+    {
+      "id": "18b68744_850940d0",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/resources/__files/BuildingBlocks/aaiPnf.json",
+      "patchset_number": 2,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 6222,
+        "name": "Mateusz Harazin",
+        "display_name": null,
+        "email": "mateusz.harazin@nokia.com",
+        "username": "mateuszharazin"
+      },
+      "updated": "2020-05-21 06:35:13.000000000",
+      "in_reply_to": "da50b7ef_49a7f922",
+      "unresolved": false
+    },
+    {
+      "id": "5f42dab3_718fce7c",
+      "file_path": "bpmn/so-bpmn-tasks/src/test/resources/__files/BuildingBlocks/aaiPnf.json",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 6222,
+        "name": "Mateusz Harazin",
+        "display_name": null,
+        "email": "mateusz.harazin@nokia.com",
+        "username": "mateuszharazin"
+      },
+      "updated": "2020-05-21 06:35:13.000000000",
+      "in_reply_to": "1513df46_1e4a4cc0",
+      "unresolved": false
+    }
+  ]
+}

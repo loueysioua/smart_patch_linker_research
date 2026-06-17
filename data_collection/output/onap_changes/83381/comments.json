@@ -1,0 +1,348 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I470d3a8b2d43f5b45d958320b620205457d1cf23",
+  "change_id": "I470d3a8b2d43f5b45d958320b620205457d1cf23",
+  "_number": 83381,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c500cd87_a1550ce0",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "inline usage, convert to expression body (actually this can be applied to all methods in this class).\n\nYou can also remove return type declaration to be even more concise",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "312f1b3c_f0c82284",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "My base proposition for refactoring current version:\n```\ninternal class ConfigurationMerger {\n    fun merge(base: PartialConfiguration, fallback: PartialConfiguration): PartialConfiguration =\n            PartialConfiguration(\n                    mergeServerConfig(base.server, fallback.server),\n                    mergeCbsConfig(base.cbs, fallback.cbs),\n                    mergeSecurityConfig(base.security, fallback.security),\n                    mergeCollectorConfig(base.collector, fallback.collector),\n                    mergeLogLevel(base.logLevel, fallback.logLevel)\n            )\n\n    private fun mergeCollectorConfig(baseOption: Option<PartialCollectorConfig>,\n                                     fallbackOption: Option<PartialCollectorConfig>) =\n            baseOption.overwriteFieldsFrom(fallbackOption) { base, fallback ->\n                PartialCollectorConfig(\n                        base.dummyMode.fallbackToGivenOrNull(fallback.dummyMode),\n                        base.maxRequestSizeBytes.fallbackToGivenOrNull(fallback.maxRequestSizeBytes),\n                        base.kafkaServers.fallbackToGivenOrNull(fallback.kafkaServers),\n                        base.routing.fallbackToGivenOrNull(fallback.routing)\n                )\n            }\n\n    private fun mergeSecurityConfig(baseOption: Option<PartialSecurityConfig>,\n                                    fallbackOption: Option<PartialSecurityConfig>) =\n            baseOption.overwriteFieldsFrom(fallbackOption) { base, fallback ->\n                PartialSecurityConfig(\n                        base.keys.fallbackToGivenOrNull(fallback.keys)\n                )\n            }\n\n    private fun mergeCbsConfig(baseOption: Option<PartialCbsConfig>,\n                               fallbackOption: Option<PartialCbsConfig>) =\n            baseOption.overwriteFieldsFrom(fallbackOption) { base, fallback ->\n                PartialCbsConfig(\n                        base.firstRequestDelaySec.fallbackToGivenOrNull(fallback.firstRequestDelaySec),\n                        base.requestIntervalSec.fallbackToGivenOrNull(fallback.requestIntervalSec)\n                )\n            }\n\n    private fun mergeServerConfig(baseOption: Option<PartialServerConfig>,\n                                  fallbackOption: Option<PartialServerConfig>) =\n            baseOption.overwriteFieldsFrom(fallbackOption) { base, fallback ->\n                PartialServerConfig(\n                        base.listenPort.fallbackToGivenOrNull(fallback.listenPort),\n                        base.idleTimeoutSec.fallbackToGivenOrNull(fallback.idleTimeoutSec),\n                        base.maxPayloadSizeBytes.fallbackToGivenOrNull(fallback.maxPayloadSizeBytes)\n                )\n            }\n\n    private fun mergeLogLevel(base: Option<LogLevel>, fallback: Option<LogLevel>) =\n            base.fallbackToGivenOrNull(fallback)\n}\n\nprivate fun <T> Option<T>.overwriteFieldsFrom(fallbackOption: Option<T>,\n                                              overrider: (base: T, fallback: T) -> T) =\n        fallbackOption.fold(this::orNull) { fallback ->\n            this.fold({ fallback }, { overrider(it, fallback) })\n        }.toOption()\n\nprivate fun <T> Option<T>.fallbackToGivenOrNull(fallback: Option<T>) =\n        getOrElse(fallback::orNull).toOption()\n\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e7760b37_9e30ebdf",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Maybe let's name those `base` and `fallback`",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bd3fd308_b7df9c64",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/PartialConfiguration.kt",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "We should not change production code like this only for tests. \nI've provided solution in test class",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "99f36790_918493ec",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/SecondDurationAdapter.kt",
+      "patchset_number": 1,
+      "line": 32,
+      "message": "DurationOfSecondsAdapter might be better name",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e78ff81d_2478dc7e",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/SecondDurationAdapter.kt",
+      "patchset_number": 2,
+      "line": 32,
+      "message": "Second is not best for first word :) Maybe `DurationOfSecondAdapter`?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d0a99b65_67746866",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/SecondDurationAdapter.kt",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "unnecessary",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "df662d70_ac67d339",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/SecondDurationAdapter.kt",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "expression body can be used, return type omitted",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "be0b5a68_5080a086",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMergerTest.kt",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "typo",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0d2c262b_671cfe1b",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMergerTest.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "change to\n```\nval actual = PartialConfiguration(logLevel= None)\nval diff = PartialConfiguration(logLevel = Some(LogLevel.INFO))\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-27 10:24:11.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "938bfffa_08e0b6df",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 7,
+      "line": 41,
+      "message": "Please reorder private methods in order of usage.",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-03-28 08:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "98a260e9_a9cd93b8",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMergerTest.kt",
+      "patchset_number": 7,
+      "line": 82,
+      "message": "Reorder actual with diff.",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-03-28 08:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2ea4681c_67043d0d",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMergerTest.kt",
+      "patchset_number": 7,
+      "line": 89,
+      "message": "I think its worth to check if rest of parameters are merged.",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-03-28 08:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f7cbc6e6_86a5d2d8",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidatorTest.kt",
+      "patchset_number": 7,
+      "line": 128,
+      "message": "same here",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-03-28 08:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6e12ebf5_36482c19",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidatorTest.kt",
+      "patchset_number": 7,
+      "line": 176,
+      "message": "add empty line",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-03-28 08:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "32703955_ad94c817",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/ConfigurationModule.kt",
+      "patchset_number": 7,
+      "line": 45,
+      "message": "This can blow up when multithreading (which we should assume when using reactor). Maybe we can remove this initial config? Is it used anywhere?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-03-28 10:09:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8a284913_f0c3e8fe",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 7,
+      "line": 84,
+      "message": "Maybe a little bit less fancy but more readable:\n\n```\nprivate fun <T> overwriteFields(base: Option<T>, update: Option<T>, overrider: (base: T, update: T) -> T) =\n        when {\n            base is Some && update is Some -> overrider(base.t, update.t).toOption()\n            base is Some && update is None -> base\n            base is None && update is Some -> update\n            else -> None\n        }\n```\n\nWhich by the way can be renamed to something more general (don't have any idea of the name) and moved to org.onap.dcae.collectors.veshv.utils.arrow/core.kt.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-03-28 10:09:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9d8415a9_97c42bed",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/api/ConfigurationModule.kt",
+      "patchset_number": 7,
+      "line": 45,
+      "message": "Currently no, but it will be used for actual config merging",
+      "author": {
+        "account_id": 3175,
+        "name": "Pawel Biniek",
+        "display_name": null,
+        "email": "pawel.biniek@nokia.com",
+        "username": "pbiniek"
+      },
+      "updated": "2019-03-28 10:22:08.000000000",
+      "in_reply_to": "32703955_ad94c817",
+      "unresolved": false
+    },
+    {
+      "id": "8037094b_73c3f4e4",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "\"fallback\" means it is to be used in case of some error. I'll think of something else.",
+      "author": {
+        "account_id": 3175,
+        "name": "Pawel Biniek",
+        "display_name": null,
+        "email": "pawel.biniek@nokia.com",
+        "username": "pbiniek"
+      },
+      "updated": "2019-03-28 10:22:08.000000000",
+      "in_reply_to": "e7760b37_9e30ebdf",
+      "unresolved": false
+    },
+    {
+      "id": "82fe0a15_e99ba84a",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 7,
+      "line": 84,
+      "message": "+2",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-28 10:24:22.000000000",
+      "in_reply_to": "8a284913_f0c3e8fe",
+      "unresolved": false
+    }
+  ]
+}

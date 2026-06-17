@@ -1,0 +1,59 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Ieb8e5e17862e9d607433a1d4e86a026725d73498",
+  "change_id": "Ieb8e5e17862e9d607433a1d4e86a026725d73498",
+  "_number": 116927,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "558d5014_6f5b759e",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleStateRunning.java",
+      "patchset_number": 3,
+      "line": 229,
+      "message": "Do you see any impact to the non-native existing policies due to the re-deployment? Also, will this happen for every PDP_UPDATE message coming from PAP? If yes, then it looks like a costly operation to me. Specially in cases where multiple use cases are running and change in one use case impacting others.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-01-27 19:07:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0affbf33_23f05c62",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleStateRunning.java",
+      "patchset_number": 3,
+      "line": 229,
+      "message": "There is no impact in the redeployment it those policies were already deployed, as it will check first if they have been installed (there are some exists() checks).   So, the kiesession will be untouched if the policies were already there.   I think that's your concern, the re-applying may be a little misleading, as it will be a no-op most of the times unless it needs to.  Also, the code will only be hit if there are new native \"Artifact\" policies deltas which should be a low runner scenario.\n\nIn theory this logic should only happen when there are UPDATEs that contains \"delta\" changes from the previous ones are received and one of those deltas is a new \"native artifact\" policy, I think in theory that should be a low occurrence.\n\nI had some enhancements I am thinking to make it just a little faster (in other reviews), but the essence of this functionality is necessary as what PDPs get from PAP is an unordered snapshot of all policies, in the case of the Drools PDP, order matters because of the native ones, and some policies may apply to several controllers, so when new native controllers are added and there are existing operational policies, it has to be revisited .. \n\nDoes it help with your concern?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-01-27 20:28:56.000000000",
+      "in_reply_to": "558d5014_6f5b759e",
+      "unresolved": true
+    },
+    {
+      "id": "cb05a22c_13a37eb2",
+      "file_path": "feature-lifecycle/src/main/java/org/onap/policy/drools/lifecycle/LifecycleStateRunning.java",
+      "patchset_number": 3,
+      "line": 229,
+      "message": "Sounds good, thanks for the clarifications!\nBTW just to let you know Wayne is already working on providing \"delta\" updates from PAP. Once that is done, PDPs will only get the list of policies to be deployed or undeployed. Probably with a new flag in PDP_UPDATE mentioning deploy vs undeploy for the list of policies. https://jira.onap.org/browse/POLICY-2112",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-01-27 21:43:10.000000000",
+      "in_reply_to": "0affbf33_23f05c62",
+      "unresolved": true
+    }
+  ]
+}

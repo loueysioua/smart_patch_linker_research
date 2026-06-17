@@ -1,0 +1,496 @@
+{
+  "id": "multicloud%2Fk8s~master~I7a6034eba543c2a27daa41b7fe6298cb2a85f9ce",
+  "change_id": "I7a6034eba543c2a27daa41b7fe6298cb2a85f9ce",
+  "_number": 113445,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2020-10-01 22:33:23.000000000",
+    "updated": "2020-10-02 23:33:15.000000000",
+    "submitted": "2020-10-02 23:20:30.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 693,
+      "name": "Igor Duarte Cardoso",
+      "display_name": null,
+      "email": "igordcard@gmail.com",
+      "username": "igordcard"
+    },
+    "submitter": {
+      "account_id": 285,
+      "name": "Ritu Sood",
+      "display_name": null,
+      "email": "ritu.sood@intel.com",
+      "username": "ritusood"
+    }
+  },
+  "subject": "Reimplement Terminate to be compatible with Status",
+  "commit_message": "Reimplement Terminate to be compatible with Status\n\nThis also includes modifying Apply and Delete, since there are\nstrict conditions that need to be met in each, to prevent\nLogical Clouds (LCs) from entering a bad state.\n\nSummary of what's being done here:\n- When applying:\n  - set tag 'lccontext' in the LC to the context ID (was already done)\n  - and let rsync know about the appcontext (grpc) (was already done)\n  - if tag was already set, check current context /status\n  - if context /status is actually Terminated,  'lccontext' is set to\n    new context ID and previous AppContext deleted\n- When terminating:\n  - lets rsync know about the termination request (grpc)\n- When deleting:\n  - checks whether the current context /status is Terminated\n  - if it is, then it will remove the latest LC context\n\nThis particular commit disables the TestDeleteLogicalCloud test\nuntil a known issue behind the test is resolved.\n\nThis commit does not leverage the full capacity of the Status\nframework, but is sufficient to support all operations. A future\npatch will entirely migrate DCM to the Status framework. Until\nthen, a known issue exists where DCM will forget about context IDs\npreviously associated to a particular Logical Cloud (only keeps last).\n\nIssue-ID: MULTICLOUD-1143\nChange-Id: I7a6034eba543c2a27daa41b7fe6298cb2a85f9ce\nSigned-off-by: Igor D.C <igor.duarte.cardoso@intel.com>\n",
+  "change_log": {
+    "entry_count": 33,
+    "entries": [
+      {
+        "id": "04e4c3ee7659ea11114280d07116cca036a7c434",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-10-01 22:33:23.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "bd08587f79fe6a3ff9fcd32334f5e5caf63111a2",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-01 22:35:05.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2455/ (1/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "e1961cd2652c387d9592dc34c7918ab8e466e4d0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-01 22:36:07.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1671/ (2/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "6fb6d4b3ed97174b7ee34c26d7045d37da145936",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-01 22:36:15.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2434/ (3/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "3a200c681e70d34e8f94043292618d524b882ea4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-01 22:50:08.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2455/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/2455\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1671/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/1671\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2434/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/2434",
+        "patchset_number": 1
+      },
+      {
+        "id": "9f1dcb9a7c604a72109239da706d61eee3991324",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-10-01 23:26:04.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "fdfc555155de1fd6247927dbdddd7b2369e3c341",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-10-02 01:42:51.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "8cc1dde7e8a81b82a036ba50f88250dc76ab0f3a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 01:44:29.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2460/ (1/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "75c1f4d56631da6be6d59cc0b02d5bf1f24b1eff",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 01:44:31.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1676/ (2/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "d685186fa83d34f5d1b693cc56d6d4dc379f3455",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 01:44:51.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2439/ (3/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "ffc9377e2a6f949bdf0f269c5c5499edd9e9331f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 02:01:30.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2460/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/2460\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1676/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/1676\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2439/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/2439",
+        "patchset_number": 2
+      },
+      {
+        "id": "e18486ff0c66b30f4adcad37e1826238ede9c52d",
+        "author": {
+          "account_id": 285,
+          "name": "Ritu Sood",
+          "display_name": null,
+          "email": "ritu.sood@intel.com",
+          "username": "ritusood"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 16:25:26.000000000",
+        "message": "Patch Set 2: Code-Review-1\n\n(2 comments)",
+        "patchset_number": 2
+      },
+      {
+        "id": "72adfecd3db15ddea3abb95fd7e8e3a06baafb9d",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-10-02 21:25:34.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "60b502fe0570de2748507d4e27f42276c73ffbbf",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-10-02 22:09:41.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "f6dc35aa012d87d030685fb74287aea33bf64c6c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:09:49.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2470/ (1/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "2d74afbca0630ac57fc1e62f769063dab808e5fd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:14:33.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1686/ (2/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "a18b4d1c6c237348fd6e30ff134df6e949371a41",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:15:03.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2449/ (3/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "96b3e1bb5a91728c78fe8e0c251fc9436f667ebe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:19:25.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1686/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1686/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/1686\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2470/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/2470\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2449/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/2449",
+        "patchset_number": 3
+      },
+      {
+        "id": "9b992ae208f6e3868a1575e33319ee9b9a4efa5b",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-10-02 22:20:51.000000000",
+        "message": "Patch Set 3:\n\nrecheck",
+        "patchset_number": 3
+      },
+      {
+        "id": "94e78dc2b3fdba1a08f35f399ec3e67fcc9ffd2a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:22:26.000000000",
+        "message": "Patch Set 3: -Verified\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2471/ (1/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "455fb4ed36277af9c80e3c7a0944653ebf2200d4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:23:15.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1687/ (2/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "7aa3d360e367ac36c0ef5847434fc70d17da331f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:23:16.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2450/ (3/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "ccfd5f42fac39ab7e64e2f70d326efa62f2151c3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:37:04.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2471/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/2471\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1687/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/1687\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2450/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/2450",
+        "patchset_number": 3
+      },
+      {
+        "id": "006244e6404bbb431ffa06cb22889ddad20c4ee4",
+        "author": {
+          "account_id": 1603,
+          "name": "Eric Multanen",
+          "display_name": null,
+          "email": "eric.w.multanen@intel.com",
+          "username": "ewmulta"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:47:43.000000000",
+        "message": "Patch Set 3:\n\n(2 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "8d6e1ba21f9b7e9e0a80f4c5b251df18b8e8677c",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-10-02 22:50:41.000000000",
+        "message": "Patch Set 3: Code-Review-1\n\n(2 comments)",
+        "patchset_number": 3
+      },
+      {
+        "id": "71761341f48fa37582675369cc206836bcd803ac",
+        "author": {
+          "account_id": 693,
+          "name": "Igor Duarte Cardoso",
+          "display_name": null,
+          "email": "igordcard@gmail.com",
+          "username": "igordcard"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-10-02 22:56:43.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "2d295fc0762007216fa14b4f44b571b0533cda51",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:58:06.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2477/ (1/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "48daa701c0b000d6cb43417d45300b201541df57",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:59:04.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1693/ (2/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "328be02e739b99af69d5a00a3b57f393b4593d1c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 22:59:11.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2456/ (3/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "123bcd782083a55391e1b44d1d609a27232c5e9e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 23:15:06.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/2477/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/2477\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/1693/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/1693\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/2456/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/2456",
+        "patchset_number": 4
+      },
+      {
+        "id": "d9c447790c06e07c472fbc5dc52d5ac970d8510e",
+        "author": {
+          "account_id": 285,
+          "name": "Ritu Sood",
+          "display_name": null,
+          "email": "ritu.sood@intel.com",
+          "username": "ritusood"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 23:20:05.000000000",
+        "message": "Patch Set 4: Code-Review+2",
+        "patchset_number": 4
+      },
+      {
+        "id": "f52be7df492c2aa2299a144ef980ceba791b25af",
+        "author": {
+          "account_id": 285,
+          "name": "Ritu Sood",
+          "display_name": null,
+          "email": "ritu.sood@intel.com",
+          "username": "ritusood"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-10-02 23:20:30.000000000",
+        "message": "Change has been successfully merged by Ritu Sood",
+        "patchset_number": 4
+      },
+      {
+        "id": "a1a7cde470ad369ca2abc66c2674c30a0ab5e3f3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-10-02 23:33:15.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-merge-golang/556/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-merge-golang/556",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

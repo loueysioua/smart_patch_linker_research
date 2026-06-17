@@ -1,0 +1,263 @@
+{
+  "id": "sdc~master~I693bb53059b056235b567ac1f9f752a33512505a",
+  "change_id": "I693bb53059b056235b567ac1f9f752a33512505a",
+  "_number": 107693,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "29b1ee27_044b52af",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "shouldn't be those methods are private, bcz called within same class and/or by private methods? and 'test' them by calling public methods?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-14 15:45:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5d547eed_e33741ea",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "I thought about this as well and decided to leave them as public as these methods don't have any side-effects and leaving them public is not going to change any internal state.\nHowever, if you have suggestions on how to do what you describe in a simple manner, I am open to them!",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-14 15:58:13.000000000",
+      "in_reply_to": "29b1ee27_044b52af",
+      "unresolved": true
+    },
+    {
+      "id": "0fb4e85d_b5daf563",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "...by covering populateToscaArtifacts (L437), populateToscaArtifacts (L441) and getToscaModelByComponentUuid (L526) you can cover all your new private functions, and as you can see from https://sonarcloud.io/code?id=onap_sdc&selected=onap_sdc%3Acatalog-be%2Fsrc%2Fmain%2Fjava%2Forg%2Fopenecomp%2Fsdc%2Fbe%2Fcomponents%2Fimpl%2FComponentBusinessLogic.java\nnone of them is covered. \nI hope I answered your question.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-14 17:23:07.000000000",
+      "in_reply_to": "5d547eed_e33741ea",
+      "unresolved": true
+    },
+    {
+      "id": "973fb596_282d5462",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "Covering the methods you mention is not the goal of the change request: the goal is to take care of unchecked calls to 'Optional.get()' (there is, I believe, already a task to improve code coverage).\nHowever, in order to be a good citizen on the project, I decided to create unit tests for the code I modify. To do that, I made my pure functions public so I could call them from a separate test class.\nI propose to switch the visibility of these methods to package-access only so they would be testable, writing proper tests for the mentioned methods would be a task of its own IMPO.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-14 18:07:51.000000000",
+      "in_reply_to": "0fb4e85d_b5daf563",
+      "unresolved": true
+    },
+    {
+      "id": "d5ba3c8d_402a8a08",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "\"Covering the methods you mention is not the goal of the change request\", never said it is. \nYes, it should be goal of different commit.\nBut creating \"public static\" methods only for be visible for testing, it is not best way, IMPO.\nI'd suggest to change to private (non-static), and test them from public, (of cause, on different commit), remove needless tests.\nHow does it sound to you?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-14 19:06:06.000000000",
+      "in_reply_to": "973fb596_282d5462",
+      "unresolved": true
+    },
+    {
+      "id": "1dc766ab_dcf72f03",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "Not sure why you want to make them non-static as their behaviour is not specific to a particular instance: is having them static causing a problem I am not aware of?\n\nSo, to recap, you suggest to:\n1) Make these methods private.\n2) Delete the existing tests for these methods.\n3) Create a separate task for someone to improve the coverage of this class.\nAm I understanding your suggestion properly?",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-14 21:12:21.000000000",
+      "in_reply_to": "d5ba3c8d_402a8a08",
+      "unresolved": true
+    },
+    {
+      "id": "3a3d6d14_e1d332d8",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 454,
+      "message": "Isn't it simpler using a method? It seems we need to call apply every time we want to use this function.\n\nUsually I use the type `FunctionX` whenever I need to pass the function in question to some higher order function, in order to reduce the boilerplate, but in this case, and please correct me if I am wrong, we never pass it to an HO function. Is that right?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-14 23:11:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7954706_f33426d5",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 489,
+      "message": "You could improve this using Either's combinators.\n```\nresult.left().foreach(def ->\n  component.getToscaArtifacts().put(def.getArtifactLabel(), def)\n)\n```",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-14 23:11:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ae22807b_37590a3f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "@Vasyl, @Chris\n\nIn this case, I would usually keep the new functions private and static and get rid of the tests as adding more public functions means more test (and more code to maintain).\n\nHaving said that, the public functions (`populateToscaArtifacts` and `getToscaModelByComponentUuid`) are pretty hard to test and this would probably require an additional change. First of all, injecting dependencies for `componentsUtils`, `toscaOperationFacade`, and `artifactsBusinessLogic` should be done among others. Then additional guarantees regarding the privates functions should be done (eg. nulls are never returned, exceptions are never thrown), finally, I have not checked yet and this is just an assumption, but considering how the logic is implemented in these functions, the tests will happen to be quiet complicated to code due to a high level of technical debt.\n\nSo I would suggest to keep the tests and the new functions as they are (because it's still better than nothing), and open a new task for a thorough re-design of the `populateToscaArtifacts` and `getToscaModelByComponentUuid` function.\n\nAt some point we have to acknowledge that the level of quality of this codebase is pretty low (which is confirmed by Sonar), and that we can make progress only by making baby steps.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-14 23:11:03.000000000",
+      "in_reply_to": "1dc766ab_dcf72f03",
+      "unresolved": true
+    },
+    {
+      "id": "68d7dd7d_46028c14",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 454,
+      "message": "You're right: it'd be easier to read and we don't have type erasure then.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-14 23:48:12.000000000",
+      "in_reply_to": "3a3d6d14_e1d332d8",
+      "unresolved": true
+    },
+    {
+      "id": "3e688d5c_fc46ae8e",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 489,
+      "message": "I actually did it initially but then noticed that 'foreach' expects a return type of Unit so we have to add another line to do `return Unit.unit()`.\nThe result was pretty verbose and I decide to go for a more 'procedural' approach as it's more common on the project.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-14 23:48:12.000000000",
+      "in_reply_to": "e7954706_f33426d5",
+      "unresolved": true
+    },
+    {
+      "id": "a49b6f03_9405f62d",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "@Chris, yes, you understood me correctly.\n\n@Francis, hard to disagree with \"..make progress only by making baby steps\" and \"..get rid of the tests as adding more public functions means more test (and more code to maintain).\"",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-15 08:36:02.000000000",
+      "in_reply_to": "ae22807b_37590a3f",
+      "unresolved": true
+    },
+    {
+      "id": "174e8c90_be34ffb8",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 454,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-15 15:28:43.000000000",
+      "in_reply_to": "68d7dd7d_46028c14",
+      "unresolved": false
+    },
+    {
+      "id": "0a852c15_8b2911aa",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 489,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-15 15:28:43.000000000",
+      "in_reply_to": "3e688d5c_fc46ae8e",
+      "unresolved": false
+    },
+    {
+      "id": "edb5a3b0_0a74b765",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ComponentBusinessLogic.java",
+      "patchset_number": 1,
+      "line": 516,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-15 15:28:43.000000000",
+      "in_reply_to": "a49b6f03_9405f62d",
+      "unresolved": false
+    }
+  ]
+}

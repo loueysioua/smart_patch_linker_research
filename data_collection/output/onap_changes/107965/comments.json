@@ -1,0 +1,42 @@
+{
+  "id": "oom~master~Ide962ac7f02d17e4386002a891ab0cf22f38f656",
+  "change_id": "Ide962ac7f02d17e4386002a891ab0cf22f38f656",
+  "_number": 107965,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d97b3de0_0524ee89",
+      "file_path": "kubernetes/portal/charts/portal-app/resources/config/deliveries/properties/ONAPPORTAL/system.properties",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "hmmm interesting my understanding was that this password is somewhere replaced before the application reads it. If not then how does this work?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-20 16:21:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "318c497a_7e91fa66",
+      "file_path": "kubernetes/portal/charts/portal-app/resources/config/deliveries/properties/ONAPPORTAL/system.properties",
+      "patchset_number": 1,
+      "line": 125,
+      "message": "You're right that this eventually gets replaced (like discussed in https://gerrit.onap.org/r/c/oom/+/106685)\nbut it's not 'before' the application reads it, it's done by the lower java layers (javax.net.ssl) that are initialized at startup with SSL certs and that will privilege X509 identity over basic auth (like aaf does).\n\nSo the problem is that, portal still tries decrypting that value regardless of it not finally being used. It would take some more work (maybe guilin) to rework portal code to avoid doing that. \n\nWe see this only when trying to sync roles (portal-894) and when that decrypt code is called, I've thought that passing a fake value that has a proper byte length would fool the Cipher class, but it does not.",
+      "author": {
+        "account_id": 5,
+        "name": "Christophe Closset",
+        "display_name": null,
+        "email": "christophe.closset@intl.att.com",
+        "username": "ChrisC"
+      },
+      "updated": "2020-05-20 16:35:15.000000000",
+      "in_reply_to": "d97b3de0_0524ee89",
+      "unresolved": true
+    }
+  ]
+}

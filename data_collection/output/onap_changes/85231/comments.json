@@ -1,0 +1,229 @@
+{
+  "id": "oom~master~I50b67255cfc1d636d0f370d6c93628a30d6dac26",
+  "change_id": "I50b67255cfc1d636d0f370d6c93628a30d6dac26",
+  "_number": 85231,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3098355e_9c67b1d1",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "If you can, please just add operationshistory\n\nLeave the old operationshistory10 for the old engine, but the new xacml uses operationshistory.\n\nAppreciate it.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-04-12 18:00:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f34b7547_4c028f6a",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "Done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:16:51.000000000",
+      "in_reply_to": "3098355e_9c67b1d1",
+      "unresolved": false
+    },
+    {
+      "id": "7b6acc0d_3130e901",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "So, I think I don't need to do this again right? It just need be done once when pap starts up",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-04-12 18:24:14.000000000",
+      "in_reply_to": "3098355e_9c67b1d1",
+      "unresolved": false
+    },
+    {
+      "id": "6761d312_6e95a680",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "Yes, you are correct!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:26:55.000000000",
+      "in_reply_to": "7b6acc0d_3130e901",
+      "unresolved": false
+    },
+    {
+      "id": "2b4e235c_09a96794",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "Actually to be precise in the response, this happens when the mariadb comes up, which it should be before pap, api, etc ..",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-04-12 18:39:50.000000000",
+      "in_reply_to": "6761d312_6e95a680",
+      "unresolved": false
+    },
+    {
+      "id": "f0cd323f_db21abfe",
+      "file_path": "kubernetes/policy/charts/policy-pap/resources/config/config.json",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "This should be \njdbc:mariadb://{{.Values.global.mariadb.nameOverride}}:3306/policyadmin\"",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-04-12 18:39:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5ff661ee_6e3196ef",
+      "file_path": "kubernetes/policy/charts/policy-pap/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "Add the section below before \"containers:\" to guarantee that the database is fully initialized before this container comes up.   \n\nSee \"oom/kubernetes/policy/templates/deployment.yaml\" for a reference.   Just copy/paste the section.\n\n      initContainers:\n      - command:\n        - /root/ready.py\n        args:\n        - --container-name\n        - {{ .Values.global.mariadb.nameOverride }}\n        env:\n        - name: NAMESPACE\n          valueFrom:\n            fieldRef:\n              apiVersion: v1\n              fieldPath: metadata.namespace\n        image: \"{{ .Values.global.readinessRepository }}/{{ .Values.global.readinessImage }}\"\n        imagePullPolicy: {{ .Values.global.pullPolicy | default .Values.pullPolicy }}\n        name: {{ include \"common.name\" . }}-readiness",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-04-12 18:39:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "35a06380_f83001d1",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 1,
+      "line": 19,
+      "message": "Agree Jorge.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:52:38.000000000",
+      "in_reply_to": "2b4e235c_09a96794",
+      "unresolved": false
+    },
+    {
+      "id": "f04ffcb0_abc4d39b",
+      "file_path": "kubernetes/policy/charts/policy-pap/resources/config/config.json",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:52:38.000000000",
+      "in_reply_to": "f0cd323f_db21abfe",
+      "unresolved": false
+    },
+    {
+      "id": "e31e9d9b_dfa5e5f9",
+      "file_path": "kubernetes/policy/charts/policy-pap/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:52:38.000000000",
+      "in_reply_to": "5ff661ee_6e3196ef",
+      "unresolved": false
+    },
+    {
+      "id": "6998ea85_a77c9485",
+      "file_path": "kubernetes/policy/charts/policy-pap/resources/config/config.json",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "keep the comma",
+      "author": {
+        "account_id": 1441,
+        "name": "Chenfei Gao",
+        "display_name": null,
+        "email": "cgao@research.att.com",
+        "username": "cgao"
+      },
+      "updated": "2019-04-12 18:53:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3ae8a40a_fbb66559",
+      "file_path": "kubernetes/policy/charts/policy-pap/resources/config/config.json",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Oops..\nThanks Chenfei!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-04-12 18:58:14.000000000",
+      "in_reply_to": "6998ea85_a77c9485",
+      "unresolved": false
+    },
+    {
+      "id": "fb0afe6c_485a0c52",
+      "file_path": "kubernetes/policy/charts/mariadb/resources/config/db.sh",
+      "patchset_number": 4,
+      "line": 21,
+      "message": "tabs",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-04-12 19:05:41.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

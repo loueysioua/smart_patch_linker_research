@@ -1,0 +1,909 @@
+{
+  "id": "cps~master~I6bb7de4b27e602c4d8ee6a5528a866e5f7e8799a",
+  "change_id": "I6bb7de4b27e602c4d8ee6a5528a866e5f7e8799a",
+  "_number": 129595,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b869b9f1_91033805",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "Class name is misleading as it's accepting metadata that is used to create a  NcmpEvent and Event.\n\nNcmpEventGenerator,\nNcmpEventCreater\nor any meaningful name",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ae9fb909_eff4b53a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 56,
+      "message": "NB : populateNcmpEvent or any other suitable name\n\nGeneral conversation\n----------------------------\ntoNcmpEvent :  a. simplifies the implementation of mappings between Java bean types\n               b. The source object as parameter and returns the target object (Here we don't have any source object but attributes required to create new object)",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fe6134df_a436ab22",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Unable to understand the method name can be renamed as createNcmpEvent or any other suitable",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "099d46e7_b2c5fad5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 71,
+      "message": "Can be composed into a single method",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d9e687e2_930a44a8",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "This method can accept another 2 agrs that needs to create Event object \n\n,final Operation operation, final NcmpServiceCmHandle ncmpServiceCmHandle)",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "00c77c51_f458756f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "Here we can set event as below :\n\ntry {\n            ncmpEvent.setEvent(createEvent(eventCorrelationId, Operation.fromValue(operation.value()), ncmpServiceCmHandle));\n        } catch (IllegalArgumentException illegalArgumentException) {\n            log.error(\"{} operation not supported\", operation);\n        }\nreturn ncmpEvent;",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f00d700_b7aac3f6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 109,
+      "message": "All these can be composed like :\n\nprivate Event createEvent(final String eventCorrelationId, final Operation operation,\n                              final NcmpServiceCmHandle ncmpServiceCmHandle) {\n        final Event event = new Event();\n        event.setOperation(operation);\n        event.setCmHandleId(eventCorrelationId);\n        if (!Operation.DELETE.equals(operation)) {\n            event.setCmhandleState(Event.CmhandleState.READY);\n            event.setCmhandleProperties(List.of(ncmpServiceCmHandle.getPublicProperties()));\n        }\n        return event;\n    }",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0fd1b8a2_a63f2ec1",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "Assert public properties as well",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bf8e38d5_fdfa1e8f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "ncmp event is created/generated/populated",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ba29c6ab_69641299",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "We can send operation enum here.\n\nvaueOf is NullPointerException prone. If needed we can use \"fromValue\"\n\npublic static Event.Operation fromValue(java.lang.String value)",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06f8b482_3b9505f6",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Assert into seperate and: clause\nassert cmhandleState as well result.event.cmhandleState == cmhandleState",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d0f1344a_0582d539",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Avoid using string.\n\nOperation.DELETE,Operation.UPDATE,Operation.DELETE or can be imported as static",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b441b2fc_915a2c38",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "NB : Is it possible to send any invalid event operation ?",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "500dade1_2664b7ce",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Unnecessary : As we never thrown IllegalArgumentException from called method.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ed294457_e4cedfaa",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "Discussion : I am not able to understand the intent of this test class as it contains only  \"noExceptionThrown()\" that is never thrown.\n\nWe should write a test case to publish ncmp event and validate it using Kafka test containers.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "39ab0624_4f9e6f72",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "NB : Move it to class level or use it locally into mockResponses and string literal \"test-cm-handle-id\" to method call \n\nobjectUnderTest.publishNcmpEvent('test-cm-handle-id', cmHandleOperation)",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "31d9eaf0_a1d6e72a",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "operation",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f0588b4b_4d8129a9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "it can be directly set into mocking method",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ba103320_3ad6afd0",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "use from class level or use string literal \"test-cm-handle-id\"",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f6fcf24d_d28933a9",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "We never thrown any kind of exception from called method.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2b7a2816_f0328c6c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "Avoid using string.\n\nOperation.DELETE,Operation.UPDATE,Operation.DELETE or can be imported as static",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7abee3a8_b8fc0238",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 51,
+      "message": "remove it from here used claas level or create it localy",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 08:44:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9a1df114_45cab517",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "NcmpEventGenerator",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "b869b9f1_91033805",
+      "unresolved": true
+    },
+    {
+      "id": "bddd9571_b5ccc658",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 56,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "ae9fb909_eff4b53a",
+      "unresolved": false
+    },
+    {
+      "id": "4ecadb2e_8f6980be",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "fe6134df_a436ab22",
+      "unresolved": false
+    },
+    {
+      "id": "f616bafb_85278bd5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 71,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "099d46e7_b2c5fad5",
+      "unresolved": false
+    },
+    {
+      "id": "4ee046ed_5a1eef64",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "d9e687e2_930a44a8",
+      "unresolved": false
+    },
+    {
+      "id": "a1ae48ab_60e3ab54",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "Ack",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "00c77c51_f458756f",
+      "unresolved": false
+    },
+    {
+      "id": "c6e51da6_56e846de",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapper.java",
+      "patchset_number": 2,
+      "line": 109,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "2f00d700_b7aac3f6",
+      "unresolved": false
+    },
+    {
+      "id": "a7f372bf_75e4813d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsMapperSpec.groovy",
+      "patchset_number": 2,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "d0f1344a_0582d539",
+      "unresolved": false
+    },
+    {
+      "id": "757c91be_557ed6fd",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "39ab0624_4f9e6f72",
+      "unresolved": false
+    },
+    {
+      "id": "3126ff38_086b06c4",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "31d9eaf0_a1d6e72a",
+      "unresolved": false
+    },
+    {
+      "id": "beabe3ec_8f2640f1",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "f0588b4b_4d8129a9",
+      "unresolved": false
+    },
+    {
+      "id": "4ddbcd25_628a9d7f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "ba103320_3ad6afd0",
+      "unresolved": false
+    },
+    {
+      "id": "84357c0b_5819cd7a",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsServiceSpec.groovy",
+      "patchset_number": 2,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 12:04:23.000000000",
+      "in_reply_to": "2b7a2816_f0328c6c",
+      "unresolved": false
+    },
+    {
+      "id": "0d0e3820_d943c302",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsGenerator.java",
+      "patchset_number": 4,
+      "line": 47,
+      "message": "NB : populate NcmpEvent",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "df4ad020_97e80204",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsGenerator.java",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "NB : cm handle identifier",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "438db64d_147b2a1f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 42,
+      "message": "NB : created/generated/populated",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f73d7731_68c19599",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "Smelly instanceof Operator:\n--------------------------------------\n\nThis check is Unnecessary as called method will always returns only one type of object that is NcmpEvent. There is no polymorphism with NcmpEvent.  \n\nThe general \"rule\" would be to avoid it whenever possible, especially when we control the type hierarchy and can use subtype polymorphism for example. The idea is not to ask the object what type it is and do something with it, but rather to ask the object directly or indirectly via a Visitor (essentially double polymorphism) to perform some action.\n\nEven though if we want to check object type then the Class.getName() method can be used in the equals method like below :\n\nassert result.getClass().getSimpleName()=='NcmpEvent'",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bf03aa64_f906a36d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 46,
+      "message": "NB : created/generated/populated",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4e5c62af_dd0d882d",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 48,
+      "message": "NB : It's better to asset header and paylod in seperate and clouse",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c1e0aad5_e274c45c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 51,
+      "message": "Use enum : operation != DELETE",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "951ecd76_5471351f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 52,
+      "message": "Assert cm handle properties that we sent to the method like : \n\nresult.event.cmhandleProperties[0].toString()=='[publicProperty1:value1, publicProperty2:value2]",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2022-06-14 15:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a50a3ae_50dabf4d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsGenerator.java",
+      "patchset_number": 4,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "0d0e3820_d943c302",
+      "unresolved": false
+    },
+    {
+      "id": "ffeb7361_2aba9cd7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsGenerator.java",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "df4ad020_97e80204",
+      "unresolved": false
+    },
+    {
+      "id": "63d6d839_e1758c7a",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 42,
+      "message": "populated",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "438db64d_147b2a1f",
+      "unresolved": false
+    },
+    {
+      "id": "069ae964_c41d974c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "f73d7731_68c19599",
+      "unresolved": false
+    },
+    {
+      "id": "4fbf4173_1f352da1",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "bf03aa64_f906a36d",
+      "unresolved": false
+    },
+    {
+      "id": "5bf2841f_64ce0872",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "4e5c62af_dd0d882d",
+      "unresolved": false
+    },
+    {
+      "id": "bbb52a80_b4381260",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "c1e0aad5_e274c45c",
+      "unresolved": false
+    },
+    {
+      "id": "969a6887_18fcba7b",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 4,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2022-06-14 15:34:43.000000000",
+      "in_reply_to": "951ecd76_5471351f",
+      "unresolved": false
+    },
+    {
+      "id": "628393e8_6d723afe",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/event/NcmpEventsGenerator.java",
+      "patchset_number": 6,
+      "line": 43,
+      "message": "NB: I would call this NcmpEventsCreator",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-06-15 08:29:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "695c58c0_d6c20238",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/event/NcmpEventsGeneratorSpec.groovy",
+      "patchset_number": 6,
+      "line": 48,
+      "message": "NB: rather than adding an if condition, perhaps additional entries into a data table for expected size and cmHandleProperties might be cleaner?",
+      "author": {
+        "account_id": 7743,
+        "name": "Joseph Keenan",
+        "display_name": "Joseph Keenan",
+        "email": "joseph.keenan@est.tech",
+        "username": "JosephKeenan"
+      },
+      "updated": "2022-06-15 08:29:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "id": "oom~master~I7d42912a9cc1f200cc1ce8916991e6e3ab5e010b",
+  "change_id": "I7d42912a9cc1f200cc1ce8916991e6e3ab5e010b",
+  "_number": 111017,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ee233632_17cf6219",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 5,
+      "line": 40,
+      "message": "please use readinessCheck components\nin values.yaml:\nglobal:\n  msbEnabled: true\nreadinessCheck:\t\n  sharedDatabase:\n      name: shared-database\n      containers:\n        - '{{ include \"common.release\" . }}-{{ include \"common.name\" . }}-config-job'\n  localDatabase:\n      name: local-database\n      containers:\n        - '{{ include \"common.mariadbService\" .}}'\n  msb:\n    name: msb\n    containers:\n        - msb-iag\n\nin requirements.yaml:\n  - name: readinessCheck\n    version: ~6.x-0\n    repository: '@local'\n\nhere:\n      initContainers: \n      {{- if global.mariadbGalera.localCluster }}\n      {{ include \"common.readinessCheck.waitFor\" (dict \"dot\" . \"wait_for\" .Values.readinessCheck.wait_for.localDatabase ) | indent 6 | trim }}\n      {{- else }}\n      {{ include \"common.readinessCheck.waitFor\" (dict \"dot\" . \"wait_for\" .Values.readinessCheck.wait_for.sharedDatabase ) | indent 6 | trim }}\n      {{- end }}\n      {{- if .Values.global.msbEnabled }}\n      {{ include \"common.readinessCheck.waitFor\" (dict \"dot\" . \"wait_for\" .Values.readinessCheck.wait_for.msb ) | indent 6 | trim }}\n      {{- end }}",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-08-18 06:59:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "876cbe8d_404ee040",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 9,
+      "line": 53,
+      "message": "missing a space here no?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-09-01 08:24:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "45a18f95_fea17901",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 9,
+      "line": 53,
+      "message": "> missing a space here no?\n\n\nThere are six spaces here.According to our test, the make operation works normally. If we add another or more space, the make operation will report \"did not find expected key\" error.\nSo I think the writing here is correct",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-01 12:28:19.000000000",
+      "in_reply_to": "876cbe8d_404ee040",
+      "unresolved": true
+    },
+    {
+      "id": "c6545fa3_7bfecd19",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 40,
+      "message": "would be great if you could use here the readinessCheck template",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-09-03 09:20:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b93fde43_a5e49f7c",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 62,
+      "message": "this is provided internally by the template so you should remove it",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-09-03 09:20:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6936aead_90977dba",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 100,
+      "message": "why do you need this IP? Couln't you just listen on 0.0.0.0?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-09-03 09:20:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "69c9483a_687b6338",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 40,
+      "message": "Hi, Krzysztof Opasiak\n  Thanks for your advice.\n  It is necessary to judge whether the job is completed. We have seen that the oom readinesscheck does not support job detection. We have solved this problem as follows:\n\nin oom/kubernetes/common/readinessCheck/templates/_readinessCheck.tpl：\n\n{{- define \"common.readinessJobCheck.waitFor\" -}}\n{{-   $dot := default . .dot -}}\n{{-   $initRoot := default $dot.Values.readinessCheck .initRoot -}}\n{{/*  Our version of helm doesn't support deepCopy so we need this nasty trick */}}\n{{-   $subchartDot := fromJson (include \"common.subChartDot\" (dict \"dot\" $dot \"initRoot\" $initRoot)) }}\n{{-   $wait_for := default $initRoot.wait_for .wait_for -}}\n{{-   $containers := index (ternary (dict \"containers\" $wait_for) $wait_for (kindIs \"slice\" $wait_for)) \"containers\" -}}\n{{-   $namePart := index (ternary (dict) $wait_for (kindIs \"slice\" $wait_for)) \"name\" -}}\n- name: {{ include \"common.name\" $dot }}{{ ternary \"\" (printf \"-%s\" $namePart) (empty $namePart) }}-readiness\n  image: \"{{ $subchartDot.Values.global.readinessRepository }}/{{ $subchartDot.Values.global.readinessImage }}\"\n  imagePullPolicy: {{ $subchartDot.Values.global.pullPolicy | default $subchartDot.Values.pullPolicy }}\n  command:\n  - /root/job_complete.py\n  args:\n  {{- range $container := $containers }}\n  - --job-name\n  - {{ tpl $container $dot }}\n  {{- end }}\n  env:\n  - name: NAMESPACE\n    valueFrom:\n      fieldRef:\n        apiVersion: v1\n        fieldPath: metadata.namespace\n  resources:\n    limits:\n      cpu: {{ $subchartDot.Values.limits.cpu }}\n      memory: {{ $subchartDot.Values.limits.memory }}\n    requests:\n      cpu: {{ $subchartDot.Values.requests.cpu }}\n      memory: {{ $subchartDot.Values.requests.memory }}\n{{- end -}}",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-03 14:02:17.000000000",
+      "in_reply_to": "c6545fa3_7bfecd19",
+      "unresolved": true
+    },
+    {
+      "id": "e6377381_1acfae2c",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 62,
+      "message": "This modification requires the readnesscheck module to support job detection. What about your suggestion?",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-03 14:02:17.000000000",
+      "in_reply_to": "b93fde43_a5e49f7c",
+      "unresolved": true
+    },
+    {
+      "id": "708e392e_e483d0b2",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 100,
+      "message": "We need this IP to register our services to MSB",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-03 14:22:51.000000000",
+      "in_reply_to": "6936aead_90977dba",
+      "unresolved": true
+    },
+    {
+      "id": "0c7ebcc5_99f48ec7",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 40,
+      "message": "Done",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-04 02:28:23.000000000",
+      "in_reply_to": "69c9483a_687b6338",
+      "unresolved": false
+    },
+    {
+      "id": "63bf82b8_48db07fd",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 62,
+      "message": "Done",
+      "author": {
+        "account_id": 5275,
+        "name": "Yuanhong Deng",
+        "display_name": "Yuanhong Deng",
+        "email": "dengyuanhong@chinamobile.com",
+        "username": "dengyh"
+      },
+      "updated": "2020-09-04 02:34:12.000000000",
+      "in_reply_to": "e6377381_1acfae2c",
+      "unresolved": false
+    },
+    {
+      "id": "52e11dd4_44f20623",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 100,
+      "message": "Is really MSB so broken that you register to it using Pod IP which may come and gone instead of service IP which is more pernament?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-09-04 08:47:48.000000000",
+      "in_reply_to": "708e392e_e483d0b2",
+      "unresolved": true
+    },
+    {
+      "id": "f0655a74_2981d3db",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 13,
+      "line": 40,
+      "message": "/app/ready is working with jobs now",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-09-07 11:51:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "97ef3170_404e68ab",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 13,
+      "line": 91,
+      "message": "why do we need SERVICE_IP now?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-09-07 11:51:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eac576e4_357f3305",
+      "file_path": "kubernetes/modeling/charts/modeling-etsicatalog/templates/deployment.yaml",
+      "patchset_number": 13,
+      "line": 91,
+      "message": "I asked the same question. It's for registering in our favorite MSB",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-09-08 17:01:58.000000000",
+      "in_reply_to": "97ef3170_404e68ab",
+      "unresolved": true
+    }
+  ]
+}

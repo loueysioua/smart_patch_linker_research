@@ -1,0 +1,280 @@
+{
+  "id": "oom~master~Ifc593e2e33c3430c74156b4b153263c11127bfa9",
+  "change_id": "Ifc593e2e33c3430c74156b4b153263c11127bfa9",
+  "_number": 49517,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_59d602f3",
+      "file_path": "kubernetes/vid/charts/vid-galera/values.yaml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "We are trying to have differnent deployment sizes where the default is 1 replica and then for production or test versions the replica count is > 1.  Can you default this to 1?",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 14:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_999eca53",
+      "file_path": "kubernetes/vid/templates/check-job-completion-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "Can you check if the python script we already have baked into the readiness image is the same as this?  At first glance it does and this seems redundant unless you are doing something different.\n\nhttps://github.com/onap/oom/tree/master/kubernetes/readiness/docker/init",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 14:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_39abf676",
+      "file_path": "kubernetes/vid/templates/cluster-ready-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "Same comment but instead of K8s job objects, we already have this baked in for K8s pod status:\n\nCan you check if the python script we already have baked into the readiness image is the same as this?  At first glance it does and this seems redundant unless you are doing something different.\n\nhttps://github.com/onap/oom/tree/master/kubernetes/readiness/docker/init\n\nIf you do need this, I would prefer a fix/flag or new script checked into the path above that is built into the readiness-image.  we could then up-rev that to 2.0.1 and have it one place.  \nI would rather not have python scripts that are fairly generic and kubernetes specific embedded in as configmaps.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 14:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_79cf3e58",
+      "file_path": "kubernetes/vid/templates/cluster-ready-configmap.yaml",
+      "patchset_number": 5,
+      "line": 50,
+      "message": "I took a closer look, seems the only different is here you are using i.metadata.name and the current ready.py in the image uses i.name.  I assume this is because it is a stateful set?  Hmm I wonder if we have a bug in the other statefulsets like SDNC and APPC.  These have mariadb statefulsets and the ODL app uses the plain ready.py seemingly ok.  Was there a problem that you had to solve with the change to metadata.name?",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 14:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_19087a90",
+      "file_path": "kubernetes/vid/templates/vid-galera-config-job.yaml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "Following on to my other comment about defaulting the replicas to 1 for the mariadb...this will break and never exit.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 14:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_197ddae7",
+      "file_path": "kubernetes/vid/templates/dbcmd-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "We've been trying to keep all configmaps in the same file.  Could you merge all configmaps for the same chart into a single file \"configmap.yaml\" and separate them by ---",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 15:00:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_19671a27",
+      "file_path": "kubernetes/vid/charts/vid-galera/values.yaml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "we will change this but keep in mind the for resiliency this will need to be update .",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_59d602f3",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d93e92da",
+      "file_path": "kubernetes/vid/templates/check-job-completion-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "we are checking if the job is ready and not if the pod is ready and this is not supported by you.",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_999eca53",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1935daf6",
+      "file_path": "kubernetes/vid/templates/cluster-ready-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "for our pods we are cheeking the statfull set which is not supported by the script.",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_39abf676",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b93946f4",
+      "file_path": "kubernetes/vid/templates/cluster-ready-configmap.yaml",
+      "patchset_number": 5,
+      "line": 50,
+      "message": "yes it did not work.",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_79cf3e58",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d9477276",
+      "file_path": "kubernetes/vid/templates/dbcmd-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "because this is needed for testing and we are lacking in time we will open a ticket to handle this in Casablanca",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_197ddae7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_99724ae2",
+      "file_path": "kubernetes/vid/templates/vid-galera-config-job.yaml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "this will be update",
+      "author": {
+        "account_id": 69,
+        "name": "Michael Lando",
+        "display_name": null,
+        "email": "michael.lando@intl.att.com",
+        "username": "ml636r"
+      },
+      "updated": "2018-06-04 15:55:19.000000000",
+      "in_reply_to": "5a93c517_19087a90",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_349d3d67",
+      "file_path": "kubernetes/vid/templates/check-job-completion-configmap.yaml",
+      "patchset_number": 5,
+      "line": null,
+      "message": "We have a script for that too.  I ported Areli's configMap work for SDC into a generic script used by any Job a while back and its been working well.\nCan you confirm that this configmap is the same? \nFor an example see: https://github.com/onap/oom/blob/master/kubernetes/sdc/charts/sdc-be/templates/deployment.yaml \n\n- name: {{ include \"common.name\" . }}-job-completion",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-06-04 17:32:25.000000000",
+      "in_reply_to": "5a93c517_d93e92da",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_129e1008",
+      "file_path": "kubernetes/vid/templates/check-job-completion-configmap.yaml",
+      "patchset_number": 6,
+      "line": 7,
+      "message": "Why integrate scripts as configMap data? why not put the scripts in resurces directory and load them like in other charts?\n\nSpecifically, this functionality already exists in readiness 2.0.0 image and example of its usage can be found in sdc.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-06-05 13:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b2f71c59",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 6,
+      "line": 20,
+      "message": "This line should not be anymore.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-06-05 13:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f2fda43c",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 6,
+      "line": 22,
+      "message": "Wrong version of readiness check is used.\nThis version has a bug that prevents vid to start sometimes.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-06-05 13:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

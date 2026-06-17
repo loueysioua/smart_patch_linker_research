@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fpap~master~I6176d51918ae758e04fb68562dc9ca70534137d4",
+  "change_id": "I6176d51918ae758e04fb68562dc9ca70534137d4",
+  "_number": 79799,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ac3cd23d_a8df231b",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/model/PdpGroupDeploymentResponse.java",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "Query - \nThe request for PDP Group deployment will go all the way to PDP through DMaaP. So the job of PAP will be just to create PDP_UPDATE message and put it on DMAAP topic. \nAt this point the request that came from REST API is done.\nAnd we won't have info to create this response object.\n\nHowever, the response from PDP side will come through PDP_STATUS message. Which will be handled by PAP to modify the DB.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-08 17:25:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ad6d36d9_7a0206a5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PapRestControllerV1.java",
+      "patchset_number": 2,
+      "line": 119,
+      "message": "I think we can delete this client and use the common TopicSinkClient from policy/endpoints",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-08 17:25:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f0351bc2_808e5a2f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/model/PdpGroupDeploymentResponse.java",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "I was imagining that PAP would wait for the PDP_STATUS replies from the PDPs and bundle them up into the response.  See Jorge's comments in one of the other reviews (or in the draft architecture?) about making the REST API calls synchronous, rather than requiring clients to query a second time for results.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-11 04:17:49.000000000",
+      "in_reply_to": "ac3cd23d_a8df231b",
+      "unresolved": false
+    },
+    {
+      "id": "72d0762e_a92475c5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PapRestControllerV1.java",
+      "patchset_number": 2,
+      "line": 119,
+      "message": "Yep.  That code didn't exist when this was pushed up - thanks for the reminder.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-11 04:17:49.000000000",
+      "in_reply_to": "ad6d36d9_7a0206a5",
+      "unresolved": false
+    },
+    {
+      "id": "06c8b875_a108d897",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/model/PdpGroupDeploymentResponse.java",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "I feel what we are trying is to synchronize the asynchronous call which can lead to long wait time for the API users. We don't know when the PDP's will respond back with PDP_STATUS reply. Also, we don't know how many PDP's are there behind the DMaaP Topic.\nMay be we can discuss this during scrum today :)",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-11 10:34:44.000000000",
+      "in_reply_to": "f0351bc2_808e5a2f",
+      "unresolved": false
+    },
+    {
+      "id": "1643edec_ddb7d47c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/model/PdpResponseStatus.java",
+      "patchset_number": 2,
+      "line": 26,
+      "message": "Please use enum PdpResponseStatus defined in pdp-common.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-11 10:34:44.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e9b27665_630f39d1",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/rest/PdpGroupDeployControllerV1.java",
+      "patchset_number": 4,
+      "line": 36,
+      "message": "this is changed to \"org.onap.policy.models.pap.concepts.PdpGroup\"",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-13 16:07:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

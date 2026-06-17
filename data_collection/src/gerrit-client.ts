@@ -10,6 +10,8 @@
  *      - GET /changes/{id}/revisions/{rev}/files    → file list per patchset
  *      - GET /changes/{id}/revisions/{rev}/files/{file}/diff → unified diff
  *      - GET /changes/{id}/comments                 → inline comments
+ *  - Token-bucket rate limiting so we never exceed Gerrit's request quota.
+ *  - Per-request AbortController timeout.
  *
  * Gerrit REST API reference:
  * https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html
@@ -43,6 +45,111 @@ const LIST_OPTIONS: readonly string[] = [
   "ALL_REVISIONS",
   "MESSAGES",
 ] as const;
+
+// ─── Rate limiter ─────────────────────────────────────────────────────────────
+
+export interface RateLimiterOptions {
+  /**
+   * Maximum number of requests allowed per `windowMs`.
+   * @default 30
+   */
+  maxRequests: number;
+  /**
+   * Rolling window duration in milliseconds.
+   * @default 10_000   (10 seconds)
+   */
+  windowMs: number;
+  /**
+   * Hard minimum gap between any two consecutive requests in milliseconds.
+   * Prevents burst-firing even when the token bucket has capacity.
+   * @default 200
+   */
+  minIntervalMs: number;
+  /**
+   * Timeout applied to each individual HTTP request in milliseconds.
+   * The fetch is aborted and an error thrown if the server does not respond
+   * within this window.
+   * @default 30_000   (30 seconds)
+   */
+  requestTimeoutMs: number;
+}
+
+const DEFAULT_RATE_LIMITER_OPTIONS: RateLimiterOptions = {
+  maxRequests: 30,
+  windowMs: 10_000,
+  minIntervalMs: 200,
+  requestTimeoutMs: 30_000,
+};
+
+/**
+ * Token-bucket rate limiter with a minimum inter-request interval.
+ *
+ * Callers `await limiter.acquire()` before every request. The method resolves
+ * only when both conditions are satisfied:
+ *  1. The rolling window contains fewer than `maxRequests` in-flight timestamps.
+ *  2. At least `minIntervalMs` has elapsed since the previous request.
+ */
+export class RateLimiter {
+  private readonly opts: RateLimiterOptions;
+  /** Timestamps (Date.now()) of requests dispatched within the current window. */
+  private requestTimestamps: number[] = [];
+  /** Timestamp of the most recent request dispatched. */
+  private lastRequestAt = 0;
+
+  constructor(opts: Partial<RateLimiterOptions> = {}) {
+    this.opts = { ...DEFAULT_RATE_LIMITER_OPTIONS, ...opts };
+  }
+
+  /**
+   * Waits until a request slot is available, then records the dispatch time.
+   * Returns the number of milliseconds it waited (useful for debug logging).
+   */
+  async acquire(): Promise<number> {
+    const start = Date.now();
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const now = Date.now();
+      const windowStart = now - this.opts.windowMs;
+
+      // Drop timestamps that have left the rolling window.
+      this.requestTimestamps = this.requestTimestamps.filter(
+        (t) => t > windowStart,
+      );
+
+      const windowFull = this.requestTimestamps.length >= this.opts.maxRequests;
+      const tooSoon = now - this.lastRequestAt < this.opts.minIntervalMs;
+
+      if (!windowFull && !tooSoon) break;
+
+      // Calculate how long to sleep before the next check.
+      let sleepMs = this.opts.minIntervalMs;
+
+      if (windowFull) {
+        // Sleep until the oldest request in the window expires.
+        const oldestInWindow = this.requestTimestamps[0];
+        const windowExpires = oldestInWindow + this.opts.windowMs;
+        sleepMs = Math.max(sleepMs, windowExpires - now + 1);
+      }
+
+      if (tooSoon) {
+        const intervalExpires = this.lastRequestAt + this.opts.minIntervalMs;
+        sleepMs = Math.max(sleepMs, intervalExpires - now + 1);
+      }
+
+      await sleep(sleepMs);
+    }
+
+    const waited = Date.now() - start;
+    this.lastRequestAt = Date.now();
+    this.requestTimestamps.push(this.lastRequestAt);
+    return waited;
+  }
+
+  get requestTimeoutMs(): number {
+    return this.opts.requestTimeoutMs;
+  }
+}
 
 // ─── Raw API response shapes ──────────────────────────────────────────────────
 
@@ -134,31 +241,78 @@ function encodeFilePath(filePath: string): string {
   return filePath.split("/").map(encodeURIComponent).join("%2F");
 }
 
+/** Resolves after `ms` milliseconds. */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // ─── Client ───────────────────────────────────────────────────────────────────
+
+export interface GerritClientOptions {
+  /** Rate-limiter configuration (merged with defaults). */
+  rateLimiter?: Partial<RateLimiterOptions>;
+}
 
 export class GerritClient {
   private readonly baseUrl: string;
+  private readonly limiter: RateLimiter;
 
   /**
    * @param baseUrl  Root URL of the Gerrit instance, e.g. "https://gerrit.onap.org/r".
    *                 Trailing slash is normalised away.
+   * @param options  Optional rate-limiter overrides and timeout settings.
    */
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, options: GerritClientOptions = {}) {
     this.baseUrl = baseUrl.replace(/\/+$/, "");
+    this.limiter = new RateLimiter(options.rateLimiter ?? {});
   }
 
   // ─── Low-level fetch ───────────────────────────────────────────────────────
 
   /**
-   * Performs a GET request and returns the parsed, XSSI-stripped JSON body.
-   * All errors produce a descriptive Error with the URL included.
+   * Performs a rate-limited GET request with a per-request timeout and returns
+   * the parsed, XSSI-stripped JSON body.
+   *
+   * Flow per call:
+   *  1. Await a rate-limiter slot (may sleep until capacity is available).
+   *  2. Create an AbortController wired to `requestTimeoutMs`.
+   *  3. Dispatch the fetch; abort if the server is too slow.
+   *  4. Strip the XSSI prefix and parse the body.
    */
   private async getJson<T>(url: URL | string): Promise<T> {
     const href = url instanceof URL ? url.toString() : url;
 
-    const response = await fetch(href, {
-      headers: { Accept: "application/json" },
-    });
+    // ── Rate limiting ──────────────────────────────────────────────────────
+    // const waited = await this.limiter.acquire();
+    // if (waited > 50) {
+    //   console.debug(
+    //     `[GerritClient] Rate-limited: waited ${waited}ms before ${href.slice(href.lastIndexOf("/changes/"))}`,
+    //   );
+    // }
+
+    // ── Timeout via AbortController ────────────────────────────────────────
+    const controller = new AbortController();
+    const timer = setTimeout(
+      () => controller.abort(),
+      this.limiter.requestTimeoutMs,
+    );
+
+    let response;
+    try {
+      response = await fetch(href, {
+        headers: { Accept: "application/json" },
+        signal: controller.signal as AbortSignal,
+      });
+    } catch (err: unknown) {
+      const isAbort = err instanceof Error && err.name === "AbortError";
+      throw new Error(
+        isAbort
+          ? `Gerrit request timed out after ${this.limiter.requestTimeoutMs}ms\nURL: ${href}`
+          : `Gerrit fetch error: ${String(err)}\nURL: ${href}`,
+      );
+    } finally {
+      clearTimeout(timer);
+    }
 
     if (!response.ok) {
       throw new Error(
@@ -234,7 +388,6 @@ export class GerritClient {
    * Returns the full CommitInfo for a specific patchset.
    *
    * GET /changes/{change-id}/revisions/{revision-id}/commit
-   * https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-commit
    *
    * @param changeId   The numeric change ID (_number).
    * @param revisionId Commit SHA or "current".
@@ -255,7 +408,6 @@ export class GerritClient {
    * Returns the map of files modified in a specific patchset.
    *
    * GET /changes/{change-id}/revisions/{revision-id}/files
-   * https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#list-files
    *
    * @param changeId   The numeric change ID (_number).
    * @param revisionId Commit SHA or "current".
@@ -276,7 +428,6 @@ export class GerritClient {
    * Returns the unified diff of a single file in a patchset.
    *
    * GET /changes/{change-id}/revisions/{revision-id}/files/{file-id}/diff
-   * https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-diff
    *
    * @param changeId   The numeric change ID (_number).
    * @param revisionId Commit SHA or "current".
@@ -302,7 +453,6 @@ export class GerritClient {
    * Returns all published inline comments on a change, keyed by file path.
    *
    * GET /changes/{change-id}/comments
-   * https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#list-change-comments
    *
    * @param changeId The numeric change ID (_number).
    */

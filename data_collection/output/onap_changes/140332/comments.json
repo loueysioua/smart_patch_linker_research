@@ -1,0 +1,279 @@
+{
+  "id": "oom~master~I0d7b404cd195c3d12c0a49015873f839e0b20043",
+  "change_id": "I0d7b404cd195c3d12c0a49015873f839e0b20043",
+  "_number": 140332,
+  "change_comments": [
+    {
+      "id": "43038083_694728cc",
+      "patchset_number": 8,
+      "message": "Hi Deena,\nthe tests have not been successful.\nAs opa-pdp is not depending on the DB initialization, you should only wait for policy-pap is up.",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2025-03-06 10:33:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "e20740d0_d10fdd5c",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 1,
+      "line": 91,
+      "message": "The rest of the file uses an indentation of 2 spaces. I think we should use that here too",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-02-28 07:20:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "58e7b39b_44a82d61",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 1,
+      "line": 91,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-03 10:54:27.000000000",
+      "in_reply_to": "e20740d0_d10fdd5c",
+      "unresolved": false
+    },
+    {
+      "id": "304fe965_a11bc987",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 31,
+      "message": "Please use the `{{ include \"common.readinessCheck.waitFor\" . | nindent 8 }}` here. You can find countless examples in OOM for that",
+      "author": {
+        "account_id": 7849,
+        "name": "Fiete Ostkamp",
+        "display_name": null,
+        "email": "fiete.ostkamp@telekom.de",
+        "username": "fostkamp"
+      },
+      "updated": "2025-03-04 15:16:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b09feb08_40596c95",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-05 13:36:48.000000000",
+      "in_reply_to": "304fe965_a11bc987",
+      "unresolved": false
+    },
+    {
+      "id": "5653666e_3193272b",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 32,
+      "message": "If you just use \"wait_for\" in the values.yaml, you can use:\n```\ninitContainers: {{ include \"common.readinessCheck.waitFor\" . | nindent 8 }}\n```",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2025-03-05 16:44:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "49866db8_a5a732f5",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 7,
+      "line": 136,
+      "message": "Didn't you want to wait for the policy-pap to be up ?\nThen it should look like:\n```\nreadinessCheck:\n  wait_for:\n    services:\n      - policy-pap\n```\nIf you want to additionally need to wait for the job, you can add:\n```\n    jobs:\n      - '{{ include \"common.release\" . }}-policy-pg-migrator-config'\n\n```",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2025-03-05 16:44:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "138bb944_81c6c756",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/templates/deployment.yaml",
+      "patchset_number": 7,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-06 06:56:41.000000000",
+      "in_reply_to": "5653666e_3193272b",
+      "unresolved": false
+    },
+    {
+      "id": "37a9a627_14182cc3",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 7,
+      "line": 136,
+      "message": "We checked the xacml it is only waiting for policy-pg-migrator-config, which is enough for opa also. So, waiting for pap is not required.",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-06 06:56:41.000000000",
+      "in_reply_to": "49866db8_a5a732f5",
+      "unresolved": false
+    },
+    {
+      "id": "9e8d0973_7979e2bc",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 8,
+      "line": 140,
+      "message": "The readinessCheck was not working as expected.\nPlease use instead:\n```\n   services:\n     - policy-pap\n```",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2025-03-06 10:33:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e28cf75f_53409a03",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 8,
+      "line": 140,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-06 14:03:44.000000000",
+      "in_reply_to": "9e8d0973_7979e2bc",
+      "unresolved": false
+    },
+    {
+      "id": "496fad4c_0a5bcc6f",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 9,
+      "line": 137,
+      "message": "Please remove space after \"wait_for\"",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2025-03-06 15:31:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bbfe67c2_e34ec6a3",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 9,
+      "line": 137,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-07 08:19:03.000000000",
+      "in_reply_to": "496fad4c_0a5bcc6f",
+      "unresolved": false
+    },
+    {
+      "id": "153b8cd2_dec19fcf",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 10,
+      "line": 46,
+      "message": "OOM may not accept snapshot versions",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2025-03-10 10:07:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b912fe26_8604df0c",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 10,
+      "line": 46,
+      "message": "yes, we will release SW this week and that will be added here",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-10 11:40:20.000000000",
+      "in_reply_to": "153b8cd2_dec19fcf",
+      "unresolved": true
+    },
+    {
+      "id": "ad84732e_d11dde41",
+      "file_path": "kubernetes/policy/components/policy-opa-pdp/values.yaml",
+      "patchset_number": 10,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 8479,
+        "name": "Deena Mukundan",
+        "display_name": null,
+        "email": "dm00536893@techmahindra.com",
+        "username": "deenam"
+      },
+      "updated": "2025-03-24 05:25:23.000000000",
+      "in_reply_to": "b912fe26_8604df0c",
+      "unresolved": false
+    }
+  ]
+}

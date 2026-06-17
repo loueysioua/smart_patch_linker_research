@@ -1,0 +1,178 @@
+{
+  "id": "clamp~master~I6c8d7fdaf8201c2bc7878f8a807c89002525857f",
+  "change_id": "I6c8d7fdaf8201c2bc7878f8a807c89002525857f",
+  "_number": 79101,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f26dcf45_46069070",
+      "file_path": "extra/sql/bulkload/clds-create-db-objects.sql",
+      "patchset_number": 1,
+      "line": 231,
+      "message": "do we need this sql for creating tables?\nWhy it is not done using JPA?",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a0f805b9_b6f60830",
+      "file_path": "extra/sql/bulkload/clds-create-db-objects.sql",
+      "patchset_number": 1,
+      "line": 274,
+      "message": "this is both in here and in association table",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "288e6c6f_def2143f",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/LoopLog.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "why don't we have one to One relation here?",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d070b251_e1bf12f2",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/MicroServicePolicy.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "why do we have both properties and jsonRepresentation?",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f4ba3c1e_c719d988",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/MicroServicePolicy.java",
+      "patchset_number": 1,
+      "line": 62,
+      "message": "can single Microservice policy be used by many loops?\nIn this case editing configuration for single loop affects all of them",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bf949b7f_784ae304",
+      "file_path": "src/main/resources/application-noaaf.properties",
+      "patchset_number": 1,
+      "line": 114,
+      "message": "This should be turn on only in tests. Otherwise clamp logs will be full of queries that bring no extra information in production",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-02-26 08:19:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d38566ac_3936199d",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/OperationalPolicy.java",
+      "patchset_number": 6,
+      "line": 60,
+      "message": "what do you think about changing this to JsonObject?\nIt would be much easier to parse and it's Json anyway.\n\nTo achieve it we would need class converting it to and from string:\n\npublic class JsonObjectAttributeConverter implements AttributeConverter<JsonObject, String> {\n\n    @Override\n    public String convertToDatabaseColumn(JsonObject jsonObject) {\n        return GSON.toJson(jsonObject);\n    }\n\n    @Override\n    public JsonObject convertToEntityAttribute(String s) {\n        return GSON.fromJson(s, JsonObject.class);\n    }\n}\n\n\n\nthen this field would look like:\n\n\n    @Expose\n    @Convert(converter = JsonObjectAttributeConverter.class)\n    @Column(columnDefinition = \"json\", name = \"configurations_json\")\n    private JsonObject configurationsJson;",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-03-01 14:28:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4acaa78_c3c4c149",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/OperationalPolicy.java",
+      "patchset_number": 6,
+      "line": 60,
+      "message": "Yeah i wanted to have that, i need to retry because it was failing to be properly serialized/deserialized.\nI'll give it another try",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2019-03-01 14:35:48.000000000",
+      "in_reply_to": "d38566ac_3936199d",
+      "unresolved": false
+    },
+    {
+      "id": "be076d51_595e532b",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/OperationalPolicy.java",
+      "patchset_number": 6,
+      "line": 60,
+      "message": "I have this changed on my branch. Can we merge this one?",
+      "author": {
+        "account_id": 3541,
+        "name": "Adam Krysiak",
+        "display_name": null,
+        "email": "adam.krysiak@nokia.com",
+        "username": "akrysiak"
+      },
+      "updated": "2019-03-04 08:26:12.000000000",
+      "in_reply_to": "d4acaa78_c3c4c149",
+      "unresolved": false
+    },
+    {
+      "id": "e07056c6_dbf46d3c",
+      "file_path": "src/main/java/org/onap/clamp/dao/model/Loop.java",
+      "patchset_number": 6,
+      "line": null,
+      "message": "In the old CldsModel, there's also controlNamePrefix, controlNameUuid, typeId and typeName which are used in the code. The first 2 seems used to create the CL name and also used in the UI to identify the CL, the later 2 used in communicate with DCAE. Do you plan to add them also in the Loop?",
+      "author": {
+        "account_id": 9,
+        "name": "Xue Gao",
+        "display_name": null,
+        "email": "xue.gao@intl.att.com",
+        "username": "xuegao"
+      },
+      "updated": "2019-03-04 08:53:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

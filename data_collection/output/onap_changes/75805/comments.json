@@ -1,0 +1,178 @@
+{
+  "id": "oom%2Foffline-installer~master~I874063ad99948a55f9227d5e7eae05d3eaabe535",
+  "change_id": "I874063ad99948a55f9227d5e7eae05d3eaabe535",
+  "_number": 75805,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_db4b40af",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "To be honest I'm not a fan of reusing the same directories for every installer call. How about creating a separate directory like run_<timestamp> for all output files?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 01:03:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_f7289834",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "Ansible log is appended with every line prefixed with a timestamp and this installer is probably used only one time - how many times the customer will install the onap? On the other hand I am not against this - adding the timestamp to the logfile will be little hack though - ansible.cfg must be either templated or I will ignore it and use env. variable - I will try to use the best solution: if no env. variable set use the ansible.cfg",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 09:39:18.000000000",
+      "in_reply_to": "9adffdf1_db4b40af",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_f7b658f8",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "well in terms of logs yeah it's not a big deal as they can be appended just like system logs but still it's nice to have a \"reboot\" delimiter just for convenience.\n\nThis comment is also related to the surrounding lines which are mounted rw.\nI'm not sure if there is a need to template ansible cfg?\nMaybe you could just create those dirs in the beginning of this script? sth like:\nRUN_DIR=$ANSIBLE_DIR/ansible_run_`date +%s`\nmkdir -p $RUN_DIR/ssh\nmkdir -p $RUN_DIR/application\nmkdir -p $RUN_DIR/log\nmkdir -p $RUN_DIR/certs\n\nand the mount this rw inside the container/chroot\n\nTo be honest the most important reason for my comment was mounting .ssh dir of current user rw into the environment not logs itself but as this pattern is repeating this may be a good opportunity to fix this;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 09:57:43.000000000",
+      "in_reply_to": "9adffdf1_f7289834",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_77990878",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "application is prepopulated with a code (that is the point) - not mounted empty and populated, that goes for .ssh too, that would mean I would have to copy those dirs into timestamped dirs and those to mount, and after leave it? If I do it like that ansible-log timestamped folder can be kept (to make sense) but others makes not much sense to keep - .ssh is rw because some playbook is creating keys, application is rw because some playbook at least before used it to template something - now it can maybe be ro - so for your comment - I can make log dir templated but I think that is ugly and I would like to have all logs inside one dir log",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 10:14:22.000000000",
+      "in_reply_to": "9adffdf1_f7b658f8",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_371940d7",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "you are right in this case but this way it's also ugly as even through it runs inside chroot/container it modifies important parts of host system.\nif we need to populate directories maybe we should use overlay instead of bind mount?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 11:02:09.000000000",
+      "in_reply_to": "9adffdf1_77990878",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_378060bf",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": ".ssh is ugly and in my case I dont modify it when I run playbooks because I setup the ssh keys before I am running any playbook. But there is a playbook which do this for a user - distributes new ssh keypair across the nodes and should be permanent so no overlay in thsi case - this is for another debate. For appliacation dir - I am not certain if it needs to be rw or not - also this can be separate commit - in this case I will just redo the log stuff",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 11:07:54.000000000",
+      "in_reply_to": "9adffdf1_371940d7",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_b7d9b0f4",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "cool. Thank you for nice clarification of all constraints.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 11:22:16.000000000",
+      "in_reply_to": "9adffdf1_378060bf",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_5a33c9f5",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "why don't you just bind mount a file? This way it will always have the same name in chroot/docker just on host it will be different",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 13:20:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_9a6b71b6",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "That IMHO improves nothing and bring more problems - now the path with log must be created before - there must be mkdir now for log dir. And the functionality will be the same. I dont see point. Docker may create the whole filepath (possibly not) and I definitively in my chroot script dont create the whole path. I create the last piece file or dir but the path must exist.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 13:32:51.000000000",
+      "in_reply_to": "9adffdf1_5a33c9f5",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_5ae66945",
+      "file_path": "ansible/run_playbook.sh",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "sorry I thought that you forgot to modify config file and that in this way we will need to template it. I just checked ansible doc:\nhttps://docs.ansible.com/ansible/2.4/config.html#envvar-ANSIBLE_LOG_PATH\n\nand now I get your point;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 13:43:48.000000000",
+      "in_reply_to": "9adffdf1_9a6b71b6",
+      "unresolved": false
+    }
+  ]
+}

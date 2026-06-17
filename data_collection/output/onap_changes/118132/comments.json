@@ -1,0 +1,144 @@
+{
+  "id": "cps~master~I37fa2f98479b3340ff1ec68b9b6e3167c2dba8ff",
+  "change_id": "I37fa2f98479b3340ff1ec68b9b6e3167c2dba8ff",
+  "_number": 118132,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "646423a2_7d40725e",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "this goes agains CSIT rules.  Docker generation must always be part of the project build.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-20 17:59:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d77a9bbf_761dc1ce",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "correct approach will be to move this to each profile. I think I mentioned this to Aditya last week.\n\n        <plugins>\n            <plugin>\n                <groupId>com.google.cloud.tools</groupId>\n                <artifactId>jib-maven-plugin</artifactId>\n            </plugin>\n        </plugins>\n\nI will propose a fix[0], I hope you don't mind. We can save some time based on the different time zones we work. So you can test the fix, if it gets merged before you start.\n\n[0] https://gerrit.onap.org/r/c/cps/+/118138",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-20 17:59:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d1f95708_5586813f",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 138,
+      "message": "you are creating 3 images with the same name cps-nf-service. Thus you are blocking to generate 2 different types of image if desired.\nif you generate a different one, you can distinguish what it contains plus one overriding each other.\nPlus names has been decided by the team already.\nSame applies for changes on next lines.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-20 17:59:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "85cd1342_41330a21",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "I would see the development process in a different way.\n\nIn early dev cycle steps, in my local env, I don't want mvn clean package to build any docker image (it requires docker to run, takes more time to build, fills my local file system, ...). This stage requiring repetitive tasks should be straightforward, simple, fast, and light.\n\nLater on in the dev cycle, at integration steps, docker images are required. Also, automatic pipelines to run integration tests are responsible to run appropriate command to build docker images, they will run tests against.\n\nI can not say for CSIT specifically as I'm not familiar with it.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-02-22 20:21:26.000000000",
+      "in_reply_to": "646423a2_7d40725e",
+      "unresolved": true
+    },
+    {
+      "id": "387463e9_2babf76c",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 138,
+      "message": "Each docker profile generates a different docker image:\n* `cps-docker` profile generates `cps-service` image (line 122)\n* `xnf-docker` profile generates `cps-nf-service` image (line 138)\n* `cps-xnf-docker` profile generates `cps-and-nf-service` image (line 154)\n\nPlease, let me know if you spot any bug.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-02-22 20:21:26.000000000",
+      "in_reply_to": "d1f95708_5586813f",
+      "unresolved": true
+    },
+    {
+      "id": "1ede42cc_7a7ab38e",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "Is not the way ONAP + CSIT wants to go -> \nhttps://wiki.onap.org/display/DW/Project-specific+CSIT+structure\nplus there is link for a video on main chat, and I'm pretty sure sent it to you some time ago that you can watch.\nAnyway you can find more info on https://jira.onap.org/browse/CPS-188",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-22 20:48:00.000000000",
+      "in_reply_to": "85cd1342_41330a21",
+      "unresolved": true
+    },
+    {
+      "id": "0faa7ea1_f30c1f2b",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 138,
+      "message": "my bad, sorry. I overlooked and saw the same name. At any rate those names were decided by the team already, \nif it was decided to change it again. I was not aware of such decision.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-22 20:48:00.000000000",
+      "in_reply_to": "387463e9_2babf76c",
+      "unresolved": true
+    },
+    {
+      "id": "e62861e2_bc2e3749",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 2,
+      "line": 38,
+      "message": "https://us02web.zoom.us/rec/play/mmpguE-AcAbc-whxQa-xcXlZjdigmHJPzy-p3auuJfLlRf-YTjN9inXA7upf_00YS3gL_m7A0jh8DxEN.dw4xCFiKCej8foG9?continueMode=true&_x_zm_rtaid=LUUWlE73Q3-9l1hmE0BWww.1612355095037.079ea8eac93752c18fe75bbec44a6c78&_x_zm_rhtaid=352\n\nimportant part start around minute 27, and around minute 37, is when the docker build is mentioned.\n\nI'm just letting know the desired way to go, not what I want, just to be clear. If Lasse assist to our CSIT internal meeting, then the team can ask about this and decide.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-02-22 20:56:25.000000000",
+      "in_reply_to": "1ede42cc_7a7ab38e",
+      "unresolved": true
+    }
+  ]
+}

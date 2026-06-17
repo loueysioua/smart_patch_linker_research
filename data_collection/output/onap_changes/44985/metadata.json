@@ -1,0 +1,280 @@
+{
+  "id": "oom~master~I546c5627587e8e4212757e4f408194b8f84eb540",
+  "change_id": "I546c5627587e8e4212757e4f408194b8f84eb540",
+  "_number": 44985,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2018-04-26 22:08:03.000000000",
+    "updated": "2018-05-03 19:19:38.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 335,
+      "name": "Chris Donley",
+      "display_name": null,
+      "email": "chrisd@alum.dartmouth.org",
+      "username": "chrisd5110"
+    },
+    "submitter": null
+  },
+  "subject": "Fix vnfsdk oom deployment",
+  "commit_message": "Fix vnfsdk oom deployment\n\nPointing to the correct containers on Nexus3.\n\nIssue-ID: VNFSDK-260\n\nChange-Id: I546c5627587e8e4212757e4f408194b8f84eb540\nSigned-off-by: Chris Donley <christopher.donley@huawei.com>\n",
+  "change_log": {
+    "entry_count": 18,
+    "entries": [
+      {
+        "id": "83935f1cc30e59272cd0979d8f21f9a8f513433b",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-26 22:08:03.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "86f6565eb89e4d5bc15ffa856a35879f9063962b",
+        "author": {
+          "account_id": 749,
+          "name": "Murali Mohan Murthy Potham",
+          "display_name": null,
+          "email": "murali.p@huawei.com",
+          "username": "Murali-P"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-27 06:25:08.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "781a00c5216eb68dbcf9bef07dbd5403ae814f0d",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-27 15:19:09.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nLab test shows following issue: \n- syntax \n   value: \"{{ .Values.vnfsdk-postgres.nameOverride }}.{{ include \"common.namespace\" . }}\"\nmake all throws message : \n27-Apr-2018 14:34:19.425 SEVERE [http-nio-8702-exec-8] org.postgresql.Driver.connect Connection error:\n org.postgresql.util.PSQLException: Connection to 127.0.0.1:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.\n  change to :  value: \"{{ index .Values \"vnfsdk-postgres\" \"nameOverride\" }}.{{ include \"common.namespace\" . }}\"\n\n- position \n  put this environment variable under containers instead of init ccontainer, otherwise environment variable won't be transfered as expected. \n      containers:\n      - image: \"{{ include \"common.repository\" . }}/{{ .Values.image }}\"\n        imagePullPolicy: {{ .Values.pullPolicy | default .Values.global.pullPolicy }}\n        name: {{ include \"common.name\" . }}\n        env:\n        - name: POSTGRES_IP\n          value: \"{{ index .Values \"vnfsdk-postgres\" \"nameOverride\" }}.{{ include \"common.namespace\" . }}\"\n\n- after above two change, POSTGRES_IP shows up as environment variable \n# printenv | grep POSTGRES\nPOSTGRES_IP=vnfsdk-postgres.onap\nPOSTGRES_SERVICE_PORT_HTTP=5432\nPOSTGRES_PORT_5432_TCP_ADDR=10.43.151.226\nPOSTGRES_SERVICE_HOST=10.43.151.226\nPOSTGRES_PORT_5432_TCP_PORT=5432\nPOSTGRES_PORT_5432_TCP_PROTO=tcp\nPOSTGRES_SERVICE_PORT=5432\nPOSTGRES_PORT=tcp://10.43.151.226:5432\nPOSTGRES_PORT_5432_TCP=tcp://10.43.151.226:5432\n\nwhile error is still seen in log: \ncat /service/logs/catalina.out | more \n.....\n27-Apr-2018 14:57:02.672 SEVERE [http-nio-8702-exec-7] org.postgresql.Driver.connect Connection error:\n org.postgresql.util.PSQLException: The connection attempt failed.\n\nSeems POSTGRES_IP is not recognized.  \nlook at the other environment variables: \n\nservice ClusterIP port:  POSTGRES_SERVICE_HOST=10.43.151.226 \nroot@k8s1:/stage/oom751/kubernetes# kubectl get services --all-namespaces\nNAMESPACE     NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE\n.......\nonap          postgres               ClusterIP   10.43.151.226   <none>        5432/TCP                     2d\nonap          refrepo                NodePort    10.43.219.57    <none>        8702:30297/TCP               2d\nonap          robot                  NodePort    10.43.46.154    <none>        88:30209/TCP                 2d\n\npostgres DB IP: \nroot@k8s1:/stage/oom751/kubernetes# kubectl describe pod dev-vnfsdk-postgres-588b6cc5c8-n56zg -n onap | grep IP\nIP:             10.42.142.61\n\nVNFSDK pod IP: \nroot@k8s1:/stage/oom751/kubernetes# kubectl describe pod dev-vnfsdk-8d5869cbc-z8ww5 -n onap | grep IP\nIP:             10.42.9.14\n\nHave you tried service IP:  POSTGRES_SERVICE_HOST=10.43.151.226\nit might be a better choice than postgres DB IP.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2bcc4ecca70acf152066082288d733b0ac02b574",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-27 15:52:04.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "b2ff8b594d6d0bcde2e6d15a6a7507f5d15a81e2",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-27 16:53:18.000000000",
+        "message": "Patch Set 2:\n\nerror message: \n27-Apr-2018 16:50:25.205 SEVERE [http-nio-8702-exec-6] org.postgresql.Driver.connect Connection error:\n org.postgresql.util.PSQLException: The connection attempt failed.\n        at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:275)\n........\n        at java.lang.Thread.run(Thread.java:748)\nCaused by: java.net.UnknownHostException: vnfsdk-postgres.onap\n\nSeems POSTGRES_IP is not recognized.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a7bc0cd4a395badb60deb1c75baaf32d253389ac",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-29 11:24:16.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "6414f9882c72599a52605ef5c90f80ddbc9bf686",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-30 16:38:18.000000000",
+        "message": "Patch Set 3: Published edit on patch set 2.",
+        "patchset_number": 3
+      },
+      {
+        "id": "b1d85059d10a433d7326a138c412b9126293a7d2",
+        "author": {
+          "account_id": 161,
+          "name": "Roger Maitland",
+          "display_name": null,
+          "email": "Roger.Maitland@amdocs.com",
+          "username": "rogerm"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-30 16:57:51.000000000",
+        "message": "Patch Set 3:\n\n> (1 comment)\n\nBorislav, was the \"-\" in the name causing the original problem? We have other components with dashes in the name so we should be aware of this.",
+        "patchset_number": 3
+      },
+      {
+        "id": "63a5482ce202ab7de145b75581cbf2c13162b4a4",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-30 17:53:15.000000000",
+        "message": "Patch Set 3:\n\n(1 comment)",
+        "patchset_number": 3
+      },
+      {
+        "id": "b4464490d2143c5d865b56d3ffbac95d763ad1a6",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-30 20:23:26.000000000",
+        "message": "Patch Set 3:\n\nJasmine,  so what changes do you want me to make?  Delete the deployment.yaml change and reference POSTGRES_SERVICE_HOST somewhere else?",
+        "patchset_number": 3
+      },
+      {
+        "id": "98d1569c29136ef99d2f6ca87e8a79ad0f93453c",
+        "author": {
+          "account_id": 161,
+          "name": "Roger Maitland",
+          "display_name": null,
+          "email": "Roger.Maitland@amdocs.com",
+          "username": "rogerm"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-30 20:35:04.000000000",
+        "message": "Patch Set 3:\n\n> Jasmine,  so what changes do you want me to make?  Delete the\n > deployment.yaml change and reference POSTGRES_SERVICE_HOST\n > somewhere else?\n\n > Jasmine,  so what changes do you want me to make?  Delete the\n > deployment.yaml change and reference POSTGRES_SERVICE_HOST\n > somewhere else?\n\nJasmine and I were working on this together.  If you're able to use the 'POSTGRES_SERVICE_HOST' environment variable within your container it should already be set by K8s.  If this is correct we won't need to make any changes here.",
+        "patchset_number": 3
+      },
+      {
+        "id": "864eb3ba97da1a677add98200b17c12f5685e8e8",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-30 20:42:07.000000000",
+        "message": "Patch Set 4: Published edit on patch set 3.",
+        "patchset_number": 4
+      },
+      {
+        "id": "b059e9003ec4586b6571283687ec2d66ac641d58",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-30 20:42:48.000000000",
+        "message": "Patch Set 4:\n\nOK. Removing the postgres_service_host variable, but leaving the changes to use the correct containers.",
+        "patchset_number": 4
+      },
+      {
+        "id": "db08b27d917a6c1098b0c85433dc0c1d57ca1d17",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-02 13:31:44.000000000",
+        "message": "Patch Set 5: Commit message was updated.",
+        "patchset_number": 5
+      },
+      {
+        "id": "2f37fafe0013ac9fe9a7ff4d2201d27d1073f4d7",
+        "author": {
+          "account_id": 749,
+          "name": "Murali Mohan Murthy Potham",
+          "display_name": null,
+          "email": "murali.p@huawei.com",
+          "username": "Murali-P"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-03 04:20:20.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "5adea922dadef148769fe1e8c91c035bbd5cdd97",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-03 08:00:20.000000000",
+        "message": "Patch Set 5:\n\n> > (1 comment)\n > \n > Borislav, was the \"-\" in the name causing the original problem? We\n > have other components with dashes in the name so we should be aware\n > of this.\n\nRoger, dash in values.yaml key is not allowed. Dashes in component names are perfectly fine.",
+        "patchset_number": 5
+      },
+      {
+        "id": "80832f7ad4e89bc88e8f641973b4530cab950592",
+        "author": {
+          "account_id": 2541,
+          "name": "Jasmine Wen",
+          "display_name": null,
+          "email": "jasmine.wen@amdocs.com",
+          "username": "jasmineWen"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-03 18:58:58.000000000",
+        "message": "Patch Set 5: Code-Review+1",
+        "patchset_number": 5
+      },
+      {
+        "id": "055dd1de4b49d05582bc2c984a67a6ae4045e45e",
+        "author": {
+          "account_id": 335,
+          "name": "Chris Donley",
+          "display_name": null,
+          "email": "chrisd@alum.dartmouth.org",
+          "username": "chrisd5110"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-03 19:19:38.000000000",
+        "message": "Abandoned\n\nIncluded in 44403",
+        "patchset_number": 5
+      }
+    ]
+  }
+}

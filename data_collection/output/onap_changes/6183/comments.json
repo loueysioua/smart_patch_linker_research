@@ -1,0 +1,42 @@
+{
+  "id": "policy%2Fcommon~master~Ibcc238b21d6ff860a3df80e8bd570a14f5367b5d",
+  "change_id": "Ibcc238b21d6ff860a3df80e8bd570a14f5367b5d",
+  "_number": 6183,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a202591_49b4f1f1",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/eelf/EventData.java",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "I don't think it is a good idea to allow EventData to be equal to a String. Shouldn't the following always hold true?\n\na.equals(b) == b.equals(a)\n\nThis won't always be the case if 'a' is of class 'EventData' and 'b' is of class 'String'.",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2017-07-25 07:54:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a202591_89b689db",
+      "file_path": "common-logging/src/main/java/org/openecomp/policy/common/logging/eelf/EventData.java",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "The idea of this code inspection is to resolve sonar blockers.   I agree, this is bad coding, and wanted to remove but I decided to leave the functionality as it was before so not to break it, even though it is bad.   I haven't written any of this code, and a proponent to remove all together.  \n\nNote the pre-inspection before code of the equals():\n\n\tString requestId = (String) obj;\n\t\tif(requestID != null && requestID.equals(requestId)){\n\t\t\treturn true;\n\t\t}\n\nIt does not even check the type of the obj, blindly typecast it to String.   Again, the previous code in this module is horrible.   But provided this may be in functionality out there that is using the commons module in other repos as policy/engine, I didn't want to go there, and handle the regression testing there, so this review is just preserving existing functionality but fixing the sonar blocker which is the line that does the \"String requestId = (String) obj;\".\n\nIn general, the problems that I've seen in these common-logging modules are really bad, but is not my intent to redesign it or regression testing all its uses, at this point as part of this activity.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-07-25 11:41:37.000000000",
+      "in_reply_to": "5a202591_49b4f1f1",
+      "unresolved": false
+    }
+  ]
+}

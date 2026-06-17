@@ -1,0 +1,586 @@
+{
+  "id": "policy%2Fcommon~master~Id667f27b15c012398421ba657b5324cc1d82cf1f",
+  "change_id": "Id667f27b15c012398421ba657b5324cc1d82cf1f",
+  "_number": 123187,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "77c5f963_07f611dc",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 1,
+      "line": 143,
+      "message": "I have defaulted this to true here, which means DefaultMetrics like CPU/Memory etc are exposed by default for all Policy components.\nWe can choose to configure this defaultMetrics to true/false, as well as the metrics itself maybe if everyone thinks all of this should be configurable.\nFor e.g., we can add a new field \"exportMetrics\" : true/false, and \"exportDefaultMetrics\": true/false in the individual Policy components' startup config file.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-09 11:24:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f5e491fb_bc3ad403",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 1,
+      "line": 143,
+      "message": "This will bring up the prometheus metrics of the respective PF component on <ip>:<port>/metrics \nDoes this look ok, or should we go with the usual url, e.g: <ip>:<port>/policy/api/v1/metrics ?\nI prefer the first option, as such versioning and all isn't really needed and is always going to be a simple get call for metrics.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-09 11:24:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6a4e4ecf_cd1058e7",
+      "file_path": "policy-endpoints/pom.xml",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "may be just call it \"io.prometheus.version\"",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-09 17:17:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9c611747_074fefb0",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 1,
+      "line": 143,
+      "message": "Thanks Ajith for looking into it!\n\nAs per me, we can go with below:\n1) Add a parameter in component config file (exportMetrics: true/false). This solution provides more flexibility at component level & deployment level to enable/disable prometheus metrics.\n2) I am okay to keep it simple and just have <ip>:<port>/metrics as the url. The benefit of that will be ease in configuring the integration for all policy components. And I couldn't think of a case where we will need the versioning for the metrics api.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-09 17:17:32.000000000",
+      "in_reply_to": "f5e491fb_bc3ad403",
+      "unresolved": true
+    },
+    {
+      "id": "d639c6f3_a0cb1a2a",
+      "file_path": "policy-endpoints/pom.xml",
+      "patchset_number": 1,
+      "line": 171,
+      "message": "blank line between dependencies to follow existing layout convention in file",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-10 00:53:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0e583439_44691d86",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+      "patchset_number": 1,
+      "line": 124,
+      "message": "See my general comment about generic servlet support (which will cover metrics plus other uses).",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-10 00:53:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "41352ad9_5dac4675",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 1,
+      "line": 143,
+      "message": "This also relates to my comment about keeping it generic when it constructing the server.   In general, I think we don't want to force a \"prometheus\" servlet every time we build a new server.   For example a component, ie. drools or apex may use n>1 servers and all of those servers will add the \"/metrics\" servlet endpoint.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-10 00:53:43.000000000",
+      "in_reply_to": "9c611747_074fefb0",
+      "unresolved": true
+    },
+    {
+      "id": "c953d528_20102fa3",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+      "patchset_number": 1,
+      "line": 229,
+      "message": "In theory this class is for the JAX-RS Jersey implementation.   I was thinking that this could go into the parent class, JettyServletServer which I think is the right level of abstraction for it.   I said previously if we can add generic servlet support to that class (similar to the Filter ones), I think that would be better.\n\nAn user can define properties as used in the factory provided that somebody passes the Servlet class name in configuration (ie. MetricsServlet for prometheus) and will bring it up.\n\nI think for the DefaultExports.initialize() we don't need to worry at this level, provided that this is a library.   An specific component will configure the endpoint to use the prometheus MetricServlet and can it their own code to call it or not if they choose to do so.    One shortcoming from putting it here is that it will get call multiple times, one per server created.   I think it is better to leave that decision to the specific component using this library.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-10 00:53:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2192d615_a0bf765c",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "We need to populate servletPath and servletClass into the properties here for this to work. So, restServerParameters should have these details too, configured in individual components' startup config file?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-12 11:15:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3b932173_a2d1bc32",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "I think the easy configuration for api and pap servers is to use a \"prometheus\" boolean in the configuration.   For example with the properties configuration changes in a drools-pdp the telemetry server that is currently configured like this:\n\nhttp.server.services.CONFIG.host=${envd:TELEMETRY_HOST}\nhttp.server.services.CONFIG.port=9696\nhttp.server.services.CONFIG.userName=${envd:TELEMETRY_USER}\nhttp.server.services.CONFIG.password=${envd:TELEMETRY_PASSWORD}\nhttp.server.services.CONFIG.restPackages=org.onap.policy.drools.server.restful\nhttp.server.services.CONFIG.managed=false\nhttp.server.services.CONFIG.swagger=true\nhttp.server.services.CONFIG.https=false\nhttp.server.services.CONFIG.aaf=${envd:AAF:false}\nhttp.server.services.CONFIG.serialization.provider=org.onap.policy.common.gson.JacksonHandler,org.onap.policy.common.endpoints.http.server.YamlJacksonHandler\n\nI would add a property line:\n\nhttp.server.services.CONFIG.prometheus=true\n\nto get it started attached to the telemetry server.   The approach I took here was similar to the aaf or https flag in the properties.\n\nI was thinking but didn't add it to the patch that there would be an equivalent in RestServerParameters that api, pap, etc .. would use instead.\n\nThe other option is the generic one as you said passing the servletPath and servletClass as in some of the junits which is also possible via the properties in drools, but would need some additional work for the RestServerParameters.    In the code when somebody uses the the prometheus boolean flag under the hood sets the servletpath and class.  I think it is prefereble though for our existing configuration just use the boolean to make config more clear.\n\nAjith, Ram, what are your thoughts?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-12 15:49:57.000000000",
+      "in_reply_to": "2192d615_a0bf765c",
+      "unresolved": true
+    },
+    {
+      "id": "7a4cc0bb_3e763990",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 7,
+      "line": 178,
+      "message": "I think we don't need to have specific handling for metrics if we are already building a generic way to add any servlet to the rest server.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-12 16:50:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f43fc1d6_427545ab",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "I think we need to go with one option:\n1) Have a generic way to add \"any\" servlet (including metric) using the servletPath & servletClass in components. And the servletPath & servletClass are provided to RestServer in the constructor itself based on a config at component level to enable/disable metrics.\n2) Just have a configuration to enable/disable metrics in components. And the servletPath & servletClass are hard coded in RestServer.\n\nFrom our side, we are okay to go either way. But it's not worth doing both of them.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-12 16:50:43.000000000",
+      "in_reply_to": "3b932173_a2d1bc32",
+      "unresolved": true
+    },
+    {
+      "id": "32b69d81_cba3b542",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "I want both of them, Ram, at the least when I configure from properties (drools).   For the json config (other components), I think it would be good too for the rest server parameters, but since I think it does not cover all of what the original factory/properties does I am not that strong.\n\nMy reasons are:\n\n1. Same design as AAF, allows for any type of Servlet Filters but offers the convenience to just provision a well-known configured filter like AAF with just a boolean, this is easier to read and configure for an admin, true/false vs. having to know full classname of implementation and path.\n\n2. If you choose the option to only have a boolean to enable/disable metrics, then the generic servlet functionality will go away, so loss of functionality, won't be able to configure a server endpoint with an arbitrary servlet (other than the metrics one supported by the bool).\n\n3. On the other hand, if you choose the option to only support servlet and servlet path configuration, it will support all,  but for a well-known servlet for all components, such as the prometheus one, administration is a little more cumbersome as configurator instead of a true/false needs to know some implementation details.   The idea here is the same as what we did for the AAF Cadi Filter, since it is common to all components, wanted to relieve administrators from such provisioning of provisioning the full classname of the cadi filter, instead they can rely on a boolean.   Similarly, for a person, not familiar with the code that has to provision it, it is more straightforward to provision prometheus=true to enable it than provisioning the classname of the prometheus servlet and the servlet path.   Note that AAF and Metrics servlets would be the only servlet/filters *common across all components* and therefore is ok to give them special attention.\n\n4. The code to add prometheus boolean flag support is almost no work, just a few lines, and it reuses the generic servlet code that provides generic functionality.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-12 17:51:24.000000000",
+      "in_reply_to": "f43fc1d6_427545ab",
+      "unresolved": true
+    },
+    {
+      "id": "6d5f4d0d_81d9c6d8",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "I agree with all of your comments Jorge. It is best to just have a simple flag \"exportMetrics\" or \"prometheus\" something like that in the component config/properties file. \nThe only question was\n - Based on the flag, isn't it better for the components to pass the servletPath and servletClass when the policy-endpoints support it (probably in the RestServer constructor - similar to how we pass Aaf**Filter class today - https://github.com/onap/policy-api/blob/master/main/src/main/java/org/onap/policy/api/main/startstop/ApiActivator.java#L77 )\n(Reiterating to make sure there is no misunderstanding)\nIf I understand your comments correctly, you are of the opinion that we shouldn't go as mentioned above, but the servletPath and servletClass for prometheus should be hardcoded in the policy-common based on just the flag set by individual components (We are just adding the initial support for generic standard servlets in policy-common for future, but for prometheus, we do not intend to use it directly from individual components). If this is the case, I probably have to revert to patchset 7.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-13 09:22:27.000000000",
+      "in_reply_to": "32b69d81_cba3b542",
+      "unresolved": true
+    },
+    {
+      "id": "bf3d8a3a_814ec7a0",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "I think as you said, it makes sense to pass the servlet as a parameter to the RestServer as I am looking at it now.  I see that the RestServer needs all variable information in the constructor for the httpservletfactory to use it. . \n\nI think based on that you will need to modify this method in RestServer to accommodate those arguments in the constructor:\nhttps://git.onap.org/policy/common/tree/policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java#n84\n\nI can see that the resulting properties being machine generated you can get by generating a more complex properties file to be used.    \n\nNote thought that drools does not use restserver and relies directly on properties directly, so the rest server code does not apply to it (uses directly the .properties files and the HttpServletServerFactory)\n\nFrom provisioning point of view, for drools, I would like to keep the contents for patch 7 that solves for us a variety of configurations I am interesting in supporting directly from the properties file:\n\nFor example, if I want to support the metrics with and existing server, I will add the following to the existing properties:\n\n# Example 1 - add metrics globally to an existing REST server at \"/metrics\" endpoint \n# This will be the common case.\nhttp.server.services.CONFIG.prometheus=true  .\n\nIf I want a different servlet than the default prometheus, may be you extend it, or want to change the default path, I would add instead of the prometheus boolean, the following to an existing server:\n\n# Example 2 - add metrics to an existing REST server at different endpoint:\nhttp.server.services.CONFIG.http.servletUriPath=/any/path/for/metrics\nhttp.server.services.CONFIG.http.servletClass=io.prometheus.client.exporter.MetricsServlet\n\nExample 2 also applies to any servlet, this is the generic way.\n\n# Example 3 - If I wanted to support an individual server dedicated to metrics only for example in port 7777, I would just add the configuration based on examples 1 and 2.\n\nNow, back to your question, with regards to the RestServer, I think you are right, you need to pass all variable parameters to the RestServer, or at least the ones that you want to set the underlying properties for a configuration that matches the json.   I will most likely be OK with what you choose to do there, but I would like to preserve previous functionality as I described in examples above for drools that is present in patch 7 that was removed.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-13 17:39:49.000000000",
+      "in_reply_to": "6d5f4d0d_81d9c6d8",
+      "unresolved": true
+    },
+    {
+      "id": "3ac684d1_411117ef",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "Thanks for the explanation Jorge! First of all, very well captured 😊\n\nOnly risk with above examples is, some one can configure \n\nhttp.server.services.CONFIG.prometheus=false\n\nAnd additionally provide\nhttp.server.services.CONFIG.http.servletUriPath=/metrics\nhttp.server.services.CONFIG.http.servletClass=io.prometheus.client.exporter.MetricsServlet\n\nThen, even if the prometheus flag is disabled. The metrics servlet will be up & running.\n\nApex-pdp is not using the RestServer directly as well. But we thought it's better to keep that aligned with other policy components and created the task for it - https://jira.onap.org/browse/POLICY-3539\n\nMay be you can take the same approach with drools-pdp too. That will simplify the RestServer class and keep it generic.\n\nAnyways, one possible solution to support both possibilities - the components using RestServer can pass the servletPath & servletClass in the constructor. And later on while building the properties file, RestServer can add that along with other parameters passed via RestServerParameters.\n\nI will suggest to sync up and finalize this over a call next week. Thanks!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-13 18:32:01.000000000",
+      "in_reply_to": "bf3d8a3a_814ec7a0",
+      "unresolved": true
+    },
+    {
+      "id": "1a7c33da_a562ed69",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "Thanks Ram, I am ok if that is yours or Ajith preference to just pass the RestServer the servletPath and servletClass.   I would still like for drools to keep it as I had in the patch.   Wrt drools moving to RestServer and json, it is not viable, it would cause loss of functionality, ie. embedding environment variables, encrypted values, etc .. and cascading effects making configuration more complex.   I'm OOO till Thursday, but I think more or less we are aligned.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-08-13 19:16:20.000000000",
+      "in_reply_to": "3ac684d1_411117ef",
+      "unresolved": true
+    },
+    {
+      "id": "348f4e0d_6846df6d",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 10,
+      "line": 144,
+      "message": "Keeping this after adding the standard servlets. This should resolve the case mentioned in the other comments, where  a servlet is added on /metrics path from the component, and also prometheus flag is made true. The servlet specifically added from the component should take effect as the servlet will be already added in the path, and prometheus Metrics servlet will not be added 2nd time.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-16 17:54:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "de0d8710_a144ece0",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "Thanks Jorge for clarifying.\nI have reverted to the changes you had in patchset7.\nAlso made some changes to this file to populate the properties.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-16 17:54:38.000000000",
+      "in_reply_to": "1a7c33da_a562ed69",
+      "unresolved": true
+    },
+    {
+      "id": "e778622b_f96d13e4",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 10,
+      "line": 74,
+      "message": "As suggested in one of the comments, providing this here in the constructor.\nIf the servletPath and servletClass are also to be provided via restServerParameters, then this can be avoided as well.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-16 17:54:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4a1c9950_41ae8ef9",
+      "file_path": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
+      "patchset_number": 10,
+      "line": 403,
+      "message": "oh my - good catch!",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-16 18:29:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f40c1d68_f289b7c8",
+      "file_path": "policy-endpoints/src/test/resources/logback-test.xml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "how much output does this generate?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-16 18:29:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5b4f9d5f_d781e5ea",
+      "file_path": "policy-endpoints/src/test/resources/logback-test.xml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "It wasn't that huge, and build time increased by about 10-15 seconds only.\nStill not really needed for the tests. So, changed it back to WARN from DEBUG.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-17 10:22:51.000000000",
+      "in_reply_to": "f40c1d68_f289b7c8",
+      "unresolved": true
+    },
+    {
+      "id": "fa2e18f6_b2c5255a",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+      "patchset_number": 10,
+      "line": 144,
+      "message": "Sounds good to me, thanks!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-17 14:14:19.000000000",
+      "in_reply_to": "348f4e0d_6846df6d",
+      "unresolved": false
+    },
+    {
+      "id": "5ee26cef_1fb620d3",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "Thanks Ajith!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-17 14:14:19.000000000",
+      "in_reply_to": "de0d8710_a144ece0",
+      "unresolved": true
+    },
+    {
+      "id": "e0a4ac01_910fb6ab",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 10,
+      "line": 74,
+      "message": "Agree with your suggestion, let's go through RestServerParameters and allow it to be configurable by admins.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-17 14:14:19.000000000",
+      "in_reply_to": "e778622b_f96d13e4",
+      "unresolved": true
+    },
+    {
+      "id": "77d9d58d_cee5cefa",
+      "file_path": "policy-endpoints/src/test/resources/logback-test.xml",
+      "patchset_number": 10,
+      "line": 38,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-17 15:04:04.000000000",
+      "in_reply_to": "5b4f9d5f_d781e5ea",
+      "unresolved": false
+    },
+    {
+      "id": "98a958ba_206f2eaf",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 8,
+      "line": 105,
+      "message": "Ack",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-17 16:01:29.000000000",
+      "in_reply_to": "5ee26cef_1fb620d3",
+      "unresolved": false
+    },
+    {
+      "id": "10ec6bd8_d79918e3",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+      "patchset_number": 10,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-17 16:01:29.000000000",
+      "in_reply_to": "e0a4ac01_910fb6ab",
+      "unresolved": false
+    },
+    {
+      "id": "08117a1b_94e1c7bb",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+      "patchset_number": 12,
+      "line": 49,
+      "message": "I thought we were going to default this to true.  Or did we decide to do it via the property files?  (Either works for me.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-17 18:22:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5009ee22_b048aa01",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+      "patchset_number": 12,
+      "line": 49,
+      "message": "oh I was asking about the defaultConfig file of individual components, having this flag as true.\nMaking it true here is fine as well(less/no work at component level then 😊)",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-18 09:28:04.000000000",
+      "in_reply_to": "08117a1b_94e1c7bb",
+      "unresolved": true
+    },
+    {
+      "id": "ac5048d9_a5ec6200",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+      "patchset_number": 12,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-18 11:31:37.000000000",
+      "in_reply_to": "5009ee22_b048aa01",
+      "unresolved": false
+    },
+    {
+      "id": "607d4e17_09fc87b6",
+      "file_path": "policy-endpoints/pom.xml",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-18 14:05:27.000000000",
+      "in_reply_to": "6a4e4ecf_cd1058e7",
+      "unresolved": false
+    },
+    {
+      "id": "3e8ab15b_612cc864",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+      "patchset_number": 1,
+      "line": 124,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-18 14:05:27.000000000",
+      "in_reply_to": "0e583439_44691d86",
+      "unresolved": false
+    }
+  ]
+}

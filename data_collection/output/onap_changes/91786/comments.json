@@ -1,0 +1,76 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fservicechange-handler~master~Ie1dc18ad753e5f43223ce699dfbceb1649dc6235",
+  "change_id": "Ie1dc18ad753e5f43223ce699dfbceb1649dc6235",
+  "_number": 91786,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "76a14e06_4d8de89c",
+      "file_path": "resources/sch.sh",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "I don't think this will work, because the configuration will not be in Consul.   The Helm charts that deploy SCH supply configuration via a local file.   See https://gerrit.onap.org/r/gitweb?p=oom.git;a=blob;f=kubernetes/dcaegen2/charts/dcae-servicechange-handler/templates/deployment.yaml;h=44ebc42412bf0d3a09579202037f1dcd2fae6dda;hb=HEAD  lines 61-66.   See also https://gerrit.onap.org/r/gitweb?p=oom.git;a=blob;f=kubernetes/dcaegen2/charts/dcae-servicechange-handler/resources/config/config.json;h=7ddc800817c2ec07ded6fe5208c3513645ea99be;hb=HEAD, which supplies the configuration file.  I suspect this may need to be changed as well, as I see an http URL for inventory as one of the configuration elements.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-22 12:25:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1bf523fc_c5430555",
+      "file_path": "resources/sch.sh",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "The use of consul as source of configuration was there before as the cmd default.  I just didn't change it.  I have changes lined up on the oom side that overrides this default with the local file approach and I also have changes to the inventory URL to use https.\n\nI can change this to the local file path in the oom chart for SCH.  I can also alternatively just throw an error saying the SCH_ARGS variable hasn't been set.  I think I'd rather do that..",
+      "author": {
+        "account_id": 1071,
+        "name": "Michael Hwang",
+        "display_name": null,
+        "email": "mhwang@research.att.com",
+        "username": "researchmike"
+      },
+      "updated": "2019-07-22 14:00:29.000000000",
+      "in_reply_to": "76a14e06_4d8de89c",
+      "unresolved": true
+    },
+    {
+      "id": "4c2a5758_f1211e30",
+      "file_path": "resources/sch.sh",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "In the Dublin release, we started deploying SCH using Helm.  The Helm chart specified the startup command as follows:\n          command: [\"java\"]\n          args:\n            - \"-jar\"           \n            - \"/opt/servicechange-handler.jar\"\n            - \"prod\"\n            - \"/opt/config.json\"\nIf we don't change this chart, we won't invoke the sch.sh script. But if we do change the chart to run \"sch.sh\", the SCH will go looking in Consul for a configuration that isn't there.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-22 17:41:41.000000000",
+      "in_reply_to": "1bf523fc_c5430555",
+      "unresolved": true
+    },
+    {
+      "id": "31be9f17_af1b0db7",
+      "file_path": "resources/sch.sh",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "I am asking for this line to read SCH_ARGS=\"prod /opt/config.json\".\nOr, if you really intend to go back to using Consul as the source of config information, I'd like to know how the information will be put there.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2019-07-22 17:41:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

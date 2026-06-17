@@ -1,0 +1,229 @@
+{
+  "id": "policy%2Fmodels~master~I5f9674db0f9e5b271606e7af34d5218f5c629b09",
+  "change_id": "I5f9674db0f9e5b271606e7af34d5218f5c629b09",
+  "_number": 98774,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "743462da_d266d5a7",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 1,
+      "line": 159,
+      "message": "Can these be placed into NetworkLogger as a consolidated single statement on in line 142?   I agree that this shouldn't go into the debug.log.\n\nI think we still need to log the messages in labs as it saves many, many hours (I cannot emphasize enough how much time it saves having this information readily available)\nworking with integration, the standard is that these og in the network.log.\n\nAs of now, the NetworkLogger prints in INFO mode only, across repos.\n\nIn production mode, the network logger could be disabled by modifying the logback.xml.   I think though we want it for drools debugging enabled during regular development to work with other teams.\n\nNote that integration team look at this file quite a bit too to detect problems in policy or with interacting components at least on the drools side.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-11-22 19:19:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "242ac918_664cf328",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "Same comment if these 3 statements could be consolidate in to one NetLoggerUtil.getNetworkLogger().info() statement above?\n\nSame argument as before.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-11-22 19:19:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e77a6fc7_a895f2ec",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 1,
+      "line": 159,
+      "message": "Ideally in the network.log, we should support INFO and DEBUG, INFO with a meaningul header and not the full message, and DEBUG with the full message.  The shortcoming right now is that we only support INFO, or OFF (FATAL-WARN).   One other option would be to have these statements as debug in Network Logger, but it would be inconsistent on how it is used all over, and then the individual componet set up could set it up to however if pleases to set the logger.   In any case, we should always use the Network logger for message exchanges.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-11-22 19:39:21.000000000",
+      "in_reply_to": "743462da_d266d5a7",
+      "unresolved": false
+    },
+    {
+      "id": "1b473f00_c518265a",
+      "file_path": "models-interactions/model-impl/aai/src/main/resources/logback.xml",
+      "patchset_number": 3,
+      "line": 38,
+      "message": "To dial back logging, just change this word to \"info\"",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-25 12:54:01.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d24c6d3a_4499f1bd",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 3,
+      "line": 151,
+      "message": "use NetLoggerUtil.log() (or info()) to log this line\n\nsame comment in the following method",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-26 14:43:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f064fea6_bbd03d43",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "use NetLoggerUtil.getLogger.info() to log the url and response code\nuse NetLoggerUtil.getLogger.debug() to log the body content\n\nsame comment in the following method",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-26 14:43:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "41dba54f_bf5e8980",
+      "file_path": "models-interactions/model-impl/aai/src/main/resources/logback.xml",
+      "patchset_number": 3,
+      "line": null,
+      "message": "I don't think we want to add this file; the output requests & responses should be going to the network log, so any changes should be made to the existing logback files instead.  The other log messages (e.g, \"PUT began\", \"PUT done\") should be left as is, going to the debug log.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-26 14:43:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6080518f_6c9ac1f7",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 3,
+      "line": 151,
+      "message": "Done",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-27 11:40:38.000000000",
+      "in_reply_to": "d24c6d3a_4499f1bd",
+      "unresolved": false
+    },
+    {
+      "id": "66178c06_02280993",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "Done",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-27 11:40:38.000000000",
+      "in_reply_to": "f064fea6_bbd03d43",
+      "unresolved": false
+    },
+    {
+      "id": "c33ccaa5_d2f0b480",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 4,
+      "line": 151,
+      "message": "I'm assuming IN is the correct usage for incoming responses",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-27 11:40:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d011c162_803a6308",
+      "file_path": "models-interactions/model-impl/aai/src/test/resources/logback-test.xml",
+      "patchset_number": 4,
+      "line": 19,
+      "message": "I moved this file to src/test/resoruces/logback-test.xml so that it's there for people during testing.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-27 11:40:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "670758ac_c1d0700d",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 4,
+      "line": 152,
+      "message": "still needed?\n\nsame comment for lines below",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-27 15:52:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "afd35ead_d2ffdad1",
+      "file_path": "models-interactions/model-impl/aai/src/main/java/org/onap/policy/aai/AaiManager.java",
+      "patchset_number": 4,
+      "line": 152,
+      "message": "This was in the original so I didn't want to remove this line and the one in the next method without asking Jorge first.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-27 17:07:11.000000000",
+      "in_reply_to": "670758ac_c1d0700d",
+      "unresolved": false
+    }
+  ]
+}

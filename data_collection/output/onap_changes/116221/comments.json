@@ -1,0 +1,161 @@
+{
+  "id": "testsuite~master~Ica53cee26bd19b663bb49ecfc4750fe3cfe32e8c",
+  "change_id": "Ica53cee26bd19b663bb49ecfc4750fe3cfe32e8c",
+  "_number": 116221,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "53d1abc6_5876f0a6",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Why wait?",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-12-08 14:44:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6035e068_a8fb2ca6",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "Why are errors ignored in all of these undeploy and delete steps?",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-12-08 14:44:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c156acae_3cce98a7",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Letting DMaaP messages propagate before starting the next test. Noticed in SB00 that messages are slow in DMaaP for somre reason",
+      "author": {
+        "account_id": 29,
+        "name": "Brian Freeman",
+        "display_name": null,
+        "email": "bf1936@att.com",
+        "username": "bdfreeman1421"
+      },
+      "updated": "2020-12-08 16:52:41.000000000",
+      "in_reply_to": "53d1abc6_5876f0a6",
+      "unresolved": true
+    },
+    {
+      "id": "a7eb24b6_d9d4f074",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "if the policy was not deployed or created you can get a false negative so this covers that case",
+      "author": {
+        "account_id": 29,
+        "name": "Brian Freeman",
+        "display_name": null,
+        "email": "bf1936@att.com",
+        "username": "bdfreeman1421"
+      },
+      "updated": "2020-12-08 16:52:41.000000000",
+      "in_reply_to": "6035e068_a8fb2ca6",
+      "unresolved": true
+    },
+    {
+      "id": "2a8372fd_13223705",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Could this be handled with some retry loop (maybe with shorter interval and longer overall max time?) That would also be sort of self-documenting way of explaining what we're waiting for here.",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-12-08 17:11:33.000000000",
+      "in_reply_to": "c156acae_3cce98a7",
+      "unresolved": true
+    },
+    {
+      "id": "bf9d9553_f160143a",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "Ah so the actual test step is \"Update vVFWCL Policy\" and everything before that is just preparation? If that's the case, it could maybe done in Test Case setup phase, but probably not worth refactoring it now.",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-12-08 17:11:33.000000000",
+      "in_reply_to": "a7eb24b6_d9d4f074",
+      "unresolved": true
+    },
+    {
+      "id": "f6ca1165_5eccd5f6",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "could watch dmaap topics for notifications from policy - we use that approach in some of our CSITs (wait_topic.sh).  Policy deployment/undeployment notifications are published on one topic, and event processing is published on another.  If you want to go that approach, let me know what you're waiting for and I can identify the topic and appropriate text to match for use by wait_topic.sh.  (This assumes, of course, that the item of interest can be identified via a policy notification.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-12-08 17:29:15.000000000",
+      "in_reply_to": "2a8372fd_13223705",
+      "unresolved": true
+    },
+    {
+      "id": "8c499db3_3472ce0f",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "vFW sends VES events every 10 seconds so there are usually mulitple TCA evens in queue between when robot sets the traffic to High and policy gets the TCA , queries AAI and sends the control action to APPC to set the traffic to Medium. Some of those get filtered since the loop is already in action but particularly with DMaaP delays stale TCA events can come into policy from after APPC already setting the traffic to Medium from the High and that can interfere with the Low TCA events since the action for both High and Low is to set the traffic to Medium. Its a minor tuning. I found in trouble shooting that actually having a different level for Medium depending on if its policy or robot setting it Medium is useful so High (10) to Medium (5) becomes High (10) to Medium (5) but robot test fail sets Medium (4) then we can see policy setting to Medium (5) vs robot resetting the test at Medium (4) - If we had more time it might make sense to have a different modifyConfig for High vs Low so high goes to Medium(6) , Low goes to Medium (4) and robot test failure sets it to Medium (5) - the problem is \"noise\" if we leave VES events continuously sending High or Low since then TCA floods policy every 10 seconds.",
+      "author": {
+        "account_id": 29,
+        "name": "Brian Freeman",
+        "display_name": null,
+        "email": "bf1936@att.com",
+        "username": "bdfreeman1421"
+      },
+      "updated": "2020-12-08 17:46:28.000000000",
+      "in_reply_to": "f6ca1165_5eccd5f6",
+      "unresolved": true
+    },
+    {
+      "id": "1c781a11_c8c1c9ec",
+      "file_path": "robot/testsuites/closed-loop.robot",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "Ack",
+      "author": {
+        "account_id": 29,
+        "name": "Brian Freeman",
+        "display_name": null,
+        "email": "bf1936@att.com",
+        "username": "bdfreeman1421"
+      },
+      "updated": "2020-12-08 17:46:28.000000000",
+      "in_reply_to": "bf9d9553_f160143a",
+      "unresolved": false
+    }
+  ]
+}

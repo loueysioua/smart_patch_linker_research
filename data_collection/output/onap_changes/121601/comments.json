@@ -1,0 +1,246 @@
+{
+  "id": "oom~master~I41563150f174787bce2c78e5a18af2862e55f87d",
+  "change_id": "I41563150f174787bce2c78e5a18af2862e55f87d",
+  "_number": 121601,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9b3c4924_a8fb0928",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "Does this two values refers to the same but not encrypted values?\nIf yes, I’d prefer to cipher them at launch or not cipher them at all",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-06-02 18:17:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "764145c3_33e8bc0c",
+      "file_path": "kubernetes/cds/components/cds-sdc-listener/values.yaml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "I’d prefer to have user / password in values and base64 encode them at launch",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-06-02 18:17:31.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "52da6322_65296ed0",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "My aim was to centralize everything so that if you want to change password you do it at only one place (api-credentials above). This is the last part of that puzzle, which I could not fix only with chart changes. The issue is that these AES hashes are generated using a key and an InitVector. The helm function for creating AES hashes does not support this. So this will require code changes in CDS. At least now it is extracted from the application.properties file and can be overridden, that is a small improvement.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-06-02 18:27:52.000000000",
+      "in_reply_to": "9b3c4924_a8fb0928",
+      "unresolved": true
+    },
+    {
+      "id": "c9fdced8_a66684e8",
+      "file_path": "kubernetes/cds/components/cds-sdc-listener/values.yaml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "This is merely a placeholder, the actual value should come from the shared external secret in the parent chart. Was not sure if i could remove it from here?",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-06-02 18:27:52.000000000",
+      "in_reply_to": "764145c3_33e8bc0c",
+      "unresolved": true
+    },
+    {
+      "id": "f1220237_ad4afcb2",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "for other components, we're using an init container to transform \"normal\" values into (unecessary) ciphered values.\n\nYou could do the same.\n\nHere's my proposal: keep it this way for now.\n\nBut, please come back with a solution (either via init container or code change in CDS) to get rid of this awful values.\n\nAnd at this time, use secrets to store them (look at how it's done in policy for example)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-06-16 06:32:02.000000000",
+      "in_reply_to": "52da6322_65296ed0",
+      "unresolved": true
+    },
+    {
+      "id": "4b9e6ca4_5306dd51",
+      "file_path": "kubernetes/cds/components/cds-sdc-listener/values.yaml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "oh OK understood!\n\nas code in parent is OK, let's keep it this way here",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-06-16 06:32:02.000000000",
+      "in_reply_to": "c9fdced8_a66684e8",
+      "unresolved": false
+    },
+    {
+      "id": "69a23236_a68336c5",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "Thanks for feedback. Yes this needs to be fixed in CDS code. Since these values are only used for interpolation in application.properties file, I am not sure I see the purpose of putting them in a secret? That would mean I have to also pass them as environment variables. The purpose at this point was just to make sure we can change it at all, instead of hard coding.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-06-16 13:15:53.000000000",
+      "in_reply_to": "f1220237_ad4afcb2",
+      "unresolved": true
+    },
+    {
+      "id": "97bc1118_0040cea2",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "well, it's sensitive values and possible backdoors so that means we must have something to hide them",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-06-22 14:03:46.000000000",
+      "in_reply_to": "69a23236_a68336c5",
+      "unresolved": true
+    },
+    {
+      "id": "7202d67d_33e6a586",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "I'm sorry I don't understand. If we have a password in the values file that will be used only for templating the application.properties file, which is then mounted into the pod. How is it better to first put the password into a secret, and then expose the secret as environment variable to finally reference that variable in application.properties? That secret would be completely redundant.",
+      "author": {
+        "account_id": 6218,
+        "name": "Jozsef Csongvai",
+        "display_name": null,
+        "email": "jozsef.csongvai@bell.ca",
+        "username": "jozsef"
+      },
+      "updated": "2021-06-22 14:47:53.000000000",
+      "in_reply_to": "97bc1118_0040cea2",
+      "unresolved": true
+    },
+    {
+      "id": "27346ec8_50131cfe",
+      "file_path": "kubernetes/cds/components/cds-blueprints-processor/values.yaml",
+      "patchset_number": 1,
+      "line": 86,
+      "message": "Nope it will not. Values stored in configmaps are stored in plain text in ETCD. Values in secrets may be encrypted before storing the (Kubernetes encryption at rest).\nSo if you place password in configmap anyone who breaks into DB may read it\nIf you place it in the secret ataccker must also crack the encryption\nNot to mention that k8s is more sensitive while displaying secrets than CM",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-06-22 16:59:38.000000000",
+      "in_reply_to": "7202d67d_33e6a586",
+      "unresolved": true
+    },
+    {
+      "id": "885e04c5_9f651967",
+      "file_path": "kubernetes/cds/components/cds-ui/templates/deployment.yaml",
+      "patchset_number": 1,
+      "line": 66,
+      "message": "here you can just modify the container entrypoint and preprocess login and password to create the auth token",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-06-22 17:04:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "14a379f3_5690f66d",
+      "file_path": "kubernetes/cds/components/cds-ui/values.yaml",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "same here\nWe always want to have the most primitive form of secret (plain text password etc)\nand then preprocess it in the init container if needed",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-06-22 17:04:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1a45e16b_879eeebd",
+      "file_path": "kubernetes/cds/values.yaml",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "nope. Please use basicAuth type and create baicAuth value on the fly in the init container",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-06-22 17:04:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7a124441_3a079897",
+      "file_path": "kubernetes/cds/values.yaml",
+      "patchset_number": 1,
+      "line": 226,
+      "message": "isn't it somehow encoded? If so please put it here in plain text and then do the encoding in the init container if needed",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-06-22 17:04:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

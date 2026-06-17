@@ -1,0 +1,382 @@
+{
+  "id": "oom~master~Ib6af32bae9f85cbc2e3c9484b970229d63c299b1",
+  "change_id": "Ib6af32bae9f85cbc2e3c9484b970229d63c299b1",
+  "_number": 128004,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a2727932_8d2f666f",
+      "file_path": "kubernetes/cps/components/cps-core/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 34,
+      "message": "Non blocking: Might be simply \n\n  {{- if .Values.config.useStrimziKafka }}\n\nSame comment for some others similar if conditions",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5261cc70_4993cbf8",
+      "file_path": "kubernetes/cps/components/cps-core/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "producer client id does not specific for onap strimzi kafka. Then, it should not be part of `useStrimziKafka` conditional block. By doing that it needs to be duplicated for other non strimzi kafka config.\n\nThe problem would become worst if some additional common kafka configuration need to be added later. It will bring many duplication.\n\nThen, I'm proposing to only keep all common kafka configuration here:\n\n  kafka:\n    producer:\n      client-id: cps-core\n\nand move all specific kafka connectivity configurations and the conditional logic at the end of the file in the form:\n\n  {{- if eq .Values.config.useStrimziKafka true }}\n  spring.kafka.bootstrap-servers: {{ include \"common.release\" . }}-{{ .Values.config.kafkaBootstrap }}:9092\n  spring.kafka.security.protocol: SASL_PLAINTEXT\n  spring.kafka.properties.sasl.mechanism: SCRAM-SHA-512\n  spring.kafka.properties.sasl.jaas.config: ${JAASLOGIN}\n  {{ else }}\n  {{ toYaml .Values.config.eventPublisher | nindent 2 }}\n  {{- end }}\n\n  {{- if .Values.config.additional }}\n  {{ toYaml .Values.config.additional | nindent 2 }}\n  {{- end }}\n\nThe same comment also applies to cps temporal",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4855c4e2_ea5cb430",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 39,
+      "message": "consumer group id (and some how topic name below) are common properties that are not specific to strimzi kafka, then maybe good to have them outside from this conditonal block. \n\nSee the related comment in cps core application-helm.yaml",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a3ec87bf_8910d035",
+      "file_path": "kubernetes/cps/components/cps-temporal/values.yaml",
+      "patchset_number": 4,
+      "line": 161,
+      "message": "Not needed if moved outside from the conditional section. See other comment in application.yaml.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0fc4ffa2_7406c1fd",
+      "file_path": "kubernetes/cps/templates/cps-kafka-user.yaml",
+      "patchset_number": 4,
+      "line": 16,
+      "message": "`config.useStrimziKafka` is not defined at this scope level. It is defined in cps core and temporal sub-charts.\nMaybe good to move this variable one level up, in one place, in cps chart.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "adc3c3e5_482984c4",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Suggestion: Rename file `cps-kafka-topic.yaml` for consistency with `cps-kafka-user.yaml`",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1c8c9462_45a1b04a",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": 16,
+      "message": "Same comment as cps-kafka-user.yaml",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8594f9b8_88ce3431",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "It would be good to also have following topic properties configurable.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-08 21:51:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6851404d_72697c77",
+      "file_path": "kubernetes/cps/components/cps-core/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "a2727932_8d2f666f",
+      "unresolved": false
+    },
+    {
+      "id": "35ed7f65_a40a1f32",
+      "file_path": "kubernetes/cps/components/cps-core/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "5261cc70_4993cbf8",
+      "unresolved": false
+    },
+    {
+      "id": "6b0f1d23_8f5c3f4b",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 4,
+      "line": 39,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "4855c4e2_ea5cb430",
+      "unresolved": false
+    },
+    {
+      "id": "e559fcc7_0c5d00dd",
+      "file_path": "kubernetes/cps/components/cps-temporal/values.yaml",
+      "patchset_number": 4,
+      "line": 161,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "a3ec87bf_8910d035",
+      "unresolved": false
+    },
+    {
+      "id": "915aa13c_6d6a19f3",
+      "file_path": "kubernetes/cps/templates/cps-kafka-user.yaml",
+      "patchset_number": 4,
+      "line": 16,
+      "message": "I have it defined at top level values.yaml\nhttps://gerrit.onap.org/r/c/oom/+/128004/4/kubernetes/cps/values.yaml#50",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "0fc4ffa2_7406c1fd",
+      "unresolved": true
+    },
+    {
+      "id": "5f2d67da_df33e184",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "adc3c3e5_482984c4",
+      "unresolved": false
+    },
+    {
+      "id": "7d35cefd_b4bad53e",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "1c8c9462_45a1b04a",
+      "unresolved": false
+    },
+    {
+      "id": "f9416442_c5fc7621",
+      "file_path": "kubernetes/cps/templates/cps-topic.yaml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-11 15:21:50.000000000",
+      "in_reply_to": "8594f9b8_88ce3431",
+      "unresolved": false
+    },
+    {
+      "id": "41c5aa64_33340fc6",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 30,
+      "message": "As group id is not strimzi kafka specific, it would be good to rename the property `config.kafka.consumer.groupId`",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-12 03:12:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "64f6ae20_9baf45dd",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "Blocking comment:\n`app.listener.data-updated.topic` is not a spring property. Then, the 2 leading spaces on line 32 need to be removed.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-12 03:12:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "267c3b04_b04be079",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 35,
+      "message": "As cps is going to add some other topics in the next release, then it might be good to rename the property with something like `config.app.listener.data-updated.topic` to be able to identify this topic.\n\nAlso, this topic name property is not strimzi kafka specfic,then it would be good not to have strimzy kafka in the property name.\n\nFinally, it seems that topic name is not configured the same way in cps core and cps temporal. Making this consistent is out of the scope of this change and can be reworked in a different change.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2022-04-12 03:12:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a0f4e6c0_f993e39f",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 30,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-12 10:24:42.000000000",
+      "in_reply_to": "41c5aa64_33340fc6",
+      "unresolved": false
+    },
+    {
+      "id": "69129c40_ca7d3e7e",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-12 10:24:42.000000000",
+      "in_reply_to": "64f6ae20_9baf45dd",
+      "unresolved": false
+    },
+    {
+      "id": "a61d2d59_b9764dde",
+      "file_path": "kubernetes/cps/components/cps-temporal/resources/config/application-helm.yml",
+      "patchset_number": 5,
+      "line": 35,
+      "message": "Ack",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-04-12 10:24:42.000000000",
+      "in_reply_to": "267c3b04_b04be079",
+      "unresolved": false
+    }
+  ]
+}

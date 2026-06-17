@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fapex-pdp~master~I7c6a9570846e3ebfaa3f4ebc8d60faa94b533240",
+  "change_id": "I7c6a9570846e3ebfaa3f4ebc8d60faa94b533240",
+  "_number": 129836,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4fb6f28e_27e24a23",
+      "file_path": "examples/examples-grpc-metadataset/src/main/resources/tosca/NodeTemplate.json",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "Looking into an actual example now, I think if the type and type_version are not going to change in a metadataset file, isn't it better to just generate the metadata nodetemplate file directly in the code base without having to provide a template specifically?\nThe name of the metadata file can be something like <toscaPolicyName>./_metadata.\nThis way, in the ToscaPolicy file also, the metadata section also can be populated at runtime in the code itself without having to tweak the template with the metadata name and version.\n\nThe ToscaCliEditor also could be much more simple this way. For e.g., to the existing ToscaCliEditor, just add another argument \"generateMetadataSet\" (or even metadataSetFileName which can then be used programmatically to generate the file and use the same name in ToscaPolicy metadata section). When this new argument is present, generate metadataset related artifacts (i.e, 1 extra nodetemplate metadataset file, and the toscaPolicy itself referring to this metadaset). If argument is not there, generate as how it is done today. This also avoids the need to separately generate both metadataSet and toscaPolicy separately by giving the inputs.\n\nAbove is my thought. What do you think? @Ram @Liam any comments?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-07-11 12:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5bb7a28c_996ea189",
+      "file_path": "examples/examples-grpc-metadataset/src/main/resources/tosca/NodeTemplate.json",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "I agree, maybe we could meet for 15 minutes to discuss this?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2022-07-11 15:10:45.000000000",
+      "in_reply_to": "4fb6f28e_27e24a23",
+      "unresolved": true
+    },
+    {
+      "id": "16f19a82_6324419e",
+      "file_path": "examples/examples-grpc-metadataset/src/main/resources/tosca/NodeTemplate.json",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "Thanks Ajith for the suggestion. Yes we can add an argument for metadataSet and generate the node template file completely from the code without using a skeleton file. I assumed the node template can be of any node type similar to policy types, and hence provided those fields in the skeleton file. If we agree to maintain a single node_type for all metadataSets we can remove the usage of skeleton file here. I can update this change on this review, else we can have a quick discussion on this before doing this change.",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-07-11 15:40:29.000000000",
+      "in_reply_to": "5bb7a28c_996ea189",
+      "unresolved": true
+    },
+    {
+      "id": "b6a9cb7f_a780e21f",
+      "file_path": "examples/examples-grpc/pom.xml",
+      "patchset_number": 2,
+      "line": 137,
+      "message": "You can add this in a separate execution which will generate the toscaPolicyWithMetadata and NodeTemplate. The existing toscapolicy will be there too in that case.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-07-15 16:21:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eb03c0b3_6f7b0373",
+      "file_path": "examples/examples-grpc/src/test/java/org/onap/policy/apex/examples/grpc/TestGenerateNodeTemplate.java",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "Isn't it better to add this test class in cli editor module itself?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2022-07-15 16:21:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8512274a_9b022fb8",
+      "file_path": "auth/cli-editor/src/main/java/org/onap/policy/apex/auth/clieditor/tosca/ApexCliToscaParameters.java",
+      "patchset_number": 3,
+      "line": 58,
+      "message": "do you want to check if this is null (not provided as it is an optional parameter) before going for the validation check?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2022-07-18 18:00:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "caf7a761_a03b9832",
+      "file_path": "auth/cli-editor/src/main/java/org/onap/policy/apex/auth/clieditor/tosca/ApexCliToscaParameters.java",
+      "patchset_number": 3,
+      "line": 58,
+      "message": "As it is an optional parameter, I think we don't require a null check for this, it would be null incase the user doesn't want to generate a node template. validateWritableFile doesn't throw an error either if the file name is provided or it is null",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-07-19 09:06:46.000000000",
+      "in_reply_to": "8512274a_9b022fb8",
+      "unresolved": true
+    },
+    {
+      "id": "867c0819_18dcd505",
+      "file_path": "examples/examples-grpc/pom.xml",
+      "patchset_number": 2,
+      "line": 137,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-07-19 10:52:52.000000000",
+      "in_reply_to": "b6a9cb7f_a780e21f",
+      "unresolved": false
+    },
+    {
+      "id": "2b38560c_dc8198e9",
+      "file_path": "examples/examples-grpc/src/test/java/org/onap/policy/apex/examples/grpc/TestGenerateNodeTemplate.java",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 6070,
+        "name": "Ramesh Murugan Iyer",
+        "display_name": null,
+        "email": "ramesh.murugan.iyer@est.tech",
+        "username": "rameshiyer27"
+      },
+      "updated": "2022-07-19 10:52:52.000000000",
+      "in_reply_to": "eb03c0b3_6f7b0373",
+      "unresolved": false
+    },
+    {
+      "id": "887a0046_094f0816",
+      "file_path": "auth/cli-editor/src/main/java/org/onap/policy/apex/auth/clieditor/tosca/ApexCliToscaParameters.java",
+      "patchset_number": 3,
+      "line": 58,
+      "message": "thanks for the information.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2022-07-19 14:48:48.000000000",
+      "in_reply_to": "caf7a761_a03b9832",
+      "unresolved": false
+    }
+  ]
+}

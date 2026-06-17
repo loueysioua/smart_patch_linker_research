@@ -1,0 +1,161 @@
+{
+  "id": "oom~master~Ie50ee1afb0b999b0e97ac5366e899a21a8e11efc",
+  "change_id": "Ie50ee1afb0b999b0e97ac5366e899a21a8e11efc",
+  "_number": 105758,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a8e79e62_c34e8911",
+      "file_path": "kubernetes/aaf/charts/aaf-cert-service/Makefile",
+      "patchset_number": 3,
+      "line": 51,
+      "message": "This certificate will be only used for tests ?\nIf not, we should be able to change a little bit the values here no?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-20 07:03:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a5d27c00_1cb4c702",
+      "file_path": "kubernetes/aaf/charts/aaf-cert-service/Makefile",
+      "patchset_number": 3,
+      "line": 51,
+      "message": "No, it will be used for signing certificates for communication between CertService Client and Service. So it will be used, if CMP is enabled. \nWe can change values :)",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-04-20 07:47:33.000000000",
+      "in_reply_to": "a8e79e62_c34e8911",
+      "unresolved": true
+    },
+    {
+      "id": "75e9327f_66c57b7a",
+      "file_path": "kubernetes/aaf/charts/aaf-cert-service/Makefile",
+      "patchset_number": 3,
+      "line": 51,
+      "message": "well, let's keep that way in the Makefile (niech żyje Polska ;) ) but can we have a simple toggle \"somewhere\" to use any secret we want (and then in prod, it will be up to the ops to provide a \"good\" cert).\n\nOther comment, I believe this part is fully documented in CMPv2 documentation?\nIf no, please add some documentation either in OOM doc or AAF doc 😊",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-22 06:53:39.000000000",
+      "in_reply_to": "a5d27c00_1cb4c702",
+      "unresolved": true
+    },
+    {
+      "id": "51f99bd2_202c81bc",
+      "file_path": "kubernetes/aaf/charts/aaf-cert-service/Makefile",
+      "patchset_number": 3,
+      "line": 51,
+      "message": "Done",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-04-22 10:00:26.000000000",
+      "in_reply_to": "75e9327f_66c57b7a",
+      "unresolved": false
+    },
+    {
+      "id": "a36b0b2f_87e5d5b9",
+      "file_path": "kubernetes/aaf/components/aaf-cert-service/values.yaml",
+      "patchset_number": 8,
+      "line": 91,
+      "message": "I'd prefer \"\" instead of false",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-16 15:00:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6eec888a_d55e0e5d",
+      "file_path": "kubernetes/aaf/components/aaf-cert-service/values.yaml",
+      "patchset_number": 8,
+      "line": 91,
+      "message": "But it's boolean value to indicate whetever external secret is used or not",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-07-17 07:50:23.000000000",
+      "in_reply_to": "a36b0b2f_87e5d5b9",
+      "unresolved": true
+    },
+    {
+      "id": "23b7433e_a6d38bd1",
+      "file_path": "kubernetes/aaf/components/aaf-cert-service/values.yaml",
+      "patchset_number": 8,
+      "line": 91,
+      "message": "ahh. By convention we call sth XXXExternalSecret when this field holds the name of external secret to be used and when this evaluates to true (using tpl) then we consider that external secret is used.\n\nIf it's not the case then where do you set the name of external secret that should be used?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-17 12:41:41.000000000",
+      "in_reply_to": "6eec888a_d55e0e5d",
+      "unresolved": true
+    },
+    {
+      "id": "53856b1d_6b637d6b",
+      "file_path": "kubernetes/aaf/components/aaf-cert-service/values.yaml",
+      "patchset_number": 8,
+      "line": 91,
+      "message": "The case here is:\n- We dynamically generate certificates for CertService Client and CertService Server\n- They are packed into two separate secrets \n- The server secret is used in CertSerivce deployment \"{{ .Values.tls.server.secret.name }}\" - so if someone wants to use custom secret, then that secret name should be assigned to the mentioned value\n- The client secret is used in other components, so is someone wants to use custom secret, then that secret name should be assigned in component where it's used\n- As far as I remember, I was requested to add this boolean value \"certificateExternalSecret\" - this flag was added, because it gives possibility to use own certificates(not to use dynamically generated ones) and in that case we do not create secrets with dynamically generated certs\n\nShould i rename this variable then? If yes, then please give me proper name",
+      "author": {
+        "account_id": 3771,
+        "name": "Adam Wudzinski",
+        "display_name": null,
+        "email": "adam.wudzinski@nokia.com",
+        "username": "adamwudzinski"
+      },
+      "updated": "2020-07-23 11:32:38.000000000",
+      "in_reply_to": "23b7433e_a6d38bd1",
+      "unresolved": true
+    },
+    {
+      "id": "4bd480eb_d34e2800",
+      "file_path": "kubernetes/aaf/components/aaf-cert-service/values.yaml",
+      "patchset_number": 8,
+      "line": 91,
+      "message": "Hmmm it seems that you are reimplementing some parts of common secret template.\n\nWhy not just use it directly?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-07-27 20:17:01.000000000",
+      "in_reply_to": "53856b1d_6b637d6b",
+      "unresolved": true
+    }
+  ]
+}

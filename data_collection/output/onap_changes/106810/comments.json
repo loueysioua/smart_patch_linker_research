@@ -1,0 +1,93 @@
+{
+  "id": "sdc~master~I04efe4761c8e454ceb532fc7c47d72d4da03c463",
+  "change_id": "I04efe4761c8e454ceb532fc7c47d72d4da03c463",
+  "_number": 106810,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2b0c82b4_277cf621",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 2,
+      "line": 246,
+      "message": "The code look nicer indeed, but in this case I think the correct solution will be to throw a ComponentException in the bottom and not handle it with Either.\nIf you look at the call hierarchy of this method, you'll see that this Either is being populated more than 4 levels up, and in each level, in case of right value, we just propagate the error to the upper level, so in this case it's unnecessary to handle it with either, and throwing an Exception would be cleaner.\n\nIn this case I suggest the following solution:\nDecide that method \"populateZip\" will not return an Either, but ZipOutputStrem.\nIn case it gets \"right\" values from methods it calls, it'll throw an Exception.\nIt means that we should add to your current implementation, the handling with Right value, that will throw an Exception.\n\nIn the Upper level, whoever calls \"populateZip(...)\" there are two options:\n1. Refactor there as well all the way up (meaning changing the return value of all methods in the hierarchy, to not be Either). \n2. Keep all the upper level methods as is, only add a try, catch block, where the catch returna Either.right().\n\nThe first option is a whole correct solution, but it's a huge change.\nThe second one is a temporary solution, assuming we refactor the code gradually.",
+      "author": {
+        "account_id": 4928,
+        "name": "Chaya Berezin-Haimson",
+        "display_name": null,
+        "email": "chaya.chaimson@intl.att.com",
+        "username": "cb478c"
+      },
+      "updated": "2020-05-06 10:30:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "97cbac83_beb445bd",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/utils/Eithers.java",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "It's nice utility to support our LeftBiased use of Either.",
+      "author": {
+        "account_id": 4928,
+        "name": "Chaya Berezin-Haimson",
+        "display_name": null,
+        "email": "chaya.chaimson@intl.att.com",
+        "username": "cb478c"
+      },
+      "updated": "2020-05-06 10:30:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ce80158c_53ed5734",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 2,
+      "line": 246,
+      "message": "Hi Chaya,\n\nYou are indeed right, the Either returned by this function is populated more than 4 levels up, but if you look closely, this is mostly done for logging purpose. This could be improved with a proper usage of Either using map for example or some additional utility.\n\nSecondly, if you look at the different refactorings I made, the code usually look more concise and is easier to compose (like at line 250). This is made possible precisely because we are using Either. Using try-catch would not allow this and add a lot of boilerplate. By the way I plan to add more functions to the Eithers utility class to reduce it even more.\n\nRegarding the zip writing logic, I actually plan to extract it from the function. The goal is to make `populateZip` more testable by leveraging inversion of control. In other words, we would provide the function with an interface abstracting the writing logic. This interface would have two implementations, one specific to the production code, and another one for the tests that would work in-memory only. This would enable us to provide proper testing of the populateZip function (which is not done as of now). Therefore, I would wait before deciding anything regarding what this function should return and see if we can improve it first. If you want, I can work on this next.\n\nThe refactoring not being completely done (keep in mind this change is an intermediate step), would it be possible to wait a bit regarding the changes you suggest until we are ready to apply them? This would ensure we have all the pieces and information before making the right decision.\n\nWould that be alright?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-06 11:12:41.000000000",
+      "in_reply_to": "2b0c82b4_277cf621",
+      "unresolved": true
+    },
+    {
+      "id": "893e7e05_dd427694",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/utils/Eithers.java",
+      "patchset_number": 2,
+      "line": 1,
+      "message": "Thank you, I plan to provide more utilities in the future, once the changes regarding CsarUtils are merged. At some point we should be able to drastically reduce the size of this file while making it easier to test and maintain.",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-06 22:02:54.000000000",
+      "in_reply_to": "97cbac83_beb445bd",
+      "unresolved": false
+    },
+    {
+      "id": "9ab5598e_28260eda",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/tosca/CsarUtils.java",
+      "patchset_number": 2,
+      "line": 246,
+      "message": "- Log messages are meaningless in case we throw an Exception (the exception will be logged better)\n- It's ok not to refactor the upper level methods now.\n- I don't think the code will look much worse if we throw an Exception instead of returning Either.right, in case you use Either methods like .map.\n- I do prefer to throw here an Exception and not propagate the Either up. I don't see why it could hurt the further refactoring of this method.\n- your ambition, effort and initiative are much appreciated\n\nThanks!",
+      "author": {
+        "account_id": 4928,
+        "name": "Chaya Berezin-Haimson",
+        "display_name": null,
+        "email": "chaya.chaimson@intl.att.com",
+        "username": "cb478c"
+      },
+      "updated": "2020-05-12 04:55:13.000000000",
+      "in_reply_to": "ce80158c_53ed5734",
+      "unresolved": true
+    }
+  ]
+}

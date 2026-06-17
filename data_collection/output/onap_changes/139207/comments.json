@@ -1,0 +1,541 @@
+{
+  "id": "cps~master~Id7179a81361718d293b7b31f50c1adbdd2ad4302",
+  "change_id": "Id7179a81361718d293b7b31f50c1adbdd2ad4302",
+  "_number": 139207,
+  "change_comments": [
+    {
+      "id": "8d3cb3de_642f720d",
+      "patchset_number": 2,
+      "message": "I have see two different date and timestamp on output:\n\nPlease see below: The git plugin showing the right date and time (as per my local build time) whereas the other (I think spring-boot plugin) showing 1 hour before.\n\nMaybe, we can only have the plugin offered by git, and never use the spring-boot's one.\n\nOtherwise, this may be confusing in the future.\n\n{\n    \"git\": {\n         ...\n        \"build\": {\n            \"time\": \"2024-10-17T10:00:29+01:00\",\n            \"version\": \"3.5.4-SNAPSHOT\"\n        }\n    },\n    \"build\": {\n        \"artifact\": \"cps-application\",\n        \"name\": \"cps-application\",\n        \"time\": \"2024-10-17T08:59:40.724Z\",\n        \"version\": \"3.5.4-SNAPSHOT\",\n        \"group\": \"org.onap.cps\"\n    }\n}",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-10-17 09:56:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fdd7ccd7_ce9ef28c",
+      "patchset_number": 2,
+      "message": "that could be beacause of the timezone..\nlet me check if I can fix that.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-18 08:28:18.000000000",
+      "in_reply_to": "8d3cb3de_642f720d",
+      "unresolved": false
+    },
+    {
+      "id": "169112df_37cf570b",
+      "patchset_number": 2,
+      "message": "fixed the timezone.\nI think we can still leave the build-info as is.\n\nBut if you guys think otherwise we can switch-off the build info altogether.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-18 10:44:16.000000000",
+      "in_reply_to": "fdd7ccd7_ce9ef28c",
+      "unresolved": false
+    },
+    {
+      "id": "5538297a_5056886c",
+      "patchset_number": 3,
+      "message": "Based on the offline discussion, the 1 hour difference doesnot cause an issue since the info has also the commit hash, thus +1.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-10-18 12:26:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a672f704_8fed29c3",
+      "patchset_number": 4,
+      "message": "recheck",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-18 14:21:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f4dbbc14_3f1c13e3",
+      "patchset_number": 7,
+      "message": "This is how the output will look like\n\n{\n  \"git\": {\n    \"commit\": {\n      \"message\": {\n        \"short\": \"Add metadata related to builds and commits\"\n      },\n      \"user\": {\n        \"name\": \"mpriyank\",\n        \"email\": \"priyank.maheshwari@est.tech\"\n      },\n      \"id\": {\n        \"full\": \"4f76458d3a02a43f3ea28820caa2b35687c62daa\"\n      }\n    },\n    \"branch\": \"master\",\n    \"build\": {\n      \"time\": \"2024-10-23T22:49:38.038Z\",\n      \"version\": \"3.5.5-SNAPSHOT\"\n    }\n  }\n}",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-23 21:58:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "3b1bba46_8e4393fb",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 176,
+      "message": "NB: Can we enable conditional execution?\n\nIf we want the plugin to only run under certain conditions (e.g., only in certain profiles or phases), we can use profile-specific executions or property-based activation.\n\nFor example, we can add a profile to enable the plugin only for release builds \n:\n\n<profiles>\n    <profile>\n        <id>release-build</id>\n        <build>\n            <plugins>\n                <plugin>\n                    <groupId>io.github.git-commit-id</groupId>\n                    ...\n                    ....\n    </build>\n    </profile>\n</profiles>\n\n\nThis approach improves maintainability by reducing the scope of the plugin execution.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d9d4e8d0_9d67162a",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 181,
+      "message": "get-git-info",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4932ee5e_98f7d23f",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 185,
+      "message": "Any reason to execute it during the initialize phase, we could execute during package that will ensure that the plugin runs only when building a deployable artifact, saving execution time for standard builds.:\n\n<phase>package</phase> <!-- Run during the package phase -->",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1e7f1781_d3fb440d",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 192,
+      "message": "<includeOnlyProperty>^git.commit.(id.full|message.short)$</includeOnlyProperty>",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "26e32b26_2929cccb",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 194,
+      "message": "^git.branch$",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c1eeefd7_bcae360b",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 197,
+      "message": "Add this to your properties section at the top of your pom.xml:\n\n\n<properties>\n<git.properties.file>${project.build.outputDirectory}/git.properties</git.properties.file>\n</properties>\n\n<generateGitPropertiesFilename>${git.properties.file}</generateGitPropertiesFilename>\n\nNow, the filename can be changed globally through the properties section without editing the plugin configuration directly.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "50c9cadd_de0872be",
+      "file_path": "cps-application/src/main/resources/application.yml",
+      "patchset_number": 1,
+      "line": 186,
+      "message": "NB:\nCan we configure the info.git mode to summary?",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9015e2dd_9782fce7",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 1,
+      "line": 141,
+      "message": "same as previous",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-16 12:58:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "da170c08_db5a95eb",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 176,
+      "message": "can do , but I think this might involve some change in the jenkins build..\nif I remember it correctly when we were committing integration-test module , we set a different profile for it and for that we had to change something in jenkins for it to run.\n\nOn the other hand we can as well activate the profile by default. But is it worth the hassle introducing a profile? \nWhat do ppl think ?",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "3b1bba46_8e4393fb",
+      "unresolved": true
+    },
+    {
+      "id": "05e76c5b_d64b98f8",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 185,
+      "message": "yeah can bind to package , compile or any other stage for that matter.\neither gather the information earlier or delay it to a different phase.\nupdated to package as u suggested. anyways used after packaging.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "4932ee5e_98f7d23f",
+      "unresolved": true
+    },
+    {
+      "id": "55e3a425_9646f9c9",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 192,
+      "message": "can do but I thought the one I had was more readable.\nso now I have them grouped.\nLet me know if its not readable and I can revert back to original.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "1e7f1781_d3fb440d",
+      "unresolved": true
+    },
+    {
+      "id": "3c1a93ba_447d5b0d",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 194,
+      "message": "not required",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "26e32b26_2929cccb",
+      "unresolved": true
+    },
+    {
+      "id": "00ef4e5b_5d34c2c7",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 197,
+      "message": "and why do we want to change the filename??\nif we change the filename then we might need to take care of other defaults to render it using actuator endpoint.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "c1eeefd7_bcae360b",
+      "unresolved": true
+    },
+    {
+      "id": "aff6018b_db26527f",
+      "file_path": "cps-application/src/main/resources/application.yml",
+      "patchset_number": 1,
+      "line": 186,
+      "message": "i think we just have 3 modes.\nfull , simple or off.\nfull is the most detailed one and suits us.\nsimple is way too simple..lacks few details.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "50c9cadd_de0872be",
+      "unresolved": true
+    },
+    {
+      "id": "2925c6e8_a11157ae",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 1,
+      "line": 141,
+      "message": "changed to package and answered above.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-16 13:53:36.000000000",
+      "in_reply_to": "9015e2dd_9782fce7",
+      "unresolved": true
+    },
+    {
+      "id": "7dbd2889_d879d6c0",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 176,
+      "message": "if there is an side-effect of conditional execution on Jenkins jobs, I don't suggest it.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2024-10-17 09:56:15.000000000",
+      "in_reply_to": "da170c08_db5a95eb",
+      "unresolved": true
+    },
+    {
+      "id": "dbe63ee9_bedf1d1d",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 176,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "7dbd2889_d879d6c0",
+      "unresolved": false
+    },
+    {
+      "id": "eb4526a6_62af2c47",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 185,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "05e76c5b_d64b98f8",
+      "unresolved": false
+    },
+    {
+      "id": "8c1b04ae_da3bb5ce",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 192,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "55e3a425_9646f9c9",
+      "unresolved": false
+    },
+    {
+      "id": "874427d9_bd52dabe",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 194,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "3c1a93ba_447d5b0d",
+      "unresolved": false
+    },
+    {
+      "id": "2d7b8708_eaeaef71",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 197,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "00ef4e5b_5d34c2c7",
+      "unresolved": false
+    },
+    {
+      "id": "c0130182_f30c4c84",
+      "file_path": "cps-application/src/main/resources/application.yml",
+      "patchset_number": 1,
+      "line": 186,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "aff6018b_db26527f",
+      "unresolved": false
+    },
+    {
+      "id": "5e69fb09_edfba0c8",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 1,
+      "line": 141,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": "2925c6e8_a11157ae",
+      "unresolved": false
+    },
+    {
+      "id": "fb492527_56c2e875",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 5,
+      "line": 137,
+      "message": "get-git-info",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2024-10-23 08:46:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0716f32f_13d3e1d4",
+      "file_path": "cps-application/pom.xml",
+      "patchset_number": 1,
+      "line": 181,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-23 21:56:19.000000000",
+      "in_reply_to": "d9d4e8d0_9d67162a",
+      "unresolved": false
+    },
+    {
+      "id": "78ace2c0_b34acea6",
+      "file_path": "cps-parent/pom.xml",
+      "patchset_number": 5,
+      "line": 137,
+      "message": "Done",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-10-23 21:56:19.000000000",
+      "in_reply_to": "fb492527_56c2e875",
+      "unresolved": false
+    }
+  ]
+}

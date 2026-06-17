@@ -1,0 +1,586 @@
+{
+  "id": "sdc~master~Ief8bf62e48a23a091e9084333c2523d8490fdcd2",
+  "change_id": "Ief8bf62e48a23a091e9084333c2523d8490fdcd2",
+  "_number": 116881,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4dcb5673_eb44d319",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 130,
+      "message": "I think copyOf is redundant here, stream collect creates new object and we can get the return stream to be unmodified by using collector \n.collect(Collectors.toUnmodifiableSet())",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7504221c_2bbb7703",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 170,
+      "message": "I would recommend splinting reading certificates on to two methods, one that read package cert and one that reads trusted certs. That way the initialization at the beginning will be unnecessary and methods that return cert will not change trustedCertificateFromPackage \"silently\". It would be something like this:\n\nif(packageCerts == null) {\n    cert = readPackageCertFromCms(...)\n    trustedCertificateFromPackage = readTrustedCertFromCms(...)\n} else {\n    cert = readPackageCertFromPackage(...)\n    trustedCertificateFromPackage = readTrustedCertFromPackage(...)\n}",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "022a0158_3f0cec6b",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 213,
+      "message": "please avoid doing assignment in while/if statements. Also by moving it together with \"instanceof\" we can get rid of \"Object object\"",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f653105b_77fa083a",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 223,
+      "message": "I think it should be moved to new method, that takes pemParser as an argument",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4c73dcb1_50eb00d7",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 142,
+      "message": "I suggest creating method for that with origin file and new file as parameters, due to fact that this part of code is repeated multiple times across tests.",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d543905a_eef1e30c",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 143,
+      "message": "Please use \"Paths.get(getClass().getResource(...)\" in order to load files from resources",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bda07865_151bdd7e",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 144,
+      "message": "Please use parameterized location for all created files and remember to delete them after tests",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e352f678_f83ab66a",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 147,
+      "message": "I suggest creating method for that with file path, reason same as above",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 08:30:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7e30e1d6_af919917",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 166,
+      "message": "do not override class variable. Use Set.clear method.",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2021-01-15 08:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "66e34b47_945a1bc6",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 186,
+      "message": "pls move methods to separate class",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2021-01-15 08:43:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ec35b40f_f5aa05db",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 130,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "4dcb5673_eb44d319",
+      "unresolved": false
+    },
+    {
+      "id": "2177c8da_2807f53e",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 166,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "7e30e1d6_af919917",
+      "unresolved": false
+    },
+    {
+      "id": "7bc7ef39_5ac3acaa",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 170,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "7504221c_2bbb7703",
+      "unresolved": false
+    },
+    {
+      "id": "84c59745_bc5a0930",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 186,
+      "message": "methods reduced",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "66e34b47_945a1bc6",
+      "unresolved": true
+    },
+    {
+      "id": "9b33c7f7_153880a5",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 213,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "022a0158_3f0cec6b",
+      "unresolved": false
+    },
+    {
+      "id": "7d71a62d_4a08095b",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 3,
+      "line": 223,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 13:00:36.000000000",
+      "in_reply_to": "f653105b_77fa083a",
+      "unresolved": false
+    },
+    {
+      "id": "dc7baace_9e1b90ef",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 4,
+      "line": 171,
+      "message": "set of certs can be generalized to Collection<X509CertificateHolder> and then can be define before this \"if\", in line 162:\nfinal X509Certificate cert;\nCollection<X509CertificateHolder> certs;\nif (packageCert == null) {",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 13:36:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8d837179_994501bc",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 4,
+      "line": 198,
+      "message": "Please, instead of returning null return Optional<X509Certificate>, then it will be possible to replace null checking in lines 173 and 165 with something like:\ncert = readSignCert(certs, firstSigner).orElseThrow(new SecurityManagerException(...));",
+      "author": {
+        "account_id": 5098,
+        "name": "Bartosz Gardziejewski",
+        "display_name": null,
+        "email": "bartosz.gardziejewski@nokia.com",
+        "username": "BartoszG"
+      },
+      "updated": "2021-01-15 13:36:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f4e2eb0e_b003d6ef",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 4,
+      "line": 171,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "dc7baace_9e1b90ef",
+      "unresolved": false
+    },
+    {
+      "id": "2b16a74d_c73c40d8",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 4,
+      "line": 198,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "8d837179_994501bc",
+      "unresolved": false
+    },
+    {
+      "id": "59ab7c82_fdbffae0",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 142,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "4c73dcb1_50eb00d7",
+      "unresolved": false
+    },
+    {
+      "id": "4376130f_474c1d13",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 143,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "d543905a_eef1e30c",
+      "unresolved": false
+    },
+    {
+      "id": "fcbc0167_9813d9eb",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 144,
+      "message": "Done, files are deleted in teardown",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "bda07865_151bdd7e",
+      "unresolved": false
+    },
+    {
+      "id": "f788f057_215b2010",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 3,
+      "line": 147,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-15 14:06:08.000000000",
+      "in_reply_to": "e352f678_f83ab66a",
+      "unresolved": false
+    },
+    {
+      "id": "56235c66_7c0ea257",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 6,
+      "line": 168,
+      "message": "all new TCs should be developed using Junit 5, please migrate to.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2021-01-15 17:42:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e3652fcb_4487f814",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 125,
+      "message": "Collection.isEmpty() should be used to test for emptiness",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2021-01-16 12:19:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7b6b08d_294d1939",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 248,
+      "message": "used? remove if not.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2021-01-16 12:19:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4236fb92_bbcdab1f",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 254,
+      "message": "log properly and/or throw dedicated exception",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2021-01-16 12:19:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8d7c4297_689c6e66",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 173,
+      "message": "Might want to move this one down ? It looks common to both branches",
+      "author": {
+        "account_id": 15,
+        "name": "Julien Bertozzi",
+        "display_name": null,
+        "email": "julien.bertozzi@intl.att.com",
+        "username": "JulienBe"
+      },
+      "updated": "2021-01-18 05:53:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "af5d3580_41d60a38",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 125,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-18 09:04:04.000000000",
+      "in_reply_to": "e3652fcb_4487f814",
+      "unresolved": false
+    },
+    {
+      "id": "ca369da4_428e4013",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 173,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-18 09:04:04.000000000",
+      "in_reply_to": "8d7c4297_689c6e66",
+      "unresolved": false
+    },
+    {
+      "id": "35af5325_96e8f9c3",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 248,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-18 09:04:04.000000000",
+      "in_reply_to": "e7b6b08d_294d1939",
+      "unresolved": false
+    },
+    {
+      "id": "6290a2b7_0b4f3c5f",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManager.java",
+      "patchset_number": 6,
+      "line": 254,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-18 09:04:04.000000000",
+      "in_reply_to": "4236fb92_bbcdab1f",
+      "unresolved": false
+    },
+    {
+      "id": "c8e60691_07d7b430",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 6,
+      "line": 168,
+      "message": "Done",
+      "author": {
+        "account_id": 7439,
+        "name": "Tomasz Pietruszkiewicz",
+        "display_name": null,
+        "email": "tomasz.pietruszkiewicz@nokia.com",
+        "username": "tpietrus"
+      },
+      "updated": "2021-01-18 09:04:04.000000000",
+      "in_reply_to": "56235c66_7c0ea257",
+      "unresolved": false
+    }
+  ]
+}

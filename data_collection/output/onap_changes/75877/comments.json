@@ -1,0 +1,331 @@
+{
+  "id": "oom%2Foffline-installer~beijing~I7ea741b088dbb7f64bb7e8e273f7648f7fbf1bd6",
+  "change_id": "I7ea741b088dbb7f64bb7e8e273f7648f7fbf1bd6",
+  "_number": 75877,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_5bcf5029",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 363,
+      "message": "how about using <<- and indenting here document?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 01:12:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_7bd494bc",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "shouldn't we print some error or at least warning that all other distros are not supported?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 01:12:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_57f084c8",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 363,
+      "message": "I use spaces :) that trick works only with tabs it would messed up the whole file or whole file must be refactored. I am no spaces vs tabs zealot - although I use spaces exclusively for sanity but this indent issues with heredoc is elsewhere too in the code - frankly I dont see reason to refactor this file with tabs (to match the indent with the rest of the file) and leave other files as they are - or worse mix it up",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 09:51:32.000000000",
+      "in_reply_to": "9adffdf1_5bcf5029",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_f7df3838",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "This is sadly thing for the installer so far - no other distro but rhel will work so far. I tried at least support the others in the commit by simply flushing all the firewall rules. Rhel/centos use firewalld, ubuntu ufw or similar - debian has no preference and I personally use simple iptables with it - and actually I would prefer iptables-persistent across the board because each and every of these \"firewalls\" are just wrappers with their own configs which generates at the end just iptables rules...",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 09:51:32.000000000",
+      "in_reply_to": "9adffdf1_7bd494bc",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_d7fd546f",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 363,
+      "message": "valid. Let's leave this as is;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 10:49:01.000000000",
+      "in_reply_to": "9adffdf1_57f084c8",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_370b808f",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "yeah I know. I'm just postulating to add here some error maybe with a suitable comment so that if anyone tries to use that on other distro he can be quickly pointed to the place of code where he should provide support for his setup.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 10:49:01.000000000",
+      "in_reply_to": "9adffdf1_f7df3838",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_f70e588b",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "I can/will do it here, but there are probably other places where we just silently ignore all other distros, I think that this installer should be marked as rhel only, with ansible installer there is a better chance to do it distro-agnostic and better",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 11:03:36.000000000",
+      "in_reply_to": "9adffdf1_370b808f",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_97702c0c",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "if so then how about adding just a check in the beginning and dropping those checks in all other places?\nBecause if we don't plan to support other distros it seems that this is unnecessary code complication",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 11:07:28.000000000",
+      "in_reply_to": "9adffdf1_f70e588b",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_57e404ab",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "I am always trying not to throw sticks in front of the legs so if some user decide to fork this or tweak it for their needs this change does not break anything on another distro - if distro is not recognized it will just flush iptables - which is ultimately the result even for rhel - the only issue will be when the user restarts the node the firewalld/ufw/shorewall will recreate those rules again - I did not wrote the bash installer - I did like 3% of it :) so I am just judging from my review that there are other places where it will break on non-rhel distro - but that does not mean that I have to abort in this function when the install procedure just needs clean iptables - which is done here for all distros",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 11:22:41.000000000",
+      "in_reply_to": "9adffdf1_97702c0c",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_57fba446",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "Actually when I think about it...even on rhel we cannot anticipate that user has firewalld..he can use shorewall, ufw, whatnot - the only sure way is the iptables at the end of the day. I dunno if we should be so ambitious in the installation and check every firewall/iptables-wrapper-project in an existence. I am just disabling the firewalld for rhel because that is the default firewall there which is installed from installation media.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 11:28:13.000000000",
+      "in_reply_to": "9adffdf1_57e404ab",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_d79eb406",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "ok fair enough let's keep this as is;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 11:28:50.000000000",
+      "in_reply_to": "9adffdf1_57e404ab",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_17c0bcdf",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "so maybe you should check not for distro but for running fw service?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2019-01-17 11:39:40.000000000",
+      "in_reply_to": "9adffdf1_57fba446",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_57a96422",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 2,
+      "line": 372,
+      "message": "firewalld is certainly installed from rhel iso which is our deployment environment and like I wrote it is meaningless to try to check other wrappers because every day can be created a new one - and checking only for firewalld has a flaw too - I use rpm for checking, ubuntu/debian has deb packages, alpine has apk...how else to check if there is a firewalld/another-wrapper installed? Systemd service - close enough, only few distros use runit or openrc, or still sysvinit, but the service name can change - there is no silver bullet - I think that test if it is rhel and check that package is installed is the clean way and other distro can be cleanly added - if the deployment is from cloud-image then it would be easy - there are no preinstaleld firewalls/wrappers there and no iptables rules configured - that is completely up to the user how his vm will be setup",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-17 11:50:00.000000000",
+      "in_reply_to": "9adffdf1_17c0bcdf",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_bda18f95",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 364,
+      "message": "to me it looks like some obfuscate code, if those commands are triggered directly it will be more legible than creating HERE doc (HERE doc for me is a way how to insert text in the code). what's the point here ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-01-17 19:54:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_3dbd9fb7",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 384,
+      "message": "same as above",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-01-17 19:54:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e0e690e7",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 364,
+      "message": "it's for doing things over ssh. I also agree that it's very unreadable code.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-01-18 06:05:26.000000000",
+      "in_reply_to": "9adffdf1_bda18f95",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_0b0c153a",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 364,
+      "message": "There is no other way how to NOT duplicate the same code. Another approach is to store the code into the variable - which will look the same or worse and is actually inferior because I would not be able to use varibales inside if I would need that - at least not without a eval. An even if I would be willing to duplicate the same code there still would not be any nice way how to avoid heredoc in ssh branch of conditional - either would be one argument to ssh which I will format more or less the same way or again heredoc or variable.",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-18 09:17:29.000000000",
+      "in_reply_to": "9adffdf1_e0e690e7",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_eb8191fb",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 364,
+      "message": "yes yes, this is fine for this old bash solution. Bash should be used code anything:) Luckily we use ansible in new one.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-01-18 13:14:30.000000000",
+      "in_reply_to": "9adffdf1_0b0c153a",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_abfb8977",
+      "file_path": "bash/tools/common-functions.sh",
+      "patchset_number": 3,
+      "line": 364,
+      "message": "If someone wants to improve on this - please, create a new patchset, we can judge it on its own merits, otherwise vote +2 so we can fix the current script and make the installation successfull. Without this change - installer fails on rhel installation from iso. Thanks",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-18 14:14:57.000000000",
+      "in_reply_to": "9adffdf1_eb8191fb",
+      "unresolved": false
+    }
+  ]
+}

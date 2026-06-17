@@ -1,0 +1,430 @@
+{
+  "id": "cps~master~I1c4c7bc145dd522d344bd98ea04f05068b3e43eb",
+  "change_id": "I1c4c7bc145dd522d344bd98ea04f05068b3e43eb",
+  "_number": 140604,
+  "change_comments": [
+    {
+      "id": "7ae7e7fb_52471ca3",
+      "patchset_number": 5,
+      "message": "recheck",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-04-01 12:43:05.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "86cb765e_533a650f",
+      "patchset_number": 6,
+      "message": "only few NBs.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2025-04-01 15:39:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "8f6168c2_2ef82c25",
+      "file_path": "cps-ncmp-service/pom.xml",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "why is this needed?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-03-27 17:09:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "65f03aeb_c122cf6f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 55,
+      "message": "add a note it is for testing purposes only",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-03-27 17:09:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f504857d_5cc744d9",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 72,
+      "message": "subJobWriteResponses",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-03-27 17:09:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "80fd3806_f2897072",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "I'd prefer if this was /do-not-use/datajob\nSo full URL would be /do-not-use/datajob/{dataJobId}/write",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-03-28 13:47:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "759970bf_23ca5ce1",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/controller/DataJobControllerSpec.groovy",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "It's very strange that this test fails while other similar tests pass. It's likely dependencies, but it's worth noting that we don't use Spring MVC, we use WebFlux and WebClient. Rewriting the test using WebTestClient works:\n\n    @SpringBootTest(classes = [DataJobController])\n    @EnableAutoConfiguration\n    @AutoConfigureWebTestClient\n    class DataJobControllerSpec extends Specification {\n    \n        @Autowired\n        WebTestClient webTestClient\n    \n        @SpringBean\n        DataJobService mockDataJobService = Mock()\n    \n        @SpringBean\n        ObjectMapper objectMapper = new ObjectMapper()\n    \n        @SpringBean\n        JsonObjectMapper jsonObjectMapper = new JsonObjectMapper(objectMapper)\n    \n        def 'successful writeDataJob call responds with OK'() {\n            given: 'a valid DataJobWriteRequest having authorization, dataJobId, and request payload'\n                def authorization = ''\n                def dataJobId = 'job123'\n                def dataJobMetadata = new DataJobMetadata('any-destination', 'application/vnd.3gpp.object-tree-hierarchical+json', 'application/3gpp-json-patch+json')\n                def writeOperations = [\n                        new WriteOperation('/path/to/node', 'create', 'op123', 'value1'),\n                        new WriteOperation('/path/to/anotherNode', 'update', 'op124', 42)\n                ]\n                def dataJobWriteRequest = new DataJobWriteRequest(writeOperations)\n                def requestPayloadAsString = objectMapper.writeValueAsString(new DataJobRequest(dataJobMetadata, dataJobWriteRequest))\n    \n            when: 'write data job API is called'\n                def result = webTestClient.post()\n                        .uri(\"/donotuse/${dataJobId}/write\")\n                        .header('Authorization', authorization)\n                        .contentType(MediaType.APPLICATION_JSON)\n                        .bodyValue(requestPayloadAsString)\n                        .exchange()\n    \n            then: 'Response is 200 OK'\n                result.expectStatus().isOk()\n    \n            and: 'Ensure the service method is called once with expected parameters'\n                1 * mockDataJobService.writeDataJob(authorization, dataJobId, dataJobMetadata, dataJobWriteRequest)\n        }\n    }",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-03-28 13:47:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9a531452_8aa9ebc9",
+      "file_path": "cps-ncmp-service/pom.xml",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "To use the @Hidden annotation from io.swagger.v3.oas.annotations.Hidden to hide an internal REST endpoint for a write job operation as it will be hidden from Swagger/OpenAPI documentation.",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-03-28 15:33:46.000000000",
+      "in_reply_to": "8f6168c2_2ef82c25",
+      "unresolved": true
+    },
+    {
+      "id": "2e8b4e6d_260248a7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-03-28 15:33:46.000000000",
+      "in_reply_to": "80fd3806_f2897072",
+      "unresolved": false
+    },
+    {
+      "id": "9a840f55_b85dcae6",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 55,
+      "message": "Added",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-03-28 15:33:46.000000000",
+      "in_reply_to": "65f03aeb_c122cf6f",
+      "unresolved": true
+    },
+    {
+      "id": "99f454d7_861af2ed",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 72,
+      "message": "done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-03-28 15:33:46.000000000",
+      "in_reply_to": "f504857d_5cc744d9",
+      "unresolved": true
+    },
+    {
+      "id": "2ab36428_261f6e1c",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/controller/DataJobControllerSpec.groovy",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "Great 😊",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-03-28 15:33:46.000000000",
+      "in_reply_to": "759970bf_23ca5ce1",
+      "unresolved": true
+    },
+    {
+      "id": "093f70b7_71bd84b3",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/controller/DataJobControllerSpec.groovy",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "we do not need a contract test as this is not an official contract :-) \n Simple delegation test will do here.",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-04-01 11:12:55.000000000",
+      "in_reply_to": "2ab36428_261f6e1c",
+      "unresolved": true
+    },
+    {
+      "id": "70a2b489_f91b0a4e",
+      "file_path": "cps-ncmp-service/pom.xml",
+      "patchset_number": 2,
+      "line": 135,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-04-01 12:43:05.000000000",
+      "in_reply_to": "9a531452_8aa9ebc9",
+      "unresolved": false
+    },
+    {
+      "id": "795c4f5b_22440a1e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "should bein the REST layer and then I also don't think you will need the new import",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-04-01 12:43:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5b50b833_5f320cea",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 55,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-01 14:57:56.000000000",
+      "in_reply_to": "9a840f55_b85dcae6",
+      "unresolved": false
+    },
+    {
+      "id": "3daf8b9e_8ec9caee",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 2,
+      "line": 72,
+      "message": "Done",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-01 14:57:56.000000000",
+      "in_reply_to": "99f454d7_861af2ed",
+      "unresolved": false
+    },
+    {
+      "id": "3c22f7fc_83337c33",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/controller/DataJobController.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-01 14:57:56.000000000",
+      "in_reply_to": "795c4f5b_22440a1e",
+      "unresolved": false
+    },
+    {
+      "id": "c5d9d397_6ed3b55f",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/controller/DataJobControllerSpec.groovy",
+      "patchset_number": 2,
+      "line": 80,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-01 14:57:56.000000000",
+      "in_reply_to": "093f70b7_71bd84b3",
+      "unresolved": false
+    },
+    {
+      "id": "2c3f1fd6_64e6a7d3",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/DataJobControllerForTest.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "NB: Unsupported endpoint, to be only used for testing purposes only.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2025-04-01 15:39:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "30f823d0_7ba49e40",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/datajobs/models/DataJobRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "NB: can also be done using java records.\n\npublic record DataJobRequest(\n    @JsonProperty(\"dataJobMetadata\") DataJobMetadata dataJobMetadata,\n    @JsonProperty(\"dataJobWriteRequest\") DataJobWriteRequest dataJobWriteRequest\n)",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2025-04-01 15:39:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db8e7725_591915e3",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/DataJobControllerForTest.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-02 13:06:20.000000000",
+      "in_reply_to": "2c3f1fd6_64e6a7d3",
+      "unresolved": false
+    },
+    {
+      "id": "292b61e2_200241d5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/datajobs/models/DataJobRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "Agree",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-02 13:06:20.000000000",
+      "in_reply_to": "30f823d0_7ba49e40",
+      "unresolved": false
+    },
+    {
+      "id": "ab858d04_191ef892",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/DataJobControllerForTest.java",
+      "patchset_number": 7,
+      "line": 46,
+      "message": "Nb. I'd prefer if we used something like \"/do-not-use/dataJobs\".\nSo instead of:\n    /do-not-use/{dataJobId}/write\nhave\n    /do-not-use/dataJobs/{dataJobId}/write\nWe might want to add other operations later to this \"do-not-use\" interface.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-04-02 13:16:49.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "42a6acd9_9b80c43b",
+      "file_path": "cps-ncmp-rest/src/main/java/org/onap/cps/ncmp/rest/controller/DataJobControllerForTest.java",
+      "patchset_number": 7,
+      "line": 46,
+      "message": "Ack",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-04-02 16:18:15.000000000",
+      "in_reply_to": "ab858d04_191ef892",
+      "unresolved": false
+    }
+  ]
+}

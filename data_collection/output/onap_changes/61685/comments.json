@@ -1,0 +1,76 @@
+{
+  "id": "ci-management~master~Iac21a88d0c7d9f8f01dbcc9740a6f6fa2e5b141c",
+  "change_id": "Iac21a88d0c7d9f8f01dbcc9740a6f6fa2e5b141c",
+  "_number": 61685,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_d61dcb67",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "In the old packer we used to have:\napt-get -f install -y\nto fix dependencies after installing Erlang. \nWill this line take care of that?",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2018-08-21 21:40:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_7624f7ae",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "no idea. what's apt-get install -y without any packages do?",
+      "author": {
+        "account_id": 25,
+        "name": "Thanh Ha",
+        "display_name": "zxiiro",
+        "email": "thanh.ha@linuxfoundation.org",
+        "username": "zxiiro"
+      },
+      "updated": "2018-08-21 21:46:40.000000000",
+      "in_reply_to": "1a76adc5_d61dcb67",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_b6784f90",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "apt-get -f install -y with no packages seems like it fixes dependencies by selecting a solution.. but if a package is specified looks like the package needs to be the solution for the dependency. \n\nIn the old packer looks like we might have been having dependency issues since Erlang was installed like this:\n\n    wget https://packages.erlang-solutions.com/erlang/esl-erlang/FLAVOUR_1_general/esl-erlang_19.3.6-1~ubuntu~trusty_amd64.deb\n    dpkg -i esl-erlang_19.3.6-1~ubuntu~trusty_amd64.deb\n    apt-get install -y libwxbase3.0-0v5\n    apt-get -f install -y\n\nI want to test this, but i still cannot get past my issues with ansible after getting my network issues magically fixed on Friday.",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2018-08-21 21:57:34.000000000",
+      "in_reply_to": "1a76adc5_7624f7ae",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_7672b7ae",
+      "file_path": "packer/provision/local-docker.yaml",
+      "patchset_number": 1,
+      "line": 132,
+      "message": "My guess is that install_recommends will take care of any Erlang dependencies..",
+      "author": {
+        "account_id": 481,
+        "name": "Jessica Wagantall",
+        "display_name": null,
+        "email": "jwagantall@linuxfoundation.org",
+        "username": "jwagantall"
+      },
+      "updated": "2018-08-21 21:58:20.000000000",
+      "in_reply_to": "1a76adc5_b6784f90",
+      "unresolved": false
+    }
+  ]
+}

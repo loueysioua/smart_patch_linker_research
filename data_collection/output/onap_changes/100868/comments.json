@@ -1,0 +1,212 @@
+{
+  "id": "multicloud%2Fk8s~master~Ia6484ebb039daf0b1cb8e698fa7bfa758eeaa568",
+  "change_id": "Ia6484ebb039daf0b1cb8e698fa7bfa758eeaa568",
+  "_number": 100868,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "daa5f00d_ec920fcd",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "\"$2\" argument of script is not visible in function, as you pass only single parameter when invoking it ($1). If you want to provide all input parameters, you should invoke function like `_clean_docker \"$@\"`",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-29 06:24:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4a865c83_68caeb1c",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "I'm not convinced there is a need to use such \"fragile\" regexp here, what do you want to match for containers/image selection - container and image name and something else? Maybe it would be more robust to use --filter or --format options to `docker ps`",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-29 06:24:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2220aa72_a5ec4ad2",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "No need for subshell execution (\"()\") here as far as I see",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-29 06:24:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f734a43d_cc9060f1",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "This is as far as I'm aware already implemented as `docker image prune`, please check if it provides required functionality. If not, I'd suggest to use --format for `docker images` as suggested above.",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-29 06:24:06.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8aa3b698_6d3e493b",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "Ok, sorry, subshell is fine, didn't notice \"&&\\\" at the end of line. But in case you have such long expression I'd suggest to handle it with\n```\nif !docker ...; then\necho\nelse\ndocker ...\nfi\n```",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-29 06:25:38.000000000",
+      "in_reply_to": "2220aa72_a5ec4ad2",
+      "unresolved": false
+    },
+    {
+      "id": "d1999fca_56383302",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "Can you elaborate, please? I am trying to list out the image name based on the command line argument {image name} supplied. Ex:  docker images | grep \"nginx/\\|/nginx \\|nginx \\|nginx \\|nginx-\\|nginx_\" | awk '{print $3}' - Lists image -ID.\nWhat could potentially cause an issue in this type of approach?",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2020-01-29 22:46:48.000000000",
+      "in_reply_to": "4a865c83_68caeb1c",
+      "unresolved": false
+    },
+    {
+      "id": "547e2a1a_bf1758d8",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "Hi Konrad, thank you for reviewing this. I completely missed this. Was testing out single line argument for ansible and overlooked updating docker's arguments. I think I'll use $@ to expand the command line arguments.",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2020-01-29 22:46:48.000000000",
+      "in_reply_to": "daa5f00d_ec920fcd",
+      "unresolved": false
+    },
+    {
+      "id": "083df6c6_df9803d7",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 39,
+      "message": "I agree with your approach. Will update it to \ndocker prune -a",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2020-01-29 22:46:48.000000000",
+      "in_reply_to": "f734a43d_cc9060f1",
+      "unresolved": false
+    },
+    {
+      "id": "81535fb1_f1261eaf",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "Yes, sure. What I'm afraid of, is that with this approach, you could match by accident an entry that is not supposed to be matched. For example if you're running this function with \"nginx\" as $2, I guess you want to remove both all containers  and images matching image \"nginx\" at any version or image \"nginx-*\"/\"nginx_*\"/... at any version. Let's now consider we have some container running image nginx, but also some other that is running command \"abc -f nginx.conf ...\". As default output from `docker ps` includes truncated command, you could by accident match container that was not supposed to be killed. Now, by using `docker ps --format` you can explicitly say what columns you want to see and then, based on it prepare relevant parser. For example, if I wanted to check whether container name or image matches pattern \"*mongo*\", I could define following pipeline:\n```\ndocker ps -a --format \"{{.Image}} {{.Names}} {{.ID}}\" | awk -v match=\"$2\" '$0 ~ match {print $3}'\n```\nIt all actually depends on what you want to match against, but using format you can have much better prepared output to later search through.\nI'm not sure if I helped with this explaination, but I hope you can see my concern.",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-01-30 10:15:11.000000000",
+      "in_reply_to": "d1999fca_56383302",
+      "unresolved": false
+    },
+    {
+      "id": "6b2cdcad_81412332",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "Thank you Konrad, this helps. I get the context now, and the method you explained is a cleaner. I will make the changes.",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2020-01-31 00:26:59.000000000",
+      "in_reply_to": "81535fb1_f1261eaf",
+      "unresolved": false
+    },
+    {
+      "id": "26ea6e0d_1ecb380a",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 5,
+      "line": 25,
+      "message": "Could you restructure this part to use `if ... then ... else ... fi` rather than `(... || ...) && ...` for better readability.",
+      "author": {
+        "account_id": 5550,
+        "name": "Konrad Banka",
+        "display_name": null,
+        "email": "kbanka.os@gmail.com",
+        "username": "kbanka"
+      },
+      "updated": "2020-02-19 07:03:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "aebc8973_a2ffa104",
+      "file_path": "kud/hosting_providers/vagrant/cleanup.sh",
+      "patchset_number": 5,
+      "line": 25,
+      "message": "Hi Konrad, \nThank you for reviewing this. I've reworked the whole command to use an if/else ladder.",
+      "author": {
+        "account_id": 5033,
+        "name": "Akhila Kishore",
+        "display_name": null,
+        "email": "akhila.kishore@intel.com",
+        "username": "akhilakishore"
+      },
+      "updated": "2020-02-20 22:31:49.000000000",
+      "in_reply_to": "26ea6e0d_1ecb380a",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "appc~master~I58a43390ff45598f6d17da48eed3620667008cb7",
+  "change_id": "I58a43390ff45598f6d17da48eed3620667008cb7",
+  "_number": 36719,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_da4c5bcb",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 2,
+      "line": 125,
+      "message": "this if statement was after init JSONObject in original, but your new code is before init JSONObject, would you please explain that? Thanks",
+      "author": {
+        "account_id": 2477,
+        "name": "Takamune Cho",
+        "display_name": null,
+        "email": "takamune.cho@att.com",
+        "username": "Takamune_Cho"
+      },
+      "updated": "2018-03-21 20:25:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_34e31335",
+      "file_path": "appc-adapters/appc-chef-adapter/appc-chef-adapter-bundle/src/main/java/org/onap/appc/adapter/chef/impl/ChefAdapterImpl.java",
+      "patchset_number": 2,
+      "line": 125,
+      "message": "Hi Takamune, This is basically a small optimization. The JSONObject is used to parse the env JSON parameter and extract the name value which then is passed into the chefApiClient.put method. \nIn the old code the JSONObject was not used any other place outside of the if(privateKeyChecker.doesExist()) condition block. This meant that the JSONObject was created and parsed even though there was a risk of it not being used in case the privateKeyChecker statement evaluated to false. I moved this inside the if-statement so that the JSONObject is created and used only when we are certain that it will be needed - to avoid unnecessary processing. Of course this change was made after I had written the unit tests. Hope this clarifies and is acceptable",
+      "author": {
+        "account_id": 2815,
+        "name": "Michal Kabaj",
+        "display_name": null,
+        "email": "michal.kabaj@nokia.com",
+        "username": "kabayashi"
+      },
+      "updated": "2018-03-22 06:47:35.000000000",
+      "in_reply_to": "5a93c517_da4c5bcb",
+      "unresolved": false
+    }
+  ]
+}

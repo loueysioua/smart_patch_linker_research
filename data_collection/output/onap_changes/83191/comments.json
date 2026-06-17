@@ -1,0 +1,161 @@
+{
+  "id": "oom%2Foffline-installer~master~I772c342b3c9eafe1849d1678b810319afaaf75bf",
+  "change_id": "I772c342b3c9eafe1849d1678b810319afaaf75bf",
+  "_number": 83191,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "e0dd0971_818b221d",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "Override file can be user defined:\nansible/roles/application/defaults/main.yml:app_helm_override_file: \"{{ app_data_path }}/override.yaml\"\n\nSo i'd rather make it:\n- name: create {{ app_helm_override_file }}",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-27 11:10:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1f1c75b_f3109e81",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 3,
+      "line": 13,
+      "message": "ack, you're right.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-03-27 11:20:46.000000000",
+      "in_reply_to": "e0dd0971_818b221d",
+      "unresolved": true
+    },
+    {
+      "id": "175ef64f_bdda237a",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 9,
+      "message": "first letter of the task name should be capital for consistency.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-27 13:17:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "00081b21_d0079163",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 13,
+      "message": "same as above",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-27 13:17:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "be5b0582_51a8cc15",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 16,
+      "message": "this to_nice_yaml is potentially a problem, there are some bugreports opened for it that it doesnt produce output correctly. I tested this and in our case it's adding some empty rows into certificate ... not sure if this is functional impact as ConfigMap with cefrtificate looks correct,\n\nBut I would recommend adding: some task to remove empty rows \n\n# to_nice_yaml filter is wrongly adding empty lines\n- name: Remove blank lines from override_file\n  replace:\n    path: \"{{ app_helm_override_file }}\"\n    regexp: '(^\\n)'\n    replace: ''",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-01 07:39:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fd1b611c_a663b3de",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 16,
+      "message": "Wouldn't \n\ncontent: \"{{ merged_overrides | to_nice_yaml | replace('^\\n', '') }}\"\n\nsuffice?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-04-01 07:52:09.000000000",
+      "in_reply_to": "be5b0582_51a8cc15",
+      "unresolved": false
+    },
+    {
+      "id": "0d41545c_e91174d8",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 16,
+      "message": "looks good but not working for me, tried also regex_replace",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-01 08:19:31.000000000",
+      "in_reply_to": "fd1b611c_a663b3de",
+      "unresolved": false
+    },
+    {
+      "id": "9553e575_600eefed",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 16,
+      "message": "this guy works:\ncontent: \"{{ merged_overrides | to_nice_yaml | replace('\\n\\n', '\\n') }}\"",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-04-01 08:23:29.000000000",
+      "in_reply_to": "0d41545c_e91174d8",
+      "unresolved": false
+    },
+    {
+      "id": "a52264e2_45c0ea6e",
+      "file_path": "ansible/roles/application-override/tasks/main.yml",
+      "patchset_number": 5,
+      "line": 16,
+      "message": "Looks strange - for sure it removes trailing empty lines? It looks like it just substitutes two empty lines with one.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-04-01 11:37:21.000000000",
+      "in_reply_to": "9553e575_600eefed",
+      "unresolved": false
+    }
+  ]
+}

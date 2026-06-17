@@ -1,0 +1,263 @@
+{
+  "id": "policy%2Fparent~master~I8ff769e7a28bf0e00969d1bc677fee6908951d8a",
+  "change_id": "I8ff769e7a28bf0e00969d1bc677fee6908951d8a",
+  "_number": 122662,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "dc05fdae_e3bac635",
+      "file_path": "docs/conf.py",
+      "patchset_number": 1,
+      "line": null,
+      "message": "This file should not have been committed to the repo.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-15 15:58:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c308dcee_7a0e9060",
+      "file_path": "docs/conf.py",
+      "patchset_number": 2,
+      "line": null,
+      "message": "It is needed, file regenerated and restored.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-15 16:14:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "25961c78_b8861007",
+      "file_path": "docs/conf.py",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-15 16:45:35.000000000",
+      "in_reply_to": "c308dcee_7a0e9060",
+      "unresolved": false
+    },
+    {
+      "id": "f4372a14_c93873aa",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "isn't there a ${xxx} for this since it's this pom's version, too?  would rather not have to manually update this when we bump the version for policy-parent.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-15 16:45:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9113f87f_cdcb17fc",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Yes, ${project.version}.\n\nHowever, when this plygin is pulled in by a POM in a module, the variable ${project.version} takes the value of the version of the project in that POM, not the parent one.\n\nSo say if we're using this in the CLMAP runtime pom, then ${project.version} is set to 6.1.2-SNAPSHOT, resulting in a \"dependency not found\" error. I was using ${project.version} until I found out this was happening.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-15 20:42:33.000000000",
+      "in_reply_to": "f4372a14_c93873aa",
+      "unresolved": true
+    },
+    {
+      "id": "ee97d019_bfaa35e1",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "I was hoping this won't be such a huge issue because hopefully policy-parent shouldn't change much.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-15 20:43:47.000000000",
+      "in_reply_to": "9113f87f_cdcb17fc",
+      "unresolved": true
+    },
+    {
+      "id": "5a498400_5c086f11",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "so we can't use ${project.version} instead of ${version.parent.resources}, and we also can't define version.parent.resources in terms of ${project.version}?\n\n  <version.parent.resources>${project.version}</version.parent.resources>\n\nseems like one of these should work. 😞\n\nanother idea: can we move the plugin stuff to its own pom and then have the other repos include that just like they do the integration/pom?  that way, it just becomes a normal part of the release process: when we update a repo's pom to point to a new version of integration/pom, we also change its version of resources/pom",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-15 20:56:43.000000000",
+      "in_reply_to": "ee97d019_bfaa35e1",
+      "unresolved": true
+    },
+    {
+      "id": "09f5ef29_f2d9d73b",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "I guess if worse comes to worse, we just update the \"Release Versioning\" instructions to include a special step for policy/parent.\n\nI am a little concerned about what happens when we do a stage-release, as the \"-SNAPSHOT\" suffix just kind of magically disappears without us manually stripping it.  Would that break something when we try to build one of the other repos after manually changing them to point at release versions of their dependents?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-15 21:04:12.000000000",
+      "in_reply_to": "5a498400_5c086f11",
+      "unresolved": true
+    },
+    {
+      "id": "bf5cf24e_859482c4",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Let me try tweaking it a bit more.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-16 08:00:23.000000000",
+      "in_reply_to": "09f5ef29_f2d9d73b",
+      "unresolved": true
+    },
+    {
+      "id": "a2bdadd3_d4ddf86f",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "<version.parent.resources>${project.version}</version.parent.resources> doesn't work, it just gets the \"project.version\" of the POM of whatever module is being built.\n\nThe issue is that this profile needs to be in the inheritance hierarchy of the POM of the module that's being built when the effective POM is created AND the plugins in the profile need to have the resources (assembly and asciidoc template) to build the swagger docs.\n\nThese resources should very seldom change so it will be OK for the \"version.parent.resources\" to point at an earlier version than the current policy-parent once we have done one release.\n\nSo it'll be OK for policy-parent to be on 3.4.1-SNAPSHOT and have versino.oarent.resources point ant version 3.4.0",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-16 08:54:47.000000000",
+      "in_reply_to": "bf5cf24e_859482c4",
+      "unresolved": true
+    },
+    {
+      "id": "64834178_cf81653d",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "ok, that's a point.  thanks for experimenting.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-16 12:48:16.000000000",
+      "in_reply_to": "a2bdadd3_d4ddf86f",
+      "unresolved": false
+    },
+    {
+      "id": "aef26c9a_c61f583b",
+      "file_path": "docs/conf.py",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Ack",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-16 12:48:38.000000000",
+      "in_reply_to": "dc05fdae_e3bac635",
+      "unresolved": false
+    },
+    {
+      "id": "17c7447f_66d10661",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "NP!",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-19 10:09:15.000000000",
+      "in_reply_to": "64834178_cf81653d",
+      "unresolved": false
+    },
+    {
+      "id": "15eafabd_c725059c",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "Maybe put some comments here in the pom.xml to remind ourselves of this for the future??",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2021-07-19 12:37:37.000000000",
+      "in_reply_to": "17c7447f_66d10661",
+      "unresolved": false
+    },
+    {
+      "id": "df7dc279_f034b631",
+      "file_path": "integration/pom.xml",
+      "patchset_number": 4,
+      "line": 39,
+      "message": "I wonder - does this mean we have to do two releases of policy/parent?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-19 13:21:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

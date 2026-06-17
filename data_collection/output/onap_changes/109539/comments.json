@@ -1,0 +1,195 @@
+{
+  "id": "oom~master~Ie986889fe53f53d51b8e8a63895c156bf1d6b521",
+  "change_id": "Ie986889fe53f53d51b8e8a63895c156bf1d6b521",
+  "_number": 109539,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "0ab8012a_fe4eb20c",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 2,
+      "line": 96,
+      "message": "Ok so sth is wrong here. certInitializer has this check internally so it cannot be this container that is causing the wait for aaf",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-26 00:01:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "09662a4a_b37f2e03",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 2,
+      "line": 96,
+      "message": "I believe the faulty one is the second one ({{ include \"common.name\" . }}-chown) and Lucjan put the \"if\" on both.\n\nSo maybe Lucjan, put the if only for {{ include \"common.name\" . }}-chown",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-26 09:24:32.000000000",
+      "in_reply_to": "0ab8012a_fe4eb20c",
+      "unresolved": true
+    },
+    {
+      "id": "b566618e_f1b7185c",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 2,
+      "line": 96,
+      "message": "not really I think we need to put if only on the part of that chown container as in fact there is more than one command executed here:\nchown -R {{ .Values.config.odlUid }}:{{ .Values.config.odlGid}} {{ .Values.persistence.mdsalPath }} ;\n^ this one should stay\n\nchown -R {{ .Values.config.odlUid }}:{{ .Values.config.odlGid}} {{ .Values.certInitializer.credsPath }}\n^ this one should be conditional",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-26 15:19:49.000000000",
+      "in_reply_to": "09662a4a_b37f2e03",
+      "unresolved": true
+    },
+    {
+      "id": "a94ef04a_c01c702b",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 2,
+      "line": 96,
+      "message": "Oh yeah you're right (I was misleaded by the line return...)\nWell, Lucjan, you know what to do ;)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-26 15:28:56.000000000",
+      "in_reply_to": "b566618e_f1b7185c",
+      "unresolved": true
+    },
+    {
+      "id": "5bcdc75f_da51b677",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 3,
+      "line": 95,
+      "message": "I would have done differently",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-30 13:07:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f14f2cdd_23dd38a5",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 3,
+      "line": 105,
+      "message": "I would have done this way:\n\n       command:\n       - sh\n       - -c\n       - chown -R {{ .Values.config.odlUid }}:{{ .Values.config.odlGid }} {{ .Values.persistence.mdsalPath }}\n       {{- if .Values.global.aafEnabled }}\n       - chown -R {{ .Values.config.odlUid }}:{{ .Values.config.odlGid}} {{ .Values.certInitializer.credsPath }}\n       {{- end }}\n       volumeMounts: {{ include \"common.certInitializer.volumeMount\" . | nindent 8 }}\n       - mountPath: {{ .Values.persistence.mdsalPath }}\n         name: {{ include \"common.fullname\" . }}-data",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-30 13:07:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0a2e3c33_79aa46b8",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 4,
+      "line": 108,
+      "message": "it won't work here:\nremove all these lines (105 to  108) and it should be good",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-08 06:30:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e730baef_f86922f4",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 5,
+      "line": 104,
+      "message": "{{- if .Values.global.aafEnabled }}",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-08 15:34:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e6840058_c23e8dc0",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 5,
+      "line": 106,
+      "message": "{{- end }}",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-08 15:34:35.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9197d301_556d34ca",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 6,
+      "line": 105,
+      "message": "nope, look at PS5 comment please (the final - is the issue)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-07-10 06:37:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "838994ce_d49aaa90",
+      "file_path": "kubernetes/sdnc/templates/statefulset.yaml",
+      "patchset_number": 8,
+      "line": 99,
+      "message": "This dash does not belong.",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2020-08-11 14:26:46.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

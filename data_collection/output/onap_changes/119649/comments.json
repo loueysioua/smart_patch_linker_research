@@ -1,0 +1,93 @@
+{
+  "id": "policy%2Fapex-pdp~master~I100674cedf78f7221128bc87dd562835f297e0dd",
+  "change_id": "I100674cedf78f7221128bc87dd562835f297e0dd",
+  "_number": 119649,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8448a3f9_e35431af",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "this will require an update to the yaml in docker/csit.  Any reason this can't be done using compose file or CLI?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-03-23 18:58:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4487c587_c6eaa814",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "apex in oom has \"cmd\" entries, will it work ok there, with the entrypoint + cmd combination?\nIn any case, it's better to use sh, than ash, more powerful shell.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-03-23 19:08:42.000000000",
+      "in_reply_to": "8448a3f9_e35431af",
+      "unresolved": true
+    },
+    {
+      "id": "104b009b_593bd71e",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "I think we are already overriding the entrypoint in csit yaml file. Also, in oom charts.\nFor standalone installation, can be done through CLI while creating docker container but we need to always pass the \"/bin/ash\" as part of the arguments. Which folks generally tend to forget and raise issues.\n\nAgree about \"sh\".\nI checked PAP and we have entrypoint (in dockerfile) + cmd (sh in oom charts) combination. So I think it will work.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-03-23 19:20:10.000000000",
+      "in_reply_to": "8448a3f9_e35431af",
+      "unresolved": true
+    },
+    {
+      "id": "4e5158a2_5e08196e",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "I think entrypoint takes precedence, so this would probably break OOM.\n\nAnd I was mistaken about docker/csit - it uses entrypoint so CSIT should still be OK, as it would override the above.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-03-23 19:20:33.000000000",
+      "in_reply_to": "4487c587_c6eaa814",
+      "unresolved": true
+    },
+    {
+      "id": "e32f4f74_410b42ef",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "I see what you're saying about PAP, so \"command\" in OOM must override \"entrypoint\" in the Dockerfile.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-03-23 19:30:59.000000000",
+      "in_reply_to": "4e5158a2_5e08196e",
+      "unresolved": false
+    }
+  ]
+}

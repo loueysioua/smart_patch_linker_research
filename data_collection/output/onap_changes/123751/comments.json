@@ -1,0 +1,59 @@
+{
+  "id": "sdc~master~If1bda517a9295ad380bf4e5e2fc35f15a1ff708e",
+  "change_id": "If1bda517a9295ad380bf4e5e2fc35f15a1ff708e",
+  "_number": 123751,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "181663cf_19e9cf00",
+      "file_path": "catalog-be/src/main/resources/scripts/sdcBePy/tosca/models/model_import_manager.py",
+      "patchset_number": 1,
+      "line": 68,
+      "message": "unless I'm misreading this, this can set action to self.ACTION_INIT only if it is already self.ACTION_INIT (i.e. not self.ACTION_UPGRADE).\n\ni dont see where we check if the model is already created and proceed to deploy the types in the init folder only if the model doesnt already exist",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2021-09-01 08:54:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "19154644_df1b9c41",
+      "file_path": "catalog-be/src/main/resources/scripts/sdcBePy/tosca/models/model_import_manager.py",
+      "patchset_number": 3,
+      "line": 123,
+      "message": "existence of the upgrade folder does not guarantee the model has already been deployed. It will depend on the 'from' version in the upgrade path. The condition should be if the model is in 'models' then upgrade otherwise init",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2021-09-02 10:41:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bc93bfec_9693b0ae",
+      "file_path": "catalog-be/src/main/resources/scripts/sdcBePy/tosca/models/model_import_manager.py",
+      "patchset_number": 11,
+      "line": 62,
+      "message": "The models not previously deployed are still not getting deployed in upgrade because you are reading from the upgrade folder rather than the init folder. Also the decision on install/upgrade needs to be taken at the model level rather than an over all level.\n\nChange to:\n\n    def deploy_models(self):\n        existing_models = self.__model_client.get_model_list()\n        \n        for model_folder_name in self.__get_model_init_list():\n            model_payload_dict = self.__read_model_payload(model_folder_name, self.ACTION_INIT)\n            if (not existing_models or not any(m for m in existing_models if model_payload_dict['name'] == m['name'])):\n                self.__create_model(model_folder_name, model_payload_dict)\n                \n        for model_folder_name in self.__get_model_upgrade_list():\n            model_payload_dict = self.__read_model_payload(model_folder_name, self.ACTION_UPGRADE)\n            if (existing_models and any(m for m in existing_models if model_payload_dict['name'] == m['name'])):\n                self.__update_model(model_folder_name, model_payload_dict)\n            \n    def __create_model(self, model_folder_name, model_payload_dict):\n        model_imports_zip_path = self.__zip_model_imports(model_folder_name, self.ACTION_INIT)\n        self.__model_client.create_model(model_payload_dict, model_imports_zip_path)\n        self.__init_model_non_node_types(model_folder_name, model_payload_dict)\n        self.__init_model_node_types(model_folder_name, model_payload_dict)\n        self.__init_model_non_node_types(model_folder_name, model_payload_dict, True);\n        \n    def __update_model(self, model_folder_name, model_payload_dict):\n        model_imports_zip_path = self.__zip_model_imports(model_folder_name, self.ACTION_UPGRADE)\n        self.__model_client.update_model_imports(model_payload_dict, model_imports_zip_path)\n        self.__upgrade_model_non_node_types(model_folder_name, model_payload_dict)\n        self.__upgrade_model_node_types(model_folder_name, model_payload_dict)\n        self.__upgrade_model_non_node_types(model_folder_name, model_payload_dict, True)\n\n\nand call deploy_models from both upgrade/run.py and imports/run.py",
+      "author": {
+        "account_id": 5269,
+        "name": "Michael Morris",
+        "display_name": null,
+        "email": "michael.morris@est.tech",
+        "username": "MichaelMorris"
+      },
+      "updated": "2021-09-09 07:23:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

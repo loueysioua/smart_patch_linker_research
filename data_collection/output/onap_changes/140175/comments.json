@@ -1,0 +1,211 @@
+{
+  "id": "cps~master~I298c902c46e6f7df33363a146ae4b47727184f79",
+  "change_id": "I298c902c46e6f7df33363a146ae4b47727184f79",
+  "_number": 140175,
+  "change_comments": [
+    {
+      "id": "9858bd20_da746b51",
+      "patchset_number": 2,
+      "message": "Some NB, otherwise good!",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2025-02-07 16:54:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "ffd9c9b4_8839aa61",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/cps/HibernateConfigSpec.groovy",
+      "patchset_number": 2,
+      "line": 39,
+      "message": "NB: you can provide a direct value for this 'org.postgresql.Driver' since it doesn't read from any properies file!",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2025-02-07 16:54:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "36cd0c31_65336cd8",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/cps/HibernateConfigSpec.groovy",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "NB: can use single qoutes instead double for groovy strings.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2025-02-07 16:54:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7bfa3ab8_b18fd540",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 26,
+      "message": "Separation of Concerns\n\nDataSourceProperties → Handles database connection settings\nJpaProperties → Handles Hibernate-related settings",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-02-07 16:58:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "20fc787f_e7c1b5cd",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 28,
+      "message": "import com.zaxxer.hikari.HikariDataSource;\nimport lombok.RequiredArgsConstructor;\nimport lombok.extern.slf4j.Slf4j;\nimport org.hibernate.cfg.Configuration;\nimport org.springframework.context.annotation.Bean;\nimport org.springframework.context.annotation.Configuration;\nimport javax.sql.DataSource;\n\n@Slf4j\n@Configuration\n@RequiredArgsConstructor\npublic class HibernateConfig {\n\n    private final DataSourceProperties dataSourceProperties;\n    private final JpaProperties jpaProperties;\n\n    /**\n     * Configures Hibernate with properties from application.yml\n     */\n    @Bean\n    public Configuration hibernateConfiguration() {\n        log.info(\"Initializing Hibernate Configuration...\");\n\n        Configuration configuration = new Configuration();\n        configuration.setProperty(\"hibernate.connection.url\", dataSourceProperties.getUrl());\n        configuration.setProperty(\"hibernate.connection.driver_class\", dataSourceProperties.getDriverClassName());\n        configuration.setProperty(\"hibernate.connection.username\", dataSourceProperties.getUsername());\n        configuration.setProperty(\"hibernate.connection.password\", dataSourceProperties.getPassword());\n        configuration.setProperty(\"hibernate.dialect\", jpaProperties.getDialect());\n        configuration.setProperty(\"hibernate.show_sql\", String.valueOf(jpaProperties.isShowSql()));\n        configuration.setProperty(\"hibernate.format_sql\", String.valueOf(jpaProperties.isFormatSql()));\n        configuration.setProperty(\"hibernate.jdbc.batch_size\", String.valueOf(jpaProperties.getJdbcBatchSize()));\n        configuration.setProperty(\"hibernate.id.new_generator_mappings\", String.valueOf(jpaProperties.isNewGeneratorMappings()));\n\n        log.info(\"Hibernate Configuration initialized successfully.\");\n        return configuration;\n    }\n\n    /**\n     * Configures a DataSource bean using HikariCP.\n     */\n    @Bean\n    public DataSource dataSource() {\n        log.info(\"Configuring DataSource...\");\n        HikariDataSource dataSource = new HikariDataSource();\n        dataSource.setJdbcUrl(dataSourceProperties.getUrl());\n        dataSource.setDriverClassName(dataSourceProperties.getDriverClassName());\n        dataSource.setUsername(dataSourceProperties.getUsername());\n        dataSource.setPassword(dataSourceProperties.getPassword());\n        log.info(\"DataSource configured successfully.\");\n        return dataSource;\n    }\n}",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-02-07 16:58:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "44576c6c_c3233c4a",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 55,
+      "message": "import lombok.Getter;\nimport lombok.Setter;\nimport org.springframework.boot.context.properties.ConfigurationProperties;\nimport org.springframework.stereotype.Component;\n\n@Getter\n@Setter\n@Component\n@ConfigurationProperties(prefix = \"spring.jpa.properties.hibernate\")\npublic class JpaProperties {\n    private String dialect;\n    private boolean showSql;\n    private boolean formatSql;\n    private int jdbcBatchSize;\n    private boolean newGeneratorMappings;\n}",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-02-07 16:58:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "094ce073_9666bf19",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "import lombok.Getter;\nimport lombok.Setter;\nimport org.springframework.boot.context.properties.ConfigurationProperties;\nimport org.springframework.stereotype.Component;\n\n@Getter\n@Setter\n@Component\n@ConfigurationProperties(prefix = \"spring.datasource\")\npublic class DataSourceProperties {\n    private String url;\n    private String driverClassName;\n    private String username;\n    private String password;\n}",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2025-02-07 17:02:21.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "47bcf85e_db111806",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 26,
+      "message": "I disagree. The concern is to populate HibernateConfiguration from application.yml.\n\nThis way is a lot of extra code for a simple problem: we would be going from a single class containing a single bean to 4 different classes.\n(The fourth class is needed because \"new_generator_mappings\" is not directly under \"spring.jpa.properties.hibernate\")",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2025-02-07 17:45:25.000000000",
+      "in_reply_to": "7bfa3ab8_b18fd540",
+      "unresolved": true
+    },
+    {
+      "id": "598fb053_430d995e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 28,
+      "message": "Hi Sourabh, can you explain the intent of this comment/codeblock",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-02-10 10:50:17.000000000",
+      "in_reply_to": "20fc787f_e7c1b5cd",
+      "unresolved": true
+    },
+    {
+      "id": "5bc1496a_a426be97",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/config/HibernateConfig.java",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "you mean you can group proreties together this way and reduce the number of annotations etc?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-02-10 10:50:17.000000000",
+      "in_reply_to": "094ce073_9666bf19",
+      "unresolved": true
+    },
+    {
+      "id": "ab20bfa5_85b0d68e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/ri/utils/CpsSessionFactory.java",
+      "patchset_number": 2,
+      "line": 64,
+      "message": "NB: the method does more now then just getting a factory\ngetSessionFactoryWithHibernateConfiguration()",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-02-10 10:50:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8a0821dc_b82f4334",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/functional/cps/HibernateConfigSpec.groovy",
+      "patchset_number": 2,
+      "line": 33,
+      "message": "find replace \" with ' :-D",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2025-02-10 10:50:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "policy%2Fxacml-pdp~master~I41ba9cf451aecd62fb0090d721685da9ce6e2f2e",
+  "change_id": "I41ba9cf451aecd62fb0090d721685da9ce6e2f2e",
+  "_number": 131925,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "7dc57e27_a4654ac0",
+      "file_path": "packages/policy-xacmlpdp-tarball/src/main/resources/mysql/bin/create-guard-table.sh",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "Will this work if the \"=\" character is in the middle of the password? Or is it a leading \"=\" that we are removing?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2022-11-01 09:13:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5d2d9a8a_a5ebec11",
+      "file_path": "packages/policy-xacmlpdp-tarball/src/main/resources/mysql/bin/create-guard-table.sh",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "It should work preserving a password that contains a \"=\" in it in a property in a properties file, see for example:\n\n[09:59|~] echo \"javax.persistence.jdbc.password=mypassword=\" | awk -F= '$1 == \"javax.persistence.jdbc.password\" { st = index($0,\"=\"); print substr($0,st+1) }'\nmypassword=\n[09:59|~] echo \"javax.persistence.jdbc.password=mypass=word\" | awk -F= '$1 == \"javax.persistence.jdbc.password\" { st = index($0,\"=\"); print substr($0,st+1) }'\nmypass=word\n[09:59|~] echo \"javax.persistence.jdbc.password==mypassword\" | awk -F= '$1 == \"javax.persistence.jdbc.password\" { st = index($0,\"=\"); print substr($0,st+1) }'\n=mypassword\n[09:59|~] \n\nbefore the password was truncated at the \"=\" sign so the credentials were invalid.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2022-11-01 15:02:31.000000000",
+      "in_reply_to": "7dc57e27_a4654ac0",
+      "unresolved": true
+    },
+    {
+      "id": "a5adf4dd_a087b196",
+      "file_path": "packages/policy-xacmlpdp-tarball/src/main/resources/mysql/bin/create-guard-table.sh",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2022-11-01 17:06:44.000000000",
+      "in_reply_to": "5d2d9a8a_a5ebec11",
+      "unresolved": false
+    }
+  ]
+}

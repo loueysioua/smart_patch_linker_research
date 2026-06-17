@@ -1,0 +1,490 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I65154d33833914b4332e02d1ef2512f4c5f09b16",
+  "change_id": "I65154d33833914b4332e02d1ef2512f4c5f09b16",
+  "_number": 40253,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-03-29 19:14:53.000000000",
+    "updated": "2018-04-03 22:23:25.000000000",
+    "submitted": "2018-04-03 21:33:29.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 811,
+      "name": "Jim Hahn",
+      "display_name": null,
+      "email": "jrh3@att.com",
+      "username": "jrh3"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Add api-resource-locks feature",
+  "commit_message": "Add api-resource-locks feature\n\nAdded ResourceLockFeatureAPI, to provide an interface for PolicyGuard\nto use to access other locking mechanisms.\nMove lock API to policy-core.\nChanged the interface and added Callback support.  Added a class to\ninvoke the API implementers.\nChanged to set a future instead of expecting the callback to implement\nthe future interface. Also refactored, creating \"lock\" sub-package.\nAdd junit tests.\nIncrease junit coverage.\nIsLocked & isLockedBy should check all arguments.\nMake ImplFuture protected instead of public.\nSimplify locking - move callback support to an optional feature.\nMove Reference class to policy-utils.\nReturn plain Future instead of LockRequestFuture.\n\nChange-Id: I65154d33833914b4332e02d1ef2512f4c5f09b16\nIssue-ID: POLICY-577\nSigned-off-by: Jim Hahn <jrh3@att.com>\n",
+  "change_log": {
+    "entry_count": 33,
+    "entries": [
+      {
+        "id": "40bf45d3d4cd9b711af5d28dc3bf8793a1ee46fe",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-29 19:14:53.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "51d0c56ddbf367b7b830077e9eb0779ff51dde09",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-29 19:16:36.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/418/",
+        "patchset_number": 1
+      },
+      {
+        "id": "e5b495513f14c1a3dcc8617e561186a5f7905c89",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-29 19:21:23.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "7b5e59802723501beedaf96240e8fa09d286c6fe",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-29 19:23:41.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/418/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/418",
+        "patchset_number": 1
+      },
+      {
+        "id": "526c337d8fcdfa2c3f0588483904209526a4ce26",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-29 22:25:40.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "0f7df76ce65f2336f56b94e95dd72a0b3c06f622",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-03-30 09:58:54.000000000",
+        "message": "Patch Set 1:\n\nOK - I'm completely missing the \"big picture\" on this. How does this relate to Drew's 'LockFeatureAPI' interface, and what is the purpose to either one of these API's? The existing feature API's tend to provide hooks where you can change behavior or just do something when state changes occur on long-lived objects, such as the Drools engine, or a Drools session.\n\nWhat kind of things would you do with this API? If the intention is to give the ability to provide an alternate lock implementation, it seems that this is not sufficient to do that, because there are additional concepts that you might need, such as an asynchronous notification interface involving callbacks and/or Drools event (blocking the Drools session thread is NOT a good long-term solution).",
+        "patchset_number": 1
+      },
+      {
+        "id": "fce28c6f762cf63d9d7d60a16dee88261e7a7ad5",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-30 13:09:40.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n> OK - I'm completely missing the \"big picture\" on this. How does\n > this relate to Drew's 'LockFeatureAPI' interface, and what is the\n > purpose to either one of these API's? The existing feature API's\n > tend to provide hooks where you can change behavior or just do\n > something when state changes occur on long-lived objects, such as\n > the Drools engine, or a Drools session.\n > \n > What kind of things would you do with this API? If the intention is\n > to give the ability to provide an alternate lock implementation, it\n > seems that this is not sufficient to do that, because there are\n > additional concepts that you might need, such as an asynchronous\n > notification interface involving callbacks and/or Drools event\n > (blocking the Drools session thread is NOT a good long-term\n > solution).\n\nThis replaces Drew's LockFeatureAPI, as it needs to be in a jar that is always on the classpath, while distributed locking will only be on the classpath if the feature is enabled.  It is intended to work like the PolicyControllerAPI, which has beforeOffer & afterOffer methods to provide hooks before and after events are processed.  In this case, it provides hooks before and after locks are acquired.\n\nFor now, PolicyGuard will use it directly.  Although, I could imagine creating a class, here, that provides some of the basic functionality that PolicyGuard currently provides.  ** Should I go ahead and do that?  And if so, should this project be renamed from api-resource-locks to simply resource-locks, since it would now contain more than just an API?\n\nRegardless, to facilitate future use, I can add a callback to the beforeLock and afterLock methods.  (Adding it in both, as the implementer may prefer it in one or the other.)",
+        "patchset_number": 1
+      },
+      {
+        "id": "69091ecd20f15c4b9f6c1ac68d3bb9d85ff1362f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-30 13:17:40.000000000",
+        "message": "Patch Set 1:\n\n> > OK - I'm completely missing the \"big picture\" on this. How does\n > > this relate to Drew's 'LockFeatureAPI' interface, and what is the\n > > purpose to either one of these API's? The existing feature API's\n > > tend to provide hooks where you can change behavior or just do\n > > something when state changes occur on long-lived objects, such as\n > > the Drools engine, or a Drools session.\n > >\n > > What kind of things would you do with this API? If the intention\n > is\n > > to give the ability to provide an alternate lock implementation,\n > it\n > > seems that this is not sufficient to do that, because there are\n > > additional concepts that you might need, such as an asynchronous\n > > notification interface involving callbacks and/or Drools event\n > > (blocking the Drools session thread is NOT a good long-term\n > > solution).\n > \n > This replaces Drew's LockFeatureAPI, as it needs to be in a jar\n > that is always on the classpath, while distributed locking will\n > only be on the classpath if the feature is enabled.  It is intended\n > to work like the PolicyControllerAPI, which has beforeOffer &\n > afterOffer methods to provide hooks before and after events are\n > processed.  In this case, it provides hooks before and after locks\n > are acquired.\n > \n > For now, PolicyGuard will use it directly.  Although, I could\n > imagine creating a class, here, that provides some of the basic\n > functionality that PolicyGuard currently provides.  ** Should I go\n > ahead and do that?  And if so, should this project be renamed from\n > api-resource-locks to simply resource-locks, since it would now\n > contain more than just an API?\n > \n > Regardless, to facilitate future use, I can add a callback to the\n > beforeLock and afterLock methods.  (Adding it in both, as the\n > implementer may prefer it in one or the other.)\n\nShould this be added to policy-core, maybe, instead of a separate api-resource-locks project?",
+        "patchset_number": 1
+      },
+      {
+        "id": "23d8eee754c411b094e5797e4ec90a8f09627a28",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-30 22:53:57.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "0eaf27fea8efa4bf625ac2f32e0bdcdb24d4636b",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-03-31 19:09:04.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "1e318a969dab5a75a16aca6dfaf604efce02064a",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-02 22:46:46.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "ab0c6be7b94abb2484c189fb48f77e2724ab19b7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 22:49:08.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/421/",
+        "patchset_number": 4
+      },
+      {
+        "id": "ed4336f8752f918195db82331187201d57f68294",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 22:56:35.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/421/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/421",
+        "patchset_number": 4
+      },
+      {
+        "id": "dea1e7f1dfaf0e7f0be0f085edfef7dfe7d2831f",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-02 23:04:08.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "fda1a7cbe20cc270d1e83a09c24c577a30d47a55",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 23:06:23.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/423/",
+        "patchset_number": 5
+      },
+      {
+        "id": "94206fa420ca22d0946c6d52167f1ac670760fa5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 23:14:19.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/423/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/423",
+        "patchset_number": 5
+      },
+      {
+        "id": "a8f1af2cd1f10d56a5f0ab936e8e11768bab7ebe",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-02 23:40:54.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "2364a1519dac866dc599ce97be2292160c86273b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 23:42:13.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/424/",
+        "patchset_number": 6
+      },
+      {
+        "id": "940c3cab5bb4512aba9e1a13b1f1d0dac608b9ca",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-02 23:50:14.000000000",
+        "message": "Patch Set 6: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/424/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/424",
+        "patchset_number": 6
+      },
+      {
+        "id": "92b8b72a241ca5d2c0f2ce91e3d29eb7de4784c7",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-02 23:50:46.000000000",
+        "message": "Patch Set 6: Code-Review+1",
+        "patchset_number": 6
+      },
+      {
+        "id": "2ee30efb6d2e9fb27fdff48c1f8aebe5e26b69f1",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-03 02:23:38.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "ec83f336afb6756705596d84eb7fda510f385dbd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 02:26:07.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/425/",
+        "patchset_number": 7
+      },
+      {
+        "id": "c552531493585b575cc6a9c4ed21bfd4134c683f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 02:35:34.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/425/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/425",
+        "patchset_number": 7
+      },
+      {
+        "id": "c4eea95c05cca41429d4b111036e0aeb97fb8eb7",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-03 02:35:59.000000000",
+        "message": "Patch Set 7: Code-Review+1",
+        "patchset_number": 7
+      },
+      {
+        "id": "94e3b97f5bf091f21d52a1bbe5687b8d52d880a4",
+        "author": {
+          "account_id": 1645,
+          "name": "Drew Magnusen",
+          "display_name": null,
+          "email": "dm741q@att.com",
+          "username": "dm741q"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 14:21:02.000000000",
+        "message": "Patch Set 7: Code-Review+1",
+        "patchset_number": 7
+      },
+      {
+        "id": "bc3487cfd0b776eb4631514998541e7c5e3e8e14",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-03 15:01:57.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "dff085f62f13f11ab1c769dca776f053ccd98577",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-03 15:02:51.000000000",
+        "message": "Patch Set 8: Code-Review+1",
+        "patchset_number": 8
+      },
+      {
+        "id": "eb71935d75dce3ef11e76196cbd482c989deae4e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 15:04:15.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/428/",
+        "patchset_number": 8
+      },
+      {
+        "id": "036010816217eb66bc00f7c2eda170b2d4af87ef",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 15:13:20.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/428/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/428",
+        "patchset_number": 8
+      },
+      {
+        "id": "ff321fca07bc814ce9292e5e239a9ece702f6b13",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 21:33:20.000000000",
+        "message": "Patch Set 8: Code-Review+2",
+        "patchset_number": 8
+      },
+      {
+        "id": "98b07b5390016ded673d0c8c879981ae3618e624",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-04-03 21:33:29.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 8
+      },
+      {
+        "id": "61023434db2ccf856c1f39e557cc05cfbf8afb4d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 22:05:09.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-merge-scm-mvn-script/22/",
+        "patchset_number": 8
+      },
+      {
+        "id": "0440cd412309fa19955fa1417a41f78cf91004cd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-03 22:23:25.000000000",
+        "message": "Patch Set 8:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-scm-mvn-script/22/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-scm-mvn-script/22",
+        "patchset_number": 8
+      }
+    ]
+  }
+}

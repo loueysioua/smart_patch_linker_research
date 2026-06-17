@@ -1,0 +1,280 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~I0828a9637376dd6176ba07cf6f35f382d1e41070",
+  "change_id": "I0828a9637376dd6176ba07cf6f35f382d1e41070",
+  "_number": 78493,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "160e4112_3770b876",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 4,
+      "line": 59,
+      "message": "We can refactor this a little to be more concise:\n```\n    public InetSocketAddress start() {\n        TcpServer tcpServer = TcpServer.create()\n                .host(\"localhost\")\n                .port(6666)\n                .wiretap(true)\n                .handle(this::handleConnection);\n        if (sslContext.isPresent()) {\n            tcpServer = tcpServer.secure(ssl -> ssl.sslContext(sslContext.get()));\n        }\n        server = tcpServer.bindNow();\n        return server.address();\n    }\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-18 07:17:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8691d5ce_243a9f39",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 54,
+      "message": "`withUnsecureConnection` could be here after applying rename for other method.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-18 07:17:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "82aff2d8_7e824d25",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 71,
+      "message": "Maybe `withSecureConnection` would sound better?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-18 07:17:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1da99128_023287c2",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "Let's extract some string variables here - I would suggest all \"client/server/trust\", however only \"trust\" is mandatory as it's used twice",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-18 07:17:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c8286c5e_1fd6775e",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 4,
+      "line": 73,
+      "message": "Collector-related part could be extracted: \n```\npublic void startSecure() {\n    createCollectorWithEnabledSSL();\n\n    final ImmutableSecurityKeys producerSecurityKeys = ImmutableSecurityKeys.builder()\n            .keyStore(ImmutableSecurityKeysStore.of(resource(\"/client.p12\").get()))\n            .keyStorePassword(Passwords.fromResource(\"/client.pass\").get())\n            .trustStore(ImmutableSecurityKeysStore.of(resource(\"/trust.p12\").get()))\n            .trustStorePassword(Passwords.fromResource(\"/trust.pass\").get())\n            .build();\n    start(ImmutableProducerOptions.builder().securityKeys(producerSecurityKeys));\n}\n\nprivate void createCollectorWithEnabledSSL() {\n    final ImmutableSecurityKeys collectorSecurityKeys = ImmutableSecurityKeys.builder()\n            .keyStore(ImmutableSecurityKeysStore.of(resource(\"/server.p12\").get()))\n            .keyStorePassword(Passwords.fromResource(\"/server.pass\").get())\n            .trustStore(ImmutableSecurityKeysStore.of(resource(\"/trust.p12\").get()))\n            .trustStorePassword(Passwords.fromResource(\"/trust.pass\").get())\n            .build();\n    final SslContext collectorSslContext = sslFactory.createSecureServerContext(collectorSecurityKeys).get();\n    collector = new DummyCollector(Optional.of(collectorSslContext));\n}\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-02-18 07:17:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4f834baa_3aee0060",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 4,
+      "line": 59,
+      "message": "Done,\nGood point!",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-18 08:37:35.000000000",
+      "in_reply_to": "160e4112_3770b876",
+      "unresolved": false
+    },
+    {
+      "id": "336dd163_99602325",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 54,
+      "message": "Done",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-18 08:37:35.000000000",
+      "in_reply_to": "8691d5ce_243a9f39",
+      "unresolved": false
+    },
+    {
+      "id": "a34713b9_9bfb7902",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/HvVesProducerIT.java",
+      "patchset_number": 4,
+      "line": 71,
+      "message": "Done",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-18 08:37:35.000000000",
+      "in_reply_to": "82aff2d8_7e824d25",
+      "unresolved": false
+    },
+    {
+      "id": "34fd20aa_c7cf6e0e",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "Done",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-18 08:37:35.000000000",
+      "in_reply_to": "1da99128_023287c2",
+      "unresolved": false
+    },
+    {
+      "id": "389bca16_68f126ee",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 4,
+      "line": 73,
+      "message": "Done",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-18 08:37:35.000000000",
+      "in_reply_to": "c8286c5e_1fd6775e",
+      "unresolved": false
+    },
+    {
+      "id": "b0c2fb24_2d315b06",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 6,
+      "line": 107,
+      "message": "I think that function should return dummy collector, not assign it to \"collector\" field. Then you would do the assignment inside startSecure method",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-02-19 10:03:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d8b96d5f_3218e69f",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 6,
+      "line": 107,
+      "message": "Ok, will be similar to start() method",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-19 10:12:48.000000000",
+      "in_reply_to": "b0c2fb24_2d315b06",
+      "unresolved": false
+    },
+    {
+      "id": "ab631e48_2faa6d0a",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 6,
+      "line": 28,
+      "message": "Use io.vavr.control.Option which provides a safer API than standard Java Optional.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-19 10:15:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d1c8ed33_f338c756",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 6,
+      "line": 108,
+      "message": "change type to the interface",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-19 10:15:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "03f6cb07_468a8a7a",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/DummyCollector.java",
+      "patchset_number": 6,
+      "line": 28,
+      "message": "used orElseGet",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-19 12:07:23.000000000",
+      "in_reply_to": "ab631e48_2faa6d0a",
+      "unresolved": false
+    },
+    {
+      "id": "9dfb7b84_11bdee78",
+      "file_path": "services/hv-ves-client/producer/ct/src/test/java/org/onap/dcaegen2/services/sdk/services/hvves/client/producer/ct/SystemUnderTestWrapper.java",
+      "patchset_number": 6,
+      "line": 108,
+      "message": "Done",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-02-19 12:07:23.000000000",
+      "in_reply_to": "d1c8ed33_f338c756",
+      "unresolved": false
+    }
+  ]
+}

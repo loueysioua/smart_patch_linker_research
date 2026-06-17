@@ -1,0 +1,535 @@
+{
+  "id": "cps%2Fcps-temporal~master~I7936cd9e8e7dead3b5650b421bb12f10d14ffa9b",
+  "change_id": "I7936cd9e8e7dead3b5650b421bb12f10d14ffa9b",
+  "_number": 123247,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "dc92fd3c_9d6ee802",
+      "file_path": "docs/api/swagger/openapi.yml",
+      "patchset_number": 6,
+      "line": 117,
+      "message": "If I change the format to nanoseconds, it always expect to have nanoseconds in the input. I would suggest to evaluate the decision in another story.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-16 19:22:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8278167c_2e1a4230",
+      "file_path": "docs/api/swagger/openapi.yml",
+      "patchset_number": 7,
+      "line": 71,
+      "message": "Finally, aren't we able to support microseconds ?",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 20:47:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "965417a1_5d9bc135",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/event/model/CpsDataUpdatedEventMapper.java",
+      "patchset_number": 7,
+      "line": 50,
+      "message": "Good catch :)",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 20:47:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3eae54e1_fe1d6cee",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 117,
+      "message": "I've notice an issue with generated link whose timezone offset is positive. I'm not sure exactly where it is coming from.\n\nLet's say we have the following request:\n\n  curl -X GET 'http://localhost:8082/cps-temporal/api/v1/dataspaces/bsa-dataspace-1/anchors/bsa-anchor-1/history?observedTimestampAfter=2021-08-01T00:00:00.000-0000&pageNumber=0&pageLimit=1'\n\nThen, generated next records link is: \n\n  /cps-temporal/api/v1/dataspaces/bsa-dataspace-1/anchors/bsa-anchor-1/history?observedTimestampAfter=2021-08-01T00:00:00.000+0000&pointInTime=2021-08-17T15:54:46.818-0400&pageNumber=1&pageLimit=1&sort=observed_timestamp:desc\n\nAnd requesting next records gives a Bad Request response:\n\n  {\n      \"status\": \"400\",\n      \"message\": \"observedTimestampAfter must be in 'yyyy-MM-dd'T'HH:mm:ss.SSSZ' format\",\n      \"details\": null\n  }\n\nI think that \"+\" in the timestamp from the generated uri needs to be encoded with \"%2B\".",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 20:47:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9556b1cf_1c693080",
+      "file_path": "src/main/java/org/onap/cps/temporal/utils/DateTimeUtility.java",
+      "patchset_number": 7,
+      "line": 31,
+      "message": "Suggestion. What about\n\n  * toOffsetDateTime(String datetTimestampAsString)\n  * toString(OffsetDateTime offsetDateTime)\n\nfor the 2 methods name of this class ?",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 20:47:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ec1a2d41_c8dc3253",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 119,
+      "message": "QueryController class depends on QueryResponseFactory and here we have the reverse dependency from QueryResponseFactory to QueryController.\n\nWould it be feasible to break this dependency cycle ?",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 21:19:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "968954a4_8cee7c6a",
+      "file_path": "src/main/java/org/onap/cps/temporal/utils/DateTimeUtility.java",
+      "patchset_number": 7,
+      "line": 21,
+      "message": "I'm suggesting to reduce the exposition of this class by moving it to `org.onap.cps.temporal.controller.utils` package as it is only used in controller layer.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-17 22:51:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c10aa677_b5ca9553",
+      "file_path": "docs/api/swagger/openapi.yml",
+      "patchset_number": 7,
+      "line": 71,
+      "message": "If format is changed it to SSSSSSZ, it always expects nano seconds to be present. We should evaluate it in a different story",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 03:51:04.000000000",
+      "in_reply_to": "8278167c_2e1a4230",
+      "unresolved": true
+    },
+    {
+      "id": "2684a912_7eed6c80",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 117,
+      "message": "Added a workaround till we get a proper fix for spring team. Also changed the test case to decode the query-param value ( using apache library) and compare with the expected value",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 03:51:04.000000000",
+      "in_reply_to": "3eae54e1_fe1d6cee",
+      "unresolved": true
+    },
+    {
+      "id": "31d7eaf0_9ec4eee1",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 119,
+      "message": "Links are getting generate from the controller method itself. If I move the code inside the controller class, that class becomes cluttered. Another option can be to have it as an inner class in QueryController.\n\nWhat do you suggest?",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 03:51:04.000000000",
+      "in_reply_to": "ec1a2d41_c8dc3253",
+      "unresolved": true
+    },
+    {
+      "id": "e26e4830_7b3506a5",
+      "file_path": "src/main/java/org/onap/cps/temporal/utils/DateTimeUtility.java",
+      "patchset_number": 7,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 03:51:04.000000000",
+      "in_reply_to": "9556b1cf_1c693080",
+      "unresolved": false
+    },
+    {
+      "id": "f70c1ad0_2d570673",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/event/model/CpsDataUpdatedEventMapper.java",
+      "patchset_number": 8,
+      "line": 39,
+      "message": "can this be picked from springcontext.",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-19 09:11:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "91d1dea2_a9a31311",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 8,
+      "line": 67,
+      "message": "are we always sure the arrayindexoutofbound never occur? just to be cautious should you check array lenngth as 2?",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-19 09:11:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8e75198f_bf7867e5",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 8,
+      "line": 68,
+      "message": "var? , type inference for string, nb",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-19 09:11:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "24f95b3f_dba5f604",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/event/model/CpsDataUpdatedEventMapper.java",
+      "patchset_number": 8,
+      "line": 39,
+      "message": "I tried to do address this comment and found that when Mapstruct generates a class with only no-arg constructor. So we can not pass any argument for constructor autowiring. It also does not work with field autowiring.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 11:22:49.000000000",
+      "in_reply_to": "f70c1ad0_2d570673",
+      "unresolved": true
+    },
+    {
+      "id": "00f3b83f_d5568ad0",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 8,
+      "line": 67,
+      "message": "User is supposed to send the sortString in the correct format. If conversion fails due to any reason, then error message is sent to user. So I think it is not required to validate it because at the end, we will throw the same error to the user. There is also a test-case for this type of input.\n\nI did change the error message to add the input sort string to help user fixing the format.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 11:22:49.000000000",
+      "in_reply_to": "91d1dea2_a9a31311",
+      "unresolved": true
+    },
+    {
+      "id": "bd0a186d_c743b708",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 8,
+      "line": 68,
+      "message": "Done",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-19 11:22:49.000000000",
+      "in_reply_to": "8e75198f_bf7867e5",
+      "unresolved": false
+    },
+    {
+      "id": "1ed43f33_c3130181",
+      "file_path": "docs/api/swagger/openapi.yml",
+      "patchset_number": 6,
+      "line": 117,
+      "message": "Ack",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": "dc92fd3c_9d6ee802",
+      "unresolved": false
+    },
+    {
+      "id": "f9bbcbc9_111dfcfd",
+      "file_path": "docs/api/swagger/openapi.yml",
+      "patchset_number": 7,
+      "line": 71,
+      "message": "Ack",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": "c10aa677_b5ca9553",
+      "unresolved": false
+    },
+    {
+      "id": "aff1bdf1_50a13e77",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 117,
+      "message": "Done",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": "2684a912_7eed6c80",
+      "unresolved": false
+    },
+    {
+      "id": "18b0face_55c5da0a",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 119,
+      "message": "Maybe an inner class would be fine. Let's create a Jira item to come back to this.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": "31d7eaf0_9ec4eee1",
+      "unresolved": true
+    },
+    {
+      "id": "4f8fff31_6594867f",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 9,
+      "line": 68,
+      "message": "In this case I would have kept the String typed variable as reading this line only does not tell much about the type of the variable. It needs to be looked in surrounding lines. I'm not sure that Sonar would have complain about not having var here. Do you know ?\n\nAnyway, not a big deal, let's keep it like this ...",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2ccd4d41_7fecbb28",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/utils/DateTimeUtility.java",
+      "patchset_number": 7,
+      "line": 21,
+      "message": "Done",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-08-20 04:13:30.000000000",
+      "in_reply_to": "968954a4_8cee7c6a",
+      "unresolved": false
+    },
+    {
+      "id": "868696b5_4e01db43",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 134,
+      "message": "'",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-20 10:24:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "50963fe8_8d2758e9",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 138,
+      "message": "just for consistency ':nb",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-20 10:24:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ab3b3298_9110d199",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 139,
+      "message": "'",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-08-20 10:24:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2cb1dc7d_bb4bd774",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/QueryResponseFactory.java",
+      "patchset_number": 7,
+      "line": 119,
+      "message": "Done in https://gerrit.onap.org/r/c/cps/cps-temporal/+/123323 patch.",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-20 11:56:51.000000000",
+      "in_reply_to": "18b0face_55c5da0a",
+      "unresolved": false
+    },
+    {
+      "id": "ef7ab534_49696b35",
+      "file_path": "src/main/java/org/onap/cps/temporal/controller/rest/model/SortMapper.java",
+      "patchset_number": 9,
+      "line": 68,
+      "message": "Done in https://gerrit.onap.org/r/c/cps/cps-temporal/+/123323 patch",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-20 11:56:51.000000000",
+      "in_reply_to": "4f8fff31_6594867f",
+      "unresolved": false
+    },
+    {
+      "id": "55a3f92e_aacc29c7",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 134,
+      "message": "Done in https://gerrit.onap.org/r/c/cps/cps-temporal/+/123323 patch",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-20 11:56:51.000000000",
+      "in_reply_to": "868696b5_4e01db43",
+      "unresolved": false
+    },
+    {
+      "id": "210cd2db_029b2fe1",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 138,
+      "message": "Done in https://gerrit.onap.org/r/c/cps/cps-temporal/+/123323 patch",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-20 11:56:51.000000000",
+      "in_reply_to": "50963fe8_8d2758e9",
+      "unresolved": false
+    },
+    {
+      "id": "23e5b3e3_a31487b4",
+      "file_path": "src/test/groovy/org/onap/cps/temporal/domain/SearchCriteriaSpec.groovy",
+      "patchset_number": 9,
+      "line": 139,
+      "message": "Done in https://gerrit.onap.org/r/c/cps/cps-temporal/+/123323 patch",
+      "author": {
+        "account_id": 7680,
+        "name": "Renu Kumari",
+        "display_name": "Renu Kumari",
+        "email": "kashi.renu@gmail.com",
+        "username": "renukumari"
+      },
+      "updated": "2021-08-20 11:56:51.000000000",
+      "in_reply_to": "ab3b3298_9110d199",
+      "unresolved": false
+    }
+  ]
+}

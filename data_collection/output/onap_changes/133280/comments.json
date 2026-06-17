@@ -1,0 +1,76 @@
+{
+  "id": "cps~master~I3d0c7ef601f06ed36265d88cadb6fb0ab0cb6ea2",
+  "change_id": "I3d0c7ef601f06ed36265d88cadb6fb0ab0cb6ea2",
+  "_number": 133280,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3deed46e_615333f8",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/entities/FragmentEntity.java",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "1) I can understand how this reduces the issue but this is not a change that will change teh system handing on to unwanted object(s) after a failure?\n\n2) Should we apply this annotation to all entities?\n\n3) wil this affect serialization of Entity's (do we need that anywhere?)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-16 14:46:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dfea8a5b_fa336def",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/entities/FragmentEntity.java",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "Some more thoughts: \n\nI realize now teh annotation is only applied to teh children.. and only makes sense in this entity\n(well maye there are other properties in other entity that could be extremely large too)\n\nI suppose the root cause might be toString() somewhere in our own code our coude or in hibernate (loggin, casting) any idea if we could find taht, mayen not needed and disabling tis way is good enough...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-16 14:53:59.000000000",
+      "in_reply_to": "3deed46e_615333f8",
+      "unresolved": true
+    },
+    {
+      "id": "2506c030_e2742b04",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/entities/FragmentEntity.java",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "1) Not necessary to change the system handling, when we doesn't want to log the whole tree, the  GC can remove it.\n\n2) No, the other entities doesn't have generated toString method\n\n3) No, the serialization works on a totally different way. It wouldn't effect that.\n\nThe root cause is: The lombok toString don't respect the LAZY annotation, and want to get every   children and grand children and etc. We use it on logging, if you enable the trace log you can see it, but when we disable the trace log it generated just hidden. So it isn't enough just disable the trace logging, we need to exclude this field from toString.",
+      "author": {
+        "account_id": 8056,
+        "name": "Andras Zoltan Kiss",
+        "display_name": "Andras Zoltan Kiss",
+        "email": "andras.zoltan.kiss@est.tech",
+        "username": "kissand"
+      },
+      "updated": "2023-02-17 13:30:44.000000000",
+      "in_reply_to": "dfea8a5b_fa336def",
+      "unresolved": false
+    },
+    {
+      "id": "b9171aff_d6346d48",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/entities/FragmentEntity.java",
+      "patchset_number": 1,
+      "line": 93,
+      "message": "ok, sounds good enought ot me, lets get some more approvals and merge it!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-20 08:26:20.000000000",
+      "in_reply_to": "2506c030_e2742b04",
+      "unresolved": false
+    }
+  ]
+}

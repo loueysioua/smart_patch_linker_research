@@ -1,0 +1,161 @@
+{
+  "id": "policy%2Fapex-pdp~master~Id5e7c2ddada2bac3b73fe543f9adade6f9b83e6c",
+  "change_id": "Id5e7c2ddada2bac3b73fe543f9adade6f9b83e6c",
+  "_number": 123672,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "93172c1b_2f7a244a",
+      "file_path": "context/context-management/src/main/java/org/onap/policy/apex/context/impl/schema/java/JavaSchemaHelper.java",
+      "patchset_number": 1,
+      "line": 243,
+      "message": "surpised it didn't complain about this",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-27 21:21:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1036f26c_de4806a2",
+      "file_path": "context/context-management/src/main/java/org/onap/policy/apex/context/impl/schema/java/JavaSchemaHelper.java",
+      "patchset_number": 1,
+      "line": 243,
+      "message": "same here, not sure why. So I left it there 😊",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-27 21:25:48.000000000",
+      "in_reply_to": "93172c1b_2f7a244a",
+      "unresolved": false
+    },
+    {
+      "id": "51c55920_e026399a",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/TaskExecutionContext.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "Removing the \"static\" from here, and similar change from TaskSelectionExecutionContext seems to fix the issue.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-30 16:39:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4f799cb8_0f66dd5f",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/TaskExecutionContext.java",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "Done, thanks!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-30 16:56:06.000000000",
+      "in_reply_to": "51c55920_e026399a",
+      "unresolved": false
+    },
+    {
+      "id": "aa5100b9_0193501b",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/StateFinalizerExecutionContext.java",
+      "patchset_number": 3,
+      "line": 89,
+      "message": "I wonder if it is better to remove this too!\nBut we should be okay, because I assume the problem is something around accessing public static fields using object instance in jruby only, so it shouldn't really matter if the tests passes..",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-30 16:59:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "75ddf2aa_6a606b6f",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/StateFinalizerExecutionContext.java",
+      "patchset_number": 3,
+      "line": 89,
+      "message": "agree, the build went through 😊\nHowever, I am okay removing static here too. Let me know.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-30 17:15:19.000000000",
+      "in_reply_to": "aa5100b9_0193501b",
+      "unresolved": true
+    },
+    {
+      "id": "a40f7e7c_edd8e61e",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/StateFinalizerExecutionContext.java",
+      "patchset_number": 3,
+      "line": 89,
+      "message": "one question would be: what is actually referencing it?  Kind of sounds like one of the scripts (jruby) is referencing it.  Is it a test script, or is it reasonable for all scripts to assume the existence of a logger object?  If the latter, then should probably remove it from here, too, so there's consistency across the XxxExecutionContext objects.  (For that matter, if it's something the scripts depend on, then perhaps these classes should extend an interface that includes a getLogger method.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-08-30 18:51:27.000000000",
+      "in_reply_to": "75ddf2aa_6a606b6f",
+      "unresolved": true
+    },
+    {
+      "id": "7a78cca5_0af65f16",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/StateFinalizerExecutionContext.java",
+      "patchset_number": 3,
+      "line": 89,
+      "message": "Finally decided to remove \"static\" from here and fix them together in another review.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-08-30 19:14:36.000000000",
+      "in_reply_to": "a40f7e7c_edd8e61e",
+      "unresolved": false
+    },
+    {
+      "id": "362027cd_f00c0d50",
+      "file_path": "core/core-engine/src/main/java/org/onap/policy/apex/core/engine/executor/context/StateFinalizerExecutionContext.java",
+      "patchset_number": 3,
+      "line": 89,
+      "message": "@Jim when writing the logic, the usage usually goes something like executor.logger.info(..) - atleast in case of javascript we do this in many places. But all of them were passing with the static added too. So, I think it is just about how the public static fields are accessed in Jruby. StateFinalizer was not used in the test jruby logic I guess, so the tests passed. But anyway, it is better to remove the \"static\" to keep it consistent with task and taskselection logic.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-08-31 10:10:18.000000000",
+      "in_reply_to": "7a78cca5_0af65f16",
+      "unresolved": false
+    }
+  ]
+}

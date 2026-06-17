@@ -1,0 +1,154 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I25bcde39a93a1bfea7bd1535540c8dbf5cdc8c86",
+  "change_id": "I25bcde39a93a1bfea7bd1535540c8dbf5cdc8c86",
+  "_number": 25185,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2017-11-29 20:11:27.000000000",
+    "updated": "2017-12-18 14:19:35.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1759,
+      "name": "Temoc Rodriguez",
+      "display_name": null,
+      "email": "cr056n@att.com",
+      "username": "cr056n"
+    },
+    "submitter": null
+  },
+  "subject": "Add Nexus Redundancy",
+  "commit_message": "Add Nexus Redundancy\n\nAdd nexus redundancy, which is audited by repo audit. Adds an\nalternate nexus repo to be used in case the main repo goes down.\n\nIssue-ID: POLICY-431\nChange-Id: I25bcde39a93a1bfea7bd1535540c8dbf5cdc8c86\nSigned-off-by: Temoc Rodriguez <cr056n@att.com>\n",
+  "change_log": {
+    "entry_count": 9,
+    "entries": [
+      {
+        "id": "0f1461e2571003b8ddcac2849398da886354c814",
+        "author": {
+          "account_id": 1759,
+          "name": "Temoc Rodriguez",
+          "display_name": null,
+          "email": "cr056n@att.com",
+          "username": "cr056n"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-11-29 20:11:27.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "53c3a3c4c695d7522ef9050ac58287bbeecacea8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-29 20:14:34.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/293/",
+        "patchset_number": 1
+      },
+      {
+        "id": "192498ef9d7b819f57f917b0046a08604f12fda4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-11-29 20:25:43.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/293/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/293",
+        "patchset_number": 1
+      },
+      {
+        "id": "add9f1bba0baffdeeb9f9d57cdf68ea1db40f1e4",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-04 20:45:43.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nThe issue is that qa default ONAP deployment will not have a secondary nexus repo, but the settings.xml used will have an invalid entry after installation in the settings.xml.\n\nI'm open for discussion but I tend to think that the right way to handle this functionality is to attach an \"install\" script to the appropriate feature, I think it may be the active-standby feature.\n\nThere are some minor changes in the base.conf associated with that but we can discuss offline if there's agreement.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b582391f45f92dbbdb25e37cde3e2ab309eeac6b",
+        "author": {
+          "account_id": 743,
+          "name": "Ralph Straubs",
+          "display_name": null,
+          "email": "rs8887@att.com",
+          "username": "rs8887"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-05 09:47:21.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nRather than making two repositories a requirement, it would be best to provide it as an option. Note that this means that there would now be a third 'settings.xml' variant to choose from (there is already a second 'standalone-settings.xml' file), and an alternate 'base.conf' to choose from.\n\nI have been thinking of a generic way to make this kind of selection. Suppose there were a directory called 'settings.xml.select' which had three files in it: '01_twoRepositories', '02_singleRepository', '03_standAlone', which contains the three variants. The '${{VARNAME}}' variables are expanded in each of the files, and the one actually selected would be the first one that doesn't have any unexpanded '${{VARNAME}}' variables.\n\nNote that this could be a generic mechanism -- any directory of the form 'xyzzy.select' could contain multiple candidates for the file 'xyzzy'. This would also allow a more generic 'configure' function in 'docker-install.sh', and eliminate the specialized 'configure_settings' function.",
+        "patchset_number": 1
+      },
+      {
+        "id": "ea5719ee12c35a29324d22a40be2d686155d710c",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-05 16:32:51.000000000",
+        "message": "Patch Set 1:\n\nOK, there is agreement then to take this back to design phase.   With regards on how it's done need more details on the proposals.   One important decision is if this is a base only feature (all the work in installation), or specifically associated with a feature (work on feature install hooks), or both.",
+        "patchset_number": 1
+      },
+      {
+        "id": "a95e9d6cbf7097927d7426f13d521cf6c32724d8",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-07 14:15:17.000000000",
+        "message": "Patch Set 1:\n\nMy understanding from Jorge is that this will be abandoned.",
+        "patchset_number": 1
+      },
+      {
+        "id": "00fb4df77acc20de8d3049918a319d0a5a599823",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-08 19:00:28.000000000",
+        "message": "Patch Set 1: Code-Review-2",
+        "patchset_number": 1
+      },
+      {
+        "id": "a0591d2680d95dcaee66caf07f2796f18f80efdc",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-18 14:19:35.000000000",
+        "message": "Abandoned",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,467 @@
+{
+  "id": "policy%2Fmodels~master~Iab12eb02e2e7f0e366aff64fa665b5d6674f2905",
+  "change_id": "Iab12eb02e2e7f0e366aff64fa665b5d6674f2905",
+  "_number": 97939,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a6b9fd7c_bb1b4b54",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdp.java",
+      "patchset_number": 2,
+      "line": 91,
+      "message": "It will be better to have PdpStatistics as a separate table with PdpName & Timestamp of the statistics entry as primary key. So that everytime we update the statistics in DB we don't need to update the main Pdp table. Thoughts?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-11-07 15:37:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d69d7def_20e4e412",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdp.java",
+      "patchset_number": 2,
+      "line": 91,
+      "message": "I agree.\n\nActually we must have this table, otherwise we have no history of the statistics, only the most recent ones.\n\nAlso then we wouldn't need to update the PDP table every time just for a statistics update change.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-07 16:16:55.000000000",
+      "in_reply_to": "a6b9fd7c_bb1b4b54",
+      "unresolved": false
+    },
+    {
+      "id": "48ecf987_b0e46877",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdp.java",
+      "patchset_number": 2,
+      "line": 91,
+      "message": "Ack",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-11-08 02:58:31.000000000",
+      "in_reply_to": "d69d7def_20e4e412",
+      "unresolved": true
+    },
+    {
+      "id": "ee19a8c3_e6ba96d7",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampConceptKey.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "If you inherit from PfConceptKey then I think you can remove much/most of the code in this class.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-11 10:00:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "eb5ffd08_4fda48ea",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampConceptKey.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "Ack",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-11-12 07:47:32.000000000",
+      "in_reply_to": "ee19a8c3_e6ba96d7",
+      "unresolved": true
+    },
+    {
+      "id": "9f6aec6a_0064b9f8",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampConceptKey.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "Hi Liam,\nAccording to the JPA wiki, the JPA spec does not allow inheritance in embeddable objects \nBut EclipseLink does support inheritance with embeddables through the native API(To define inheritance with a hierarchy of embedded classes a DescriptorCustomizer and SessionCustomizer can be used.).\nI will try this solution.\nhttps://wiki.eclipse.org/EclipseLink/UserGuide/JPA/Basic_JPA_Development/Entities/Embeddable#Inheritance",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-11-13 08:51:12.000000000",
+      "in_reply_to": "eb5ffd08_4fda48ea",
+      "unresolved": true
+    },
+    {
+      "id": "42b254a8_db55f9b7",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampConceptKey.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "The question would be as this would create tight coupling to an specific library, if in the future there is the possibility to use a different JPA library that many not support this functionality (to keep the code portable)?   This is just a question.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-11-13 15:10:42.000000000",
+      "in_reply_to": "9f6aec6a_0064b9f8",
+      "unresolved": true
+    },
+    {
+      "id": "6442dcd9_4797111f",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampConceptKey.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "I agree, I don't think we should use library specific JPA extensions. I think I came across this problem before when doing the JPA work earlier in the year, I'll have a look at this and come back on it.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-11-25 12:36:37.000000000",
+      "in_reply_to": "42b254a8_db55f9b7",
+      "unresolved": true
+    },
+    {
+      "id": "4ef867dd_d25d1e84",
+      "file_path": "models-base/src/main/java/org/onap/policy/models/base/PfTimestampKey.java",
+      "patchset_number": 5,
+      "line": 148,
+      "message": "OK, timestamp can never be null.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-12-03 10:38:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e1c50190_70423497",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatistics.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "Will this be a list? \nBecause PdpStatistics class itself holds data for a particular pdpInstance.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-12-03 17:42:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e899fec2_4cb9ea90",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/enums/PdpEngineState.java",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "Do we really need this? \nHave a look at -  https://github.com/onap/policy-models/blob/master/models-pdp/src/main/java/org/onap/policy/models/pdp/enums/PdpState.java",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-12-03 17:42:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e0d766b1_4d31f952",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatistics.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "For Apex PDP, sometimes there is more than one EngineWorker and each EngineWorker has it own statistics, so I use list to hold such data.\nTo make it more understandable, how about renaming the class PdpEngineStatistics to PdpEngineWorkerStatistics?",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-04 08:36:31.000000000",
+      "in_reply_to": "e1c50190_70423497",
+      "unresolved": true
+    },
+    {
+      "id": "202c5ead_60ca772e",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/enums/PdpEngineState.java",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "The purpose of this class is to represent the state of each EngineWorker.\nIf use the PdpState, I think we need to define the relationship between PdpState and AxEngineState",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-04 08:36:31.000000000",
+      "in_reply_to": "e899fec2_4cb9ea90",
+      "unresolved": true
+    },
+    {
+      "id": "018bf3cb_1736d531",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatistics.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "Yes, PdpEngineWorkerStatistics sounds better.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-12-04 09:50:45.000000000",
+      "in_reply_to": "e0d766b1_4d31f952",
+      "unresolved": true
+    },
+    {
+      "id": "32eb3e03_66ac1584",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/enums/PdpEngineState.java",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "May be rename this to PdpEngineWorkerState",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-12-04 09:50:45.000000000",
+      "in_reply_to": "202c5ead_60ca772e",
+      "unresolved": true
+    },
+    {
+      "id": "581693d9_48992e5a",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpStatistics.java",
+      "patchset_number": 6,
+      "line": 53,
+      "message": "Done",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-05 03:40:53.000000000",
+      "in_reply_to": "018bf3cb_1736d531",
+      "unresolved": false
+    },
+    {
+      "id": "b316100a_33b00309",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/enums/PdpEngineState.java",
+      "patchset_number": 6,
+      "line": 23,
+      "message": "Done",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-05 03:40:53.000000000",
+      "in_reply_to": "32eb3e03_66ac1584",
+      "unresolved": false
+    },
+    {
+      "id": "5f4fed89_cb371b87",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "This will cause a Sonar issue, too many parameters in method call.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2019-12-05 10:57:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "efa5a7df_4db51055",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "Yes >7, you could use a Builder class for this.",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2019-12-05 13:10:06.000000000",
+      "in_reply_to": "5f4fed89_cb371b87",
+      "unresolved": false
+    },
+    {
+      "id": "363513ff_0b43eeb7",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "or a lombok annotation (@Builder?)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-12-05 21:21:21.000000000",
+      "in_reply_to": "efa5a7df_4db51055",
+      "unresolved": false
+    },
+    {
+      "id": "602151e5_23c8cbd1",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 169,
+      "message": "isn't there a \"CompareBuilder\" that can be used for this?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-12-05 21:21:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "30d3c358_b13f07cd",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 279,
+      "message": "should there be a \"clean()\" on the engine worker statistics?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-12-05 21:21:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ab004e1f_cfb5e526",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 126,
+      "message": "Done",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-06 05:58:06.000000000",
+      "in_reply_to": "363513ff_0b43eeb7",
+      "unresolved": false
+    },
+    {
+      "id": "ceb9dc85_f0bc8123",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 169,
+      "message": "Done",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-06 05:58:06.000000000",
+      "in_reply_to": "602151e5_23c8cbd1",
+      "unresolved": false
+    },
+    {
+      "id": "dad32482_5082335e",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 7,
+      "line": 279,
+      "message": "Done",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-06 05:58:06.000000000",
+      "in_reply_to": "30d3c358_b13f07cd",
+      "unresolved": false
+    },
+    {
+      "id": "af2cd977_e0e2286e",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 8,
+      "line": 224,
+      "message": "can engineStats be null? or can we assume it's !=null whenever clean() is used?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-12-06 14:06:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "94da51b4_312eca19",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/persistence/concepts/JpaPdpStatistics.java",
+      "patchset_number": 8,
+      "line": 224,
+      "message": "It can be null.\nAdded a check.",
+      "author": {
+        "account_id": 5257,
+        "name": "Tim Huang",
+        "display_name": null,
+        "email": "tim.huang@est.tech",
+        "username": "shaoqiu"
+      },
+      "updated": "2019-12-09 06:35:21.000000000",
+      "in_reply_to": "af2cd977_e0e2286e",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "id": "so~master~Icaf70f8457de99e493cf882170fe778c620308c9",
+  "change_id": "Icaf70f8457de99e493cf882170fe778c620308c9",
+  "_number": 47665,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-15 17:43:01.000000000",
+    "updated": "2018-05-15 23:50:50.000000000",
+    "submitted": "2018-05-15 20:58:33.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1423,
+      "name": "Rob Daugherty",
+      "display_name": null,
+      "email": "rd472p@att.com",
+      "username": "rd472p"
+    },
+    "submitter": {
+      "account_id": 897,
+      "name": "Seshu Kumar Mudiganti",
+      "display_name": null,
+      "email": "seshukumar.mudiganti@windriver.com",
+      "username": "seshukm"
+    }
+  },
+  "subject": "WorkflowResponse json issues",
+  "commit_message": "WorkflowResponse json issues\n\nThis commit adds some robustness to the interface between the\nAPI-H and BPMN, specifically, in how the response is handled.\n\nI don't have proof, but there appears to be some randomness to\nthe json provider behavior when used with the jax-rs. Sometimes,\nthe serializer is adding the root element, and sometimes it\nis not.  Maybe there's something wrong with the configuration.\nMaybe we have competing json providers.  I couldn't pin this\ndown.\n\nI'm almost certain it is the presence of the root element in\nthe content that causes the API-H code to fail parsing of the\nBPMN response.  This doesn't kill the request, as you might\nexpect, but rather, the API-H passes the BPMN response through\nto the client (VID, or policy, or whatever).\n\nThe original problem (SO-586) was \"fixed\" by \"removing the\nwrapper\".  This \"wrapper\" is a needed feature of the interface\nbetween BPMN and the API-H.  We shouldn't have removed it.\nThe fact that the \"fix\" appeared to work is due to the\nbehavior I described in the previous paragraph.  The API-H\nchokes on the message, and it passes it through unchanged.\nNot really what we want.\n\nSo, I don't know why the jackson/json behavior is flaky and\ndifferent now, but I can (and did) modify the API-H so it can\nparse a json message whether or not it has a root element.\n\nNote that WorkflowResponse.java (in BPMN) and CamundaResponse.java\n(in the API-H) are basically the same bean representing the\nmessage format.  Seems less than ideal to have two different\nclasses.\n\nAlso note that I changed the name of the \"response\" attribute\nof the WorkflowResponse and CamundaResponse classes to \"content\".\nGot tired of seeing this nonsense everywhere in the code:\n\tresponse.getResponse()\n\nChange-Id: Icaf70f8457de99e493cf882170fe778c620308c9\nIssue-ID: SO-586\nIssue-ID: SO-618\nSigned-off-by: Rob Daugherty <rd472p@att.com>\n",
+  "change_log": {
+    "entry_count": 18,
+    "entries": [
+      {
+        "id": "d7a96c963e3fb783f5bc743142dc83a6ebcbda00",
+        "author": {
+          "account_id": 1423,
+          "name": "Rob Daugherty",
+          "display_name": null,
+          "email": "rd472p@att.com",
+          "username": "rd472p"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 17:43:01.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "e70bc715e8316fc65fe3bc402750b3e4391d4f4d",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 17:45:11.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/so-master-verify-profile-java/1978/",
+        "patchset_number": 1
+      },
+      {
+        "id": "36a6d5b99189196df7ea8fb09e6b7c804d8b0ec7",
+        "author": {
+          "account_id": 1423,
+          "name": "Rob Daugherty",
+          "display_name": null,
+          "email": "rd472p@att.com",
+          "username": "rd472p"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 17:58:22.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "b768efa303c5194f35271219ffe199d1574357fb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 18:01:49.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-master-verify-profile-java/1979/",
+        "patchset_number": 2
+      },
+      {
+        "id": "00479fd5aa7da47ea66a6977a3ab46a340b62b23",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 18:05:44.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/so-master-verify-profile-java/1978/ : ABORTED\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/so-master-verify-profile-java/1978/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-verify-profile-java/1978",
+        "patchset_number": 1
+      },
+      {
+        "id": "fe986a24fd23a19c7c0b9fc0a786bb6d959c1ecd",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 19:23:27.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-master-verify-profile-java/1979/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-verify-profile-java/1979",
+        "patchset_number": 2
+      },
+      {
+        "id": "741a70e9845abdb25d71fe87f5fe89be3fecd367",
+        "author": {
+          "account_id": 2025,
+          "name": "Arthur Martella",
+          "display_name": null,
+          "email": "arthur.martella.1@att.com",
+          "username": "amartell"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 19:44:51.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "18757d49a60989405236dadde22e53eb29dd861e",
+        "author": {
+          "account_id": 897,
+          "name": "Seshu Kumar Mudiganti",
+          "display_name": null,
+          "email": "seshukumar.mudiganti@windriver.com",
+          "username": "seshukm"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 20:58:28.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "6d5ab28458107d4d1fd1ea959b03cdef15204e34",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-15 20:58:33.000000000",
+        "message": "Change has been successfully merged by Seshu Kumar M",
+        "patchset_number": 2
+      },
+      {
+        "id": "7624f839f37eec24a8ca10faf96b40ac63a3f8ea",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 20:59:50.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-aria-aria-rest-sever-python-staging-master/260/ (1/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "e549e1f02967c2cf9345285e6868354a83527877",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 21:01:37.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-master-merge-profile-java/928/ (2/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "e954b1b42940d2174a2255ed01ba59f60b5619e5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 21:48:45.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-master-merge-profile-java/928/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-merge-profile-java/928\n\nhttps://jenkins.onap.org/job/so-aria-aria-rest-sever-python-staging-master/260/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-aria-aria-rest-sever-python-staging-master/260",
+        "patchset_number": 2
+      },
+      {
+        "id": "b0541fc81e1b2e7442f481902643eb2c0ee0b1ae",
+        "author": {
+          "account_id": 667,
+          "name": "Marcus Williams",
+          "display_name": null,
+          "email": "marcus.williams@intel.com",
+          "username": "mgkwill"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 22:42:52.000000000",
+        "message": "Patch Set 2:\n\nplease release",
+        "patchset_number": 2
+      },
+      {
+        "id": "baba60a6de9a3a29f9d7517667312674b37972f1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 22:44:45.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-master-release-version-profile-java-daily/306/ (1/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "1ab9759b310ecd800ab81164916d3eefe67ba3e4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 22:45:07.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-master-docker-version-java-daily/395/ (2/2)",
+        "patchset_number": 2
+      },
+      {
+        "id": "7d0f327c328b5546f92f3a84722fb4e09d65aac1",
+        "author": {
+          "account_id": 897,
+          "name": "Seshu Kumar Mudiganti",
+          "display_name": null,
+          "email": "seshukumar.mudiganti@windriver.com",
+          "username": "seshukm"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 23:23:08.000000000",
+        "message": "Patch Set 2:\n\nrun-sonar",
+        "patchset_number": 2
+      },
+      {
+        "id": "a1f397d66e3771e3c9dcc079b039a8ec24bfcbef",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 23:24:53.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/so-sonar/153/ (3/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "b557fc55f986ef60b0cdd1e060ed228ce6dfdab5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-15 23:50:50.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/so-master-release-version-profile-java-daily/306/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-release-version-profile-java-daily/306\n\nhttps://jenkins.onap.org/job/so-master-docker-version-java-daily/395/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-master-docker-version-java-daily/395\n\nhttps://jenkins.onap.org/job/so-sonar/153/ : SUCCESS (skipped)\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/so-sonar/153",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

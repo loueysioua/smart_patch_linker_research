@@ -1,0 +1,195 @@
+{
+  "id": "oom~master~I21a8e277e1fd5f5190c7b67fb6ef97c1b3355230",
+  "change_id": "I21a8e277e1fd5f5190c7b67fb6ef97c1b3355230",
+  "_number": 121003,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bcf6306c_6c8a744c",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 1,
+      "line": 218,
+      "message": "I'm not sure if this flag should not stay. Our goal was to remove fake deployment.",
+      "author": {
+        "account_id": 5775,
+        "name": "Pawel Baniewski",
+        "display_name": "Pawel Baniewski",
+        "email": "pawel.baniewski@nokia.com",
+        "username": "baniewsk"
+      },
+      "updated": "2021-04-29 13:24:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8691cbad_577afa07",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 1,
+      "line": 218,
+      "message": "This flag has been added with fake deployment in the same MR and after removal fake deployment it will not be used anywhere. After all should I stay it?",
+      "author": {
+        "account_id": 6592,
+        "name": "Piotr Marcinkiewicz",
+        "display_name": null,
+        "email": "piotr.marcinkiewicz@nokia.com",
+        "username": "pmarcink"
+      },
+      "updated": "2021-04-29 13:34:11.000000000",
+      "in_reply_to": "bcf6306c_6c8a744c",
+      "unresolved": true
+    },
+    {
+      "id": "cba5152a_581ad7fc",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 1,
+      "line": 218,
+      "message": "Done",
+      "author": {
+        "account_id": 6592,
+        "name": "Piotr Marcinkiewicz",
+        "display_name": null,
+        "email": "piotr.marcinkiewicz@nokia.com",
+        "username": "pmarcink"
+      },
+      "updated": "2021-04-29 13:39:48.000000000",
+      "in_reply_to": "8691cbad_577afa07",
+      "unresolved": false
+    },
+    {
+      "id": "de67c10a_4eacb7a1",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 4,
+      "line": 71,
+      "message": "I've just did a deployment using this PR and I have set platform.enabled to \"false\". And the effect is this:\n\n# kubectl get pods -n onap | grep sdnc\nonap-sdnc-0                                         0/2     Init:0/6           0          73m\nonap-sdnc-ansible-server-75555fd8dc-w59nz           0/1     Init:1/2           7          73m\nonap-sdnc-dbinit-job-w9nnz                          0/1     Completed          0          73m\nonap-sdnc-dgbuilder-564d6475fd-md22g                1/1     Running            0          73m\nonap-sdnc-dmaap-listener-645967948-6md8p            0/1     Init:1/2           0          73m\nonap-sdnc-sdnrdb-init-job-wnqb8                     0/1     Completed          0          73m\nonap-sdnc-ueb-listener-597f6dd7fc-qt4fk             0/1     Init:1/2           0          73m\nonap-sdnc-web-6976c958b5-d7q94                      0/1     Init:2/3           6          73m\nonap-so-sdnc-adapter-74bc974b76-6g2x8               2/2     Running            0          59m\n\n\n# kubectl describe pod onap-sdnc-0\n(...)\n  Warning  FailedMount  59m                   kubelet  Unable to attach or mount volumes: unmounted volumes=[certservice-tls-volume], unattached volumes=[certservice-tls-volume bin data-filebeat aaf-agent-certs localtime properties default-token-hp2lz logs config-input onap-sdnc-aaf-config onap-sdnc-data sdnc-logging-cfg-config filebeat-conf aaf-add-config cmpv2-certs-volume-0]: timed out waiting for the condition\n(...)\n\nSo to me it does not look like it's possible to perform an installation with default chart values (i.e. cmpv2Enabled set to true) and platform.enabled set to false because in such case Onap is does not function properly.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-06 11:07:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4808a45e_1cfa63d5",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 4,
+      "line": 75,
+      "message": "So continuing previous comment, IMHO if we want cmpv2 to be optional then the default value for cmpv2Enabled should be false in relevant chart values file.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-06 11:07:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9f972665_d491a381",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 5,
+      "line": 71,
+      "message": "I'm very sorry but it's still ambiguous for me... \"If\" here can be interpreted as if the platform could be deployed without it in _default_ configuration which is not true.\n\nHow about separate point in this doc?\n\nStep 3** Install Chartmuseum\nStep 4** Install Cert-Manager (NEW)\nStep 5** Customize the Helm charts like",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-07 11:47:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4dddbe76_f78e496b",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 5,
+      "line": 71,
+      "message": "I think it can be good idea. I added the new step for Cert-Manager installation",
+      "author": {
+        "account_id": 6592,
+        "name": "Piotr Marcinkiewicz",
+        "display_name": null,
+        "email": "piotr.marcinkiewicz@nokia.com",
+        "username": "pmarcink"
+      },
+      "updated": "2021-05-07 12:28:28.000000000",
+      "in_reply_to": "9f972665_d491a381",
+      "unresolved": true
+    },
+    {
+      "id": "039e026f_15cd9481",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 4,
+      "line": 71,
+      "message": "Done",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-07 13:11:46.000000000",
+      "in_reply_to": "de67c10a_4eacb7a1",
+      "unresolved": false
+    },
+    {
+      "id": "d24744c9_27bdf2d9",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 4,
+      "line": 75,
+      "message": "Done",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-07 13:11:46.000000000",
+      "in_reply_to": "4808a45e_1cfa63d5",
+      "unresolved": false
+    },
+    {
+      "id": "9d279553_56fcf61c",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 5,
+      "line": 71,
+      "message": "Great, thank you for all the fixes.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2021-05-07 13:11:46.000000000",
+      "in_reply_to": "4dddbe76_f78e496b",
+      "unresolved": false
+    },
+    {
+      "id": "77895d13_bd63e930",
+      "file_path": "docs/oom_quickstart_guide.rst",
+      "patchset_number": 8,
+      "line": 36,
+      "message": "nice catch;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-05-10 09:17:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

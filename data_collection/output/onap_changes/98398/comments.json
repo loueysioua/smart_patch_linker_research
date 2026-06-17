@@ -1,0 +1,76 @@
+{
+  "id": "oom~master~I843c89ed4899055e9502268089d0e01f28fe37ae",
+  "change_id": "I843c89ed4899055e9502268089d0e01f28fe37ae",
+  "_number": 98398,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "3b461e8e_90610346",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "`replicaCount` should be at least 2 (as was in vid-mariadb-galera/values.yaml)",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-11-18 14:48:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "272e7337_ee53dbf6",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "replicaCount was 2 in vid-mariadb-galera/values.yaml but it was overriden by this line (which is untouched on this review).\nFor example, here's the result of daily master:\nkubectl get po -n onap | grep vid\nonap-vid-vid-64569f57cf-nt6rz                                2/2     Running            0          8h\nonap-vid-vid-galera-config-qmtcv                             0/1     Completed          0          8h\nonap-vid-vid-galera-config-w4jll                             0/1     Init:Error         0          8h\nonap-vid-vid-mariadb-galera-0                                1/1     Running            0          8h\n\nIn https://galeracluster.com/library/documentation/weighted-quorum.html, we can see:\n\nn order to enable automatic failovers, you need to use at least three nodes. Bear in mind that this scales out to other levels of infrastructure, for the same reasons.\n\nSingle switch clusters should use a minimum of 3 nodes.\nClusters spanning switches should use a minimum of 3 switches.\nClusters spanning networks should use a minimum of 3 networks.\nClusters spanning data centers should use a minimum of 3 data centers.\n\n\nSo if you want not to have a cluster of 1 per default, we should move to 3.\nAfter, this is a transient solution as I want to move vid database(s) into common galera cluster which has 3 nodes.\n\nSo it's up to you :)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-11-18 14:55:37.000000000",
+      "in_reply_to": "3b461e8e_90610346",
+      "unresolved": true
+    },
+    {
+      "id": "4a608531_a8a39d34",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "I would like to go with 3, then.\nIf you think it risks the efforts up to here, we can take it separately, at a different change.\n\nI'm happy that you pinpointed the config here, as I was sure we're h/a already.",
+      "author": {
+        "account_id": 4379,
+        "name": "Ittay Stern",
+        "display_name": null,
+        "email": "ittay.stern@att.com",
+        "username": "ittays"
+      },
+      "updated": "2019-11-18 15:53:48.000000000",
+      "in_reply_to": "272e7337_ee53dbf6",
+      "unresolved": true
+    },
+    {
+      "id": "fca2c9f7_a050bdaf",
+      "file_path": "kubernetes/vid/values.yaml",
+      "patchset_number": 4,
+      "line": 66,
+      "message": "OK, I've changed it :)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2019-11-18 16:05:01.000000000",
+      "in_reply_to": "4a608531_a8a39d34",
+      "unresolved": false
+    }
+  ]
+}

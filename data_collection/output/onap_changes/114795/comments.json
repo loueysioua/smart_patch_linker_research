@@ -1,0 +1,127 @@
+{
+  "id": "integration%2Fcsit~master~I8687e4c5262be87b0f7007e4d0320260938e0c71",
+  "change_id": "I8687e4c5262be87b0f7007e4d0320260938e0c71",
+  "_number": 114795,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "312a64a1_acac9521",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 172,
+      "message": "Seems to work for Jenkins, but this has at least a pair of issues for local executions\n\n- this overwrites potentially existing docker daemon config (which at least Samsung developers need for internal purposes)\n- local user should have sudo privileges (or then provide the password every time, which is somewhat awkward)",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-11-12 09:46:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f6bda257_9f7a4b2d",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 170,
+      "message": "I quite not follow the idea: you are assuming here that any image that failed to be pulled from dockerhub will be available in nexus3.onap.org? How do they (dockerhub images) get there (ONAP's nexus)?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2020-11-12 10:16:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "12eae7a8_cd9a3dd3",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 170,
+      "message": "I can't answer this.  All I can say is that all of the policy images are pushed to nexus3 and it appears that the other onap images are, too, as are the alpine and sonatype/nexus images.  I don't know if nexus3 is a true mirror or if it's primarily a repo for the onap images, but it certainly has what is needed for the policy CSITs.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-12 13:09:40.000000000",
+      "in_reply_to": "f6bda257_9f7a4b2d",
+      "unresolved": true
+    },
+    {
+      "id": "51e5fe3a_3bed6359",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 172,
+      "message": "- one option would be to have it just add the item to the json file\n- sudo privilege may have been a mistaken assumption on my part.  I assumed that sudo privileges were available, because all of the policy setup scripts, as well as those for A&AI and DCAE use sudo.  When I think \"local user\", I typically think \"local VM\", where you do typically have sudo access.  For that matter, anybody that can run a docker command can get root access if they try\n\none way to address both issues would be to make it a default option so that it works this way when run from jenkins, but you local users can suppress it",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-12 13:09:40.000000000",
+      "in_reply_to": "312a64a1_acac9521",
+      "unresolved": true
+    },
+    {
+      "id": "ae67a8be_a2df44e0",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 172,
+      "message": "actually, a lot of scripts assume sudo access is available",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-12 13:10:55.000000000",
+      "in_reply_to": "51e5fe3a_3bed6359",
+      "unresolved": true
+    },
+    {
+      "id": "94eb4692_ecdbe44e",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 172,
+      "message": "Yes, and none of those work for me without manual intervention :) \nThis is of course a minor annoyance (and looks like I've even written one of the sudo-using scripts myself) and can not be avoided in case of /etc/docker/daemon.json",
+      "author": {
+        "account_id": 3949,
+        "name": "Lasse Kaihlavirta",
+        "display_name": null,
+        "email": "l.kaihlavirt@partner.samsung.com",
+        "username": "kaihlavi"
+      },
+      "updated": "2020-11-12 13:55:32.000000000",
+      "in_reply_to": "ae67a8be_a2df44e0",
+      "unresolved": true
+    },
+    {
+      "id": "47bd7218_d77051f3",
+      "file_path": "run-csit.sh",
+      "patchset_number": 2,
+      "line": 172,
+      "message": "you are right, though, in that some folks may already have this file.  Should we put some tests around it and only add the file if it isn't already there?  (For all I know, it's already there in the jenkins build environment, but guessing not.)\n\nis there another way to get docker to use nexus3 instead of dockerhub when docker-compose is executed?  I didn't see an option on docker-compose.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-11-12 14:04:48.000000000",
+      "in_reply_to": "94eb4692_ecdbe44e",
+      "unresolved": true
+    }
+  ]
+}

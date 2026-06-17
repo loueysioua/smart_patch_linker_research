@@ -1,0 +1,59 @@
+{
+  "id": "oom~master~Id27f3ffd1ddb092a9c038d3a45d9e3278720eb62",
+  "change_id": "Id27f3ffd1ddb092a9c038d3a45d9e3278720eb62",
+  "_number": 119081,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "efb53dba_e5424a7a",
+      "file_path": "kubernetes/common/mariadb-init/resources/config/db_init.sh",
+      "patchset_number": 8,
+      "line": 34,
+      "message": "have you tested that this is going to work correctly with all the special characters that can be found in our passwords:\n@&%?,=[]_:-+*$#!'^~;()/.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-16 20:00:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "550b803e_b73b9690",
+      "file_path": "kubernetes/common/mariadb-init/resources/config/db_init.sh",
+      "patchset_number": 8,
+      "line": 34,
+      "message": "Good remark.\n\nNo since I had no idea of what can be the input here.\nLet's try this\n\nwith bash\n~$ PASSWD='@&%?,=[]_:-+*$#!'\"'\"'^~;(\\)/.'\n~$ echo $PASSWD\n@&%?,=[]_:-+*$#!'^~;(\\)/.\n~$ PASS_VAR=\"PASSWD\"\n~$ PASS=`echo -n ${!PASS_VAR} | sed -e \"s/'/''/g\"`\n~$ echo $PASS\n@&%?,=[]_:-+*$#!''^~;(\\)/.\n~$ PASS=$(eval echo -n \\$$PASS_VAR | sed -e \"s/'/''/g\")\n~$  echo $PASS\n@&%?,=[]_:-+*$#!''^~;(\\)/.\n\nand with dash\n~$ dash\n$ PASSWD='@&%?,=[]_:-+*$#!'\"'\"'^~;(\\)/.'\n$ echo $PASSWD\n@&%?,=[]_:-+*$#!'^~;(\\)/.\n$ PASS_VAR=\"PASSWD\"\n$ PASS=`echo -n ${!PASS_VAR} | sed -e \"s/'/''/g\"`\ndash: 1: Bad substitution\n$ PASS=$(eval echo -n \\$$PASS_VAR | sed -e \"s/'/''/g\")\n$ echo $PASS\n@&%?,=[]_:-+*$#!''^~;(\\)/.\n\n\n\nThe behaviour is the same with the old and the new script in this case.\nDo you think that anything else can be crafted ?",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2021-04-17 17:53:03.000000000",
+      "in_reply_to": "efb53dba_e5424a7a",
+      "unresolved": true
+    },
+    {
+      "id": "c03c8061_6a6eca01",
+      "file_path": "kubernetes/common/mariadb-init/resources/config/db_init.sh",
+      "patchset_number": 8,
+      "line": 34,
+      "message": "After reconsidering this, my opinion is that no malicious code to trick eval can be crafted from the password content by itself here.\nThe only way to trick eval is to craft the variable name stored in PASS_VAR. But shells limit the possibility and if I understand well, these variable names are not decided by the users but by the system.",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2021-04-21 07:28:44.000000000",
+      "in_reply_to": "550b803e_b73b9690",
+      "unresolved": true
+    }
+  ]
+}

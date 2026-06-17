@@ -1,0 +1,804 @@
+{
+  "id": "policy%2Fdocker~master~I45546099690ba24c224bd7006c2422a151d266e2",
+  "change_id": "I45546099690ba24c224bd7006c2422a151d266e2",
+  "_number": 143145,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2026-02-09 20:58:34.000000000",
+    "updated": "2026-02-10 11:54:54.000000000",
+    "submitted": "2026-02-10 11:46:38.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 6742,
+      "name": "Daniel Hanrahan",
+      "display_name": null,
+      "email": "daniel.hanrahan@est.tech",
+      "username": "danielhanrahan"
+    },
+    "submitter": {
+      "account_id": 6070,
+      "name": "Ramesh Murugan Iyer",
+      "display_name": null,
+      "email": "ramesh.murugan.iyer@est.tech",
+      "username": "rameshiyer27"
+    }
+  },
+  "subject": "Refactor docker compose to remove duplication",
+  "commit_message": "Refactor docker compose to remove duplication\n\nThere are many duplicate service definitions across the\ncompose files, mainly due to having separate configs for\nwith and without replicas. Instead, replica count can be\nset to 1 by default, and the same config used.\n\nChanges:\n- Use deploy.replicas with default of 1 for ACM services\n- Remove compose.acm.scale.yml and compose.pdp.scale.yml\n- Consolidate participant sim configs using YAML anchors\n- Standardize service names with policy-* prefix\n- Remove legacy scaling scripts and nginx configurations\n- Delete broken apex-pdp-medium and -large tests.\n- Fix intermittent issue in apex-pdp tests using sleep 5s\n\nIssue-ID: POLICY-5534\nChange-Id: I45546099690ba24c224bd7006c2422a151d266e2\nSigned-off-by: danielhanrahan <daniel.hanrahan@est.tech>\n",
+  "change_log": {
+    "entry_count": 55,
+    "entries": [
+      {
+        "id": "24b723e0af52b83ce7909301a2cf402e82b6141a",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 20:58:34.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "fc5487ce2c9da0ae8ab1a6c6cd182e00a06e8f7c",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 20:58:48.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/21840409784",
+        "patchset_number": 1
+      },
+      {
+        "id": "79d9e32578a1b9e0a4b2af98c7c2201f843fdb7e",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 20:59:13.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/21840410911",
+        "patchset_number": 1
+      },
+      {
+        "id": "845394cc135f67892705e5ce9f70851d69d300c5",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 20:59:28.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21840409784",
+        "patchset_number": 1
+      },
+      {
+        "id": "eede232bd03c7233d5ef8654478966a3840ed394",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 20:59:42.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21840410911",
+        "patchset_number": 1
+      },
+      {
+        "id": "7063fbdf7b113be83f3b5fb0306fcde9cbb95baa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 20:59:43.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/250/ (1/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "e9681d373ac1e726ef54ff2db1fab75311233083",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 20:59:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/901/ (2/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "2c655e4ed329cd3bfadfd134eec7d55e8d0ce17e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:03.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/1351/ (3/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "0e51d39ac7c458364ab1762a34f59c9b1e876e1f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:18.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/903/ (4/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "419de7fa231aef7a9f4824fc172a2a1bf1985307",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:23.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/774/ (5/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "aab7ee5ef74f3645af940ea8f6682545cf3d4347",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:26.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/903/ (6/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "7f7977835f6b06ec91b0f89ffd6bfafd8306da52",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:44.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/906/ (7/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "e33a715359936c73107b65e72bf0c83ec01036b9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:00:44.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/907/ (8/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "32cc1f03e624eb9b7353924a1d5168e4f1d3a3ff",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:03:29.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/907/ (9/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "13409c11ff08ebcb508aeb6c31d5abd86ec157e8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:03:42.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/904/ (10/10)",
+        "patchset_number": 1
+      },
+      {
+        "id": "4c9ca7ae2b5d9529ca3cfd00a3d2c1120b090e12",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:13:19.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/250/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-opa-pdp-master-project-csit-verify-opa-pdp/250\n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/901/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-project-csit-verify-drools-applications/901\n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/1351/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/1351\n\nhttps://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/903/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-distribution-master-project-csit-verify-distribution/903\n\nhttps://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/774/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-clamp-master-project-csit-verify-clamp/774\n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/903/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-project-csit-verify-drools-pdp/903\n\nhttps://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/906/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-project-csit-verify-api/906\n\nhttps://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/907/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-pap-master-project-csit-verify-pap/907\n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/907/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/907\n\nhttps://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/904/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-apex-pdp-master-project-csit-verify-apex-pdp/904",
+        "patchset_number": 1
+      },
+      {
+        "id": "207e644fc04a3ab73543f691edfffdca5372b166",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:14:45.000000000",
+        "message": "Uploaded patch set 2.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 2
+      },
+      {
+        "id": "2ab6011112b70b1d77a04167ee487cb400ccfdbc",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:14:57.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/21840939122",
+        "patchset_number": 2
+      },
+      {
+        "id": "59aee35653088b83510ee6d5ddc401d9e32c7a84",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:15:54.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/251/ (1/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "403bd14e8a71a1d6d38f266190a54b163664a9d2",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:15:54.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21840939122",
+        "patchset_number": 2
+      },
+      {
+        "id": "3aa3f5643bf252ec3a3fc9b6d7cb5f93ec4f4f31",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:15:59.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/902/ (2/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "2a2ebf2adc03118248612e639904fb01a0b9e0b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:16:24.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/1352/ (3/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "e99f8edef3512c4e78811b277635ab0547ff967a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:16:34.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/904/ (4/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "cf544a9e93c7910d33407cc4ef6fa63cb5562642",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:16:37.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/775/ (5/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "8d49e220ed0121ceebb254a9a8c67c54fb969e8f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:16:39.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/904/ (6/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "cd45eba3e5e777cd1b302244b2080df979184dc0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:17:09.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/907/ (7/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "e4f9737911bd6935db42f4f09166c2eda22669e1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:17:09.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/908/ (8/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "cf812fbf628ff0c7dd61becb2f45146c57d82fae",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:17:10.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/908/ (9/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "9fba957042039b6a11d6796f93c7e62418840570",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:17:13.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/905/ (10/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "00ce11e18e06dfdd2e371f2d8d967de4757c85f3",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:17:14.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/21840940013",
+        "patchset_number": 2
+      },
+      {
+        "id": "1fa879663a6ebd0b6f581514010fc1fbf647463c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:17:42.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21840940013",
+        "patchset_number": 2
+      },
+      {
+        "id": "ae2b0ea9e61c6d1fbf67d3a25aea2755eaaec552",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:29:32.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/907/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/907/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-project-csit-verify-api/907\n\nhttps://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/251/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-opa-pdp-master-project-csit-verify-opa-pdp/251\n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/902/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-project-csit-verify-drools-applications/902\n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/1352/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/1352\n\nhttps://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/904/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-distribution-master-project-csit-verify-distribution/904\n\nhttps://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/775/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-clamp-master-project-csit-verify-clamp/775\n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/904/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-project-csit-verify-drools-pdp/904\n\nhttps://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/908/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-pap-master-project-csit-verify-pap/908\n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/908/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/908\n\nhttps://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/905/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-apex-pdp-master-project-csit-verify-apex-pdp/905",
+        "patchset_number": 2
+      },
+      {
+        "id": "1c1ba7d3b9bd762ca39b13b48b41194004577224",
+        "author": {
+          "account_id": 6742,
+          "name": "Daniel Hanrahan",
+          "display_name": null,
+          "email": "daniel.hanrahan@est.tech",
+          "username": "danielhanrahan"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2026-02-09 21:34:47.000000000",
+        "message": "Patch Set 2:\n\n(1 comment)",
+        "patchset_number": 2
+      },
+      {
+        "id": "3fc8f5f0d60a941d471e4dd4b2bf147b378fcc07",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:34:59.000000000",
+        "message": "Patch Set 2: -Verified\n\nSTARTED: https://github.com/onap/.github/actions/runs/21841589829",
+        "patchset_number": 2
+      },
+      {
+        "id": "c0646fd5b460d4eb91f628caa19521f23dfe99c5",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:35:01.000000000",
+        "message": "Patch Set 2: -Verified\n\nSTARTED: https://github.com/onap/.github/actions/runs/21841590838",
+        "patchset_number": 2
+      },
+      {
+        "id": "46d5642d243935909d05d2e84f0bdd9a3a51fb72",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:35:32.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21841590838",
+        "patchset_number": 2
+      },
+      {
+        "id": "527dd568fa6e9071beca22428d1c1b2250fd6228",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-09 21:35:34.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21841589829",
+        "patchset_number": 2
+      },
+      {
+        "id": "a13c59a872abe93907a18663b4fefc23bd4e42d6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:35:53.000000000",
+        "message": "Patch Set 2: -Verified\n\nBuild Started https://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/252/ (1/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "5d16a85a68229a675d7ed9d9e99defe6e5179762",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:04.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/903/ (2/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "94d2f52e75c019534d3b452458e09038f18287fa",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:13.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-docker-master-verify-java/1353/ (3/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "4ede8ed5b763fd1d9ca2e47a3795a242348840b7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:19.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/905/ (4/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "77c1ba865b30b320bbd2f954738c2aeac26756d0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:34.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/776/ (5/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "260ff2d83c37a2315740d34e2992f6c9c8234430",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:44.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/905/ (6/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "cc4dbcf16a9ebcfe06ff42fc5947e8da9f7b2fe3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:44.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/908/ (7/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "23156fcd3eabedb3f5d68d07b76f4c1dc2512ea4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:36:45.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/909/ (8/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "4f45f15cddfa556ac0516a52b6c61de381f975b6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:39:29.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/909/ (9/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "9ddfa75bd8ee16f7f79ec4d9d86608a748158df0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:39:43.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/906/ (10/10)",
+        "patchset_number": 2
+      },
+      {
+        "id": "2d567c91a0981630b3aee5aa269db5f92ee4160a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-09 21:49:44.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-opa-pdp-master-project-csit-verify-opa-pdp/252/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-opa-pdp-master-project-csit-verify-opa-pdp/252\n\nhttps://jenkins.onap.org/job/policy-drools-applications-master-project-csit-verify-drools-applications/903/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-applications-master-project-csit-verify-drools-applications/903\n\nhttps://jenkins.onap.org/job/policy-docker-master-verify-java/1353/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-verify-java/1353\n\nhttps://jenkins.onap.org/job/policy-distribution-master-project-csit-verify-distribution/905/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-distribution-master-project-csit-verify-distribution/905\n\nhttps://jenkins.onap.org/job/policy-clamp-master-project-csit-verify-clamp/776/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-clamp-master-project-csit-verify-clamp/776\n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-project-csit-verify-drools-pdp/905/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-project-csit-verify-drools-pdp/905\n\nhttps://jenkins.onap.org/job/policy-api-master-project-csit-verify-api/908/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-api-master-project-csit-verify-api/908\n\nhttps://jenkins.onap.org/job/policy-pap-master-project-csit-verify-pap/909/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-pap-master-project-csit-verify-pap/909\n\nhttps://jenkins.onap.org/job/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/909/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-xacml-pdp-master-project-csit-verify-xacml-pdp/909\n\nhttps://jenkins.onap.org/job/policy-apex-pdp-master-project-csit-verify-apex-pdp/906/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-apex-pdp-master-project-csit-verify-apex-pdp/906",
+        "patchset_number": 2
+      },
+      {
+        "id": "7d82ca623547ca5dac98a8d41e1f0ae4c6262033",
+        "author": {
+          "account_id": 6722,
+          "name": "Wayne Dunican",
+          "display_name": null,
+          "email": "wayne.dunican@est.tech",
+          "username": "waynedunican"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-10 11:28:14.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "52724d7ddb98238e849fee2fce7b08b2b3d4971b",
+        "author": {
+          "account_id": 6710,
+          "name": "Krupa Nagabhushan",
+          "display_name": null,
+          "email": "krupa.nagabhushan@est.tech",
+          "username": "KrupaNagabhushan"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-10 11:43:59.000000000",
+        "message": "Patch Set 2: Code-Review+1",
+        "patchset_number": 2
+      },
+      {
+        "id": "96965fd7e84216c378f0c6db88e774469ab26f27",
+        "author": {
+          "account_id": 6070,
+          "name": "Ramesh Murugan Iyer",
+          "display_name": null,
+          "email": "ramesh.murugan.iyer@est.tech",
+          "username": "rameshiyer27"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-10 11:46:32.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "f910aecd6f9c7ed6bf7f40de586db1c3af49aeaf",
+        "author": {
+          "account_id": 6070,
+          "name": "Ramesh Murugan Iyer",
+          "display_name": null,
+          "email": "ramesh.murugan.iyer@est.tech",
+          "username": "rameshiyer27"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-10 11:46:38.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 2
+      },
+      {
+        "id": "49a8e700690b3be903e80638ea76ba471fcc13e3",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-10 11:46:49.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/21863599306",
+        "patchset_number": 1
+      },
+      {
+        "id": "d5527ea3961c0d48d6a94b33538ac1299b900e4c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2026-02-10 11:47:30.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/21863599306",
+        "patchset_number": 1
+      },
+      {
+        "id": "06820d3e9b1fbe3020cf025f2328dcf92f84b7f8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2026-02-10 11:54:54.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-docker-master-merge-java/542/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-docker-master-merge-java/542",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

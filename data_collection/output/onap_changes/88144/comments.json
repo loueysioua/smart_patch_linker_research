@@ -1,0 +1,178 @@
+{
+  "id": "oom%2Foffline-installer~master~If6874c99dcc42ef63da167abe8d1f7cdd8e0fcb1",
+  "change_id": "If6874c99dcc42ef63da167abe8d1f7cdd8e0fcb1",
+  "_number": 88144,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "e78f494c_d898037d",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Which of the roles included after 'dns' role fails due to lack of dns container before the ond of the playbook? vncserver nginx or nexus?\n\nansible$ grep -A 5 -B 7 dns infrastructure.yml\n- name: Setup infrastructure servers\n  hosts: infrastructure\n  roles:\n    - chrony\n    - package-repository-check\n    - certificates\n    - docker\n    - dns\n    - vncserver\n    - nginx\n    - nexus\n\n- name: Setup base for Kubernetes nodes",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 08:16:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "59cf737f_986ab653",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Nevermind, 'nexus' that is.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 08:21:23.000000000",
+      "in_reply_to": "e78f494c_d898037d",
+      "unresolved": true
+    },
+    {
+      "id": "16109756_2bcaa6c7",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "I think nexus is the first one needing it. But why this problem is not visible in molecule tests? Even though infra-play is still not merged, but did not hit it in local runs.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-21 08:25:04.000000000",
+      "in_reply_to": "e78f494c_d898037d",
+      "unresolved": true
+    },
+    {
+      "id": "afa93895_f27eb2f9",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "there were 2 issues: 1) handler not triggered, 2) dnsmasq container is in the loop w/o setting-up dns directly in task (or handler newly) - issue was detected on \"Wait for nexus to come-up\" due to not working dns resolving\n\ninfrastructure playbook test is not yet available for molecule as per OOM-1816 ?",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-21 08:55:04.000000000",
+      "in_reply_to": "16109756_2bcaa6c7",
+      "unresolved": true
+    },
+    {
+      "id": "e6585b63_3df7bafa",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "No, the issue was not that handler was not _triggered_ but that it was not _flushed_. It was indeed triggered but at the end of the playbook, which is too late.\n\nSamuli: This bug is a regression introduced by 87422 and play-infra tests in 85907 didn't detect that because they were not rebased since 87422 got into master.\n\nRole tests are not able to detect integration level issues that's why 'dns' role tests are unable to detect that kind of issues, but that's obvious i think.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 09:03:00.000000000",
+      "in_reply_to": "afa93895_f27eb2f9",
+      "unresolved": true
+    },
+    {
+      "id": "90873b88_5fb107ab",
+      "file_path": "ansible/roles/dns/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "cool, sounds right. So infra-play would have detected this.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-21 09:51:39.000000000",
+      "in_reply_to": "e6585b63_3df7bafa",
+      "unresolved": true
+    },
+    {
+      "id": "50c741da_73751101",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 4,
+      "line": 7,
+      "message": "This message does not describe the nature of the bug precisely - container was started, but too late (at the end of the playbook)",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 10:59:13.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "175f5a9a_4fec1c8a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "Like i wrote in the comment - it _was_ triggered but at the end of the playbook, so this description should rather state that 'handler was not flushed'. \"Dnsmasq is not started\" is a false statement.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 10:59:13.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d1973887_d11dbd0b",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "I think it never reached that point, hanging nexus healtcheck prevents playbook to finish completely",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-05-21 11:29:13.000000000",
+      "in_reply_to": "175f5a9a_4fec1c8a",
+      "unresolved": true
+    },
+    {
+      "id": "c8d1425f_f94c982a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "fatal: [infra_host]: FAILED! => {\"attempts\": 30, \"changed\": false, \"msg\": \"Failed to connect to nexus.infra.novalocal at port 443: [Errno -2] Name or service not known\"}\n\nRUNNING HANDLER [dns : Run dns server container] *******************************\n\nLog explains my statement precisely.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-05-21 11:32:54.000000000",
+      "in_reply_to": "d1973887_d11dbd0b",
+      "unresolved": true
+    }
+  ]
+}

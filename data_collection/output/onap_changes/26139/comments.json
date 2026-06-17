@@ -1,0 +1,59 @@
+{
+  "id": "policy%2Fengine~master~I0874abb7e986a8bb42ae18561064a8d7534eade6",
+  "change_id": "I0874abb7e986a8bb42ae18561064a8d7534eade6",
+  "_number": 26139,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_082034f6",
+      "file_path": "PolicyEngineAPI/src/main/java/org/onap/policy/std/StdPolicyConfig.java",
+      "patchset_number": 1,
+      "line": 167,
+      "message": "I think this has been declared earlier in the interface, if so should be marked as @Override to avoid sonars.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-12-13 17:47:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e87e28e4",
+      "file_path": "ONAP-PDP-REST/src/main/java/org/onap/policy/pdp/rest/api/services/GetConfigService.java",
+      "patchset_number": 1,
+      "line": 182,
+      "message": "retrieving the policy-type by parsing the policyName is an error prone practice because there are no restrictions on the intrinsic policy-name values that allows having the \"_\" and \".\" inside any part of the name.\n\nFor instance, if I have policy with policyName = DCAE_alex.Config_alex_was_here.5.xml\nthis parsing will return \"Config_alex_was\" - instead of \"Config\"\n\nAnother example is DCAE_alex.Config_alex_was.here_today.5.xml that will return \"here\" - totally not related piece of policyName...\n\nSorry :-(",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2017-12-13 18:00:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c37778d3",
+      "file_path": "ONAP-PDP-REST/src/main/java/org/onap/policy/pdp/rest/api/services/GetConfigService.java",
+      "patchset_number": 2,
+      "line": 181,
+      "message": "this is much better !!!\n\n- the only concern left is if I create a \"Base\" type policy with the name that starts with pieces like \"MS_\".  \n\nFor instance, /createPolicy policyName=DCAE_alex.MS_alex that is converted by PAP to DCAE_alex.Config_MS_alex.5.xml.  In this case this function will return \"MS\" type instead of the \"Base\"...\n\nI guess we will have to live with this",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2018-01-03 21:38:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

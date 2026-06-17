@@ -1,0 +1,144 @@
+{
+  "id": "policy%2Fmodels~master~I69f2843a93cd5f831359a0965223298b769498d9",
+  "change_id": "I69f2843a93cd5f831359a0965223298b769498d9",
+  "_number": 113112,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2a62482e_ff517c51",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "not sure if the parenthesis are needed ..   \nI suppose we'll need to open a ticket in honolulu to handle object and string mappings, is that correct?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-09-24 15:32:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "586cee35_32613456",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 1,
+      "line": 199,
+      "message": "I thought we already have a JIRA in this area but we don't, I'll open one. It's related to JIRA POLICY-2540 but not quite the same. \n\nThis isn't the only case and is actually a trivial case of a much larger case of problems because our TOSCA handling is not type aware. In other words, we need to change our TOSCA handling so that it reads and checks the types of everything. What we have now is a bare minimum where everything is treated as strings. It works and we haven't got into trouble with it yet but in time we will.\n\nThe problem is that it's a lot of tricky work to do this, XXL T shirt size and until there's a real need to do it, it will be hard to justify.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2020-09-25 07:11:29.000000000",
+      "in_reply_to": "2a62482e_ff517c51",
+      "unresolved": true
+    },
+    {
+      "id": "1aa998e8_9289224d",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 199,
+      "message": "maybe we should use a Coder to convert it to a String?  And use a Coder to decode it when extracting back out of the DB?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-28 14:38:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db667ed4_8aff32f0",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 199,
+      "message": "thought about it too, if I understood it correctly one of the problems, is that the \"class\" to encode and decode against is not known, neither the format, json, or yaml.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-09-28 20:51:05.000000000",
+      "in_reply_to": "1aa998e8_9289224d",
+      "unresolved": true
+    },
+    {
+      "id": "98afcc4a_28696363",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 199,
+      "message": "since it comes in off the wire (or from a text file), it must be a type that gson knows about or it would never been decoded in the first place.  Hence it must be ok to encode it again.  \n\nAlso avoids the need for the null check, as gson will return null for that.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-28 21:03:29.000000000",
+      "in_reply_to": "db667ed4_8aff32f0",
+      "unresolved": true
+    },
+    {
+      "id": "23565e83_8e334d3f",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 199,
+      "message": "This is a tiny symptom of a bigger problem with TOSCA type management. OK, we (well Java/GSON) knows the type on the way into the DB, but on the way out of the DB, we have no idea what the type is unless we use the type of the property specified in TOSCA.\n\nTo implement type handling in TOSCA would be a major job.\n\nLet's chat about this at the scrum.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2020-09-29 08:30:57.000000000",
+      "in_reply_to": "98afcc4a_28696363",
+      "unresolved": true
+    },
+    {
+      "id": "cf140235_db3fb0a6",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 162,
+      "message": "need to decode the value here, right?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-29 17:03:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "61195b21_8b6e1e47",
+      "file_path": "models-tosca/src/main/java/org/onap/policy/models/tosca/simple/concepts/JpaToscaProperty.java",
+      "patchset_number": 2,
+      "line": 199,
+      "message": "no matter what we choose to do, toString() will probably not provide a value that can be decoded when retrieved from the DB",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-09-29 17:03:22.000000000",
+      "in_reply_to": "23565e83_8e334d3f",
+      "unresolved": true
+    }
+  ]
+}

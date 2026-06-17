@@ -1,0 +1,650 @@
+{
+  "id": "multicloud%2Fk8s~master~I0cdd9f1682542e96b8808e59f9b83868ab2d8565",
+  "change_id": "I0cdd9f1682542e96b8808e59f9b83868ab2d8565",
+  "_number": 142676,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2025-12-07 18:02:06.000000000",
+    "updated": "2025-12-08 08:26:37.000000000",
+    "submitted": "2025-12-08 08:02:28.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    },
+    "submitter": {
+      "account_id": 2701,
+      "name": "Lukasz Rajewski",
+      "display_name": null,
+      "email": "lukasz.rajewski@t-mobile.pl",
+      "username": "rajewluk"
+    }
+  },
+  "subject": "Add tracing",
+  "commit_message": "Add tracing\n\n- add otel dependencies [0]\n- register otel middleware on router\n- use grpc trace exporter\n- this also updates gorilla/mux (1.7.3 -> 1.8.0)\n- exporter configuration is available via\n  environment variables [1]\n\n[0] v1.2.0 of otel dependencies is used due to a dependency\n    on v1 of github.com/go-logr/logr in later versions.\n    The update from v0 to v1 of that dependency would require\n    updating all the k8s.io packages from v0.19 -> v0.21 too.\n[1] https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/\n\nIssue-ID: MULTICLOUD-1535\nChange-Id: I0cdd9f1682542e96b8808e59f9b83868ab2d8565\nSigned-off-by: Fiete Ostkamp <fiete.ostkamp@telekom.de>\n",
+  "change_log": {
+    "entry_count": 44,
+    "entries": [
+      {
+        "id": "aec8660f173ab36877ef05007de8350807e1fa29",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-07 18:02:06.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2039116d05a25c9931037ecdf622f9ec08bab027",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-07 18:02:16.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20008173273",
+        "patchset_number": 1
+      },
+      {
+        "id": "3986cab583f02343f06a6e08a8602c0805cad7c7",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-07 18:02:16.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20008173252",
+        "patchset_number": 1
+      },
+      {
+        "id": "4352f95235f3dc5d5ad9851307c645053f05fa2e",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-07 18:02:45.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20008173252",
+        "patchset_number": 1
+      },
+      {
+        "id": "e279d94c94397c401729e9ac75ba3ee4bda30db3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-07 18:03:02.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3010/ (1/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "9a909e359864aa28f6c664a2b6644b3cedd8387e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-07 18:03:21.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2250/ (2/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "2ab31f85d42ed6286be11c715251099cd035081b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-07 18:03:21.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3038/ (3/3)",
+        "patchset_number": 1
+      },
+      {
+        "id": "55e1d2f4ac28f8f64eb75f445d519d68a996150f",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-07 18:03:35.000000000",
+        "message": "Patch Set 1: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20008173273",
+        "patchset_number": 1
+      },
+      {
+        "id": "6e6dd75d3317402000965769e85d59607136639c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-07 18:06:59.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3038/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3038/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/3038\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2250/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2250/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/2250\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3010/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/3010",
+        "patchset_number": 1
+      },
+      {
+        "id": "f73b763de90f6172e0f7de400100760ae2579fb8",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 06:31:46.000000000",
+        "message": "Uploaded patch set 2.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 2
+      },
+      {
+        "id": "e5cef3712803bb5701c940dc47c003312a5e9490",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 06:31:55.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20018972947",
+        "patchset_number": 2
+      },
+      {
+        "id": "33dc2f95939453e743533ac69569a522440d899b",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 06:31:56.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20018972900",
+        "patchset_number": 2
+      },
+      {
+        "id": "334ae4fe997817d32239319e34fd7cac97f23aad",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 06:32:21.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20018972947",
+        "patchset_number": 2
+      },
+      {
+        "id": "86ebc1370a1ba5bc54786d58eec54232de4c8edc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 06:33:03.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3011/ (1/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "bcd0802ae2ae50dd41cdeeebd835891a363fcc42",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 06:33:12.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3039/ (2/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "6b6035ebe512efa85bf06545fe53c6aa305d21ad",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 06:33:19.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20018972900",
+        "patchset_number": 2
+      },
+      {
+        "id": "ccaa04ca354c716fbc9b52325d33b04aa31af57b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 06:34:01.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2251/ (3/3)",
+        "patchset_number": 2
+      },
+      {
+        "id": "76d30092f089eb1583ef0c05c04d7db0d04b6ba5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 06:37:22.000000000",
+        "message": "Patch Set 2: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3039/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3039/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/3039\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2251/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2251/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/2251\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3011/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/3011",
+        "patchset_number": 2
+      },
+      {
+        "id": "79412593329243fe3f3b3eb4af807109804613d7",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:09:39.000000000",
+        "message": "Uploaded patch set 3.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 3
+      },
+      {
+        "id": "b93087aee1aa576cb8e287d489ae4d6ffbaed411",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:09:50.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20019743031",
+        "patchset_number": 3
+      },
+      {
+        "id": "e170261d3fdef3b741545150784cce6a17b64254",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:09:50.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20019743037",
+        "patchset_number": 3
+      },
+      {
+        "id": "96fc23bd2c6c3ef31c60365e12d1389747cd2a7e",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:10:16.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20019743031",
+        "patchset_number": 3
+      },
+      {
+        "id": "400fa13e09d8219d3bf1396a64ab2a8ef44851ab",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:10:40.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2252/ (1/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "bbca3cc7121533560c634153f85aa9ec37b3999a",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:11:20.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20019743037",
+        "patchset_number": 3
+      },
+      {
+        "id": "5d1f3991b7e138d8380f3db11ac555ee274a0306",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:12:41.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3040/ (2/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "6d529dafe3b2925f1c03d626c54c603988eadbc4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:12:44.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3012/ (3/3)",
+        "patchset_number": 3
+      },
+      {
+        "id": "e554ce92a98424b3eae1dfd0cef993d0b4461a9e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:24:22.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3040/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3040/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/3040\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2252/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2252/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/2252\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3012/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/3012",
+        "patchset_number": 3
+      },
+      {
+        "id": "1aad77616bef73926945c480a96d3aacd7f3f391",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:26:06.000000000",
+        "message": "Uploaded patch set 4.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 4
+      },
+      {
+        "id": "0f6780357209c25786d5cc628d48da2f83f37ea1",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:26:15.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20020131249",
+        "patchset_number": 4
+      },
+      {
+        "id": "6cf0ccc3a8b63e94493a0089c1ae748331f01f00",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:26:16.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20020131110",
+        "patchset_number": 4
+      },
+      {
+        "id": "e68c8e019287ed73e8280a2871afe4578caff901",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:26:16.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3041/ (1/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "f02b145c6d4b05ea328cbd5530c0e28d8055d703",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:26:42.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20020131249",
+        "patchset_number": 4
+      },
+      {
+        "id": "6040509d505c8dee0245cd3ac9ac63b111cf917a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:26:57.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3013/ (2/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "b6f25f60148fdf28c4ef3e92a819a8e4a18e75b0",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:27:28.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 4
+      },
+      {
+        "id": "ce4fda47684c0cd61a9d998638c071226d9ce018",
+        "author": {
+          "account_id": 8478,
+          "name": "ONAP Bypass GHA",
+          "display_name": null,
+          "email": "releng+onap.bypass.gha@linuxfoundation.org",
+          "username": "onap.bypass.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 07:27:37.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20020131110",
+        "patchset_number": 4
+      },
+      {
+        "id": "816581f937dd789dfd386fc6d4b1c045b2c2fd7c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:28:27.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2253/ (3/3)",
+        "patchset_number": 4
+      },
+      {
+        "id": "83cb273b078b9bb88ae36a6d16d8bcc10ca767a0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 07:45:47.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-verify-golang/3041/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-verify-golang/3041\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-kud-deployment-verify-shell/2253/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-kud-deployment-verify-shell/2253\n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-validation-scripts-verify-python/3013/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-validation-scripts-verify-python/3013",
+        "patchset_number": 4
+      },
+      {
+        "id": "a6717a392a40e32b0bf6da7d79ad611a3e1fba5d",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 08:02:24.000000000",
+        "message": "Patch Set 4: Code-Review+2",
+        "patchset_number": 4
+      },
+      {
+        "id": "a2965787f56535a8803827ce5308c0a7f9d0364e",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 08:02:28.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 4
+      },
+      {
+        "id": "64e9d5fdfe5de1fa5a8875447ae9f193717270f9",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 08:02:39.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/20020912324",
+        "patchset_number": 1
+      },
+      {
+        "id": "a925cae521e6470419219258e3343ae7b8c71de3",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2025-12-08 08:02:42.000000000",
+        "message": "Patch Set 4:\n\n(1 comment)",
+        "patchset_number": 4
+      },
+      {
+        "id": "ca6107853350b52c7aac4a198c2ad8f945cfb345",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2025-12-08 08:04:19.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/20020912324",
+        "patchset_number": 1
+      },
+      {
+        "id": "af47e648b4247939498c3a6d35b403af31e5bbc3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 08:08:42.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-docker-golang-shell-daily/1897/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-docker-golang-shell-daily/1897",
+        "patchset_number": 4
+      },
+      {
+        "id": "839c115cffcb9aa3466be1edb9a2d9c126c2eef0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2025-12-08 08:26:37.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/multicloud-k8s-master-merge-golang/722/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/multicloud-k8s-master-merge-golang/722",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

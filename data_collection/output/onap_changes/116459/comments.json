@@ -1,0 +1,688 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fdatafile~master~I13ec80e996861e14d2c561087c4af3b34d861030",
+  "change_id": "I13ec80e996861e14d2c561087c4af3b34d861030",
+  "_number": 116459,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c0b2ed98_de408aa9",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Fix formatting 4 spaces instead of 2.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cd968643_47f610e1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Is this needed? Client is reassigned in the open() method.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5038a5fd_69941426",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Is there a benefit to using CountDownLatch instead of using: client.get().response().block() ?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "03b8a3b0_2c9664a2",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 69,
+      "message": "Why pass those values in such a way? For me it's hard to understand what's happening.\n\nI would propose solution in lines of:\n\n client.get().response((responseReceiver, byteBufFlux) -> {\n     response = byteBufFlux.aggregate().asInputStream();\n     if(isResponseOk(responseReceiver)){\n         return saveFile(response);\n     } else {\n         retrun Mono.error( createException(response) )\n     }\n }).then().block();\n\n\nfrom the response() lambda you should probably create RuntimeExceptions with correct message/stacktrace, and the whole client.get().response()... could be wrapped by try catch and then DatafileTaskException could be created.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "58f8f449_b827a4c7",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 147,
+      "message": "You could just do:\n\n int port = fileServerData.port().isPresent() ? fileserverData.port().get() : HttpUtils.HTTP_DEFAULT_PORT;\n return \"http://\" + fileServerData.serverAddress() + \":\" + port + remoteFile;\n\nor:\n\n return fileServerData.port().orElse(HttpUtils.HTTP_DEFAULT_PORT)\n     .map(port -> \"http://\" + fileServerData.serverAddress() + \":\" + HttpUtils.HTTP_DEFAULT_PORT + remoteFile)\n     .get();",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5e9b8221_e309be83",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientResponseHelper.java",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Fix formatting 4 spaces instead of 2 as indent",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "64cc51c1_512ba85d",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Wildcard imports should be expanded.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5e6dc161_215939b2",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "As above",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4a9e0f7a_244a6b72",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 40,
+      "message": "Fix formatting.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d7827233_c0f41761",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Unnecessary",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fe15aef8_08c2daee",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/scheme/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Unnecessary, assertEquals is statically imported.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "92443625_80b01cdb",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 224,
+      "message": "Isn't it part of reactor-bom?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f1c91e72_8649f584",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 232,
+      "message": "From my understanding (as this is dependencyMangement) this dependency is imported implicitly into child POM, because it's not defined there. Consider adding explicit import to the child POM.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-17 21:04:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f040d2f5_68be620c",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "c0b2ed98_de408aa9",
+      "unresolved": false
+    },
+    {
+      "id": "534ff447_84ec6c29",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Yes, this can be taken out. Removed",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "cd968643_47f610e1",
+      "unresolved": false
+    },
+    {
+      "id": "c7a2ac76_ee727f4b",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "Actually, Yes 😊, I agree with you with block() and initially it was in my plans. But now DFC was written in such way, I was unable to use it (please, see small part of my earlier logs):\n\n\"\njava.lang.IllegalStateException: block()/blockFirst()/blockLast() are blocking, which is not supported in thread FileCollectorWorker-2\n\tat reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:83)\n\tat reactor.core.publisher.Mono.block(Mono.java:1679)\n\tat org.onap.dcaegen2.collectors.datafile.http.DfcHttpClient.collectFile(DfcHttpClient.java:82)\n\"\n\nThat was the reason of using subscribe() and CountDownLatch.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "5038a5fd_69941426",
+      "unresolved": false
+    },
+    {
+      "id": "b23b28b6_193085fb",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 69,
+      "message": "I've used mostly all your solution. This impede slightly another part of code \n(i.e. checking response code in collecting file). Nevertheless, I was able do remove clientResponse, but no errorMessages. At all, It was possible to use ArrayList, so it is \"better looking\"",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "03b8a3b0_2c9664a2",
+      "unresolved": false
+    },
+    {
+      "id": "868cae99_45b64766",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 1,
+      "line": 147,
+      "message": "Chosen option no 1. With second it was some error with map.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "58f8f449_b827a4c7",
+      "unresolved": false
+    },
+    {
+      "id": "f4399428_38df424b",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientResponseHelper.java",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "5e9b8221_e309be83",
+      "unresolved": false
+    },
+    {
+      "id": "16ebc02b_e39d6fd5",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "64cc51c1_512ba85d",
+      "unresolved": false
+    },
+    {
+      "id": "e708d833_53c5f991",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "5e6dc161_215939b2",
+      "unresolved": false
+    },
+    {
+      "id": "96596249_bb804aa4",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 40,
+      "message": "Hope all formatting was corrected.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "4a9e0f7a_244a6b72",
+      "unresolved": false
+    },
+    {
+      "id": "e5a5439c_113ba241",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/http/HttpClientTest.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "d7827233_c0f41761",
+      "unresolved": false
+    },
+    {
+      "id": "087ca443_c84aa03e",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/scheme/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Done.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "fe15aef8_08c2daee",
+      "unresolved": false
+    },
+    {
+      "id": "8f90362c_712a9e5c",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 224,
+      "message": "Seems, you're right. Removed",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "92443625_80b01cdb",
+      "unresolved": false
+    },
+    {
+      "id": "dcfbb919_dd53254f",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 232,
+      "message": "Agree, moved.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-18 22:45:47.000000000",
+      "in_reply_to": "f1c91e72_8649f584",
+      "unresolved": false
+    },
+    {
+      "id": "4365646d_3cae98a0",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 43,
+      "message": "Have some doubts on that hardcode. I wonder if it wouldn't block other threads when multiple downloads over http are requested.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3dd48591_2b445e09",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Is it possible that userId and password are empty? Is it correct in such case?",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5e1ba436_5602b0f6",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 64,
+      "message": "Consider AtomicReference - errorMessages cannot have more than one error. Also You can consider wrapping Throwable instead of String.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea9119b4_9c40d7b4",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "Pass exception to DatafileTaskException instead of e.toString().\n\n throw new DatafileTaskException(\"Interrupted exception after datafile download\", e);",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b8bd1bbb_133fd068",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "Double logging can occur.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5a6d454b_423d9fef",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 138,
+      "message": "Consider: Starting http client disposal.",
+      "author": {
+        "account_id": 6044,
+        "name": "Remigiusz Janeczek",
+        "display_name": null,
+        "email": "remigiusz.janeczek@nokia.com",
+        "username": "rjanecze"
+      },
+      "updated": "2020-12-21 16:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "205baa00_7492e4d5",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 43,
+      "message": "Regarding that, taken constant from ScheduledTask.NUMBER_OF_WORKER_THREADS (made public). This didn't influenced on our CoS",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "4365646d_3cae98a0",
+      "unresolved": false
+    },
+    {
+      "id": "e192e995_e3ef24a1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "FileServerData allow to contain empty string for login and password, what seem to be incorrect for basicAuth. Suitable verification was done.",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "3dd48591_2b445e09",
+      "unresolved": false
+    },
+    {
+      "id": "bbe89ab5_641cb983",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 64,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "5e1ba436_5602b0f6",
+      "unresolved": false
+    },
+    {
+      "id": "f65792bd_49a9f492",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "ea9119b4_9c40d7b4",
+      "unresolved": false
+    },
+    {
+      "id": "221e61ed_38ce923f",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "Logger was removed. Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "b8bd1bbb_133fd068",
+      "unresolved": false
+    },
+    {
+      "id": "42f8f01b_a5b68907",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/http/DfcHttpClient.java",
+      "patchset_number": 2,
+      "line": 138,
+      "message": "Done",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2020-12-22 18:41:25.000000000",
+      "in_reply_to": "5a6d454b_423d9fef",
+      "unresolved": false
+    },
+    {
+      "id": "d520046a_c144048e",
+      "file_path": "datafile-app-server/pom.xml",
+      "patchset_number": 6,
+      "line": 28,
+      "message": "1.5.0 already released - version bump was required for this enhancement",
+      "author": {
+        "account_id": 93,
+        "name": "Vijay Venkatesh Kumar",
+        "display_name": null,
+        "email": "vijayv81@gmail.com",
+        "username": "vv770d"
+      },
+      "updated": "2021-01-02 17:08:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "be9cba48_7608451a",
+      "file_path": "datafile-app-server/pom.xml",
+      "patchset_number": 6,
+      "line": 28,
+      "message": "Resolved here - https://gerrit.onap.org/r/c/dcaegen2/collectors/datafile/+/116587\nas this patch has status merged. Next, will be created 1.5.1-container.yaml file in \"releases\" folder",
+      "author": {
+        "account_id": 6675,
+        "name": "Krzysztof Gajewski",
+        "display_name": null,
+        "email": "krzysztof.gajewski@nokia.com",
+        "username": "gajos"
+      },
+      "updated": "2021-01-05 13:48:11.000000000",
+      "in_reply_to": "d520046a_c144048e",
+      "unresolved": false
+    }
+  ]
+}

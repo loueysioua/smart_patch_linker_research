@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fdrools-applications~master~I5cc2761adb2621bca094fb035e626dd40baa08e1",
+  "change_id": "I5cc2761adb2621bca094fb035e626dd40baa08e1",
+  "_number": 100070,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d2109e99_85ab2dbf",
+      "file_path": "controlloop/packages/docker-controlloop/pom.xml",
+      "patchset_number": 2,
+      "line": 167,
+      "message": "I'm changing the phase from the configuration that was done previously and reverted.\nThe antrun cleanup is now executed at deploy phase instead of process-sources phase. This is because the antrun Dockerfile is also required at deploy phase for push. This is why the cleanup is delayed to the end of the deploy phase.\n\nI'm concerned about running maven docker profile without reaching deploy phase (ex: mvn clean install -Pdocker). In this case it is possible that antrun Dockerfile is not deleted and remains. This is not clean and would require a more elegant solution. Any comments on this ?\n\nAs this change is related to maven deploy, it was not tested locally. Maven install, including tests, ran successfully locally.\n\nFor reference, previous change and revert one are:\n* https://gerrit.onap.org/r/c/policy/drools-applications/+/99741\n* https://gerrit.onap.org/r/c/policy/drools-applications/+/99992",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2020-01-07 23:51:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c501edff_8db20f19",
+      "file_path": "controlloop/packages/docker-controlloop/pom.xml",
+      "patchset_number": 2,
+      "line": 159,
+      "message": "Is it possible to put it under \"target\" ?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-01-09 15:09:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "87e0f357_e9bff848",
+      "file_path": "controlloop/packages/docker-controlloop/pom.xml",
+      "patchset_number": 2,
+      "line": 167,
+      "message": "Nice write up explaining Bruno.   I don't know enough these plugins to propose a solution, ideally if we could put the filtered file in target instead as I mentioned above, overriding or previous to the production of the \"filtered\" Dockerfile placed under target from the docker plugin, that would be taken care with the clean, but I don't have a good handle on its feasibility.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-01-09 15:09:43.000000000",
+      "in_reply_to": "d2109e99_85ab2dbf",
+      "unresolved": true
+    },
+    {
+      "id": "c9be3df8_88d28665",
+      "file_path": "controlloop/packages/docker-controlloop/pom.xml",
+      "patchset_number": 2,
+      "line": 167,
+      "message": "Filtered dockerfile is now moved and kept in target. This is much better like this. Thanks.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2020-01-09 18:35:47.000000000",
+      "in_reply_to": "87e0f357_e9bff848",
+      "unresolved": false
+    }
+  ]
+}

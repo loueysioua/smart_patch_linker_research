@@ -1,0 +1,127 @@
+{
+  "id": "oom~master~I0497df70f0ff9a30e4ccd634aff67467f5ae04df",
+  "change_id": "I0497df70f0ff9a30e4ccd634aff67467f5ae04df",
+  "_number": 106685,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "b78c2a98_9f365952",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "is this encrypted or what?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-27 23:05:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a704540d_d9e5af1f",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "I'm not a Portal code expert but I see it expects an encrypted value for the AAF rest api password, they use a key in their code to decrypt it (in fact the code that does this is in portal-sdk : CipherUtil.java -> DecryptPKC)\n\nmaybe Sunder can comment ?",
+      "author": {
+        "account_id": 5,
+        "name": "Christophe Closset",
+        "display_name": null,
+        "email": "christophe.closset@intl.att.com",
+        "username": "ChrisC"
+      },
+      "updated": "2020-04-28 08:12:06.000000000",
+      "in_reply_to": "b78c2a98_9f365952",
+      "unresolved": true
+    },
+    {
+      "id": "4560761f_74df63a9",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "Hmm last time when we spoke about this this password was supposed to be obtained in runtime right?\n\nThen it's kind of unclear for me how we managed to go from runtime obrained password to hardcoding an encrypted password.\nBTW. Where is the key to encrypt it? How anyone is supposed to change that?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-28 16:46:07.000000000",
+      "in_reply_to": "a704540d_d9e5af1f",
+      "unresolved": true
+    },
+    {
+      "id": "40c2550c_c17ee157",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "There is a Portal \"key.properties\" file. The key is coming from there and is used to decrypt the value. Currently, the \"key.properties\" file is in the image. We will externalize this in the Gilian release.",
+      "author": {
+        "account_id": 679,
+        "name": "Sunder Tattavarada",
+        "display_name": null,
+        "email": "statta@att.com",
+        "username": "tattasunder"
+      },
+      "updated": "2020-04-28 19:43:42.000000000",
+      "in_reply_to": "4560761f_74df63a9",
+      "unresolved": true
+    },
+    {
+      "id": "0b0c7d6b_8bd1d6a7",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "Then there is no way you can get this patch merged.\nIf you want to have it merged you need to:\n1) (recommended) stop encrypting your password\nor\n2) (plan minimum) remove key from the image, add it as yet another password using common secret template, put this password in plain text and later encrypt it in init container.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-28 19:55:07.000000000",
+      "in_reply_to": "40c2550c_c17ee157",
+      "unresolved": true
+    },
+    {
+      "id": "e0ce5c24_78a468f8",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "With option 2, we can easily remove the key from the image and mount it from OOM. But, why can't this password be encrypted with the same key. Adding the code in the init container to encrypt using some custom code is a big change at this point.",
+      "author": {
+        "account_id": 679,
+        "name": "Sunder Tattavarada",
+        "display_name": null,
+        "email": "statta@att.com",
+        "username": "tattasunder"
+      },
+      "updated": "2020-04-28 21:18:03.000000000",
+      "in_reply_to": "0b0c7d6b_8bd1d6a7",
+      "unresolved": true
+    },
+    {
+      "id": "fbfe7926_92a7f177",
+      "file_path": "kubernetes/portal/charts/portal-app/values.yaml",
+      "patchset_number": 1,
+      "line": 57,
+      "message": "The change would be relatively simple. I can help with it if you face any issues.\n\nThere are a few reasons why you shouldn't do this. As you store your encryption key in the image it's compromised by design which means that you are mishandling your cryptography - which means it's a bug and we cannot accept a new bugs in OOM.\n\nSecondly, think a while about a user who would like to deploy ONAP in production. How he is supposed to change this password? How we can know where is the key, which algorithm has been used etc?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-28 21:22:59.000000000",
+      "in_reply_to": "e0ce5c24_78a468f8",
+      "unresolved": true
+    }
+  ]
+}

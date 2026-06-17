@@ -1,0 +1,42 @@
+{
+  "id": "oom%2Foffline-installer~master~I2455985281e24c5d9d40e5d807b07700b4fb8aa6",
+  "change_id": "I2455985281e24c5d9d40e5d807b07700b4fb8aa6",
+  "_number": 81834,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "79ddcc48_19989a28",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "Why have you used \"command\" if there is native ansible module 'yum', it has 'update_cache' opt.\n\nSecondly patch above is a workaround not solution for the real problem which is corrupted resources files. I think we need to further improve resource uploading to be a tansactional and atomic operation with all files not being corrupted as a prereq for successfull transaction 'commit'. Why did problem described in OOM-1689 occur? Some upload process automation issue? Disk issue?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-08 09:26:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a45bdae4_b4aa8ce5",
+      "file_path": "ansible/roles/package-repository/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "update_cache is not exactly \"clean all\" cache. \nThis commit is not a workaround, it's rather improvement to get issue visible directly when it appears.  The original trigger for this problem as described in OOM-1689 is caused by not properly populated platform, but we saw several other issues with different rootcause in the past where repos were not working properly. This commit will make it visible where it should be.",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-03-08 13:50:48.000000000",
+      "in_reply_to": "79ddcc48_19989a28",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "ccsdk%2Foran~master~I1bd74a4b7f4454accb0a9b04cd37fe5d95700885",
+  "change_id": "I1bd74a4b7f4454accb0a9b04cd37fe5d95700885",
+  "_number": 138760,
+  "change_comments": [
+    {
+      "id": "48d9d639_93236268",
+      "patchset_number": 1,
+      "message": "Looks good to me,but would appreciate if someone from onap team would review and add a +1",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2024-08-15 15:28:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "8213ee83_5dc74d8e",
+      "file_path": "a1-policy-management/src/main/java/org/onap/ccsdk/oran/a1policymanagementservice/SpringContextProvider.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "Not really a comment, just a NOTE: We had a interesting problem with this approach on the Jenkins environment where tests would not run, because this get would return NULL. (Locally, in WSL an some VMs it would work just fine)\nEven after adding the @DependsOn which should load those beans before, and avoid the null. \nBut in the telemetry case, the class dependencies were multiple and somehow unexpected. I suspected it was a concurrency/timing problem on a different cpu architecture?",
+      "author": {
+        "account_id": 7629,
+        "name": "Francesco Davide Lapenta",
+        "display_name": null,
+        "email": "francesco.lapenta@est.tech",
+        "username": "lapentafd"
+      },
+      "updated": "2024-08-15 13:05:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d3f7099d_ab63c451",
+      "file_path": "a1-policy-management/src/main/java/org/onap/ccsdk/oran/a1policymanagementservice/SpringContextProvider.java",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "In this case the applicationcontext is used only by the non-spring managed objects to create a bean. So there no possibility of circular/dependent bean referencing.\n\nIf the application context is passed to some other bean to which we don't have much control, the same issue could still happen.",
+      "author": {
+        "account_id": 8109,
+        "name": "Aravindhan Ayyanathan",
+        "display_name": " Aravindhan Ayyanathan",
+        "email": "aravindhan.a@est.tech",
+        "username": "aravind.est"
+      },
+      "updated": "2024-08-15 14:25:36.000000000",
+      "in_reply_to": "8213ee83_5dc74d8e",
+      "unresolved": false
+    }
+  ]
+}

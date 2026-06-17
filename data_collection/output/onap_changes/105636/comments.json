@@ -1,0 +1,1674 @@
+{
+  "id": "oom~master~I318d72830d5002f50597e23e0753e292f8b47c53",
+  "change_id": "I318d72830d5002f50597e23e0753e292f8b47c53",
+  "_number": 105636,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f59687ae_65231d94",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "I'm not sure to understand why we delete PVC here...",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-09 07:45:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "da6cb429_7850a466",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "The reason is that when we apply \"helm upgrade --force\", statefulset and old PV of mariadb-galera (release E) will be deleted, but the old PVC will remain in \"Terminating phase forever\". After the upgrade, new statefulset and new PVs are created, but this new PVs cannot be bound to any PVCs since the old PVCs are not automatically deleted (old PVCs of statefulset can only be deleted by command \"kubectl delete pvc\"). Only when old PVCs are deleted and new PVCs are created that they can bind to the new PVs. This is the feature of current kubernetes version, so hopefully future version might help to adjust this feature.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-09 12:19:13.000000000",
+      "in_reply_to": "f59687ae_65231d94",
+      "unresolved": true
+    },
+    {
+      "id": "a63ce9e4_b95da89b",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "OK cool!",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-09 13:10:25.000000000",
+      "in_reply_to": "da6cb429_7850a466",
+      "unresolved": false
+    },
+    {
+      "id": "bd29ee6c_b8cd8cd9",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.sh",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "why we need a shell script that will run to just create a file in the pod instead of providing the yaml file directly?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 09:14:27.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c66c0c63_a693018c",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.sh",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "good question ;)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-14 13:29:08.000000000",
+      "in_reply_to": "bd29ee6c_b8cd8cd9",
+      "unresolved": true
+    },
+    {
+      "id": "3971e309_403ba890",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "couldn't we just grab the yaml or go template output of this command to be sure that we are operating on exactly what we've just created?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 14:15:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cf1a446a_4913e1bb",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "nope, don't hardcode the namespace in which we operate;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 14:15:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "201da112_9ebb43bc",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "don't we really have a better method of checking if the new instance is ready than greppigng through the logs?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 14:15:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c258baa9_68fdb896",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "namespace hardcoded\n\npersonally I'd prefer yaml output or even better the exact path in format",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 14:15:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0ed8f36a_c294dc71",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "same",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 14:15:12.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4db4d78e_db8c040b",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.sh",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "I agree with you. I can modify the code for this suggestion.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-14 14:41:34.000000000",
+      "in_reply_to": "c66c0c63_a693018c",
+      "unresolved": true
+    },
+    {
+      "id": "93a57a1a_7e2116c1",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "I don't understand your question.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-14 14:41:34.000000000",
+      "in_reply_to": "3971e309_403ba890",
+      "unresolved": true
+    },
+    {
+      "id": "94b6e4b6_4332d9d7",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 35,
+      "message": "This and other question about namespace will be edited.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-14 14:41:34.000000000",
+      "in_reply_to": "cf1a446a_4913e1bb",
+      "unresolved": true
+    },
+    {
+      "id": "14c3a7dd_4b09c3b0",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "There is another way to check some variables' value, e.g. cluster size, within the mariadb-galera database. If the cluster size reach the expected value, the condition is satisfied. Does this approach is better than checking the log?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-14 14:41:34.000000000",
+      "in_reply_to": "201da112_9ebb43bc",
+      "unresolved": true
+    },
+    {
+      "id": "23896b31_812d7445",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Do you mean we'd rather use some thing like {{ include \"common.namespace\" . }} ?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-14 14:41:34.000000000",
+      "in_reply_to": "c258baa9_68fdb896",
+      "unresolved": true
+    },
+    {
+      "id": "1d8f15e4_53ceeb7b",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "So as a result of grep you can get more than one result due to some mistake of someone or unique configuration. If you take output from the create command you should have the exact name that should be used and you don't need to grep for it",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 15:33:26.000000000",
+      "in_reply_to": "93a57a1a_7e2116c1",
+      "unresolved": true
+    },
+    {
+      "id": "6cdd375f_174e7684",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "yup, sounds better",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 15:33:26.000000000",
+      "in_reply_to": "14c3a7dd_4b09c3b0",
+      "unresolved": true
+    },
+    {
+      "id": "bce629e5_f17f1b81",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "nope. I mean kubectl ... -o yaml | ...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-14 15:33:26.000000000",
+      "in_reply_to": "23896b31_812d7445",
+      "unresolved": true
+    },
+    {
+      "id": "39db02bd_ab44c541",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "not that I complain once again but I believe that if you put this as a resource in a separate file this whole construct would be more readable;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-15 22:50:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bd37bc2e_4893c3ec",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "isn't this whole container description exactly the same as we already have in statefulset.yaml? If yes then maybe a helper template would be useful just to make sure that we have a single source of truth?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-15 22:50:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "59e3fdeb_bbf63a11",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "how about extracting this to a shell script that you will just provide as a resource? DOn't you think that it would be a little bit more readable this way?;)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-15 22:51:56.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1977066f_ddbe7dd4",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "I thought I put the content of this mariadb-upgrade-deployment.yaml file in a separate file located in the resource folder from my submitted version. Not sure why it appear like that. @Sylvain, did you modify the submitted code?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-16 15:41:30.000000000",
+      "in_reply_to": "39db02bd_ab44c541",
+      "unresolved": true
+    },
+    {
+      "id": "9a926c68_0da47237",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "Again I submitted a different version of this file. The submitted content is like this:\n      - name: {{ include \"common.name\" . }}\n        image: \"{{ include \"common.repository\" . }}/{{ .Values.image }}\"\n        ports:\n        - containerPort: {{ .Values.service.internalPort }}\n          name: {{ .Values.service.portName }}\n        - containerPort: {{ .Values.service.sstPort }}\n          name: {{ .Values.service.sstPortName }}\n        - containerPort: {{ .Values.service.replicationPort }}\n          name: {{ .Values.service.replicationName }}\n        - containerPort: {{ .Values.service.istPort }}\n          name: {{ .Values.service.istPortName }}\n        env:\n        - name: POD_NAMESPACE\n          valueFrom:\n                fieldRef:\n                  apiVersion: v1\n                  fieldPath: metadata.namespace\n        - name: MYSQL_USER\n          value: {{ default \"\" .Values.config.userName | quote }}\n        - name: MYSQL_PASSWORD\n          valueFrom:\n                secretKeyRef:\n                  name: {{ template \"common.fullname\" . }}\n                  key: user-password\n        - name: MYSQL_DATABASE\n          value: {{ default \"\" .Values.config.mysqlDatabase | quote }}\n        - name: MYSQL_ROOT_PASSWORD\n          valueFrom:\n                secretKeyRef:\n                  name: {{ template \"common.fullname\" . }}\n                  key: db-root-password\n      subdomain: {{ .Values.service.name }}\n      hostname: {{ .Values.nameOverride }}-upgrade-deployment\n\n* You can notice that the content from MYSQL_USER to MYSQL_ROOT_PASSWORD is not similar to the statefulset.yaml in the master branch, but is similar to the statefulset.yaml in the El Alto branch. As I have explained to Sylvain from previous message (https://gerrit.onap.org/r/c/oom/+/104905). The reason is that using the value of environment with \"envFromSecretFast\" (from the master branch) is not applicable because they rely on mariadb-galera-db-user-credentials configmaps to exists. However, mariadb-galera-db-user-credentials only appears in the post-upgrade, and this mariadb-upgrade-deployment.yaml is created in a pre-upgrade process, where mariadb-galera-db-user-credentials is not created yet. In this case, I must use the same value as used in El Alto release in order to retrieve available secrets and configmaps existing before the helm upgrade, as following:\n- name: MYSQL_USER\n          value: {{ default \"\" .Values.config.userName | quote }}\n        - name: MYSQL_PASSWORD\n          valueFrom:\n                secretKeyRef:\n                  name: {{ template \"common.fullname\" . }}\n                  key: user-password\n        - name: MYSQL_ROOT_PASSWORD\n          valueFrom:\n                secretKeyRef:\n                  name: {{ template \"common.fullname\" . }}\n                  key: db-root-password",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-16 15:41:30.000000000",
+      "in_reply_to": "bd37bc2e_4893c3ec",
+      "unresolved": true
+    },
+    {
+      "id": "a0c79b1e_312ab8e1",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "I will modify that.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-16 15:50:25.000000000",
+      "in_reply_to": "59e3fdeb_bbf63a11",
+      "unresolved": true
+    },
+    {
+      "id": "443baaaf_0facf70c",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "I have moved all the content into a separate file named \"create-deployment.yml\" located in the resources folder. Please check Patch Set 4.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:30:30.000000000",
+      "in_reply_to": "1977066f_ddbe7dd4",
+      "unresolved": false
+    },
+    {
+      "id": "33854a5d_5777e4e8",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "Due to the above explanation, the template of the mariadb-galera-upgrade-deployment is slightly different from the statefulset. I am not sure if writing a helper here would actually create a single source of truth due to different set of parameters between the deployment and statefulset. Please check it in Patch Set 4",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:30:30.000000000",
+      "in_reply_to": "9a926c68_0da47237",
+      "unresolved": true
+    },
+    {
+      "id": "e02eca53_a749076f",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "I have move all the command into a shell script named \"upgrade-scripts.sh\" located in the resources folder. Please check Patch Set 4",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:30:30.000000000",
+      "in_reply_to": "a0c79b1e_312ab8e1",
+      "unresolved": false
+    },
+    {
+      "id": "e66b83a7_603474bd",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "Sorry I made some mistake during submitting the code. Please check PS 6 instead.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:54:34.000000000",
+      "in_reply_to": "443baaaf_0facf70c",
+      "unresolved": false
+    },
+    {
+      "id": "20a64f61_91769aea",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "Sorry I made some mistake during submitting the code. Please check PS 6 instead.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:54:34.000000000",
+      "in_reply_to": "33854a5d_5777e4e8",
+      "unresolved": true
+    },
+    {
+      "id": "0c95b915_2e64431d",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "Sorry I made some mistake during submitting the code. Please check PS 6 instead.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 18:54:34.000000000",
+      "in_reply_to": "e02eca53_a749076f",
+      "unresolved": false
+    },
+    {
+      "id": "4d3a0fd9_2d2a1344",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 6,
+      "line": 42,
+      "message": "Hmm how do we deal with the change of password during migration? SHouldn't we retrieve the old password an place it in a secret instead of creating a new one which may cause some bumpy ride for our clients?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-20 19:59:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "616be345_edeca857",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 6,
+      "line": 3,
+      "message": "please stick to 80 columns so that it's at least a little bit readable...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-20 19:59:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e14ece2d_99d8107b",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 6,
+      "line": 62,
+      "message": "whitespace",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-20 19:59:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f29c3d3f_f9a2ec2c",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 6,
+      "line": 42,
+      "message": "I think this file actually retrieves the old password from the secret in the prev-upgrade cases, where old resources are not deleted. It did not create any new one. Can you explain more what are the issues?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-04-20 20:35:29.000000000",
+      "in_reply_to": "4d3a0fd9_2d2a1344",
+      "unresolved": true
+    },
+    {
+      "id": "453435c6_f569540c",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 6,
+      "line": 42,
+      "message": "well yeah that's true but after this \"temporary deploymen we are spinning a new mariadb-galera instance right? and this new instance will have a new password, no?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-04-29 14:10:49.000000000",
+      "in_reply_to": "f29c3d3f_f9a2ec2c",
+      "unresolved": true
+    },
+    {
+      "id": "8d787f03_c8a49b53",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "remove last dash",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-04-29 14:10:57.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "adf7615e_fb226bb6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 10,
+      "line": 1,
+      "message": "please reformat this to 80 columns",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-04 12:58:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3de75ed2_ee29725c",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 10,
+      "line": 17,
+      "message": "I'm not convinced to use latest.\n1) I'd prefer a well defined version\n2) This should go to values not be hardcoded here",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-04 12:58:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a5d6c8ba_b02b86fb",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 10,
+      "line": 64,
+      "message": "hey we already have it in values. WHy we aren't using this?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-04 12:58:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4ddb1a6a_7d3b3d8d",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 10,
+      "line": 17,
+      "message": "thats waht I asked (to use global version) in sdnc I guess",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-04 14:25:01.000000000",
+      "in_reply_to": "3de75ed2_ee29725c",
+      "unresolved": true
+    },
+    {
+      "id": "296da3d7_ff758b4f",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 10,
+      "line": 64,
+      "message": "I prefer to have it global so we can manage it globally (obvious is obvious) as mariadb, dgbuilder, namegen, sdnc will need it",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-04 14:25:01.000000000",
+      "in_reply_to": "a5d6c8ba_b02b86fb",
+      "unresolved": true
+    },
+    {
+      "id": "d0e59141_63f49ce4",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 10,
+      "line": 64,
+      "message": "Fully agree",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-04 16:35:26.000000000",
+      "in_reply_to": "296da3d7_ff758b4f",
+      "unresolved": true
+    },
+    {
+      "id": "02639e1b_1fd51fef",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 3,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 01:26:13.000000000",
+      "in_reply_to": "e66b83a7_603474bd",
+      "unresolved": false
+    },
+    {
+      "id": "b058a72e_5a3ed499",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 3,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 01:26:13.000000000",
+      "in_reply_to": "0c95b915_2e64431d",
+      "unresolved": false
+    },
+    {
+      "id": "56575462_37a127a5",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 10,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 15:14:54.000000000",
+      "in_reply_to": "adf7615e_fb226bb6",
+      "unresolved": false
+    },
+    {
+      "id": "c52a232e_a3eaeb52",
+      "file_path": "kubernetes/common/mariadb-galera/templates/configmap.yaml",
+      "patchset_number": 6,
+      "line": 30,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 15:14:54.000000000",
+      "in_reply_to": "8d787f03_c8a49b53",
+      "unresolved": false
+    },
+    {
+      "id": "6f0c6d23_a8f9d375",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 6,
+      "line": 62,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 15:14:54.000000000",
+      "in_reply_to": "e14ece2d_99d8107b",
+      "unresolved": false
+    },
+    {
+      "id": "9c92b394_68536fc5",
+      "file_path": "kubernetes/common/mariadb-galera/templates/job.yaml",
+      "patchset_number": 10,
+      "line": 17,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 15:14:54.000000000",
+      "in_reply_to": "4ddb1a6a_7d3b3d8d",
+      "unresolved": false
+    },
+    {
+      "id": "af5d8464_b978899b",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 10,
+      "line": 64,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-07 15:14:54.000000000",
+      "in_reply_to": "d0e59141_63f49ce4",
+      "unresolved": false
+    },
+    {
+      "id": "14791234_029e4048",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "please use common templates with a suffix",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1f953898_d7462a32",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 10,
+      "message": "please use common.selector\n\ndon't would we catch also statefulset pods with this selector?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2e08ab9e_42fcc821",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 14,
+      "message": "please use common.templateMetadata",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "719095c0_170037c4",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "I still believe it would be better with json output and jq but we can start with this and improve later if Krzysztof is OK",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "08f0d861_993ac5cc",
+      "file_path": "kubernetes/common/mariadb-galera/values.yaml",
+      "patchset_number": 11,
+      "line": 45,
+      "message": "you should use \"busyboxImage\" (not capital B)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "04f03aea_0cae6fae",
+      "file_path": "kubernetes/common/mariadb-galera/values.yaml",
+      "patchset_number": 11,
+      "line": 46,
+      "message": "you should use \"busyboxRepository\" (not capital B)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cc86806e_3bc17080",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 11,
+      "line": 60,
+      "message": "you should use \"busyboxImage\" (not capital B)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0028d0b2_5c0ecb4e",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 11,
+      "line": 61,
+      "message": "you should use \"busyboxImage\" (not capital B)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-05-13 07:03:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "936180c9_d82f52f6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 37,
+      "message": "use directly secret name without common secret template here",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-13 14:18:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3048873f_471502ed",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "would be awesome to split those variables with empty lines",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-13 14:18:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "918e2ff9_41b754f3",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "I cannot use the common templates which contains dict data here since all the data are rendered into a long string text and results in an error \"could not sparse YAML to JSON\". I can only use template which contains one line string data such as common.name or common.fullnames. Can we somehow explicitly specify the labels, selector, ... instead of using common template in this case.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "14791234_029e4048",
+      "unresolved": true
+    },
+    {
+      "id": "6a9b8d22_c84344b3",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 10,
+      "message": "same here",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "1f953898_d7462a32",
+      "unresolved": true
+    },
+    {
+      "id": "5d99e5c9_7506e0c6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 14,
+      "message": "same here.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "2e08ab9e_42fcc821",
+      "unresolved": true
+    },
+    {
+      "id": "ee652f1d_e09676f4",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "sure",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "3048873f_471502ed",
+      "unresolved": false
+    },
+    {
+      "id": "1596ff6d_8f285c6e",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "I keep this for now unless if Krzysztof has no comment.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "719095c0_170037c4",
+      "unresolved": true
+    },
+    {
+      "id": "57db1a82_8a9c3b9a",
+      "file_path": "kubernetes/common/mariadb-galera/values.yaml",
+      "patchset_number": 11,
+      "line": 45,
+      "message": "changed.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-13 21:18:16.000000000",
+      "in_reply_to": "08f0d861_993ac5cc",
+      "unresolved": false
+    },
+    {
+      "id": "7780cd4a_227a09fc",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "Hmm that's interesting. It should be possible",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-13 22:50:18.000000000",
+      "in_reply_to": "918e2ff9_41b754f3",
+      "unresolved": true
+    },
+    {
+      "id": "80d9a881_de3619a6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "I support Sylvain's point of view",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-05-13 22:50:18.000000000",
+      "in_reply_to": "1596ff6d_8f285c6e",
+      "unresolved": true
+    },
+    {
+      "id": "ab6ec8ab_5a7a300a",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 3,
+      "message": "I could use the common.resourceMetadata with the nonindent 4 as Sylvain suggestion.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-21 02:43:22.000000000",
+      "in_reply_to": "7780cd4a_227a09fc",
+      "unresolved": false
+    },
+    {
+      "id": "ed9534f5_73f00d02",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 10,
+      "message": "As agree we keep the selector as-is now.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-21 02:43:22.000000000",
+      "in_reply_to": "6a9b8d22_c84344b3",
+      "unresolved": false
+    },
+    {
+      "id": "de566b8a_8437aa40",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 14,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-21 02:43:22.000000000",
+      "in_reply_to": "5d99e5c9_7506e0c6",
+      "unresolved": false
+    },
+    {
+      "id": "f22ef273_d408db80",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 11,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-21 02:43:22.000000000",
+      "in_reply_to": "936180c9_d82f52f6",
+      "unresolved": false
+    },
+    {
+      "id": "1fd33349_c3ddf0e6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "I have used jsonpath instead.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-21 02:43:22.000000000",
+      "in_reply_to": "80d9a881_de3619a6",
+      "unresolved": false
+    },
+    {
+      "id": "7c8f6864_443615b1",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 23,
+      "message": "I have used patch instead of sed",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-28 03:57:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "584145f6_dc62df47",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 105,
+      "message": "I have used jsonpath instead of grep.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-05-28 03:57:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "63305859_444742ff",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 14,
+      "line": 9,
+      "message": "impossible",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9c91d961_f076c10a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 14,
+      "line": 10,
+      "message": "immutable",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dd37734d_678e85e6",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 14,
+      "line": 42,
+      "message": "shouldn't we use here credentials from the mariadb-galera instance that is already running?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "86ee5b1d_74b029c2",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 14,
+      "line": 47,
+      "message": "same here.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f4989379_21405041",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 16,
+      "message": "@Sylvain\nHmm I think we need clarify what upgrade means for us\n\nWe have two ways to go:\n1) You don't modify any of incomming passwords and try figure them out from a running instance\n2) You depend on a user to provide all required passwords that he wants to have to helm charts on his own\n\nWhat are your thoughts?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "33f202cd_9c515271",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "Please reference a secret by name not by index we have a template for it.",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-02 22:38:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "107a4acb_74a6fe73",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 14,
+      "line": 9,
+      "message": "OK.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-03 00:23:45.000000000",
+      "in_reply_to": "63305859_444742ff",
+      "unresolved": true
+    },
+    {
+      "id": "e9096a23_4734294a",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 14,
+      "line": 10,
+      "message": "OK.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-03 00:23:45.000000000",
+      "in_reply_to": "9c91d961_f076c10a",
+      "unresolved": true
+    },
+    {
+      "id": "f76d3615_8af1d6e4",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 14,
+      "line": 42,
+      "message": "We use the same credential of the already-running mariadb instance. It is just this credential is stored in a different secret. The reason is that when the old release is deleted, the secret of old release is also deleted. Therefore, I create a new secret storing the old value of credential here.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-03 00:23:45.000000000",
+      "in_reply_to": "dd37734d_678e85e6",
+      "unresolved": true
+    },
+    {
+      "id": "22ec5b33_4239fe25",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 16,
+      "message": "I remembered discussing the first point with you from the beginning. We keep the new incoming password. But then you said the temporary deployment will have the old password, while the new statefulset of new release will have the new password and they create a discrepancy. Do we need to discuss about this more?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-03 00:23:45.000000000",
+      "in_reply_to": "f4989379_21405041",
+      "unresolved": true
+    },
+    {
+      "id": "4fd42cc1_1df078d1",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "can you tell me that template?",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-03 00:23:45.000000000",
+      "in_reply_to": "33f202cd_9c515271",
+      "unresolved": true
+    },
+    {
+      "id": "1e97eea7_d0b37ce4",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "common.secret.getSecretNameFast with secret uid",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:19:07.000000000",
+      "in_reply_to": "4fd42cc1_1df078d1",
+      "unresolved": true
+    },
+    {
+      "id": "3905ab1d_4e020314",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 23,
+      "message": "good for me",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:19:07.000000000",
+      "in_reply_to": "7c8f6864_443615b1",
+      "unresolved": true
+    },
+    {
+      "id": "55a99808_7b944998",
+      "file_path": "kubernetes/common/mariadb-galera/resources/create-deployment.yml",
+      "patchset_number": 14,
+      "line": 37,
+      "message": "reference the secret created and no if here",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "642fe44d_17ec47de",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 15,
+      "message": "remove if and create\nkubectl create secret generic '{{ include \"common.fullname\" . }}'-temp-upgrade-root' --from-literal=password=$MYSQL_ROOT_PASSWORD",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b4502d41_282cfdbf",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 26,
+      "message": "remove if and create\nkubectl create secret generic '{{ include \"common.fullname\" . }}'-temp-upgrade-user' --from-literal=login=$MYSQL_USER --from-literal=password=$MYSQL_PASSWORD",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "22572411_abfeeab8",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 119,
+      "message": "delete the right ones and remove sleep 10",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "15cadaa6_9cbae512",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 119,
+      "message": "delete them in post-upgrade-script.sh when the deployment is deleted",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-03 14:56:11.000000000",
+      "in_reply_to": "22572411_abfeeab8",
+      "unresolved": true
+    },
+    {
+      "id": "d5768786_b55d227b",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 18,
+      "message": "done.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-05 05:25:17.000000000",
+      "in_reply_to": "1e97eea7_d0b37ce4",
+      "unresolved": true
+    },
+    {
+      "id": "f87930c4_1c29a97c",
+      "file_path": "kubernetes/common/mariadb-galera/resources/post-upgrade-script.sh",
+      "patchset_number": 14,
+      "line": 23,
+      "message": "Done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-05 05:25:17.000000000",
+      "in_reply_to": "3905ab1d_4e020314",
+      "unresolved": false
+    },
+    {
+      "id": "a79c2546_0b9f6b7c",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 15,
+      "message": "done.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-05 05:25:17.000000000",
+      "in_reply_to": "642fe44d_17ec47de",
+      "unresolved": true
+    },
+    {
+      "id": "7441e985_862a1eaf",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 26,
+      "message": "done",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-05 05:25:17.000000000",
+      "in_reply_to": "b4502d41_282cfdbf",
+      "unresolved": true
+    },
+    {
+      "id": "031c5de4_81c83a4f",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 14,
+      "line": 119,
+      "message": "done.",
+      "author": {
+        "account_id": 6339,
+        "name": "Tri Nguyen",
+        "display_name": null,
+        "email": "tri.nguyen@tatacommunications.com",
+        "username": "tringuyen"
+      },
+      "updated": "2020-06-05 05:25:17.000000000",
+      "in_reply_to": "15cadaa6_9cbae512",
+      "unresolved": true
+    },
+    {
+      "id": "f74c5205_7b1a8d50",
+      "file_path": "kubernetes/common/mariadb-galera/resources/upgrade-scripts.sh",
+      "patchset_number": 15,
+      "line": 9,
+      "message": "I'm not a fan of printing plaintext passwords to logs but I consider this to be a PoC and this may ease debugging process so let it stay...",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-06-09 21:34:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

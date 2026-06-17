@@ -1,0 +1,144 @@
+{
+  "id": "policy%2Fmodels~master~Iae667be02cced57b0b9578e0a96c5cda38111b97",
+  "change_id": "Iae667be02cced57b0b9578e0a96c5cda38111b97",
+  "_number": 82979,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "88cdce7f_1fb5c6dd",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpGroup.java",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "We can use lombok to do this.\nFor no args constructor:\n@NoArgsConstructor\n\nFor copy constructor:\n@Builder(toBuilder = true)\nclass Foo {\n    // fields, etc\n}\nFoo foo = getReferenceToFooInstance();\nFoo copy = foo.toBuilder().build();",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 10:45:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9f70cbfe_fb5fab2b",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpInstanceDetails.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "Same comment",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 10:45:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4a72d9e0_f191e5e8",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpSubGroup.java",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "Same comment.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 10:45:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ca57a1bd_a9342e1a",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/Policy.java",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "We don't need this class as we will be using ToscaPolicy.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 10:45:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "40aaa8dc_ebc3e587",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/Policy.java",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "Same comment",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 10:45:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0ecfb7d6_984cbbd6",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpGroup.java",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "I'm not sure I see how @Builder helps, as we want to make a deep copy of all of the elements, using their respective copy constructors.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-22 12:32:28.000000000",
+      "in_reply_to": "88cdce7f_1fb5c6dd",
+      "unresolved": false
+    },
+    {
+      "id": "fe4e406d_25389cca",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/Policy.java",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "Actually, I'm beginning to think that we want to go in the opposite direction, introducing several different \"Policy\" classes.  My concern is that, in different contexts, we're supposed to be populating different fields.  Using the same class for each is confusing.\n\nFor instance, instance in the query, we return supported types, which is just the type & version, AND we return policies, which are name, type, type version, and implementation. In the deploy, it's just the policy name & version.  In the PDP_STATUS message, we have the supported types, which is the same as the query, I believe, but we also have a list of policies, which is the policy name, type, type version, and properties.  And finally, we have the PDP_UPDATE message, that has a list of policies that appear to have the same structure as the second list in the PDP_STATUS message.\n\nBased on the above, I see the need for four distinct classes, none of which seem to match the fields in ToscaPolicy: type/version, name/type/type-version/implementation, name/version, name/type/type-version/properties.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-03-22 12:52:53.000000000",
+      "in_reply_to": "ca57a1bd_a9342e1a",
+      "unresolved": false
+    },
+    {
+      "id": "939e9fb8_79456489",
+      "file_path": "models-pap/src/main/java/org/onap/policy/models/pap/concepts/PdpGroup.java",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "Ok got it. Thanks!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2019-03-22 13:12:36.000000000",
+      "in_reply_to": "0ecfb7d6_984cbbd6",
+      "unresolved": false
+    }
+  ]
+}

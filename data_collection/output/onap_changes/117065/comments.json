@@ -1,0 +1,807 @@
+{
+  "id": "cps~master~Iaac6cb19d8d561f3baf8bbf57a114a85a1995063",
+  "change_id": "Iaac6cb19d8d561f3baf8bbf57a114a85a1995063",
+  "_number": 117065,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "27179382_96884543",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "too many logic was added to a simple POJO while it was intended to move all the logic into builder utility\n\nplease move all of it (incl immutable data manipulation) into DataNodeBuilder class.\nfollowing methods are expected (names may differ):\n\naddChildNode(DataNode currentDataNode, DataNode childDataNode)\nsetAttributeValue(DataNode currentDataNode, String attrName, Object attrValue) ->\nsame method to be invoked for both single Object and a collection as attrValue\n\ntake into account the attributes setting is a single action per attribute name,\nno dynamic list value updating is expected for attributes - see comment in YangUtils",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-22 15:55:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "42368a7d_907bb8ad",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "leaf-list defines the collection of simple types,\ntwo-stages (first placeholder, then list values one-by-one) is extra here.\ncreate a collection of values and set under attribute by single call,\nall within current method no need to invoke createDataNodeTreeFromNormalizedNode()",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-22 15:55:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4f681b7a_3e3d0225",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 1,
+      "line": 122,
+      "message": "this method contains error which should be fixed.\n\nthis method is expected to create a DataNode object representing current which then\nthen children nodes to be populated into this object.\ninstead all the children of current container node are populated under container's parent,\nmaking current node information (incl xpath) being lost.\n\nit's a bug to be fixed.",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-22 15:55:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "53e77991_a683e3c0",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/utils/YangUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "this test is incomplete.\n\nit expected to validate all the supported node types are parsed as expected\n(container, keyed list, leaf and leaf-list).\n\nplease pay attention to the bug case described in comment for YangUtils.inspectContainer method\nthis case with transitional container node may require both test yang model and data update",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-22 15:55:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6f98a0d9_2caa858e",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "move to utils package \nthis artifact does not belong to API",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-22 15:59:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a2576be4_5182a4be",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "from this builder class point of view it is just a DataNode (not a parent)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "09cede11_aa75cbd5",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "xPath\n\n(capital P)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "800c7727_a6ad523e",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "explain that the chidlNode will be added to the collection of child nodes for the parent too",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5cffec32_f28fb6b1",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "ok, to me it seems more natural in the DataNode itself, that it knows how to add a child but since we have a builder and what to keep this a simple PoJo lets move it to the builder",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": "27179382_96884543",
+      "unresolved": true
+    },
+    {
+      "id": "f9156406_51ddc595",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 102,
+      "message": "Below is just a brain-dump. Looking for reactions....\nI am not sure about these now, these are like the attributes of the Pojo but should it go to the builder too as it is 'business logic' ?! I think it would be all a lot easier to have just oen class no need for a builder no need for decision what goes where... \n\nBut if we do have a builder, it should just about creating NEW objects. not modifying existing objects. and in from taht perspective these method belong here correct?\n\nhence the dilemma with the create child, It does 2 things: create a child AND add it to the parent! Weighing everything up that probably does belong to the builder class (assuming we agree we need one)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea4624f7_73a12ffc",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 1,
+      "line": 122,
+      "message": "can you explain what exactly is lost, the unit tets are passing. But maybe the tests don't cover it...r",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": "4f681b7a_3e3d0225",
+      "unresolved": true
+    },
+    {
+      "id": "10b48737_90c38e31",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Scenarios (test names) are full sentences start with Capital and end in full stop",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb8d65e8_ddde1fa7",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "no 'parent' !",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f55de0a2_6ce1d479",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "a data node is created for a given xPath",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "96c5524e_47d1abd1",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "data node",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b3a72bec_a3513fb1",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 40,
+      "message": "follow suggestion from previous test",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6fbd04d4_2d6bdf2d",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "you can assert it contain the correct child!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "47bbdde9_7ccc8963",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/utils/YangUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "I am still not sure about any bug. The xPaths are verified below!\n\nIt has always bene my intention to handle list, leaves and leaves list in separate user stories. Some already are on the backlog. Although some code already is there to handle it it was not in the scope of this user story to handle all of those.  The purpose of this user story was to REFACTOR what was the Fragment class and use the new DataNode class from the API (and a builder for some reason). Please keep in mind the scope of a user story before commenting\n\nWhat is happening is her that some if this functionality is already 'poc-ed'. No need to throw away that code and we have user stories coming up to flesh out the details and add the required validation etc.",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-22 16:42:55.000000000",
+      "in_reply_to": "53e77991_a683e3c0",
+      "unresolved": true
+    },
+    {
+      "id": "3d907ff8_02e2773f",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 20,
+      "message": "agree",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-01-25 09:16:48.000000000",
+      "in_reply_to": "6f98a0d9_2caa858e",
+      "unresolved": true
+    },
+    {
+      "id": "5b6e2f6c_79ed916d",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "2021",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-01-25 09:16:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fbb05b54_d51febfa",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "This should be just a model class, with no logic inbuilt.",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-01-25 09:16:48.000000000",
+      "in_reply_to": "5cffec32_f28fb6b1",
+      "unresolved": true
+    },
+    {
+      "id": "24f6e6b3_f89d92fc",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 55,
+      "message": "xPath",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-01-25 09:16:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "29a175f3_8da4b1eb",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "bit confusing, reword if you can.",
+      "author": {
+        "account_id": 6862,
+        "name": "Rishi Chail",
+        "display_name": null,
+        "email": "rishi.chail7@gmail.com",
+        "username": "Rishi.Chail"
+      },
+      "updated": "2021-01-25 09:16:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ff030035_71a5e070",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "This story was to replace Fragment class with DataNode. Hence any code change in YangUtils can be taken up as part of another story to store the DataNode.",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 10:26:56.000000000",
+      "in_reply_to": "42368a7d_907bb8ad",
+      "unresolved": true
+    },
+    {
+      "id": "fb24f7e2_441e7fc8",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 1,
+      "line": 122,
+      "message": "As mentioned above, this story is only to replace Fragments with DataNode class. These suggested changes can be taken up in other tasks/stories",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 10:26:56.000000000",
+      "in_reply_to": "ea4624f7_73a12ffc",
+      "unresolved": true
+    },
+    {
+      "id": "d62e02b0_0af9c748",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/utils/YangUtilsSpec.groovy",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "As discussed in YangUtils, the above discussed bug case can be handled in a different task/story.",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 10:26:56.000000000",
+      "in_reply_to": "47bbdde9_7ccc8963",
+      "unresolved": true
+    },
+    {
+      "id": "9e046266_038ed639",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "09cede11_aa75cbd5",
+      "unresolved": false
+    },
+    {
+      "id": "c5f0eaa2_615426e6",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 41,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "800c7727_a6ad523e",
+      "unresolved": false
+    },
+    {
+      "id": "0d0069e8_a4280a4a",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "fbb05b54_d51febfa",
+      "unresolved": false
+    },
+    {
+      "id": "0a0e6faf_19439d13",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 55,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "24f6e6b3_f89d92fc",
+      "unresolved": false
+    },
+    {
+      "id": "910a8193_07938097",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 60,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "29a175f3_8da4b1eb",
+      "unresolved": false
+    },
+    {
+      "id": "9d5a0fda_2c61b42b",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 1,
+      "line": 102,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "f9156406_51ddc595",
+      "unresolved": true
+    },
+    {
+      "id": "0641a697_adb7962d",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "10b48737_90c38e31",
+      "unresolved": false
+    },
+    {
+      "id": "1c64a0f4_76518610",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 28,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "fb8d65e8_ddde1fa7",
+      "unresolved": false
+    },
+    {
+      "id": "74f0c43e_d1fc553a",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 29,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "f55de0a2_6ce1d479",
+      "unresolved": false
+    },
+    {
+      "id": "7dcd051b_85f647bb",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 31,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "96c5524e_47d1abd1",
+      "unresolved": false
+    },
+    {
+      "id": "fd6942dd_e07f2581",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 40,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "b3a72bec_a3513fb1",
+      "unresolved": false
+    },
+    {
+      "id": "6d5c828c_e541333e",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/api/CpsDataNodeBuilderSpec.groovy",
+      "patchset_number": 1,
+      "line": 46,
+      "message": "Ack",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:32:20.000000000",
+      "in_reply_to": "6fbd04d4_2d6bdf2d",
+      "unresolved": false
+    },
+    {
+      "id": "253ed550_3eeb97ad",
+      "file_path": "cps-service/src/main/java/org/onap/cps/api/CpsDataNodeBuilder.java",
+      "patchset_number": 1,
+      "line": 36,
+      "message": "I see the checkstyle failing when this is renamed to xPath. Hence reverted here as well as in DatsNode.",
+      "author": {
+        "account_id": 6738,
+        "name": "aditya puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@bell.ca",
+        "username": "puthuparambil.aditya"
+      },
+      "updated": "2021-01-25 12:52:58.000000000",
+      "in_reply_to": "9e046266_038ed639",
+      "unresolved": false
+    },
+    {
+      "id": "3574aded_93f176b9",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 3,
+      "line": 35,
+      "message": "which one is the builder? this or CpsDataNodeBuilder ?",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-25 13:11:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4113a967_e0849641",
+      "file_path": "cps-service/src/main/java/org/onap/cps/spi/model/DataNode.java",
+      "patchset_number": 3,
+      "line": 50,
+      "message": "since we have builder, why we needs this constructor?",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-25 13:11:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2ac5ef86_c300d196",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/CpsDataNodeBuilder.java",
+      "patchset_number": 3,
+      "line": 20,
+      "message": "this is the builder not an util class. It needs to sit together with the object builder.\nAnd the constructor from the object type created should be only reachable from this builder.\nOtherwise we are not enforcing the use of the builder.",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-25 13:11:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ef81453b_aa35d289",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/CpsDataNodeBuilder.java",
+      "patchset_number": 3,
+      "line": 69,
+      "message": "why CpsDataNodeBuilder  is returning something that is not an cpsDataNode?",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-25 13:11:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db1e9f70_7ae9d8c4",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 3,
+      "line": 54,
+      "message": "why is this builder here?",
+      "author": {
+        "account_id": 6679,
+        "name": "Claudio David Gasparini",
+        "display_name": null,
+        "email": "gasparini24@gmail.com",
+        "username": "cdgasparini"
+      },
+      "updated": "2021-01-25 13:11:05.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "07cd1d3e_f3157f75",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/CpsDataNodeBuilder.java",
+      "patchset_number": 3,
+      "line": 35,
+      "message": "Why does the builder need getter methods?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-25 13:29:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c04e503b_5b6e2617",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 3,
+      "line": 88,
+      "message": "I think this method (and everything that comes with it) should move to the builder, then anything else can remain private in the builder class",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-01-25 13:29:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "feec50f0_13ce5fe5",
+      "file_path": "cps-service/src/main/java/org/onap/cps/utils/YangUtils.java",
+      "patchset_number": 3,
+      "line": 120,
+      "message": "```\n    private void inspectLeafList(final DataNode currentDataNode, final LeafSetNode leafSetNode) {\n        final String leafName = leafSetNode.getNodeType().getLocalName();\n        final Set<Object> leafListValue = ImmutableSet.of(\n            ((Collection<NormalizedNode>) leafSetNode.getValue())\n                .stream().map(NormalizedNode::getValue).collect(Collectors.toSet())\n        );\n        cpsDataNodeBuilder.addLeafValue(leafName, leafListValue); // same method as for leafs\n    }\n```\nyou need just one (!) method, same one to set leaf value for both leaf and leaf-list nodes, \nthis will simplifies the logic significantly",
+      "author": {
+        "account_id": 7362,
+        "name": "Ruslan Kashapov",
+        "display_name": null,
+        "email": "ruslan.kashapov@pantheon.tech",
+        "username": "rkashapov"
+      },
+      "updated": "2021-01-26 08:03:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

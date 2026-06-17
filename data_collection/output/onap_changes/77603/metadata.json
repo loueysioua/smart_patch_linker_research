@@ -1,0 +1,300 @@
+{
+  "id": "policy%2Fcommon~master~I2eadb12ef1c4b07b9e47dc6ebc096acc713299a0",
+  "change_id": "I2eadb12ef1c4b07b9e47dc6ebc096acc713299a0",
+  "_number": 77603,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-01-30 20:14:23.000000000",
+    "updated": "2019-02-06 15:13:21.000000000",
+    "submitted": "2019-02-06 14:55:18.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 4965,
+      "name": "Krzysztof Opasiak",
+      "display_name": null,
+      "email": "k.opasiak@samsung.com",
+      "username": "kopasiak"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "Fix potential race condition",
+  "commit_message": "Fix potential race condition\n\ninit() is currently called outside of synhronized block.\nThis is may lead to race condition as init() creates new bus consumer\n(this.consumer) which is the copied and nulled in stop() synchronized\nblock. This may lead to race condition if:\n\nThread #1   \t     \t     \t       Thread #2\n\nthis.alive = true;\n\t\t\t\t\tthis.alive = false\n\t\t\t\t\tconsumerCopy = this.consumer;\n\nthis.consumer = new Consumer();\n\n\t\t\t\t\t// false\n\t\t\t\t\tif(consumerCopy != null) {\n\t\t\t\t\t    consumerCopy.close();\n\t\t\t\t\t} else {\n\t\t\t\t\t    log.warn();\n\t\t\t\t\t}\n\nAs a result, new BusConsumers are being created but they are never\nclose().\n\nIssue-ID: POLICY-1387\nChange-Id: I2eadb12ef1c4b07b9e47dc6ebc096acc713299a0\nSigned-off-by: Krzysztof Opasiak <k.opasiak@samsung.com>\n",
+  "change_log": {
+    "entry_count": 19,
+    "entries": [
+      {
+        "id": "d01b68d6ffc35fb6be22abe2877500ad2b17788e",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-30 20:14:23.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "12132cd390cfd4e49cedceae1761f2a343ae4be8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 20:18:13.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/394/",
+        "patchset_number": 1
+      },
+      {
+        "id": "266694116c8104507a115bd44e3ecfdedd7d5606",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 20:22:08.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/394/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/394",
+        "patchset_number": 1
+      },
+      {
+        "id": "e925913d718a0ff6052e07b39049809634ee41fb",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-30 21:13:37.000000000",
+        "message": "Uploaded patch set 2: Patch Set 1 was rebased.",
+        "patchset_number": 2
+      },
+      {
+        "id": "7289bfd257ec1cb03dfea3dbb148065a863e3f15",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 21:14:15.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/397/",
+        "patchset_number": 2
+      },
+      {
+        "id": "7aca8ee9a102bc4423a0ffe1586db407e814b59b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-30 21:18:18.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/397/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/397",
+        "patchset_number": 2
+      },
+      {
+        "id": "794d85644d05071d0ccce25dc31d44261e2774c5",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2019-01-31 14:55:42.000000000",
+        "message": "Uploaded patch set 3: Patch Set 2 was rebased.",
+        "patchset_number": 3
+      },
+      {
+        "id": "30639e6718bb82d90f9fc6b664f51b3c788175de",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 14:59:36.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/405/",
+        "patchset_number": 3
+      },
+      {
+        "id": "23ae14ffb28f070a6f5fa930fc83d24fc700e877",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 15:03:23.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/405/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/405",
+        "patchset_number": 3
+      },
+      {
+        "id": "819a9796e795f7d0c6e2c5bef40e3a25b783f7b8",
+        "author": {
+          "account_id": 4965,
+          "name": "Krzysztof Opasiak",
+          "display_name": null,
+          "email": "k.opasiak@samsung.com",
+          "username": "kopasiak"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-01-31 20:18:05.000000000",
+        "message": "Uploaded patch set 4: Patch Set 3 was rebased.",
+        "patchset_number": 4
+      },
+      {
+        "id": "1e73ebd56a3267c830cc5e0999e22ff6fdbd5950",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 20:21:31.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/policy-common-master-verify-java/416/",
+        "patchset_number": 4
+      },
+      {
+        "id": "2d3d1363bdf00e6af908ba8d2d892a2bcdd0f498",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 20:25:29.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-verify-java/416/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-verify-java/416",
+        "patchset_number": 4
+      },
+      {
+        "id": "5b55f6e994672d69ecf2638f429510963299f585",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 18:43:27.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "dff6d159d2b60dc75a4fdda493e77884a88f2b5e",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 18:59:45.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "d5d33b44290c9fa81e5da92545605e17ff0d3055",
+        "author": {
+          "account_id": 2787,
+          "name": "Liam Fallon",
+          "display_name": null,
+          "email": "liam.fallon@est.tech",
+          "username": "liamfallon"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 19:09:48.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "4e9dc8a9d66389f4f1ced7e7a24adff5c52b4dae",
+        "author": {
+          "account_id": 811,
+          "name": "Jim Hahn",
+          "display_name": null,
+          "email": "jrh3@att.com",
+          "username": "jrh3"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 19:12:16.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "d9111756c40cb8b9394c5a54a564f658a1182dcf",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-06 14:53:32.000000000",
+        "message": "Patch Set 4: Code-Review+2",
+        "patchset_number": 4
+      },
+      {
+        "id": "837337688864566a3479822a98e817deab9a25d7",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-06 14:55:18.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 4
+      },
+      {
+        "id": "1730c08820897291f32335e4ffe81941ca155347",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-06 15:13:21.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-common-master-merge-java/203/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-common-master-merge-java/203",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

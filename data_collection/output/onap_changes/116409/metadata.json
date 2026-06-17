@@ -1,0 +1,216 @@
+{
+  "id": "ccsdk%2Fcds~master~I6ab002352b3272898ad0b183341ee664652c8ae3",
+  "change_id": "I6ab002352b3272898ad0b183341ee664652c8ae3",
+  "_number": 116409,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2020-12-15 20:52:14.000000000",
+    "updated": "2020-12-17 17:42:50.000000000",
+    "submitted": "2020-12-17 17:11:34.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 6331,
+      "name": "Julien Fontaine",
+      "display_name": null,
+      "email": "julien.fontaine@bell.ca",
+      "username": "jfontaine49"
+    },
+    "submitter": {
+      "account_id": 865,
+      "name": "KAPIL SINGAL",
+      "display_name": null,
+      "email": "ks220y@att.com",
+      "username": "ks220y"
+    }
+  },
+  "subject": "Fixed NoClassDefFoundError when USE_SCRIPT_COMPILE_CACHE is set to false",
+  "commit_message": "Fixed NoClassDefFoundError when USE_SCRIPT_COMPILE_CACHE is set to false\n\nUSE_SCRIPT_COMPILE_CACHE set to false cleans the Class Loader cache after each kotlin script execution.\nWhen several kotlin script are executed in parallel (ie no dependency between them) and USE_SCRIPT_COMPILE_CACHE=false then\nthe class loader from the cache may be deleted before one of those executed kotlin script get the time to finish which to the NoClassDefFoundError.\n\nRemoved cleanupInstance method for kotlin script executors that where causing the class loader to be removed prematurely.\nNow the behaviour is to remove the class loader from the cache only when we publish a new CBA which was already the case when CDS run with a single instance.\nIn cluster mode, a topic has been added to hazelcast to allow the instance publishing the updated CBA to communicate to the other instances by sending a message to clean the class loader\nfor this CBA from their cache.\n\nAdded mutex on kotlin script compilation to fix race condition. For concurrent kotlin script execution each process wanted to compile an executable but it was causing a race condition if a process tries to execute while another still compile. Mutex on the execution path prevent this behaviour\n\nIssue-ID: CCSDK-3052\nSigned-off-by: Julien Fontaine <julien.fontaine@bell.ca>\nSigned-off-by: Jozsef Csongvai <jozsef.csongvai@bell.ca>\nChange-Id: I6ab002352b3272898ad0b183341ee664652c8ae3\n",
+  "change_log": {
+    "entry_count": 13,
+    "entries": [
+      {
+        "id": "2c67ba766540c01fdc86aadd4ac1eeeeefcf10ca",
+        "author": {
+          "account_id": 6331,
+          "name": "Julien Fontaine",
+          "display_name": null,
+          "email": "julien.fontaine@bell.ca",
+          "username": "jfontaine49"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-15 20:52:14.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "157baae8826785e4604d04da3cb9fefe39da02cc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-15 20:56:00.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/529/",
+        "patchset_number": 1
+      },
+      {
+        "id": "d96a3068b4a73c3b1b63cd567dbc201c4caf86af",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-15 20:59:12.000000000",
+        "message": "Patch Set 1: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/529/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/529/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-cds-maven-verify-master-mvn36-openjdk11/529",
+        "patchset_number": 1
+      },
+      {
+        "id": "fdcafff7b9b68447b5872fe6bc9247b52b33bc04",
+        "author": {
+          "account_id": 6331,
+          "name": "Julien Fontaine",
+          "display_name": null,
+          "email": "julien.fontaine@bell.ca",
+          "username": "jfontaine49"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-16 00:16:13.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a9ab670989c06593297455fa9d6be43bb65f17c5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-16 00:18:19.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/531/",
+        "patchset_number": 2
+      },
+      {
+        "id": "d74a71c30efbe8740efe243ca68d088bffca3067",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-16 00:41:35.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/531/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-cds-maven-verify-master-mvn36-openjdk11/531",
+        "patchset_number": 2
+      },
+      {
+        "id": "083d40a9da102b919650aa51a929df554e7dcd50",
+        "author": {
+          "account_id": 865,
+          "name": "KAPIL SINGAL",
+          "display_name": null,
+          "email": "ks220y@att.com",
+          "username": "ks220y"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-16 14:59:41.000000000",
+        "message": "Patch Set 3: Patch Set 2 was rebased",
+        "patchset_number": 3
+      },
+      {
+        "id": "6d70c3c912456287892cc40d9070d557b6c3702b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-16 15:01:42.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/541/",
+        "patchset_number": 3
+      },
+      {
+        "id": "60609604c6362f75eea4a3f1eb36cf36622a57c7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-16 15:24:59.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn36-openjdk11/541/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-cds-maven-verify-master-mvn36-openjdk11/541",
+        "patchset_number": 3
+      },
+      {
+        "id": "7d207b59db991e01deb780682290e82f6b8d2f5b",
+        "author": {
+          "account_id": 6218,
+          "name": "Jozsef Csongvai",
+          "display_name": null,
+          "email": "jozsef.csongvai@bell.ca",
+          "username": "jozsef"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-17 13:41:35.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "808c6e688263230415c8341f2eef8040deaedc8e",
+        "author": {
+          "account_id": 865,
+          "name": "KAPIL SINGAL",
+          "display_name": null,
+          "email": "ks220y@att.com",
+          "username": "ks220y"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-17 17:11:31.000000000",
+        "message": "Patch Set 3: Code-Review+2",
+        "patchset_number": 3
+      },
+      {
+        "id": "f7f3c84b33d0497d7024e15ed2372ce8dd213acd",
+        "author": {
+          "account_id": 865,
+          "name": "KAPIL SINGAL",
+          "display_name": null,
+          "email": "ks220y@att.com",
+          "username": "ks220y"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-12-17 17:11:34.000000000",
+        "message": "Change has been successfully merged by KAPIL SINGAL",
+        "patchset_number": 3
+      },
+      {
+        "id": "efcdf9ae611e40656330eaac6a0df5386e5c837a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-12-17 17:42:50.000000000",
+        "message": "Patch Set 3:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/ccsdk-cds-maven-merge-master/855/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/ccsdk-cds-maven-merge-master/855",
+        "patchset_number": 3
+      }
+    ]
+  }
+}

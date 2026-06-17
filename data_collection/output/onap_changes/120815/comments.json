@@ -1,0 +1,195 @@
+{
+  "id": "oom~master~I7cf2caff461b88326d3ec90c9eea0fd6711f16e5",
+  "change_id": "I7cf2caff461b88326d3ec90c9eea0fd6711f16e5",
+  "_number": 120815,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c9305d5c_49b6ac27",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/resources/config/sdc-controllers-config.json",
+      "patchset_number": 4,
+      "line": 9,
+      "message": "where is the key to decrypt it?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-27 19:53:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dfda76a7_d41b0149",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/resources/config/sdc-controllers-config.json",
+      "patchset_number": 4,
+      "line": 9,
+      "message": "Where is my mind ? 😄 It's fun that it used to work on our windriver lab ... It seems that AAF generates the same key file ? 😮\nMy bad, the key file is returned by AAF initializer, i need to change it totally ... so that we can encrypt it on the fly.\nI'll put the password in the values.yaml and encode it. I hope the Cadi jar is there so that i can encode it....",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-04-28 06:59:43.000000000",
+      "in_reply_to": "c9305d5c_49b6ac27",
+      "unresolved": true
+    },
+    {
+      "id": "e3787c57_116f483e",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/resources/config/sdc-controllers-config.json",
+      "patchset_number": 4,
+      "line": 9,
+      "message": "Ideally it should be received somewhere from SDC setup or global setup, it should not be defined in clamp.\nThose account/passwords definitions between the different onap apps is just a broken stuff.\nKrzysztof/Sylvain Any suggestion to have something nice for that ?",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-04-28 07:14:08.000000000",
+      "in_reply_to": "dfda76a7_d41b0149",
+      "unresolved": true
+    },
+    {
+      "id": "5023d383_f6330bcd",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/resources/config/sdc-controllers-config.json",
+      "patchset_number": 4,
+      "line": 9,
+      "message": "Yeah it should. \nUnfortunately, we didn’t had time to work on the gazillions of passwords set in OOM (and also hard coded on containers :( ). \nGoal is more to move « as fast as possible » to service mesh were passwords will be handled outside of the components.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-05-04 05:52:42.000000000",
+      "in_reply_to": "e3787c57_116f483e",
+      "unresolved": true
+    },
+    {
+      "id": "81533fdd_74b6fa18",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 70,
+      "message": "Please don't use sed as we already had a bazillion issues with it. Please use envsubst which is way safer",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-05-05 13:52:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8b13dbe1_673e2b75",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/values.yaml",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "please use common secret template for this",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-05-05 13:52:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d6350446_06aab58a",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/values.yaml",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "Not sure neither if it will be useful (unless i'm mistaken), as the password should not be visible anywhere. It will obviously appear in the command executed in the AAF initiliazer, may be i missed it but i did not see those commands dumped somewhere\n\nMoreover i'm not really sure how i can configure a secret for the certinit, as it's included in the deployment.yaml\nI have to create a new init container that has access to the certinit volume i think ...",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-05-06 10:34:25.000000000",
+      "in_reply_to": "8b13dbe1_673e2b75",
+      "unresolved": true
+    },
+    {
+      "id": "fea49965_f8a34299",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/values.yaml",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "Ok so let me explain the problem here. So the aaf_add_config is used as a content of the config map that is mounted to the init container created by the cerInitializer. Having any passwords in config map is strongly discouraged by kubernetes as those are stored in etcd in plain text and presented to every user on demand.\n\nIf we use common secret template here then the password will be stored in secret which can be encrypted at rest with the right k8s setup and the configmap woul just reference the env variable in which value (the actual password) is stored.\n\nDoing that in certInitializer would be tricky but you may always just add a separate init container that would do it for you and then just pass this password as env variable created from secret",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-05-06 22:29:02.000000000",
+      "in_reply_to": "d6350446_06aab58a",
+      "unresolved": true
+    },
+    {
+      "id": "174aa590_07349d59",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/values.yaml",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "Ok I see the problem, so I'll create a separate init container",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-05-07 05:54:25.000000000",
+      "in_reply_to": "fea49965_f8a34299",
+      "unresolved": true
+    },
+    {
+      "id": "77fcbf7a_09104987",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-05-10 11:50:50.000000000",
+      "in_reply_to": "81533fdd_74b6fa18",
+      "unresolved": false
+    },
+    {
+      "id": "4fefaa69_761df0e9",
+      "file_path": "kubernetes/policy/components/policy-clamp-be/values.yaml",
+      "patchset_number": 6,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-05-10 11:50:50.000000000",
+      "in_reply_to": "174aa590_07349d59",
+      "unresolved": false
+    }
+  ]
+}

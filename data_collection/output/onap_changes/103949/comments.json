@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fapex-pdp~master~I59426c22f2e6f128bff950e65f27ce358b62e6c8",
+  "change_id": "I59426c22f2e6f128bff950e65f27ce358b62e6c8",
+  "_number": 103949,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "cef9f735_100ac673",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "In theory, you'll need the +x for other users other than apexuser to be able to do, \"cd $POLICY_HOME/etc/ssl\".   You may be OK provided that apexuser would own this directory, not sure, probably should test it out.   Traditionally the +x is needed to go into directories, etc .. (case ../etc/ssl), for regular files 644 is OK the change you made.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-03-19 17:44:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "95040589_d226f366",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "actually, could delete this line, as lines 45 & 46 do what's needed.  Might also be safer to move 45-47 to the end of this list so it applies to anything that happens to be copied into /opt/app by some prior step",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-03-19 19:58:18.000000000",
+      "in_reply_to": "cef9f735_100ac673",
+      "unresolved": false
+    },
+    {
+      "id": "231dee3b_2a8daeac",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Yes, apexuser owns this directory, so there shouldn't be any problem.\nJim I think you are right. But not sure whether we should make these changes at this point. I would like to test these changes, because earlier also 45-47 lines were there. But still had to add 49-50 to resolve some issues that came up during testing. The main change was making apexuser the owner of the directory and that should be enough(probably 45-46 have to be moved down as you said). Still I think it is better to spent some time to test these changes.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-03-20 10:47:03.000000000",
+      "in_reply_to": "95040589_d226f366",
+      "unresolved": false
+    },
+    {
+      "id": "24a95fcf_6e7858f9",
+      "file_path": "packages/apex-pdp-docker/src/main/docker/Dockerfile",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "If you leave it as is right now, then Jorge's concern is still valid: may need to add:\n\n  chmod 755 etc/ssl",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-03-20 12:53:33.000000000",
+      "in_reply_to": "231dee3b_2a8daeac",
+      "unresolved": false
+    }
+  ]
+}

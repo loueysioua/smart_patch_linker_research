@@ -1,0 +1,195 @@
+{
+  "id": "policy%2Fpap~master~I4317ccba3eda6863ce96a6db4ef20816e59a7f2d",
+  "change_id": "I4317ccba3eda6863ce96a6db4ef20816e59a7f2d",
+  "_number": 122381,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d0e2d16a_4bf4570f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "So there will be 2 listeners in PAP polling same heartbeat messages, where this 1 is specifically for heartbeats?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 08:49:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "89c26e7f_79dd97db",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "*specifically for statistics?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 08:50:02.000000000",
+      "in_reply_to": "d0e2d16a_4bf4570f",
+      "unresolved": true
+    },
+    {
+      "id": "c501f90a_116c1281",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Or is it going to read from POLICY-STATISTICS topic, where saving statistics to db is done by this class, and the existing code deals with sending statistics to this new topic? But in that case, maybe can't we just send PdpStatistics into the new topic instead of the whole PdpStatus?\nSorry I am assuming things here. Maybe I will get more idea when I see the upcoming reviews you mentioned..",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 08:56:59.000000000",
+      "in_reply_to": "89c26e7f_79dd97db",
+      "unresolved": true
+    },
+    {
+      "id": "4a48db59_793abc0f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Should become clear in the next review.\n\nThere will be two listeners polling the same topic for the same PdpStatus messages.  The actual (i.e., effective) topic will be the same for both, POLICY-PDP-PAP, but in the config file, one will be called POLICY-PDP-PAP, as is currently the case, and the other will be called POLICY-STATISTICS.  The consumerGroup for the first will be continue to be unique, while the consumerGroup for the second will be a constant used by all PAPs (i.e., \"policy-pap\").  Both listeners will monitor the same message flow and no additional messages will be published to the topic than are already being published.\n\nThe existing PdpHeartbeatListener will no longer deal with the statistics contained within the PdpStatus; this new listener will take over that job.  In addition, the saveStatisticsInDb flag will go away.  Instead, the presence or absence of the POLICY-STATISTICS item within the config.json will determine whether or not statistics are saved to the DB - if it's in the config.json, then it will be saved, otherwise, it will not.\n\nOne question I have: is there a way in helm charts to specify a UUID to be injected into the consumerInstance of the config.json?  If not, then policy-endpoints will have to include a little more logic to make that happen.  (Actually, I may add that logic anyway: if consumerGroup is specified in the config.json, but consumerInstance is not, then it generates a UUID for the instance.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-01 12:56:27.000000000",
+      "in_reply_to": "c501f90a_116c1281",
+      "unresolved": true
+    },
+    {
+      "id": "eb0c7328_ec820a55",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Seems possible.\n{{- $pap-topic-uuid := uuidv4 -}}  will generate a random uuid, put this into one of the yaml and then use $pap-topic-uuid in the config file.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 13:57:49.000000000",
+      "in_reply_to": "4a48db59_793abc0f",
+      "unresolved": true
+    },
+    {
+      "id": "16b788bc_c6f030cf",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "I don't remember the fine details, and you probably already checked, but have to ask, did you test that the 2 endpoints combination work as you intend here?   Since there will be 2 connections from the same host to the dmaap server for the server, I am wondering if the fetchTimeout needs to be tweaked in anyway, or it wouldn't matter provided the consumerInstance is unique?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-07-01 14:43:50.000000000",
+      "in_reply_to": "eb0c7328_ec820a55",
+      "unresolved": true
+    },
+    {
+      "id": "663b8bce_896814e9",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "yes, checked it and it works.\n\nAs you've surmised, no need to tweak the fetchTimeout, as the consumerGroup/consumerInstance pair is unique.  However, I am putting in a fix to policy-endpoints so it doesn't go into a spin loop when it can't contact the dmaap server.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-01 15:33:24.000000000",
+      "in_reply_to": "16b788bc_c6f030cf",
+      "unresolved": false
+    },
+    {
+      "id": "79dd1762_a403ead2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "I have another question.\nAll PAPs running in the multi cluster setup are supposed to use same {consumergroup}/{consumerid} for the 2nd subscription intended for PdpStatistics handling.\nWhy can't we simply hardcode it into PAP codebase, say for e.g. POLICY-PDP-PAP/pap-pdp-statistics-consumergroup/pap-pdp-statistics-consumerid used for PdpStatisticsListener , so that whichever PAP instance is coming up, they all will share the same since they are hardcoded.\nEverything else works as usual, as they have random {consumergroup}/{consumerid} as it is now.\nJust a thought.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 16:50:04.000000000",
+      "in_reply_to": "663b8bce_896814e9",
+      "unresolved": false
+    },
+    {
+      "id": "382a8984_3daa120f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "the (consumer group, consumer ID) pair has to be unique",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-01 18:20:11.000000000",
+      "in_reply_to": "79dd1762_a403ead2",
+      "unresolved": false
+    },
+    {
+      "id": "f30877e7_63981e19",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Oh I didn't know that.\nFrom a RestClient point of view, I have seen multiple Rest clients registered to same DMaaP url(with same group and ID) so that only one gets the event. But probably that is because it is just treated as hitting a url, not like an actual DMaaP listener registered then.\nGood to know  (y)",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-07-01 18:36:09.000000000",
+      "in_reply_to": "382a8984_3daa120f",
+      "unresolved": false
+    },
+    {
+      "id": "c33e5b70_8ddfd55f",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/PdpStatisticsListener.java",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "the simulator is more lenient, and it's possible that dmaap is more lenient these days, but in the past, it was unwise to use the same pair from multiple machines, as dmaap would complain that the given pair was polling too frequently",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-01 19:41:21.000000000",
+      "in_reply_to": "f30877e7_63981e19",
+      "unresolved": false
+    }
+  ]
+}

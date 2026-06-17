@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fcommon~master~I5ef0abb8d2a3ea1ae93edc00363c4d2bea1747e2",
+  "change_id": "I5ef0abb8d2a3ea1ae93edc00363c4d2bea1747e2",
+  "_number": 7133,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a1a2d67_665a3385",
+      "file_path": "integrity-audit/src/main/java/org/onap/policy/common/ia/DbDAO.java",
+      "patchset_number": 1,
+      "line": 420,
+      "message": "Boy that is picky.  How many times have I been dinged for NOT initializing a local variable.",
+      "author": {
+        "account_id": 1621,
+        "name": "Kevin McKiou",
+        "display_name": null,
+        "email": "km097d@att.com",
+        "username": "km097d"
+      },
+      "updated": "2017-08-09 20:09:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a1a2d67_465f3773",
+      "file_path": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "There  are two problems.  1) The variable badparms is supposed to be a list of bad parameters.  You are not creating a list with tempBadParms.  You are assigning single values to it. 2) You never assign tempBadParms (which I assume you meant to be a list) back to badparams.  badparams is a string that is passed in by the parent method and when you are done updating it, the badparams is utilized in a log and exception message at the parent/calling level.\n\nI think your assignment statements should have been:\ntempBadParams = tempBadParams.concat(\"whatever the param\");\n\nThen at the bottom: \nbadparams = badparams.concat(tempBadParams);\n\nBut, this is all more complicated than the original code.",
+      "author": {
+        "account_id": 1621,
+        "name": "Kevin McKiou",
+        "display_name": null,
+        "email": "km097d@att.com",
+        "username": "km097d"
+      },
+      "updated": "2017-08-09 20:09:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a1a2d67_c64a27ac",
+      "file_path": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+      "patchset_number": 1,
+      "line": 126,
+      "message": "Yeah, I agree your correct solution to my error is more complicated than the original. I will restore this part to the original.",
+      "author": {
+        "account_id": 1645,
+        "name": "Drew Magnusen",
+        "display_name": null,
+        "email": "dm741q@att.com",
+        "username": "dm741q"
+      },
+      "updated": "2017-08-09 20:38:21.000000000",
+      "in_reply_to": "1a1a2d67_465f3773",
+      "unresolved": false
+    },
+    {
+      "id": "1a1a2d67_e1574d25",
+      "file_path": "integrity-audit/src/test/java/org/onap/policy/common/ia/test/DbAuditTest.java",
+      "patchset_number": 2,
+      "line": 115,
+      "message": "In general, \"unit-testing\" should not be reflected back in real source code.   No action required on this since this is existing code, but keep on the back of your mind to see if it can be resolved, so not intertwine real code with testing code",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-08-10 13:16:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

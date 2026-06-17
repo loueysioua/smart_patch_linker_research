@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I4c9d2cc32993208fd345e66ef1f1dce7a1e7de7d",
+  "change_id": "I4c9d2cc32993208fd345e66ef1f1dce7a1e7de7d",
+  "_number": 43541,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_fa2509c2",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 1,
+      "line": 320,
+      "message": "Isn't 'StringBuilder' more efficient, particularly when concatenating a large number of strings?",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2018-04-19 12:34:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1a0a3526",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 1,
+      "line": 320,
+      "message": "Not in this case, as Java turns this into StringBuilder operations.  There are two cases where it makes sense to use StringBuilder: 1) when appending strings in a loop  2) as an argument to methods that may want to append more text",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 13:19:32.000000000",
+      "in_reply_to": "5a93c517_fa2509c2",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e5132aff",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 1,
+      "line": 209,
+      "message": "I think this will interfere with fetch method above, note that the close method of this class does a little more than just plainly closing the cambria consumer.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-19 15:14:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c572ae49",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 1,
+      "line": 209,
+      "message": "Good point.  Think I'll just abandon this change.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 15:36:38.000000000",
+      "in_reply_to": "5a93c517_e5132aff",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6585dacd",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 1,
+      "line": 209,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 16:25:32.000000000",
+      "in_reply_to": "5a93c517_c572ae49",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bdfc56b6",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 4,
+      "line": 215,
+      "message": "Jim, is this issue possible, 2 close() on the cambria library, in the scenario below, can you verify? if that's the case what would be the behavior of the underlying cambria libraries when you issue multiple close()?  \n\nScenario:\nthread-1. fetch -  waiting here for X seconds.\nthread-2. setFilter\nthread-3. close (while still on the fetch)",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-20 18:46:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9d9b9a72",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/BusConsumer.java",
+      "patchset_number": 4,
+      "line": 215,
+      "message": "A couple of comments: 1) this will never close the same consumer twice unless the invoker actually calls close() two times - same behavior as the original code  2) as you pointed out previously, close() doesn't actually do anything, so no impact  3) the behavior is unchanged from the original code, as the original code did not preclude thread-3 from closing the consumer while thread-1 was fetching",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-23 14:55:37.000000000",
+      "in_reply_to": "5a93c517_bdfc56b6",
+      "unresolved": false
+    }
+  ]
+}

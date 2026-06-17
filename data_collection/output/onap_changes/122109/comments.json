@@ -1,0 +1,229 @@
+{
+  "id": "policy%2Fmodels~master~I86c97702abe62a5672720330df50b7b106187661",
+  "change_id": "I86c97702abe62a5672720330df50b7b106187661",
+  "_number": 122109,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "85d6dbbd_cf417dda",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Don't we already send the hostname in the \"name\" field already?",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-06-22 17:01:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "51fb2b62_eefaf841",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "good point Ajith, I think pdps send it.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-06-22 17:06:15.000000000",
+      "in_reply_to": "85d6dbbd_cf417dda",
+      "unresolved": true
+    },
+    {
+      "id": "05c7efeb_5bff88f7",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "that's true for the status message, but not the others.  We could eliminate the duplicate in several ways:\n1) modify the PDPs to set the \"source\" to null (I don't particularly like this option); or\n2) move the \"source\" field into the pdp-update and pdp-state-change subclasses; or\n3) remove the \"name\" field from the pdp-status subclass, but add getName/setName methods that invoke getSource/setSource underneath (so it remains backward compatible)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-22 18:52:29.000000000",
+      "in_reply_to": "51fb2b62_eefaf841",
+      "unresolved": true
+    },
+    {
+      "id": "ade51c30_5812a549",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "If I am correct, we decided to change the PDPs to send unique identifier instead of hostname in the \"name\" field of PDP_STATUS. To make them unique across multiple clusters.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-06-22 19:19:04.000000000",
+      "in_reply_to": "05c7efeb_5bff88f7",
+      "unresolved": true
+    },
+    {
+      "id": "36842d1c_3020d96c",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "hmm.  We did discuss that.  However, I'm still unsure about the need for it, because it seems like the names that we see in the pdp-status messages are pod names, which generally include some kind of random letter sequence.  Wouldn't that make them unique?\n\nIf the name is not unique, then this approach for providing a default value for \"source\" would not necessarily be unique either.  So the question is: can we depend on the hostname being globally unique?  If not, then I would propose that we add a method to policy-common, possibly in NetworkUtil, to generate a unique name to be used by a server.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-22 19:45:25.000000000",
+      "in_reply_to": "ade51c30_5812a549",
+      "unresolved": true
+    },
+    {
+      "id": "0f2a6b45_ad9da867",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "I don't remember the resolution wrt the multi-cluster discussion.   For existing functionality, for what I see in drools and xacml (and probably apex I would think) always send the hostname in the 'name' including responses to state-change and updates (since the responses are part of status messages).",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-06-22 19:45:47.000000000",
+      "in_reply_to": "ade51c30_5812a549",
+      "unresolved": true
+    },
+    {
+      "id": "ba53bb61_e8b76f0f",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "And the hostname for drools & apex is something like\ndev-policy-apex-pdp-0\ndev-policy-drools-pdp-0\n\nFor xacml-pdp I see that some unique code is appended at the end\ndev-policy-xacml-pdp-5989d574cb-fhzf9",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-06-22 21:16:54.000000000",
+      "in_reply_to": "0f2a6b45_ad9da867",
+      "unresolved": true
+    },
+    {
+      "id": "694051bf_9193e5d3",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "thanks for checking, Ram.  In that case, I'll add a method to policy-common for generating a unique \"name\".  For now, I think I'll take this approach in models:\n4) change \"source\" to \"name\" in the superclass and remove \"name\" from the pdp-status subclass.  I won't provide a default value, thus PAP will have to be modified to populate it",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-22 21:38:50.000000000",
+      "in_reply_to": "ba53bb61_e8b76f0f",
+      "unresolved": true
+    },
+    {
+      "id": "de6400f7_23f8c00b",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "...and switching to approach #2, because messages originating from PAP need both a source and a name (i.e., target PDP)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-22 21:43:35.000000000",
+      "in_reply_to": "694051bf_9193e5d3",
+      "unresolved": true
+    },
+    {
+      "id": "cf075094_9ab6e998",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Sounds good!",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2021-06-22 21:46:22.000000000",
+      "in_reply_to": "694051bf_9193e5d3",
+      "unresolved": true
+    },
+    {
+      "id": "02e3ae8b_ce06bf29",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 10,
+      "message": "probably modify this text for accuracy.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-06-23 14:37:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "45fbcac6_cc520e01",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 3,
+      "line": 10,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-06-23 15:35:07.000000000",
+      "in_reply_to": "02e3ae8b_ce06bf29",
+      "unresolved": false
+    },
+    {
+      "id": "a98855d6_f13c9fe5",
+      "file_path": "models-pdp/src/main/java/org/onap/policy/models/pdp/concepts/PdpMessage.java",
+      "patchset_number": 1,
+      "line": 63,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-06-24 12:51:45.000000000",
+      "in_reply_to": "cf075094_9ab6e998",
+      "unresolved": false
+    }
+  ]
+}

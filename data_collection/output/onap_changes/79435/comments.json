@@ -1,0 +1,127 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~Iffe72a0f40a8e608fa7f0a6424eacc21f196e167",
+  "change_id": "Iffe72a0f40a8e608fa7f0a6424eacc21f196e167",
+  "_number": 79435,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "44f906a7_4327d703",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Add `@NotNull` and `requireNonNull` to hash as you are using it directly in constructor. \n\nOption<V> and Map<K,V> objects should also never be null, so apply same contract.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-04 07:26:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f7989bdf_75e7f388",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 133,
+      "message": "This method is used only in tests and I don't think it brings to them much value in terms of readability - let's get rid of it as this class is big enough.\n\nThen we can also remove `subtree(String... path)`[unused] and `isSame(MerkleTree<V> other, String... path)`[similarly no value] methods for further slimming.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-04 07:26:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f3a84285_0eb5d655",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 149,
+      "message": "Let's use all these fields directly in `leaf` method:\n```\nprivate MerkleTree<V> leaf(V value) {\n    return new MerkleTree<>(valueSerializer, hashAlgorithm, hashForValue.apply(value), Option.of(value), HashMap.empty());\n}\n```\n\nso here we would have \n```\nfinal MerkleTree<V> result = addSubtree(path, leaf(value));\n```",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-04 07:26:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "94611e2b_470a1714",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 150,
+      "message": "We should return `result` directly, because we are also checking for Arrays.equals in `addSubtree(String label, MerkleTree<V> subtree)` [:171].",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-04 07:26:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6e0d54ab_ed137851",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 169,
+      "message": "This var is actually \"newSubtrees\" (plural). Maybe we should name this class field \"children\" instead to avoid confusion?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-03-04 07:26:36.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "dc4dd9f6_f0c4bbb0",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "requireNotNull for hash is optional here. The result will be the same = NPE. However, it adds nice symmetry to the implementation ;)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-03-05 06:43:01.000000000",
+      "in_reply_to": "44f906a7_4327d703",
+      "unresolved": false
+    },
+    {
+      "id": "4c250e2d_a7057c6c",
+      "file_path": "rest-services/cbs-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/cbs/client/api/listener/MerkleTree.java",
+      "patchset_number": 2,
+      "line": 133,
+      "message": "I've added these varargs variants of the methods to support nice api usage. However, the effect is as you've stated Filip. Let's remove all these varargs methods and leave only list-based variants.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-03-05 06:43:01.000000000",
+      "in_reply_to": "f7989bdf_75e7f388",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "id": "sdc~master~I961e91746ca638d858dd468e6c82aeb57993f7a3",
+  "change_id": "I961e91746ca638d858dd468e6c82aeb57993f7a3",
+  "_number": 84499,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "0fd16582_8a3433c2",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfMultipleNodeTemplatesTest.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Sonar remark\n\nLambdas should be replaced with method references\n \nCode smell\n \nMinor\nsquid:S1612\n \nMethod/constructor references are more compact and readable than using lambdas, and are therefore preferred. Similarly, null checks can be replaced with references to the Objects::isNull and Objects::nonNull methods.\nNote that this rule is automatically disabled when the project's sonar.java.source is lower than 8.\nNoncompliant Code Example\n  class A {    void process(List<A> list) {      list.stream()        .map(a -> a.<String>getObject())        .forEach(a -> { System.out.println(a); });    }      <T> T getObject() {      return null;    }  }  \nCompliant Solution\n  class A {    void process(List<A> list) {      list.stream()        .map(A::<String>getObject)        .forEach(System.out::println);    }      <T> T getObject() {      return null;    }  }  ",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4efb729b_f0aeabc8",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfMultipleNodeTemplatesTest.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "Input stream should be protected with try with resource block.",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "406ddf15_bb3f5e48",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Please use sonar before making git review.",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d92b3b84_60717589",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 60,
+      "message": "Resources should be closed\n \nBug\n \nBlocker\nsquid:S2095\n \nConnections, streams, files, and other classes that implement the Closeable interface or its super-interface, AutoCloseable, needs to be closed after use. Further, that close call must be made in a finally block otherwise an exception could keep the call from being made. Preferably, when class implements AutoCloseable, resource should be created using \"try-with-resources\" pattern and will be closed automatically.\nFailure to properly close resources will result in a resource leak which could bring first the application and then perhaps the box it's on to their knees.\nNoncompliant Code Example\n  private void readTheFile() throws IOException {    Path path = Paths.get(this.fileName);    BufferedReader reader = Files.newBufferedReader(path, this.charset);    // ...    reader.close(); // Noncompliant    // ...    Files.lines(\"input.txt\").forEach(System.out::println); // Noncompliant: The stream needs to be closed  }    private void doSomething() {    OutputStream stream = null;    try {      for (String property : propertyList) {        stream = new FileOutputStream(\"myfile.txt\"); // Noncompliant        // ...      }    } catch (Exception e) {      // ...    } finally {      stream.close(); // Multiple streams were opened. Only the last is closed.    }  }  \nCompliant Solution\n  private void readTheFile(String fileName) throws IOException {      Path path = Paths.get(fileName);      try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {        reader.readLine();        // ...      }      // ..      try (Stream<String> input = Files.lines(\"input.txt\")) {        input.forEach(System.out::println);      }  }    private void doSomething() {    OutputStream stream = null;    try {      stream = new FileOutputStream(\"myfile.txt\");      for (String property : propertyList) {        // ...      }    } catch (Exception e) {      // ...    } finally {      stream.close();    }  }  \nExceptions\nInstances of the following classes are ignored by this rule because close has no effect:\njava.io.ByteArrayOutputStream\njava.io.ByteArrayInputStream\njava.io.CharArrayReader\njava.io.CharArrayWriter\njava.io.StringReader\njava.io.StringWriter\nJava 7 introduced the try-with-resources statement, which implicitly closes Closeables. All resources opened in a try-with-resources statement are ignored by this rule.\n  try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {    //...  }  catch ( ... ) {    //...  }  \nSee\nMITRE, CWE-459 - Incomplete Cleanup\nCERT, FIO04-J. - Release resources when they are no longer needed\nCERT, FIO42-C. - Close files when they are no longer needed\nTry With Resources",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d485b915_099042e4",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 92,
+      "message": "\"throws\" declarations should not be superfluous\n \nCode smell\n \nMinor\nsquid:RedundantThrowsDeclarationCheck\n \nAn exception in a throws declaration in Java is superfluous if it is:\nlisted multiple times\na subclass of another listed exception\na RuntimeException, or one of its descendants\ncompletely unnecessary because the declared exception type cannot actually be thrown\nNoncompliant Code Example\n  void foo() throws MyException, MyException {} // Noncompliant; should be listed once  void bar() throws Throwable, Exception {} // Noncompliant; Exception is a subclass of Throwable  void baz() throws RuntimeException {} // Noncompliant; RuntimeException can always be thrown  \nCompliant Solution\n  void foo() throws MyException {}  void bar() throws Throwable {}  void baz() {}  \nExceptions\nThe rule will not raise any issue for exceptions that cannot be thrown from the method body:\nin overriding and implementation methods\nin interface default methods\nin non-private methods that only throw, have empty bodies, or a single return statement .\nin overridable methods (non-final, or not member of a final class, non-static, non-private), if the exception is documented with a proper javadoc.\n  class A extends B {    @Override    void doSomething() throws IOException {      compute(a);    }      public void foo() throws IOException {}      protected void bar() throws IOException {      throw new UnsupportedOperationException(\"This method should be implemented in subclasses\");    }      Object foobar(String s) throws IOException {      return null;    }      /**     * @throws IOException Overriding classes may throw this exception if they print values into a file     */    protected void print() throws IOException { // no issue, method is overridable and the exception has proper javadoc      System.out.println(\"foo\");    }  }  ",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3dfeb126_43747a5a",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "Should be with try resource block",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-08 12:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "47a6b8d4_bb1f5f61",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfMultipleNodeTemplatesTest.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "0fd16582_8a3433c2",
+      "unresolved": false
+    },
+    {
+      "id": "67152eca_07c6ae77",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfMultipleNodeTemplatesTest.java",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "Done",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "4efb729b_f0aeabc8",
+      "unresolved": false
+    },
+    {
+      "id": "18ccf7d5_c266f269",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ran Sonar on the code, however test classes were ignored while running sonarlint in intellij. Have you configured sonarqube in intellij to include test classes? How was this configured?",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "406ddf15_bb3f5e48",
+      "unresolved": false
+    },
+    {
+      "id": "187de488_28d5537d",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 60,
+      "message": "Done",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "d92b3b84_60717589",
+      "unresolved": false
+    },
+    {
+      "id": "a341de20_4de9de83",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 92,
+      "message": "Done",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "d485b915_099042e4",
+      "unresolved": false
+    },
+    {
+      "id": "9c17b0a9_c30bc6be",
+      "file_path": "openecomp-be/lib/openecomp-tosca-converter-lib/openecomp-tosca-converter-core/src/test/java/org/openecomp/core/impl/ToscaSolConverterPnfTest.java",
+      "patchset_number": 2,
+      "line": 102,
+      "message": "Done",
+      "author": {
+        "account_id": 4799,
+        "name": "Dermot Melia",
+        "display_name": null,
+        "email": "dermot.melia@est.tech",
+        "username": "dermot123"
+      },
+      "updated": "2019-04-08 16:36:03.000000000",
+      "in_reply_to": "3dfeb126_43747a5a",
+      "unresolved": false
+    }
+  ]
+}

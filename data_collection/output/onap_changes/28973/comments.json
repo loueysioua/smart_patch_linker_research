@@ -1,0 +1,858 @@
+{
+  "id": "multicloud%2Fframework~master~If07bd4690014f19ff202ca6ad23ebdab227305fe",
+  "change_id": "If07bd4690014f19ff202ca6ad23ebdab227305fe",
+  "_number": 28973,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_0240d5a3",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "I hope this is not intending to change the interface of broker and plugins which are loosely coupled by rest APIs. I prefer sticking to existing overall architecture with regarding to how broker and plugins collaborate and the flexibility to deploy/maintain as well as to expose NBIs via MSB.\n\nThis Multi process framework could be applied to individual plugins which is up to their committer/maintainer's choice. But it need more discussion when it comes to broker . We need to figure out the specific use case and see what is the benefits.",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-24 14:33:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c2498dd1",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "This is good to evaluate, again it is up to each individual plugins to decide whether to change the framework.",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-24 14:33:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e244c9b8",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "does this tool generate API for microservice framework? or just generate swagger file ?",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-24 14:33:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_821385b7",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "I get confused, since I think django is just internal implementation element which is invisible to external API consumers. Backward compatibility refer to API related to external consumers, changing of internal implementation should be irrelevant to API it exposed, correct?",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-24 14:33:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_85ef0f87",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "This is not intending to change the interface, but to change how the process works.\n\nAnd this is not a functionality enhancement, but a performance enhancement. I don't think we can identify *specific* use case for it.\n\nThe change here is to comply the R2 S3P goal. The benefit will be improving the parallelism of API handler. From what I tested in my local computer, current way to run django server can only handle one api request at one time. And according to [Django_Document], we are just using django debug mode in multi-cloud. I see no reason to keep it that way.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-25 02:26:57.000000000",
+      "in_reply_to": "5a93c517_0240d5a3",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e5f7f357",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 65,
+      "message": "reply below",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-25 02:26:57.000000000",
+      "in_reply_to": "5a93c517_c2498dd1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0503ff42",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "this is to generate api for http server that each multicloud component will expose.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-25 02:26:57.000000000",
+      "in_reply_to": "5a93c517_e244c9b8",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_45b7c786",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "You are correct. But as your concern above, I agree new things mean unstable. So, we are not replacing current api framework. Instead, I propose to have 2 sets of api framework. And this configuration option is to giving user a choice. And as I mentioned, default value will still choose the current django framework. So that users who don't care about this feature will not be affected.\nUntil this api framework is mature, it will still be the alternative option. And I don't think this api framework will be mature in R2.\nSo, what I proposed here is how we can take baby steps while still working toward S3P.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-25 02:26:57.000000000",
+      "in_reply_to": "5a93c517_821385b7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_366e7302",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "Having looked at the Django docs and a bit into Pecan, +1 to this proposal. It's not uncommon to provide a user multiple options for the backend that can be configured by the cloud admin that won't affect end users. It's like the difference between an OpenStack Cinder deployment using an LVM backend versus a Ceph one. If there's any part of the work items that you could use a hand with I'd be happy to help.",
+      "author": {
+        "account_id": 299,
+        "name": "Nate Potter",
+        "display_name": null,
+        "email": "Nathaniel.Potter@intel.com",
+        "username": "ntpttr"
+      },
+      "updated": "2018-01-25 22:24:19.000000000",
+      "in_reply_to": "5a93c517_45b7c786",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3c065187",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "I might have misunderstood something here. The problem statement above shows me the need of the ability of adding/removing APIs in a automatic way, i.e. generating APIs based on YAML according to what was described at project meeting on Monday.\n\nBut the \"Multi Processes Framework\" seems the improvement of API handling, i.e. the need of the ability of handling multiple API requests concurrently.\n\nThere is a difference between \"Extensible API Framework\" and \"Concurrent API Handling Framework\". The former means the front-end API endpoints can be generated at runtime if YAML changes. The latter means the internal handling of API requests concurrently (no matter what the front-end APIs are, either static or dynamic). The latter actually is more an implementation issue, ie. multi-threading. The former is more a design issue, i.e. definition of API root URL, API pattern, and how to map resource objects in YAML to the API endpoints / resource path in URL, and a tool to generate the dynamic API endpoints (resource path) that can be appended to API root URL, and related data object schema of resources for CRUD operations.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-27 02:12:07.000000000",
+      "in_reply_to": "5a93c517_85ef0f87",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bcf90182",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "This is in line with what I understood of an \"Extensible API Framework\". But I didn't see anything proposed here.\n\nAre you going to develop the spec?\n\nI suggest that we can reuse the design of what OpenStack Gluon project has done - exactly the same thing.\n\nThe design of \"Extensible API Framework\" can be found here:\n\nhttps://github.com/openstack/gluon/blob/master/doc/source/devref/gluon_api_spec.inc.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-27 02:12:07.000000000",
+      "in_reply_to": "5a93c517_0503ff42",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dcf40d89",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "Agree it is quite stretch to make it mature in R2. Then questions:\n(1) It is an MVP component now. What if it cannot meet R2 schedule? Should we move it as a stretch goal/long term task?\n(2) Once it is mature, can we run both framework concurrently?\n\nThe goal is to have zero impact on current happy users (VF-C, APP-C etc.) If they keep on using existing APIs, there are 2 options:\n(1) support existing APIs in new framework.\n(2) run 2 frameworks concurrently: one for existing APIs to support current users if they don't want to change; and the other one for new APIs to support anyone who wants to use new APIs.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-27 02:12:07.000000000",
+      "in_reply_to": "5a93c517_366e7302",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7cf3799e",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Certainly, the design of API framework is missing in the task list. But the design of API framework is actually the essence/core/heart of the \"Extensible API Framework\". In addition the API Generator work item is also missing, which is another pillar of this API Framework. Without the design and API Generator tool, current task list won't achieve the goal of \"Extensible API Framework\".\n\nPlease refer to OpenStack Gluon:\n\n(1) API Design: https://github.com/openstack/gluon/blob/master/doc/source/devref/gluon_api_spec.inc\n\n(2) API Generator (aka Particle Generator): https://github.com/openstack/gluon/tree/master/gluon/particleGenerator\n\n(3) API Server (aka Proton Server): https://github.com/openstack/gluon/tree/master/gluon/api\n\nI encourage reuse.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-27 02:12:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dfcddf5e",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "Bin, you are right. We are addressing 2 issues here. I know it is a bit confusing, but the fixing of 2 issues are tight coupled. So I use one spec file for them. Maybe I should change the tile of this spec, any suggestion?",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-29 02:33:45.000000000",
+      "in_reply_to": "5a93c517_3c065187",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1f3a6736",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "Thanks, reply below",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-29 02:33:45.000000000",
+      "in_reply_to": "5a93c517_bcf90182",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5f30ef55",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "For questions,\n\n(1) The goal is to implement the work in this spec in R2. We are not planning to leave things to R3. So, I don't think it is good to move it to long term task. What I meant \"it will not be mature in R2\" is that it might have some bugs/issues, and we may spend another one or two release to fix the bugs to make it mature. Does this make sense?\n\n(2) The plan is to let cloud admin choose one framework.\n\nFor options, The plan it so support option (1)",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-29 02:33:45.000000000",
+      "in_reply_to": "5a93c517_dcf40d89",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ffd21bd1",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Thanks Bin for pointing that out. I just had a rough mind, written some some poc code locally and draft this spec. I went through project Gluon and find that project Gluon indeed has many same ideas in this spec. I will definitely take Project Gluon as reference.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-29 02:33:45.000000000",
+      "in_reply_to": "5a93c517_7cf3799e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_221148ac",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Django is a framework and runserver is a simple webserver for demo. we can change to nginx + uwsgi to improve the performance by supporting concurrent API processing. We don't need another framework to address this issue. Please refer to:\nhttp://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-29 06:30:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_225f0874",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 53,
+      "message": "while oslo can be a candidate to achieve this \"multiple processing\" purpose, we might also need take a look at another option: django + celery : https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-29 06:30:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_02d3ecd6",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "basically, I am very concerned to switch to another framework and make it a MVP in such tight schedule for Beijing Release. I suggest we stick to existing building blocks and see how to improve it with existing solutions to accomplish our S3P goal. Anyway, Stability is part of S3P, change the framework is a radical change will endanger the Stability with unknown performance improvement.",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-29 06:30:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_13b260e6",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "I suggest to split it into 2 specs, one for Extensible API Framework, and the other one for Concurrent API Handling.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-30 06:00:44.000000000",
+      "in_reply_to": "5a93c517_dfcddf5e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d3cb9851",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "Based on my comments above, i.e. very stretch for R2 considering the amount of work and immaturity/uncertainty of new framework, I would agree with Bin Yang that we stick to existing building blocks. \"Platform Stability\" is #1 in S3P.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-30 06:00:44.000000000",
+      "in_reply_to": "5a93c517_02d3ecd6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_33b51ccd",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "If the plan is to support option (1), i.e. supporting existing APIs in new framework, it is very stretch for R2 considering the amount of work and immaturity/uncertainty of new framework.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-30 06:00:44.000000000",
+      "in_reply_to": "5a93c517_5f30ef55",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f3c6d448",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "That's great. As I commented at the beginning, we need to split into 2 specs. This current spec with current task list seems more about Concurrent API Handling. We need another spec to define API Framework.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-01-30 06:00:44.000000000",
+      "in_reply_to": "5a93c517_ffd21bd1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4e283b86",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 22,
+      "message": "Actually, I investigated the django based solution before I drafted this spec and thought that it might not be ideal api framework. I will add more details in new version, we can carry on discussion in new version.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-30 08:00:06.000000000",
+      "in_reply_to": "5a93c517_221148ac",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ae19bf7a",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-30 08:00:06.000000000",
+      "in_reply_to": "5a93c517_13b260e6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2e25afaa",
+      "file_path": "docs/specs/extensible_api_framework.rst",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "I will upload a new version of the spec, we can carry on discussion there.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-01-30 08:00:06.000000000",
+      "in_reply_to": "5a93c517_d3cb9851",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f85b0c2c",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "Would you please consider another option: django + celery ?",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-01-31 06:14:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ac96a24a",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 2,
+      "line": 108,
+      "message": "celery is an asynchronous task queue based on distributed message passing. It is beyond the scope of this spec.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-01 09:55:21.000000000",
+      "in_reply_to": "5a93c517_f85b0c2c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7a36fee8",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 37,
+      "message": "Yes, those three points are all valid. I'm backing to address them.\n\nBut the title of this proposal is \"parallelism\".\nIt's confusing that emphasizing point is the complexity of django framework.\n\nI suppose parallelism is also issue. In that case, IO parallelism is issue. pecan doesn't address it. but eventlet does.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-07 17:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fa78ce90",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 84,
+      "message": "Does this proposal includes implementation of the existing API with pecan + eventlet?\nboth implementaiton(django and pecan) will be supported in Beijing?\nWhat's the deprecation/removal plan? in Cassandra?",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-07 17:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9a6f4ac5",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "Are you proposing to use eventlet?\nIt's a big change. so it should be discussed in this spec either.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-07 17:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ba7246ab",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "Yeah, we can shamelessly steal openstack code.\nThey are tried and proven.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-07 17:03:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ade0cdfa",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 37,
+      "message": "Right, one reason that we are using pecan is because it is widely used with eventlet. I should add more content about eventlet. \n\n\nThe complexity of django impedes the improvement of parallelism. It makes the work harder to accomplish.\n\nThe second and third problems I mentioned here may not directly be related to \"parallelism\", but they are related to which solution we chose.  I think it is fair to add them here, or else there will be concern about why we don't just chose solution based on django.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-08 07:28:31.000000000",
+      "in_reply_to": "5a93c517_7a36fee8",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cda3d9b0",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 84,
+      "message": "Does this proposal includes implementation of the existing API with pecan + eventlet?\nYes\n\n\nboth implementaiton(django and pecan) will be supported in Beijing?\nYes, for the backward compatibility and stability concern.\n\n\n\nWhat's the deprecation/removal plan? in Cassandra?\nThere is no real plan for now, but yes, it will start in Cassandra.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-08 07:28:31.000000000",
+      "in_reply_to": "5a93c517_fa78ce90",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8da95192",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 96,
+      "message": "Will update, thanks.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-08 07:28:31.000000000",
+      "in_reply_to": "5a93c517_9a6f4ac5",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_adae8d96",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "Pls check https://gerrit.onap.org/r/#/c/30223/\n\n\nit only takes about 100 lines of code to build eventlet+pecan based on oslo.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-08 07:28:31.000000000",
+      "in_reply_to": "5a93c517_ba7246ab",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e4e6d914",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 37,
+      "message": "I'm very fun of moving to eventlet + pecan. Please don't get me wrong.\n\nMy review point is about wording and documentation.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-16 07:08:52.000000000",
+      "in_reply_to": "5a93c517_ade0cdfa",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ae9df1bd",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 4,
+      "line": 7,
+      "message": "it's s3p now.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-27 15:54:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ee5f790d",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 4,
+      "line": 6,
+      "message": "It's now S3P.\nand the occurence below also should be replaced to s3p.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-27 15:54:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4e678de9",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "Now proposal is to address S3P, not parallelism.\nSo the title of this should be updated to reflect it.",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-02-27 15:54:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0b189273",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "I am not sure the replacement is appropriate, I use the title from our MVP goals. And there is no security consideration in this spec.",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-02-28 08:18:09.000000000",
+      "in_reply_to": "5a93c517_4e678de9",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8d6032a6",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "I'm confused. the line 16-18 talks about security, doesn't it?",
+      "author": {
+        "account_id": 287,
+        "name": "Isaku Yamahata",
+        "display_name": null,
+        "email": "isaku.yamahata@gmail.com",
+        "username": "yamahata"
+      },
+      "updated": "2018-03-01 15:32:49.000000000",
+      "in_reply_to": "5a93c517_0b189273",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c7936d59",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 4,
+      "line": 10,
+      "message": "Right, will update. Thanks",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-03-06 02:18:48.000000000",
+      "in_reply_to": "5a93c517_8d6032a6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6d934f5b",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 6,
+      "line": 83,
+      "message": "Xinhui: does this clarification satisfy your comment of focusing on the scope with use case when a spec is drafted? Please advise.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-03-08 02:48:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e0bc0609",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 8,
+      "line": 72,
+      "message": "I suggest to add one new section here, detailing the test set up, configuration, and result/performance analysis of 3 situations: django (current), django+uwsgi, and pecan+eventlet+wsgi, which shows the best technology we will choose.",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-03-22 04:58:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c03b0a9b",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 8,
+      "line": 117,
+      "message": "Can you add a description about how oslo can help provide a stable implementation?",
+      "author": {
+        "account_id": 845,
+        "name": "Bin Hu",
+        "display_name": null,
+        "email": "bin.hu@att.com",
+        "username": "bh526r"
+      },
+      "updated": "2018-03-22 04:58:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a0d27e32",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 8,
+      "line": 72,
+      "message": "sure, will add",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-03-22 05:36:31.000000000",
+      "in_reply_to": "5a93c517_e0bc0609",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_80e18200",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 8,
+      "line": 117,
+      "message": "Done",
+      "author": {
+        "account_id": 1205,
+        "name": "Hong Hui Xiao",
+        "display_name": null,
+        "email": "honghui_xiao@yeah.net",
+        "username": "HongHuiXiao"
+      },
+      "updated": "2018-03-22 05:36:31.000000000",
+      "in_reply_to": "5a93c517_c03b0a9b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2a091195",
+      "file_path": "docs/specs/parallelism_improvement.rst",
+      "patchset_number": 3,
+      "line": 74,
+      "message": "Is it feasible to make solution 1 as MVP an solution 2 as stretch goal. This will guarantee we can deliver what we committed and also allow us have more time to evaluate the strength and shortcomings of either solution.",
+      "author": {
+        "account_id": 1889,
+        "name": "Bin Yang",
+        "display_name": null,
+        "email": "bin.yang@windriver.com",
+        "username": "biny993"
+      },
+      "updated": "2018-03-22 05:48:51.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

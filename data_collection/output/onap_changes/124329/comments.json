@@ -1,0 +1,229 @@
+{
+  "id": "cps~master~I11e6da303320aea096a135eb93e270a5fd014740",
+  "change_id": "I11e6da303320aea096a135eb93e270a5fd014740",
+  "_number": 124329,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "299d7f63_f59ce354",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "i don't think i like this convention of shortening table names, it makes the query harder to read. We don't do it in Java so why do we do it in Sql?! This might explain why this bug wasn't spotted in the original review....\n\nWhat do you think? Maybe change to full names and let's compare",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-09-17 14:45:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "28174da1_6dc51652",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "sure, I think we need to make a team decision on this. I will add both examples here\n\nSELECT DISTINCT\nyr.module_Name AS ModuleName,\nyr.revision AS Revision\nFROM\ndataspace d\nJOIN anchor a ON a.dataspace_id = d.id\nJOIN schema_set ss ON ss.id = a.schema_set_id\nJOIN schema_set_yang_resources ssyr ON ssyr.schema_set_id = ss.id\nJOIN yang_resource yr ON yr.id = ssyr.yang_resource_id\nWHERE\nd.name = 'NFP-Operational' AND\na.name ='ran-network-simulation';\n\t\t\nSELECT DISTINCT\nyang_resource.module_Name AS ModuleName,\nyang_resource.revision AS Revision\nFROM\ndataspace dataspace\nJOIN anchor anchor ON anchor.dataspace_id = dataspace.id\nJOIN schema_set schema_set ON schema_set.id = anchor.schema_set_id\nJOIN schema_set_yang_resources schema_set_yang_resources ON schema_set_yang_resources.schema_set_id = schema_set.id\nJOIN yang_resource yang_resource ON yang_resource.id = schema_set_yang_resources.yang_resource_id\nWHERE\ndataspace.name = 'NFP-Operational' AND\nanchor.name ='ran-network-simulation';",
+      "author": {
+        "account_id": 6841,
+        "name": "Niamh Core",
+        "display_name": null,
+        "email": "niamh.core@est.tech",
+        "username": "niamhcore"
+      },
+      "updated": "2021-09-17 15:10:00.000000000",
+      "in_reply_to": "299d7f63_f59ce354",
+      "unresolved": true
+    },
+    {
+      "id": "511672fe_9e105533",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "I definitely prefer the 2nd option with full table names!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-09-17 15:27:04.000000000",
+      "in_reply_to": "28174da1_6dc51652",
+      "unresolved": true
+    },
+    {
+      "id": "69c24214_25ec0644",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "+1 for the 2nd option also.",
+      "author": {
+        "account_id": 5658,
+        "name": "Bruno Sakoto",
+        "display_name": null,
+        "email": "bruno.sakoto@bell.ca",
+        "username": "brusak"
+      },
+      "updated": "2021-09-18 01:55:21.000000000",
+      "in_reply_to": "511672fe_9e105533",
+      "unresolved": true
+    },
+    {
+      "id": "446dd3eb_af80fcd1",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Agree, prefer using the full table name which makes it easier to read.",
+      "author": {
+        "account_id": 7744,
+        "name": "Dylan Byrne",
+        "display_name": null,
+        "email": "dylan.byrne@est.tech",
+        "username": "DylanB95EST"
+      },
+      "updated": "2021-09-20 08:16:23.000000000",
+      "in_reply_to": "69c24214_25ec0644",
+      "unresolved": true
+    },
+    {
+      "id": "730c8e45_64f96642",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 7,
+      "message": "by anchor and dataspace",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-09-20 09:44:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c47de25f_4ef0b3b7",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsModulePersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 1,
+      "line": null,
+      "message": "In set_data is see there are two anchors and they are attached to same schema_set, i think to test it better we should attached them with differecnt schema set and both schema set have 1 common module. That way it'll describe the real test scenario.",
+      "author": {
+        "account_id": 5006,
+        "name": "Rahul Tyagi",
+        "display_name": "Rahul Tyagi",
+        "email": "rahul.tyagi@est.tech",
+        "username": "tragait"
+      },
+      "updated": "2021-09-20 09:44:45.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bf269441_b27432ee",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 7,
+      "message": "next patch updates both queries",
+      "author": {
+        "account_id": 6841,
+        "name": "Niamh Core",
+        "display_name": null,
+        "email": "niamh.core@est.tech",
+        "username": "niamhcore"
+      },
+      "updated": "2021-09-20 10:06:24.000000000",
+      "in_reply_to": "730c8e45_64f96642",
+      "unresolved": false
+    },
+    {
+      "id": "e011d3ca_35e3f90d",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/YangResourceRepository.java",
+      "patchset_number": 1,
+      "line": 58,
+      "message": "Done",
+      "author": {
+        "account_id": 6841,
+        "name": "Niamh Core",
+        "display_name": null,
+        "email": "niamh.core@est.tech",
+        "username": "niamhcore"
+      },
+      "updated": "2021-09-20 10:06:24.000000000",
+      "in_reply_to": "446dd3eb_af80fcd1",
+      "unresolved": false
+    },
+    {
+      "id": "4993699e_92ba7393",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/impl/CpsModulePersistenceServiceIntegrationSpec.groovy",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 6841,
+        "name": "Niamh Core",
+        "display_name": null,
+        "email": "niamh.core@est.tech",
+        "username": "niamhcore"
+      },
+      "updated": "2021-09-20 10:06:24.000000000",
+      "in_reply_to": "c47de25f_4ef0b3b7",
+      "unresolved": false
+    },
+    {
+      "id": "7f3039e9_bf68ebdd",
+      "file_path": "cps-ri/src/test/resources/data/schemaset.sql",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "I presume this has been added to proof it is not included in the result?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-09-20 13:50:11.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4ae0df17_6a26e08c",
+      "file_path": "cps-ri/src/test/resources/data/schemaset.sql",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "In the previous patch rahul commented that the two anchors use the same schema set for the tests. He suggested it would be better to test the anchors with different schema sets and one common module",
+      "author": {
+        "account_id": 6841,
+        "name": "Niamh Core",
+        "display_name": null,
+        "email": "niamh.core@est.tech",
+        "username": "niamhcore"
+      },
+      "updated": "2021-09-20 15:12:08.000000000",
+      "in_reply_to": "7f3039e9_bf68ebdd",
+      "unresolved": true
+    },
+    {
+      "id": "401ace5c_62b9f9b4",
+      "file_path": "cps-ri/src/test/resources/data/schemaset.sql",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2021-09-21 10:51:37.000000000",
+      "in_reply_to": "4ae0df17_6a26e08c",
+      "unresolved": false
+    }
+  ]
+}

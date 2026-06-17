@@ -1,0 +1,212 @@
+{
+  "id": "policy%2Fdrools-applications~master~I5f8e74cec3e83d5427be03f5e684c871a038f923",
+  "change_id": "I5f8e74cec3e83d5427be03f5e684c871a038f923",
+  "_number": 57721,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "da7095c5_93a56106",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/generate_performance_report.sh",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "I see that you have removed the wait time from average calculation, so how do you determine that when to send the APPC Response?\n\nAnd, can we rename this file with \"Multi thread or something\" just to differentiate between the old one and this one.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-07-27 08:49:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_b381854c",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "Using network.log for calculation will be risky in performance tests. Because if you are running multiple threads and that too for long time, the network logs will be rotated very fast. That's what we saw during our testing with just 2 threads.\n\nAlso, this script is run manually after running the test plan or executed by the test plan after every interval?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-07-27 08:49:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_c9d32637",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/generate_performance_report.sh",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "The jmeter script looks for notification messages by subscribing to the POLICY-CL-MGT topic.  Each thread uses its own consumer group and server-side filtering to retrieve just the message for which it's currently looking.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-07-27 12:25:22.000000000",
+      "in_reply_to": "da7095c5_93a56106",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_49207649",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "Yes, the user of this script must unzip the relevant network log zip files, though for this test, everything fits in one network.log and one network.log.zip, so the prep work is not very much.\n\nThis is executed manually, like the generate.sh script.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-07-27 12:25:22.000000000",
+      "in_reply_to": "da7095c5_b381854c",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_497cf620",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/generate_performance_report.sh",
+      "patchset_number": 2,
+      "line": 73,
+      "message": "That's very cool!!! Thanks.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-07-27 13:21:05.000000000",
+      "in_reply_to": "da7095c5_c9d32637",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_a9b032f5",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "May be I am missing something here, you are referring to network.log file of drools PDP right? \nCouldn't understand that how we can make sure that everything fits in one network.log? \nI mean if we will execute this script after executing test plan for 72 hours, there will be multiple network.log files. And the APPC request/response logs will span through multiple files. How to decide which is the relevant network.log file?\n\nAlso, I am not clear as why we are calculating the time taken for APPC to process the request. As per me, it should not affect the performance metrics of drools PDP.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-07-27 13:21:05.000000000",
+      "in_reply_to": "da7095c5_49207649",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_e994ea38",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "The MT jmeter script takes less than an hour to run.  As a result, the network log doesn't roll over more than once.\n\nRegarding the purpose: The performance metrics show the total elapsed time from initial ONSET to FINAL notification.  With the stability script, there is a fixed wait time that must be subtracted from the total elapsed time.  Similarly, with the MT test, the time should also be subtracted.  However, the time is no longer fixed, but is dependent on DMaaP and the jmeter script's response time, thus uebtime.sh attempts to measure that time.  Now that I think about it, I should have left the \"-w\" option in generate.sh and then passed the output from uebtime.sh to generate.sh via the \"-w\" option.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-07-27 13:35:35.000000000",
+      "in_reply_to": "da7095c5_a9b032f5",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_a99ef254",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "Actually, the network log rolled over seven times, but that still wasn't difficult to prep manually.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-07-27 13:38:36.000000000",
+      "in_reply_to": "da7095c5_e994ea38",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_69ce9a5c",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "Agree that we should pass this to generate.sh using -w option and use the same subtraction logic.\n\nI thought the MT script will be made to run continuously for 72 hours before running the performance scripts to collect metrics. As running it only once (for less than an hour) won't give the actual performance figures. What do you say?\n\nRegarding rollover, I think there is a limit of total number of files in that folder (/var/log/onap/policy/pdpd) post which it gets purged and that's why we will not have all the files at the end of 72 hours for calculation.",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-07-27 14:03:13.000000000",
+      "in_reply_to": "da7095c5_a99ef254",
+      "unresolved": false
+    },
+    {
+      "id": "da7095c5_c979e6fd",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/uebtime.sh",
+      "patchset_number": 2,
+      "line": 188,
+      "message": "First, only the data for the last 10K events of each type is reported, thus the elapsed time values for the individual types will be the same whether it's run for an hour or run for 70 hours.  Second, from brief measurements that I've taken, the actual CPU usage doesn't vary much whether it's run for five minutes or an hour, thus, I kind of doubt that there will be much advantage to running it longer - this is not intended to be a stability test.\nThat being said, I hadn't noticed before that generate.sh automatically scans the zipped files.  I'll see what I can do to modify this version to do the same and to combine the scanning of the network & audit logs into a single script.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-07-27 14:22:20.000000000",
+      "in_reply_to": "da7095c5_69ce9a5c",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_9c190925",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/policyMTPerformanceTestPlan.jmx",
+      "patchset_number": 8,
+      "line": 274,
+      "message": "I think we have DMaaP as well in the test setup, considering that we may trigger the ONSET/ABATEMENT to drools-pdp through DMaaP and not directly through the REST interface. What do you say?",
+      "author": {
+        "account_id": 3239,
+        "name": "Ram Krishna Verma",
+        "display_name": null,
+        "email": "ramkrishna.verma@gmail.com",
+        "username": "ramverma"
+      },
+      "updated": "2018-08-01 13:48:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_5c8ff123",
+      "file_path": "testsuites/performance/src/main/resources/amsterdam/policyMTPerformanceTestPlan.jmx",
+      "patchset_number": 8,
+      "line": 274,
+      "message": "this is the default, as it appears in more of the cases.  For the DMaaP cases, this is overridden",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-08-01 14:17:21.000000000",
+      "in_reply_to": "1a76adc5_9c190925",
+      "unresolved": false
+    }
+  ]
+}

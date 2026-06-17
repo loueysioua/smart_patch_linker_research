@@ -1,0 +1,144 @@
+{
+  "id": "sdc~master~I5f0a2061796e8410a5b225c43baa70d7e0269684",
+  "change_id": "I5f0a2061796e8410a5b225c43baa70d7e0269684",
+  "_number": 106996,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "fc742779_50a238a3",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "access should be changed if this is only intended to be used by the tests.",
+      "author": {
+        "account_id": 1877,
+        "name": "Ilana Paktor",
+        "display_name": null,
+        "email": "ilanap@amdocs.com",
+        "username": "ilanap"
+      },
+      "updated": "2020-05-03 06:06:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "83ed2b0b_ccf99441",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "So by default the constructor is public, so technically, the access modifier has not changed. What do you think?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-03 15:55:53.000000000",
+      "in_reply_to": "fc742779_50a238a3",
+      "unresolved": true
+    },
+    {
+      "id": "a5f20a8c_3c4245b4",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "If you think about it, whenever a OrchestrationTemplateCandidateImpl is instantiated, it first retrieves the static instances of OrchestrationTemplateCandidateManager, VendorSoftwareProductManager and ActivityLogManager. This change makes this action explicit at the constructor level.\n\nOut of curiosity, why should we ensure this constructor is only accessible from the tests and not from the rest of the code?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-03 16:12:38.000000000",
+      "in_reply_to": "83ed2b0b_ccf99441",
+      "unresolved": true
+    },
+    {
+      "id": "d82fc237_03a22e51",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "If we think about the options, this constructor could be private, but that would prevent it from being accessible from the tests. So the only remaining options are protected and default (aka package private). This would then expose the constructor either to all classes inhering from it or to all classes in the same package (including the tests). In both cases, it's impossible to ensure the constructor is only accessible from the tests.\n\nConsidering these dependencies are anyway \"injected\" in the class, why not making this clear at the constructor level? Or using a factory method?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-03 16:41:28.000000000",
+      "in_reply_to": "a5f20a8c_3c4245b4",
+      "unresolved": true
+    },
+    {
+      "id": "84668df8_138a16cd",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "We can make it clear at the constructor level, that will work too. i am not completely comfortable with adding constructors/code purely for the sake of testing without comments or modifiers to not kae it accessible to all.",
+      "author": {
+        "account_id": 1877,
+        "name": "Ilana Paktor",
+        "display_name": null,
+        "email": "ilanap@amdocs.com",
+        "username": "ilanap"
+      },
+      "updated": "2020-05-04 05:59:13.000000000",
+      "in_reply_to": "d82fc237_03a22e51",
+      "unresolved": true
+    },
+    {
+      "id": "e53c5c96_4c140116",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "Could you please provide an example of what you think would work the best?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-04 09:59:53.000000000",
+      "in_reply_to": "84668df8_138a16cd",
+      "unresolved": true
+    },
+    {
+      "id": "3fbddaed_a2ddfd23",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "Done",
+      "author": {
+        "account_id": 1877,
+        "name": "Ilana Paktor",
+        "display_name": null,
+        "email": "ilanap@amdocs.com",
+        "username": "ilanap"
+      },
+      "updated": "2020-05-05 18:18:08.000000000",
+      "in_reply_to": "e53c5c96_4c140116",
+      "unresolved": false
+    },
+    {
+      "id": "b53a107e_f3efe447",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/main/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImpl.java",
+      "patchset_number": 1,
+      "line": 87,
+      "message": "Done",
+      "author": {
+        "account_id": 6625,
+        "name": "rodrigo lima",
+        "display_name": null,
+        "email": "rodrigo.lima@yoppworks.com",
+        "username": "rodrigoYoppworks"
+      },
+      "updated": "2020-05-05 20:25:17.000000000",
+      "in_reply_to": "3fbddaed_a2ddfd23",
+      "unresolved": false
+    }
+  ]
+}

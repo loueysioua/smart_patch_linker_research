@@ -1,0 +1,127 @@
+{
+  "id": "aai%2Fdata-router~master~I5d121121e1f6b8167cc0f6b3326b488aedf01430",
+  "change_id": "I5d121121e1f6b8167cc0f6b3326b488aedf01430",
+  "_number": 58979,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_6509e82b",
+      "file_path": "src/main/java/org/onap/aai/datarouter/entity/POAServiceInstanceEntity.java",
+      "patchset_number": 2,
+      "line": 117,
+      "message": "Move this check out of the try/catch block so it is not immediately caught and re-thrown.\n\nMaybe the payload should be attached to the exception, or at least logged so that it can be debugged?",
+      "author": {
+        "account_id": 2475,
+        "name": "Brad Benesch",
+        "display_name": null,
+        "email": "brad.benesch@amdocs.com",
+        "username": "bbenesch"
+      },
+      "updated": "2018-08-07 14:00:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_c52b1c81",
+      "file_path": "src/main/java/org/onap/aai/datarouter/event/EventPublisher.java",
+      "patchset_number": 2,
+      "line": 54,
+      "message": "Long => long?  Also, the l suffix looks too much like 1; either leave it off (not necessary here) or use L",
+      "author": {
+        "account_id": 2475,
+        "name": "Brad Benesch",
+        "display_name": null,
+        "email": "brad.benesch@amdocs.com",
+        "username": "bbenesch"
+      },
+      "updated": "2018-08-07 14:00:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_45370ce4",
+      "file_path": "src/main/java/org/onap/aai/datarouter/event/POAAuditEvent.java",
+      "patchset_number": 2,
+      "line": 71,
+      "message": "Personally I don't think business rules like this belong in POJOs (model layer) - they should be in the service/controller layer.",
+      "author": {
+        "account_id": 2475,
+        "name": "Brad Benesch",
+        "display_name": null,
+        "email": "brad.benesch@amdocs.com",
+        "username": "bbenesch"
+      },
+      "updated": "2018-08-07 14:00:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_e54ad854",
+      "file_path": "src/main/java/org/onap/aai/datarouter/policy/ServiceIntegrityValidationPolicy.java",
+      "patchset_number": 2,
+      "line": 52,
+      "message": "Exceeding the 120 column limit throughout this class",
+      "author": {
+        "account_id": 2475,
+        "name": "Brad Benesch",
+        "display_name": null,
+        "email": "brad.benesch@amdocs.com",
+        "username": "bbenesch"
+      },
+      "updated": "2018-08-07 14:00:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_c760f737",
+      "file_path": "pom.xml",
+      "patchset_number": 3,
+      "line": 3,
+      "message": "this looks like a possible windows cr/lf issue for the whole file?",
+      "author": {
+        "account_id": 1077,
+        "name": "Michael O'Brien",
+        "display_name": null,
+        "email": "frank.obrien@amdocs.com",
+        "username": "michaelobrien"
+      },
+      "updated": "2018-08-08 00:30:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_074eefc1",
+      "file_path": "src/main/java/org/onap/aai/datarouter/util/LoggingUtil.java",
+      "patchset_number": 3,
+      "line": 21,
+      "message": "This LoggingUtil class is similar to other LoggingUtil classes in AAI like in champ-service and gizmo - perhaps it should be moved to aai-common and used by all three",
+      "author": {
+        "account_id": 1077,
+        "name": "Michael O'Brien",
+        "display_name": null,
+        "email": "frank.obrien@amdocs.com",
+        "username": "michaelobrien"
+      },
+      "updated": "2018-08-08 00:30:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_23e511a8",
+      "file_path": "src/main/java/org/onap/aai/datarouter/event/EventPublisher.java",
+      "patchset_number": 4,
+      "line": null,
+      "message": "This class explicitly instantiates a publisher of type DMaaPEventPublisher.  This introduces a build-time dependency on DMaaP which would prevent the data-router from working with another back-end message bus technologies.\n\nThe goal of the event-client library is to remove this type of build-time dependency.  In fact, you shouldn't need this file at all.  If you instantiate the DMaaPEventPublisher via a beans.xml file, you will remove the build-time dependency and allow run-time configuration to specify which type of producer to use (DmaaP, Kafka, RabbitMQ, etc).\n\nHave a look at how this is done for the EntityEventPolicy.  You can find an example of how a DMaapEventConsumer is instantiated via a beans file here:\n\nhttps://gerrit.onap.org/r/gitweb?p=aai/test-config.git;a=blob;f=data-router/dynamic/conf/entity-event-policy.xml;h=ccd6648bf6acaf4ee7061e3a78726ae00d96698f;hb=HEAD",
+      "author": {
+        "account_id": 453,
+        "name": "Steven Blimkie",
+        "display_name": null,
+        "email": "steven.blimkie@amdocs.com",
+        "username": "sblimkie"
+      },
+      "updated": "2018-08-10 20:27:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

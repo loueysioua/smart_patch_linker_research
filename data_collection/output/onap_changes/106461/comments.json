@@ -1,0 +1,1232 @@
+{
+  "id": "policy%2Fcommon~master~I3f2b10d009a1d51f30a6080c07459eb0ac07189f",
+  "change_id": "I3f2b10d009a1d51f30a6080c07459eb0ac07189f",
+  "_number": 106461,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "35478617_587335bc",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 1,
+      "line": 491,
+      "message": "You still want to modify the Logger interface so that the EELFLogger returned by FlexLogger can invoke these methods. For the EELFLogger it can just invoke the methods you have just added. For the other types of loggers that don't support \"{}\", the utility you wrote would be useful there.",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-22 18:39:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "81f2385c_7d4f2486",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "Update copyright to include 2020. Same comment for other files.",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-22 21:22:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2ca7f466_a0b371b0",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 2,
+      "line": 384,
+      "message": "Did you still want to use the utility you wrote to translate \"{}\" for loggers that don't support that capability out of the box?",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-22 21:22:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "165ee029_e8082c02",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "Suggestion: It would be nice if the added methods in this class also supported formatted messages too. In that case, I would extract 'formatMessage()' from the Logger4j class and put it in a utility class to avoid duplicate code, like you had in a previous patch.",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-23 13:48:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3064156a_f729df50",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 3,
+      "line": 490,
+      "message": "I think  this new method signature will be hiding this method in line 441:  \npublic static void info(String className, String arg0)\nYou may be able to remove the 441 method if the had the same body, but they don't.\n\nCan you test it out and verify which method is called when calling\n info(\"a\", \"b\") and get back to us?\n\nThis is a general question, it also applies to warn below ..",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-04-23 14:37:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cfc4aa27_8f6af01b",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 3,
+      "line": 661,
+      "message": "need to call seTimestamps() ?\n\nsame question for the various methods below",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:38:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bbf2c4d8_0f1a4f15",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 3,
+      "line": 124,
+      "message": "it would probably be good to invoke the appropriate isXxxEnabled() method, so-as to avoid doing the formatMessage if it is unnecessary.\n\nsame comment for the subsequent changes",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:38:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "db3ad690_b0d59075",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 3,
+      "line": 126,
+      "message": "The signature of this call to debug() will match both lines 113 and 124.  Depending on which one javac chooses, this could result in inifinite recursion.  Perhaps change it to invoke log.debug() instead of debug().\n\nSame comment for the subsequent changes",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:38:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9833e42e_dd1f733d",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 3,
+      "line": 646,
+      "message": "is the \"|| ...\" portion needed?  I think the first portion is sufficient, unless there's some specific oddity that this handles.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:38:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1abd10d1_391ef69f",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 3,
+      "line": 157,
+      "message": "Agreed",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:38:53.000000000",
+      "in_reply_to": "165ee029_e8082c02",
+      "unresolved": true
+    },
+    {
+      "id": "a3f5ed5b_ea1717aa",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 3,
+      "line": 490,
+      "message": "Good catch.  Looking at 441, it makes me wonder if these new methods should also set/pass a message code like the old method.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 14:41:09.000000000",
+      "in_reply_to": "3064156a_f729df50",
+      "unresolved": true
+    },
+    {
+      "id": "174d79a5_c502e26c",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 5,
+      "line": 336,
+      "message": "oops",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 22:10:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3db10c4d_5dcc93fc",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 5,
+      "line": 444,
+      "message": "should delete this and the others (i.e., debug, warn, error) too",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-23 22:10:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ae29307b_4bbe8662",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/OnapLoggingUtils.java",
+      "patchset_number": 6,
+      "line": 98,
+      "message": "remove the \"|| ...\" portion of this test",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "42ea6f69_c9225b39",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": null,
+      "message": "I'm wondering why we're adding these hooks in multiple classes.  Seems like one should be invoking the other, in which case, it should only be needed in one class, and all of the code should use that one class.\n\nIn other words, no classes should be invoking the EELFLoggers directly, but should be using PolicyLogger instead.  If that were the case, then the hooks would only be needed in PolicyLogger.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e87eff78_0e04115b",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 480,
+      "message": "add return if info not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0af2866e_a2423b9f",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 483,
+      "message": "toString will throw NPE if arguments[0]=null",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fe45f338_7bfd4e2f",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 487,
+      "message": "use debugLogger directly",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c200db8f_4394a16a",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 491,
+      "message": "should this also pass a message code?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "57871954_6e069d34",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 559,
+      "message": "add return if warn not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6f22a1e0_8daf07f8",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 562,
+      "message": "toString will throw NPE if arguments[0]=null",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7389777_2893b39c",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 566,
+      "message": "use debugLogger directly",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c8cce9da_21825319",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 570,
+      "message": "should this also pass a message code?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ad281214_dfbcfaa4",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 643,
+      "message": "add return if error not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d02aed89_35824fd8",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 647,
+      "message": "toString will throw NPE if arguments[0]=null",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bb714fea_ee7dc87f",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 651,
+      "message": "use errorLogger directly",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5e34b20c_56fb17f1",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 656,
+      "message": "should this also pass a message code?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7c3d9197_32d5db2a",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 725,
+      "message": "add return if debug not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "88caee03_1f652591",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 728,
+      "message": "toString will throw NPE if arguments[0]=null",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c29fe590_77f57c4d",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 732,
+      "message": "use debugLogger directly",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8550a7fe_10668a06",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 736,
+      "message": "should this also pass a message code?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f3a8efea_e4209fcd",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 758,
+      "message": "add return if info not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9831aac9_7d4b176b",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 1166,
+      "message": "add return if info not enabled",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "235ee51d_30441a17",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 1173,
+      "message": "toString will throw NPE if arguments[0]=null",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "00c4c218_f118c6b8",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 1178,
+      "message": "should this also pass a message code?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5dfa3796_8adeca56",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 114,
+      "message": "as with PolicyLogger, need to remove this method and fold it into the method on line 125\n\nsame comment for the corresponding info(), error(), and warn() methods",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06c62de4_979e4742",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 127,
+      "message": "invoke log.debug",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d7e1cea6_49eb1a40",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 188,
+      "message": "invoke log.error",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "cff26f72_5ff853be",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 225,
+      "message": "invoke log.info",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "22fe5b47_b347a477",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 285,
+      "message": "invoke log.warn",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "37bc0e35_7cc4166d",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 407,
+      "message": "invoke log.info",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2999c5d9_6efba5b5",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 536,
+      "message": "invoke log.info",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b840668c_38a090d5",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 151,
+      "message": "as with PolicyLogger, need to remove this method and fold it into the method on line 162\n\nsame comment for the corresponding info(), error(), and warn() methods",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c244e58a_55f54e57",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 164,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "73abbc7b_2a9d188b",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 225,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2f06e247_a377a15c",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 262,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ebb7972f_1bbf0f61",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 325,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c84a8960_42514964",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 445,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f3957b25_81879e15",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 6,
+      "line": 570,
+      "message": "invoke displayMessage",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 13:23:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "455d5dd8_d89ad8e9",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 480,
+      "message": "still missing these checks in all of the methods",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": "e87eff78_0e04115b",
+      "unresolved": true
+    },
+    {
+      "id": "e0bf0b20_e89bb96b",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 736,
+      "message": "?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": "8550a7fe_10668a06",
+      "unresolved": true
+    },
+    {
+      "id": "38aba781_54f52368",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 6,
+      "line": 1178,
+      "message": "?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": "00c4c218_f118c6b8",
+      "unresolved": true
+    },
+    {
+      "id": "ccd45dcb_c0e31cb4",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 6,
+      "line": 176,
+      "message": "seems like it's fine like this - let PolicyLogger deal with the arguments",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d2a26c08_4f991eab",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 6,
+      "line": 231,
+      "message": "seems like it's fine like this - let PolicyLogger deal with the arguments",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "efbd466a_f17b0b28",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 6,
+      "line": 263,
+      "message": "seems like it's fine like this - let PolicyLogger deal with the arguments",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb614a7b_30ba0915",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 7,
+      "line": null,
+      "message": "I'm sorry.  This is just getting more complicated than it needs to be, particularly since PolicyLogger already does all of the argument stuff.  Let's just put this class back the way it was and simply add the String/Args methods for info, debug, warn, error, audit, metrics:\n\n  debug(String message, Object[] args) {\n    PolicyLogger.debug(message, args)\n  }",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f695536a_e2bf885c",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+      "patchset_number": 6,
+      "line": 114,
+      "message": "I was totally wrong here.  I was thinking this was \"String, Throwable\", but it was \"Object, Throwable\", so there is no collision.  However, as long as policy-engine still compiles, this may not be needed anyway.  Can you verify that?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": "5dfa3796_8adeca56",
+      "unresolved": true
+    },
+    {
+      "id": "6feb31c9_4cd9dbff",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 7,
+      "line": 153,
+      "message": "don't need \".toString()\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-24 19:45:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "278d10c5_4036cb01",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 8,
+      "line": 780,
+      "message": "Is there a reason why these checks \"enabled\" checks are done in this method but not in the other audit ones?\nThe question will apply to all the other methods, metrics, etc ..",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2020-04-27 13:46:29.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4ada5316_880fd2f0",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 8,
+      "line": 484,
+      "message": "So in general with these checks, there's an assumption that if there's only one argument and the it isn't a throwable, the message is the class name. That isn't always going to be the case but if everyone else is okay with that then that is okay with me. It's a small detail.",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 13:55:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "77d93adf_7671ef0e",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "License Update",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 13:55:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "34bec049_1d7a9ca2",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 8,
+      "line": 441,
+      "message": "Do we really need the check for length of one? Couldn't OnapLoggingUtils.formatMessage() handle the case of only one argument?",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 13:55:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "8b3bee57_dc806006",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 8,
+      "line": 565,
+      "message": "What about the arguments?",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 13:55:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "91b3ed63_34704031",
+      "file_path": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+      "patchset_number": 8,
+      "line": 6,
+      "message": "License Update",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 13:55:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "30bfbb50_f0af4168",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 8,
+      "line": 484,
+      "message": "That is certainly what the old method did, the method that this subsumed.  Whether it's a valid assumption or not, I'm not sure.  Honestly, I'm still not sure of the purpose of these changes, as I don't think we intend to modify existing code to use this new functionality.  In fact, I think we plan to eliminate flexlogger altogether.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-27 15:18:45.000000000",
+      "in_reply_to": "4ada5316_880fd2f0",
+      "unresolved": true
+    },
+    {
+      "id": "d1cb0256_b67d8525",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 8,
+      "line": 441,
+      "message": "I think SystemOutLogger is the only place where we want to format the message like this - the other loggers still work differently.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-27 15:18:45.000000000",
+      "in_reply_to": "34bec049_1d7a9ca2",
+      "unresolved": true
+    },
+    {
+      "id": "4cf6fe58_03ee8579",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+      "patchset_number": 8,
+      "line": 565,
+      "message": "oh, good catch!",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-27 15:18:45.000000000",
+      "in_reply_to": "8b3bee57_dc806006",
+      "unresolved": true
+    },
+    {
+      "id": "39698f36_cff8a095",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 8,
+      "line": 484,
+      "message": "I agree that the prior implementation made that assumption but at least it was explicit in the arguments that the string was \"className\" so it gives a hint to the developer of what it is specifically using the string as. I think changing it to message is fine too but then placing the value in the MDC with the classNameProp key is a little off putting to me as it may or may not be an actual class name. That being said I don't have a strong opinion on the matter so I'm fine with it if everyone else is. Perhaps a note in the Java doc that describes under what conditions message is used as a className could help clarify.",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-27 15:33:53.000000000",
+      "in_reply_to": "30bfbb50_f0af4168",
+      "unresolved": true
+    },
+    {
+      "id": "473a5029_f5627100",
+      "file_path": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+      "patchset_number": 8,
+      "line": 484,
+      "message": "Agreed, the doc on line 477 (and other places) should reflect the fact that this is assumed to be a class name, if there is exactly one argument and the argument is not a throwable.  Wonder how often this is used?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-04-27 16:08:32.000000000",
+      "in_reply_to": "39698f36_cff8a095",
+      "unresolved": true
+    },
+    {
+      "id": "d928e465_5504a88d",
+      "file_path": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+      "patchset_number": 11,
+      "line": 6,
+      "message": "One last license update, otherwise everything looks good!",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-28 13:31:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f7f22f6b_87c54f30",
+      "file_path": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+      "patchset_number": 12,
+      "line": 6,
+      "message": "Joseph - update, not overwrite.\n2019-2020",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2020-04-28 14:01:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e3006f18_1d312b0b",
+      "file_path": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+      "patchset_number": 13,
+      "line": 6,
+      "message": "I think it should be 2019-2020",
+      "author": {
+        "account_id": 1677,
+        "name": "Daniel Cruz",
+        "display_name": null,
+        "email": "dc443y@att.com",
+        "username": "dc443y"
+      },
+      "updated": "2020-04-28 14:08:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

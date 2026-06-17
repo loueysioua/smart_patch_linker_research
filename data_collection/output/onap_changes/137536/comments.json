@@ -1,0 +1,139 @@
+{
+  "id": "cps~master~If1c066a7d1c1f7e1c154714fe06f2566b727634c",
+  "change_id": "If1c066a7d1c1f7e1c154714fe06f2566b727634c",
+  "_number": 137536,
+  "change_comments": [
+    {
+      "id": "7ae7a5e6_2f50124c",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-03-20 09:16:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "79b69f2b_bff9a66c",
+      "patchset_number": 1,
+      "message": "if I understand it correctly then it solves the basic purpose of saving new subscription and also if its an ongoing subscription then add it to the list of subscribers.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-21 11:21:28.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d642762f_aefdb692",
+      "patchset_number": 1,
+      "message": "yes correct",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-03-22 11:48:36.000000000",
+      "in_reply_to": "79b69f2b_bff9a66c",
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "99da53d4_2053798a",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmNotificationSubscriptionPersistenceServiceImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 72,
+      "message": "NB: an ongoing",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-03-21 11:21:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1e5f9535_c6ce410d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmNotificationSubscriptionPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 123,
+      "message": "There's a few issues here around quotes, e.g. id value is both single and double-quoted (note Json does not support single-quotes). I think Java 17 multi-line strings make quotes much easier to handle, something like this:\n\n    updatedJson = \"\"\"\n        {\"cm-handle\":[{\"id\":\"%s\",\"filters\":{\"filter\":[\n          {\"xpath\": \"%s\",\"subscriptionIds\": [\"%s\"]}]}}]}\n        \"\"\".formatted(cmHandleId, xpath, newSubscriptionId);",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-21 16:31:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6a32bd1e_bda5316c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmNotificationSubscriptionPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 123,
+      "message": "Alternatively, if you prefer structures, can do something like - I prefer this to raw strings because it automatically takes care of escaping special characters like \":\n\n    updatedJson = jsonObjectMapper.asJsonString(\n        Map.of(\"cm-handle\", Map.of(\"id\", cmHandleId, \n            \"filters\", Map.of(\"filter\", Map.of(\"xpath\", xpath, \n                \"subscriptionIds\", List.of(newSubscriptionId))))));",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2024-03-21 16:36:52.000000000",
+      "in_reply_to": "1e5f9535_c6ce410d",
+      "unresolved": true
+    },
+    {
+      "id": "40412fe8_5bbeaf59",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmNotificationSubscriptionPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 123,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-03-22 11:48:36.000000000",
+      "in_reply_to": "6a32bd1e_bda5316c",
+      "unresolved": false
+    },
+    {
+      "id": "c7f4e31f_87d778d8",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/events/cmsubscription/service/CmNotificationSubscriptionPersistenceServiceImplSpec.groovy",
+      "patchset_number": 1,
+      "line": 72,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2024-03-22 11:48:36.000000000",
+      "in_reply_to": "99da53d4_2053798a",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,336 @@
+{
+  "id": "oom~master~I3b619dfc84926bc27381c0b932971b41b12e4269",
+  "change_id": "I3b619dfc84926bc27381c0b932971b41b12e4269",
+  "_number": 49181,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-25 19:01:39.000000000",
+    "updated": "2018-06-27 10:42:45.000000000",
+    "submitted": "2018-06-27 10:42:45.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1733,
+      "name": "Aaron Hay",
+      "display_name": null,
+      "email": "aaron.hay@att.com",
+      "username": "ah415j"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "Create readiness health check for readiness probe",
+  "commit_message": "Create readiness health check for readiness probe\n\nNew health_check.sh added that allows the readiness probe configured in statefulset.yaml to succeed\n\nChange-Id: I3b619dfc84926bc27381c0b932971b41b12e4269\nIssue-ID: OOM-1109\nSigned-off-by: Aaron Hay <ah415j@att.com>\n",
+  "change_log": {
+    "entry_count": 22,
+    "entries": [
+      {
+        "id": "2abf217f780fc40bfd5fc895d10adbfd2e75616f",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:01:39.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "f9e27e29448ba48a6c5e0dba2398192e2d9e8072",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 19:25:18.000000000",
+        "message": "Patch Set 1:\n\nSorry could you explain this change?  The old health check was just verifying that a required port was open.  The new one just echoes a string.  Shouldn't we be addressing why the health port isn't up?",
+        "patchset_number": 1
+      },
+      {
+        "id": "ac654c760a20469e87546f16bd8dbdf8d70a8042",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 19:29:53.000000000",
+        "message": "Patch Set 1:\n\nSee JIRA OOM-1109 for more background information. This change is preventing the containers from going into a ready state until the startODL.sh script nears completion. It takes up to 15 minutes for APPC to be ready when an initialization occurs.",
+        "patchset_number": 1
+      },
+      {
+        "id": "80f603378d41d3f448850425e333529ad71c5528",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 20:09:14.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\nI can't accept this as a solution, as it completely bypasses the usefulness of having a readiness probe.  If it takes APP-C 15 minutes to start, then it's not \"ready\" to serve requests until that's done.  \n\nWhen an APP-C pod fails, and a new one is started to replace it, the new one could immediately begin receiving requests that it isn't ready to serve.",
+        "patchset_number": 1
+      },
+      {
+        "id": "9aa2a41e53b13bff665ea03c091ae87b3414f0c7",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-25 20:14:06.000000000",
+        "message": "Patch Set 1:\n\nThe existing port probe defeats the purpose of having a readiness probe, because it is indicating that APPC is ready when it really isn't. This change is actually making the readiness probe work as it was designed to so that the appc pod is not flagged as ready until it is actually ready to handle requests.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8d2fbfb05a07a8f738eccb0573823386f38e0c17",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-25 20:31:10.000000000",
+        "message": "Patch Set 1: -Code-Review\n\nWas the issue that the readiness probe was marking APP-C ready too soon?  If so, that's likely happening because ODL is started twice in startODL.sh, and it passed readiness sometime during the initial up-time while features are being installed.  If that's the case, then you're right, it's not a very good readiness test and we should devise a better one.\n\nWith this solution, the health_check.sh file is created ( and available for the readiness check to run ) before the second time the karaf executable is invoked.  So there's definitely still an opportunity to advertise readiness before it's time.\n\nCould we instead have a readiness test that hits an API which is only available after karaf is fully up the second time it's started?\n\nI expect that SDN-C suffers from a similar problem, but it may not be as obvious since it installs fewer bundles and starts quicker.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2360b044597f2c0c2ae62feea58bc78a329c43fc",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-26 17:52:21.000000000",
+        "message": "Patch Set 1:\n\n> Was the issue that the readiness probe was marking APP-C ready too\n > soon?  If so, that's likely happening because ODL is started twice\n > in startODL.sh, and it passed readiness sometime during the initial\n > up-time while features are being installed.  If that's the case,\n > then you're right, it's not a very good readiness test and we\n > should devise a better one.\n > \n > With this solution, the health_check.sh file is created ( and\n > available for the readiness check to run ) before the second time\n > the karaf executable is invoked.  So there's definitely still an\n > opportunity to advertise readiness before it's time.\n > \n > Could we instead have a readiness test that hits an API which is\n > only available after karaf is fully up the second time it's\n > started?\n > \n > I expect that SDN-C suffers from a similar problem, but it may not\n > be as obvious since it installs fewer bundles and starts quicker.\n\nIn the end of the startup script it can touch some file. Readiness probe can check whether the file exists.",
+        "patchset_number": 1
+      },
+      {
+        "id": "eb4ec3ae2a54a43879a59a6ad4e233d399569b03",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 11:49:57.000000000",
+        "message": "Patch Set 1:\n\n@Borislav  That's basically what this change is trying to do, except that it's being done before the main ODL executable is invoked.  The karaf command does not return, it leaves you at a command prompt",
+        "patchset_number": 1
+      },
+      {
+        "id": "1047d8fd587c2e0b41a325e5757fd1b26ee6162d",
+        "author": {
+          "account_id": 343,
+          "name": "Helen Chen",
+          "display_name": null,
+          "email": "helen.chen@huawei.com",
+          "username": "helenc878"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-28 19:35:45.000000000",
+        "message": "Patch Set 1:\n\nPrefer to merge this one at C release.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b94a658c4739d22d19e31c6ee38b408266c4cfb3",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-30 15:16:53.000000000",
+        "message": "Topic set to casablanca",
+        "patchset_number": 1
+      },
+      {
+        "id": "d5e162abff110a76354c4e1ea5a0317a30b06fdf",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-20 13:39:30.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a37ec6a6cac87ebdfed57e0b8719aee2fbf56b82",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-20 13:42:57.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "f4550632560d3da0633240545569b694b5a929f7",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-06-20 14:35:54.000000000",
+        "message": "Patch Set 3:\n\nreviewing",
+        "patchset_number": 3
+      },
+      {
+        "id": "fa8737c9be70f5405b40affa0b05e1319de7bd1a",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-20 14:39:39.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "69cf2ec029be173e4070ab8107ef71162e5edd1b",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-20 14:44:28.000000000",
+        "message": "Patch Set 4:\n\n> reviewing\n\nPlease review patch set 4. I have verified that the behavior is working as expected in my testing.\n\nThe readiness status is failed until the completion of the APPC installation.\n\nonap      dev-appc-0   1/2       Running   0         10m       10.44.0.7   k8s-appc1\nonap      dev-appc-2   1/2       Running   0         11m       10.47.0.5   k8s-appc2\nonap      dev-appc-1   1/2       Running   0         12m       10.36.0.9   k8s-appc3\n\nAfter completion of startODL.sh and system level status is back to 100 after the ODL restart, the readiness probe succeeds:\n\nonap      dev-appc-0   2/2       Running   0         10m       10.44.0.7   k8s-appc1\nonap      dev-appc-2   2/2       Running   0         11m       10.47.0.5   k8s-appc2\nonap      dev-appc-1   2/2       Running   0         12m       10.36.0.9   k8s-appc3\n\nContainers:\n  appc:\n    Container ID:  docker://53ff2a51b51266d21bc478b561711f30dbc5a20170f8b4f555356955e449b935\n    Image:         nexus3.onap.org:10001/onap/appc-image:1.3.0-SNAPSHOT-latest\n    Image ID:      docker-pullable://nexus3.onap.org:10001/onap/appc-image@sha256:3f706dd64bc4edb91c54452af6f43cfa38e4813b20ac5c5572dffe35c7b1e186\n    Ports:         8181/TCP, 1830/TCP\n    Command:\n      /opt/appc/bin/startODL.sh\n    State:          Running\n      Started:      Wed, 20 Jun 2018 10:27:31 -0400\n    Ready:          True\n    Restart Count:  0\n    Readiness:      exec [/opt/appc/bin/health_check.sh] delay=10s timeout=1s period=10s #success=1 #failure=3\n\n\n\n\n > reviewing",
+        "patchset_number": 4
+      },
+      {
+        "id": "70cb22f3c5f1daa21a4acfd756f384f3a2c045da",
+        "author": {
+          "account_id": 35,
+          "name": "Gary Wu",
+          "display_name": null,
+          "email": "gary.wu@gmail.com",
+          "username": "gwu"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-06-20 15:25:28.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "4cbf2bce11227c19f8205aaaee14055f41d8ccaa",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-06-20 17:12:30.000000000",
+        "message": "Patch Set 4:\n\nThis looks pretty good.  I'm just curious if it's possible for the readiness probe to pass prior to when ODL is restarted.  My guess is that it's possible, but that this window of opportunity is tiny.",
+        "patchset_number": 4
+      },
+      {
+        "id": "f035dc91d4bf1f0636e2fe0761e85fc6fb4a9aad",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-20 17:16:25.000000000",
+        "message": "Patch Set 4: Code-Review+1\n\n> This looks pretty good.  I'm just curious if it's possible for the\n > readiness probe to pass prior to when ODL is restarted.  My guess\n > is that it's possible, but that this window of opportunity is tiny.\n\nIt is not possible since the script is checking as to whether startODL.sh is still running. The startODL.sh startup script does not finish until the last ODL restart is executed; however, while the restart is occurring, the system level will not be 100 anymore and the health_check will continue to fail until ODL restarts and returns a 100 for the system level check.",
+        "patchset_number": 4
+      },
+      {
+        "id": "77d544af94119d725256ef3fcf9d58a3dff56f4f",
+        "author": {
+          "account_id": 659,
+          "name": "James MacNider",
+          "display_name": null,
+          "email": "James.MacNider@amdocs.com",
+          "username": "jmac"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-06-20 17:17:23.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "e834a8c87f28ddf32a6cd2fa56f0238323f3b6c3",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-06-22 12:57:12.000000000",
+        "message": "Patch Set 4:\n\nIs someone going to merge this soon?",
+        "patchset_number": 4
+      },
+      {
+        "id": "8cdac25bbba57f018e303b2fe307036799dbc007",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-06-27 10:42:37.000000000",
+        "message": "Patch Set 4: Code-Review+2 Verified+1\n\nroot@borislav-rancher:~/onap/master/oom/kubernetes/robot# kgpa | grep appc\nonap          aaa-appc-0                                      2/2       Running            0          2h\nonap          aaa-appc-cdt-749564c549-lwtlc                   1/1       Running            0          2h\nonap          aaa-appc-db-0                                   2/2       Running            0          2h\nonap          aaa-appc-dgbuilder-577569dfdb-7rfmc             1/1       Running            0          2h\n\n------------------------------------------------------------------------------\nBasic APPC Health Check                                               | PASS |\n------------------------------------------------------------------------------",
+        "patchset_number": 4
+      },
+      {
+        "id": "76648a59791169583b34a472be5489a200592d90",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-06-27 10:42:45.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

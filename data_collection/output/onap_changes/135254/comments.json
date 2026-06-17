@@ -1,0 +1,175 @@
+{
+  "id": "dmaap%2Fdatarouter~master~I43d8eaf199ff8327fbcc01f756f6506f3768cb95",
+  "change_id": "I43d8eaf199ff8327fbcc01f756f6506f3768cb95",
+  "_number": 135254,
+  "change_comments": [
+    {
+      "id": "b731a946_42a6b846",
+      "patchset_number": 4,
+      "message": "recheck",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2023-07-13 13:55:22.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f989b427_1a2a48b6",
+      "patchset_number": 4,
+      "message": "stage-release",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2023-07-17 20:19:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "2802b48e_7d02525f",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "I guess the default user will be dcae but should this be more generic or configurable?",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2023-07-03 13:34:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5eea4eba_edfec7b1",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 237,
+      "message": "Do we need to provision publishers also?",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2023-07-03 13:34:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "81f78e7e_2be784ba",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "This header is used to set up a form of authorization (based on unauthenticated identities!) that isn't used in the ONAP context.  The bus controller, acting as a front end to the DR provisioning API, allowed specifying this value when creating a feed (the \"owner\" property in the values.yaml) but used a hard-coded default when creating a subscription.  \n\nThe \"authorization\" mechanism works something like this: the value in X-DMAAP-DR-ON-BEHALF-OF in the API request used to create a feed or subscription must be used in that header on subsequent requests to view or update the feed or subscription. (Exception: if you look up a feed by querying on its name and version, rather than its \"self\" URL, you can read the feed using any value in X-DMAAP-DR-ON-BEHALF-OF.) \n\nI'm looking at 3 possible changes here:\n--- Use a fixed name, but a more generic one, like drprov-client or dmaap-init.\n--- Bring back the owner field in the YAML for the feed in values.yaml, and add it to\n    the YAML for subscriptions as well, and use that value for X-DMAAP-DR-ON-BEHALF-OF,\n    defaulting to a generic fixed name.\n--- Use the component's common name in this field.\n\nFrom the perspective of debugging DR provisioning issues, which typically involves querying the DR provisioning API, having a single fixed value for this field is the most convenient.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2023-07-10 13:38:19.000000000",
+      "in_reply_to": "2802b48e_7d02525f",
+      "unresolved": true
+    },
+    {
+      "id": "ecfcad4b_daf517a7",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 237,
+      "message": "DR does not have a separate notion of feed and publisher.  A feed has a list of associated \"endpoints\" (username/password pairs, created by the client, not the DR provisioning system).  The bus controller simulated the distinction between feeds and publishers by creating a feed with a dummy endpoint, and then created publishers by updating the feed with a new endpoint.  I did not want to add this complexity to the drprov-client script.   (After you made your comment, but before I read it, I added a(n incomplete) README that includes a discussion of this and its implications.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2023-07-10 13:38:19.000000000",
+      "in_reply_to": "5eea4eba_edfec7b1",
+      "unresolved": true
+    },
+    {
+      "id": "aef1479b_d24053a3",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "Yep, agreed. I think option 1 or 3 is fine here as long as the pub/sub apps can refernece it somehow. It still leads to some hardcoding for these particular feeds but for this use case it's prob fine.",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2023-07-10 13:55:38.000000000",
+      "in_reply_to": "81f78e7e_2be784ba",
+      "unresolved": true
+    },
+    {
+      "id": "bbaa6d23_dea64605",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 237,
+      "message": "Of course, I'm so long away from it I had forgotten about the endpoints mech",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2023-07-10 13:55:38.000000000",
+      "in_reply_to": "ecfcad4b_daf517a7",
+      "unresolved": true
+    },
+    {
+      "id": "2840aaf5_30763b11",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 5,
+      "message": "I've gone for the first option, a fixed generic name.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2023-07-13 13:57:41.000000000",
+      "in_reply_to": "aef1479b_d24053a3",
+      "unresolved": false
+    },
+    {
+      "id": "13f38389_a6866c12",
+      "file_path": "datarouter-prov-client/misc/drprov-client.sh",
+      "patchset_number": 1,
+      "line": 237,
+      "message": "Documented in the README.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2023-07-13 13:57:41.000000000",
+      "in_reply_to": "bbaa6d23_dea64605",
+      "unresolved": false
+    }
+  ]
+}

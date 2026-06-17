@@ -1,0 +1,314 @@
+{
+  "id": "cps~master~Ieb6002212d006396d468f27f853708b5aa1e31f2",
+  "change_id": "Ieb6002212d006396d468f27f853708b5aa1e31f2",
+  "_number": 133420,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "751f8999_928b1144",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 11,
+      "message": "I am confused :-)\nWhat is a list v. a container v. a list element ?!\nCan you explain this during standup maybe?",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-27 08:49:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1f996ab0_777f5adf",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 640,
+      "message": "I have 2 suggestions here\n.Although it is relatively fast you are 'normalizing' the same paths at least twice. Look at the CpsPathUtil methods you'll see what I mean. \nThere is already a method that return CpsPathQuery object and then check what each of them is and what to do of them usign some new method on the CpsPatHQuery object (thats where the knowledge should remain) ie. something like\n\nfor (xpath : xpaths) {\n   cpsPathQuery = CpsPathUtil.getCpsPathQuery(xpath)\n   if cpsPathQuery.isAbslutPathToContainer() {\n     xPathsToContainers.add(xPath)\n   } else {\n     cpsPathQuery.isAbslutPathToList() {\n        xPathsToListContainers.add(xPath)\n     }\n   }\n}",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-27 09:25:44.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "df12e936_08c55d90",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 640,
+      "message": "for (xpath : xpaths) {\n   cpsPathQuery = CpsPathUtil.getCpsPathQuery(xpath)\n   normalizedXPathsToDelete.add(cpsPathQuery.xPath)\n   if (!cpsPathQuery.isPathToListElement() {\n        normalizedXPathsToListElements.add(xPath)\n   }\n}\nfragmentRepository.deleteFragmentsByAnchorIdAndXPath(...)\ndeletePotentialWholeList(...)\n\n\n\n\nprivate deletePotentialWholeList(normalizedXPathsToDelete, normalizedXPathsToListElements) {\n  xPathsToPotentialList = normalizedXPathsToDelete.removeAll(normalizedXPathsToListElements)\n  potentiaListXPathPatterns = xPathsToPotentialList.stream( concat with [%]).collection\n  fragmentRepository.deleteFragmentsByAnchorIdAndXPathPattern(xPathPatterns)\n}",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-27 10:45:27.000000000",
+      "in_reply_to": "1f996ab0_777f5adf",
+      "unresolved": true
+    },
+    {
+      "id": "585be3f2_ae68cfb6",
+      "file_path": "/COMMIT_MSG",
+      "patchset_number": 1,
+      "line": 11,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-27 15:01:49.000000000",
+      "in_reply_to": "751f8999_928b1144",
+      "unresolved": false
+    },
+    {
+      "id": "9f5b64cf_0e4cd23e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 1,
+      "line": 640,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-27 15:01:49.000000000",
+      "in_reply_to": "df12e936_08c55d90",
+      "unresolved": false
+    },
+    {
+      "id": "fdf430b2_772afeee",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 2,
+      "line": 643,
+      "message": "NB: private method should come after all public methods",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-27 17:28:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ae3b6b84_0cbfb4a8",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentNativeRepository.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "very good, many might have forgotten to update the JavaDoc details!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-27 17:28:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "457f9d90_3ccfdf56",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 624,
+      "message": "It can still be a Collection",
+      "author": {
+        "account_id": 8056,
+        "name": "Andras Zoltan Kiss",
+        "display_name": "Andras Zoltan Kiss",
+        "email": "andras.zoltan.kiss@est.tech",
+        "username": "kissand"
+      },
+      "updated": "2023-02-28 15:10:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3dbb5d73_84c73c4d",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 624,
+      "message": "Why use Set, can the input contains any duplications? ArrayList is more effective than HashSet.",
+      "author": {
+        "account_id": 8056,
+        "name": "Andras Zoltan Kiss",
+        "display_name": "Andras Zoltan Kiss",
+        "email": "andras.zoltan.kiss@est.tech",
+        "username": "kissand"
+      },
+      "updated": "2023-02-28 15:10:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a0128d9f_917b802e",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 625,
+      "message": "NB: normalizedXPathsToPotentialLists",
+      "author": {
+        "account_id": 8056,
+        "name": "Andras Zoltan Kiss",
+        "display_name": "Andras Zoltan Kiss",
+        "email": "andras.zoltan.kiss@est.tech",
+        "username": "kissand"
+      },
+      "updated": "2023-02-28 15:10:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d0337464_55455591",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/performance/CpsDataPersistenceServiceDeletePerfTest.groovy",
+      "patchset_number": 3,
+      "line": 34,
+      "message": "not necessary, you have one in the base class",
+      "author": {
+        "account_id": 8056,
+        "name": "Andras Zoltan Kiss",
+        "display_name": "Andras Zoltan Kiss",
+        "email": "andras.zoltan.kiss@est.tech",
+        "username": "kissand"
+      },
+      "updated": "2023-02-28 15:10:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f9ac6590_24eef3cc",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 624,
+      "message": "i was thinking that too but presumed there was  a good reason for using Set...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-28 16:15:24.000000000",
+      "in_reply_to": "457f9d90_3ccfdf56",
+      "unresolved": true
+    },
+    {
+      "id": "adb85438_f3c6293f",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/repository/FragmentNativeRepository.java",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Ack",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-28 16:15:24.000000000",
+      "in_reply_to": "ae3b6b84_0cbfb4a8",
+      "unresolved": false
+    },
+    {
+      "id": "8581b869_d6741fd8",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 2,
+      "line": 643,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-28 16:30:59.000000000",
+      "in_reply_to": "fdf430b2_772afeee",
+      "unresolved": false
+    },
+    {
+      "id": "5def9755_011f1455",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 624,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-28 16:30:59.000000000",
+      "in_reply_to": "3dbb5d73_84c73c4d",
+      "unresolved": false
+    },
+    {
+      "id": "68d6ff2d_78efc7c8",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 624,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-28 16:30:59.000000000",
+      "in_reply_to": "f9ac6590_24eef3cc",
+      "unresolved": false
+    },
+    {
+      "id": "f5a3ddb9_0e7f4eab",
+      "file_path": "cps-ri/src/test/groovy/org/onap/cps/spi/performance/CpsDataPersistenceServiceDeletePerfTest.groovy",
+      "patchset_number": 3,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-28 16:30:59.000000000",
+      "in_reply_to": "d0337464_55455591",
+      "unresolved": false
+    },
+    {
+      "id": "e0e0241d_073515e1",
+      "file_path": "cps-ri/src/main/java/org/onap/cps/spi/impl/CpsDataPersistenceServiceImpl.java",
+      "patchset_number": 3,
+      "line": 625,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-28 16:32:49.000000000",
+      "in_reply_to": "a0128d9f_917b802e",
+      "unresolved": false
+    }
+  ]
+}

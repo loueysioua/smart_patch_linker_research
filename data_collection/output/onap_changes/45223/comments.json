@@ -1,0 +1,110 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fblueprints~master~I885e251ef7af91669efef3995e3e813adc709b18",
+  "change_id": "I885e251ef7af91669efef3995e3e813adc709b18",
+  "_number": 45223,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_ae5ba352",
+      "file_path": "blueprints/k8s-holmes-rules.yaml-template",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "I see service-name as pstg-write on 10.12.5.80; possibly the suffice -write is needed by the plugin.",
+      "author": {
+        "account_id": 93,
+        "name": "Vijay Venkatesh Kumar",
+        "display_name": null,
+        "email": "vijayv81@gmail.com",
+        "username": "vv770d"
+      },
+      "updated": "2018-04-30 00:24:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2e379300",
+      "file_path": "blueprints/k8s-holmes-rules.yaml-template",
+      "patchset_number": 1,
+      "line": 39,
+      "message": "There is an extra quote mark here at the beginning of the line.  (I ran into this problem trying to deploy holmes-rules.)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-30 00:27:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6e511b2f",
+      "file_path": "blueprints/k8s-tca.yaml-template",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "This value needs to be quoted.  (\"8443\")\nI ran into a problem with this--it doesn't show up until the k8s plugin makes the API call to k8s, and then it fails.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-30 00:27:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0e3417fa",
+      "file_path": "blueprints/k8s-tca.yaml-template",
+      "patchset_number": 1,
+      "line": 43,
+      "message": "Also needs to be quoted.  (\"3904\")",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-30 00:27:54.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4e2d3fa7",
+      "file_path": "blueprints/k8s-holmes-rules.yaml-template",
+      "patchset_number": 1,
+      "line": 45,
+      "message": "\"pstg-write\" is the private postgres used by inventory.  It's not the one we want.   We definitely do not want the blueprint to add \"-write\".",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-30 01:01:04.000000000",
+      "in_reply_to": "5a93c517_ae5ba352",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1929c389",
+      "file_path": "blueprints/k8s-holmes-engine.yaml-template",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Due to the k8s rules for naming deployments and services (following the very old DNS RFC), the plugin has to truncate the service component name that it generates in order to use it in a k8s object name.   Unfortunately, in one case, the truncation leaves a \"-\" at the end of the truncated name, which turns out to be a violation of the rule that the plugin isn't smart enough to detect and fix. The workaround is: At line 96 of this file, we currently have:\nservice_component_type: dcae-analytics-holmes-engine-management\n\nThis can be changed to:\nservice_component_type: dcae-analytics-holmes-engin-management\n\n(Yes, drop the trailing \"e\" from \"engine\".)\n\nPlease make this additional change.  Otherwise the holmes engine deployment will fail.\n\nThe plugin fixes most naming rule violations, but it missed this one.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-04-30 03:58:08.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

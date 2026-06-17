@@ -1,0 +1,109 @@
+{
+  "id": "cps~master~Iadca27eb1f9482016759070e5afdc70c53f9d043",
+  "change_id": "Iadca27eb1f9482016759070e5afdc70c53f9d043",
+  "_number": 136512,
+  "change_comments": [
+    {
+      "id": "e0d4a3c4_6160a315",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-11-14 15:32:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "106f201f_21552f91",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/performance/base/CpsPerfTestBase.groovy",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "just wondering do you see (significant) variations in memory usage?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-11-14 09:15:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dec371a2_8d8e8317",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/performance/base/CpsPerfTestBase.groovy",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "Depends on the test. This test varies between 300 and 600 MB. But some tests are extremely stable, having no variance across runs.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-11-14 10:25:27.000000000",
+      "in_reply_to": "106f201f_21552f91",
+      "unresolved": false
+    },
+    {
+      "id": "f2852bd1_1cdd227c",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/performance/base/CpsPerfTestBase.groovy",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "maybe some test (which use larger around of memory) are affected by GC run during the test?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-11-14 15:29:28.000000000",
+      "in_reply_to": "dec371a2_8d8e8317",
+      "unresolved": false
+    },
+    {
+      "id": "0dd45290_3ce9dcc3",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/performance/base/CpsPerfTestBase.groovy",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "Yes, I think you're correct. Tests that use small amounts of memory always report same usage across runs:\n   \n    4.72\t4.72\t4.72\t4.72\t4.72\n   \nBut tests using large amounts of memory tend to fluctuate:\n\n    589.15\t381.56\t266.63\t232.72\t634.67\n\nObvious explanation is that GC is freeing memory during tests.\n\nSo right now I'm writing tests for the ResourceMeter class itself, and I'm looking at a different way of reporting memory used.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-11-14 15:41:14.000000000",
+      "in_reply_to": "f2852bd1_1cdd227c",
+      "unresolved": true
+    },
+    {
+      "id": "f9d60648_7c88628e",
+      "file_path": "integration-test/src/test/groovy/org/onap/cps/integration/performance/base/CpsPerfTestBase.groovy",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "CPS-1967 attempts to address this. We are now incorrectly recording current memory usage instead of peak memory usage. So if GC runs during a test, the amount of memory may be hugely under-reported (possibly zero). It may be some time before we have an adequate solution - Micro-benchmarking with Garbage Collection is hard!",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-11-15 18:24:10.000000000",
+      "in_reply_to": "0dd45290_3ce9dcc3",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "id": "policy%2Fengine~master~I9dc4fecddc842e80b433d2709a26e7af1760882a",
+  "change_id": "I9dc4fecddc842e80b433d2709a26e7af1760882a",
+  "_number": 28435,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_43ba6c6f",
+      "file_path": "packages/install/src/files/console.conf",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "Which component uses this value? I don't think tomcat uses this config file, am I wrong?",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2018-01-18 18:48:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a3aa5017",
+      "file_path": "packages/install/src/files/console.conf",
+      "patchset_number": 1,
+      "line": 12,
+      "message": "The console component uses this conf file. For example, SSL_HTTP_CONNECTOR_PORT is stored here and populated in the console server.xml file. This value is the password to the keystore which holds the security certificate.",
+      "author": {
+        "account_id": 1759,
+        "name": "Temoc Rodriguez",
+        "display_name": null,
+        "email": "cr056n@att.com",
+        "username": "cr056n"
+      },
+      "updated": "2018-01-18 19:00:18.000000000",
+      "in_reply_to": "5a93c517_43ba6c6f",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_86516210",
+      "file_path": "packages/base/src/files/install/servers/console/conf/server.xml",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "This wouldn't work without a keystore, it will break automated installation if not existing, I believe.   Right now, drools-pdp packages keystore to talk to aai with certificate.   Can the same be done be here?   The issue being is that this keystore I think it has to exist for correct functioning.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-01-18 20:47:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_266f2ec7",
+      "file_path": "packages/base/src/files/install/servers/console/conf/server.xml",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "Jorge, you are correct, it would not work if the keystore does not exist. Automated installation should be fine but the console would not be able to start, tomcat will complain that the file does not exist. However, there already exists a script to create the keystore, created by Pam, see the comment in xml \"Use certtool.sh init <FQDN> in POLICY_HOME/etc/ssl dir to create keystore\". I'm not sure how this will be automated since the FQDN must be the correct one for the host, it's not generic. Additionally, this would install a self-signed certification which is not suitable for a production environment. Thus if you want a CA signed cert I can help with the process, but I cannot actually place the order for it. I'm not sure of what the onap process is for obtaining such certs so you'll have to fill me in on that.",
+      "author": {
+        "account_id": 1759,
+        "name": "Temoc Rodriguez",
+        "display_name": null,
+        "email": "cr056n@att.com",
+        "username": "cr056n"
+      },
+      "updated": "2018-01-18 21:01:14.000000000",
+      "in_reply_to": "5a93c517_86516210",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6683f656",
+      "file_path": "packages/base/src/files/install/servers/console/conf/server.xml",
+      "patchset_number": 1,
+      "line": 118,
+      "message": "Thanks Temoc for the explanation.   For ONAP, we should come up and running without human intervention, so installation scripts should ensure that without manual intervention.\n\nRight now, ONAP uses self signed certificates for automated, test purpose installation, using trusted root CA certificates is out of the scope for at least the initial phases of Beijing.\n\nFirst step is to consult with Portal team because the use of self signed certificates implies that the client side is able to deal with them.\n\nThis discussion can take a bit offline.  \n\nI think for the purpose of this code inspection, I suggest to update the ciphers section in the commented out configuration above (and undo all other changes) until we have resolution on how to proceed.\n\nThe issue being again is that if we let these changes in as they are, they will break the UI for folks using it.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-01-18 21:20:18.000000000",
+      "in_reply_to": "5a93c517_266f2ec7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f9131b64",
+      "file_path": "packages/install/src/files/console.conf",
+      "patchset_number": 2,
+      "line": 11,
+      "message": "probably good to set a default, otherwise expanded config files (tomcat -server.xml I assume) may be invalid and give problems coming up, if this one is used.\n\nI've seen it set up like this:\n\nKEYSTORE_PASSWD=PolicyR0ck$",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-01-26 15:39:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

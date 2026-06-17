@@ -1,0 +1,365 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I78df868e0dd51008ef39d01553e6a0a3b8273a54",
+  "change_id": "I78df868e0dd51008ef39d01553e6a0a3b8273a54",
+  "_number": 73907,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_253161a2",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/MessageValidator.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "I'd prefer to have this class non-rx. Maybe return Either<String(nok), String(ok)> or Optional<errormessage> in both cases. Having utility function in utils module, we can simply use it on a result from current class in VesHvCollector class.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_c55975ff",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/Router.kt",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "Such logs should be inside reactive stream, eg. `Mono.just(...).doOnNext(log)`. There are 2 reasons:\n\n1. We may loose the rx context (so also MDCs)\n2. Log should be done in rx runtime/subscription phase (not when setting up the stream)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e55cb9ef",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/Router.kt",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "Also this little method begs to be extracted to common `Option<T>.asMonoWithLog(accMsgPrvdr, rjctdMsgPrvdr)`",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_85736d7f",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/VesDecoder.kt",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "As in other cases: try to extract the common part and put it in utils. Also I do not like the fact that you've put rx to this plain functional class. I believe that when we extract this utility method then it will settle down as expected. Please also check other similar places. The goal is to have as much restricted rx part of code as possible.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_6568c987",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/VesHvCollector.kt",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "After removing rx from decoder there won't be a need for this bizarre construct ;)",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_05077dcb",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/VesHvCollector.kt",
+      "patchset_number": 2,
+      "line": 81,
+      "message": "As above.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_a5c0f17c",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/adapters/kafka/KafkaSink.kt",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "It would be nice to have a common operator in our utils module.\n\n```\nfun Flux<T>.filterWithLog(pred: T -> Bool, acceptedMsg: T-> String, rejectedMsg: T-> String)\n```\n\nor similar.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_65ba090c",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/socket/NettyTcpServer.kt",
+      "patchset_number": 2,
+      "line": 60,
+      "message": "\"...with SSL enabled\" sounds better, or not?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_45bfc5fb",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/socket/NettyTcpServer.kt",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "... with SSL disabled",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_05d21d5c",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/errors.kt",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Looks like error messages do no match actual errors.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_253c0193",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/wire_frame.kt",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "Rename this function to `validate` as it does a little more than returning a boolean",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_e5cef9b3",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/wire_frame.kt",
+      "patchset_number": 2,
+      "line": 71,
+      "message": "Convert to `when` (there is refactoring in intellij ready to be used).",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2018-11-30 07:17:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_918acbbd",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/socket/NettyTcpServer.kt",
+      "patchset_number": 2,
+      "line": 60,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 07:58:05.000000000",
+      "in_reply_to": "9adffdf1_65ba090c",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_b1858fae",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/socket/NettyTcpServer.kt",
+      "patchset_number": 2,
+      "line": 63,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 07:58:05.000000000",
+      "in_reply_to": "9adffdf1_45bfc5fb",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_718f27cd",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/errors.kt",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 07:58:05.000000000",
+      "in_reply_to": "9adffdf1_05d21d5c",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_11bedb65",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/wire_frame.kt",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 07:58:05.000000000",
+      "in_reply_to": "9adffdf1_253c0193",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_d1b7f384",
+      "file_path": "hv-collector-domain/src/main/kotlin/org/onap/dcae/collectors/veshv/domain/wire_frame.kt",
+      "patchset_number": 2,
+      "line": 71,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 07:58:05.000000000",
+      "in_reply_to": "9adffdf1_e5cef9b3",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_5159c358",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/MessageValidator.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 08:28:19.000000000",
+      "in_reply_to": "9adffdf1_253161a2",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_b5101a02",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/Router.kt",
+      "patchset_number": 2,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 10:58:25.000000000",
+      "in_reply_to": "9adffdf1_c55975ff",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_5568ce86",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/VesHvCollector.kt",
+      "patchset_number": 2,
+      "line": 70,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 10:58:25.000000000",
+      "in_reply_to": "9adffdf1_6568c987",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_f506a2cd",
+      "file_path": "hv-collector-core/src/main/kotlin/org/onap/dcae/collectors/veshv/impl/VesHvCollector.kt",
+      "patchset_number": 2,
+      "line": 81,
+      "message": "Done",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2018-12-03 10:58:25.000000000",
+      "in_reply_to": "9adffdf1_05077dcb",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "id": "oom~master~I473a0cd0e3e00d39e6c33d87781581ec527fbc89",
+  "change_id": "I473a0cd0e3e00d39e6c33d87781581ec527fbc89",
+  "_number": 109470,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "60d729c9_7e593c3d",
+      "file_path": "kubernetes/dcaegen2/components/dcae-cloudify-manager/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 52,
+      "message": "for my curiosity (as I'm building a template for readiness part), the '-t 15' is mandatory (I've not took it into account...)?",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-24 07:36:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ef08d532_1353100d",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 18,
+      "message": "For new deployment, we expect you to use our templates and use \"apps/v1\" API (extensions/v1beta1 is deprecated since k8s v1.9 and removed in k8s v1.16)",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-24 07:36:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "dda4b100_aaeee6a0",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 20,
+      "message": "please us our templates (kubernetes/dmaap/components/dmaap-bc/templates/deployment.yaml is a good example on how to use them).\nIf you don't manage, don't hesitate to ask for help",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-24 07:36:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6cb12d06_21df56dc",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/templates/service.yaml",
+      "patchset_number": 2,
+      "line": 19,
+      "message": "same here, please use \"common.service\" templates (still in dmaap)\nNote that it requires special way of describing service in values.yaml",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-24 07:36:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4814acbf_a03686fc",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/values.yaml",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "as said is service.yaml, there's a special way to describe it.\n\nFYI, we don't support for now different value for \"internal\" and \"external\" ports. I think it would be nice but for now we don't.\nIs it a big issue on your side?\n\nIf yes, I can \"quickly\" (so let's say a week) add this capability.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-24 07:36:08.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c81ce7ad_bdb1b63f",
+      "file_path": "kubernetes/dcaegen2/components/dcae-cloudify-manager/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 52,
+      "message": "It is not mandatory.  It's the time (in minutes) that the readiness check will continue before exiting with a failure.   The default is 10 minutes.   In practice (at least in my test environment), even 15 minutes is too short for some of the dependencies (sdc in particular), but the container restarts after the timeout, sometimes more than once, and eventually it succeeds.  I think probably I first used -t 15 because I copied it from an example somewhere, and I just continue to cut and paste when I create a new deployment.  (When you finish with your templating work, I will not be cutting and pasting anymore!)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2020-06-24 21:52:38.000000000",
+      "in_reply_to": "60d729c9_7e593c3d",
+      "unresolved": true
+    },
+    {
+      "id": "93cfbea7_ff0b7584",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/values.yaml",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "It's possible using your existing service template to create a ClusterIP Service where the port exposed by the Service and the port on the container are different.  Your template sets the targetPort to the port name.  The port definition in the container spec can use any port number it wishes as long as the port name matches the port name in the service.  So no additional work is needed.   I have set up the dcaemod-healthcheck Service to expose port 80 with the container port at 8080.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2020-06-24 21:52:38.000000000",
+      "in_reply_to": "4814acbf_a03686fc",
+      "unresolved": true
+    },
+    {
+      "id": "bdee9d4d_c3f96006",
+      "file_path": "kubernetes/dcaegen2/components/dcae-cloudify-manager/templates/deployment.yaml",
+      "patchset_number": 2,
+      "line": 52,
+      "message": "Ack",
+      "author": {
+        "account_id": 5170,
+        "name": "ONAP JobDeployer",
+        "display_name": null,
+        "email": "jobdeployer-admin@onap.org",
+        "username": "onapbot"
+      },
+      "updated": "2020-06-25 06:44:46.000000000",
+      "in_reply_to": "c81ce7ad_bdb1b63f",
+      "unresolved": false
+    },
+    {
+      "id": "e99a2e15_d2612484",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/values.yaml",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "If you use \"common.containerPorts\" (defined in kubernetes/common/common/templates/_pod.tpl), it will also use the \"port\" value in the port (and so the same value as external service).\nAnd so it wouldn't really work...\n\nI can add a new value \"internalPort\" in the port definition of the service that would be used if defined.\nWhat do you think?",
+      "author": {
+        "account_id": 5170,
+        "name": "ONAP JobDeployer",
+        "display_name": null,
+        "email": "jobdeployer-admin@onap.org",
+        "username": "onapbot"
+      },
+      "updated": "2020-06-25 06:44:46.000000000",
+      "in_reply_to": "93cfbea7_ff0b7584",
+      "unresolved": true
+    },
+    {
+      "id": "f97b0602_58b98d14",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/values.yaml",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "I think it will be useful to set the Service port to a value that's different from the internal (container) port, especially since we are running containers without root privilege and so cannot use (easily) the standard ports for common protocols.\n\nI don't think it's essential for healthcheck, so I will switch to using the template for ports, and we will expose 8080 on the container and on the Service.  If do add \"internalPort\" later, let me know and we will try it here.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2020-06-25 16:25:11.000000000",
+      "in_reply_to": "e99a2e15_d2612484",
+      "unresolved": true
+    },
+    {
+      "id": "dd7f15a5_faa10906",
+      "file_path": "kubernetes/dcaemod/components/dcaemod-healthcheck/values.yaml",
+      "patchset_number": 2,
+      "line": 29,
+      "message": "OK, I'm inline with you!\nI do think it's a valid idea for 8080 -> 80 or 8443 -> 443 so I'll take a look on how to do it.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2020-06-29 06:44:14.000000000",
+      "in_reply_to": "f97b0602_58b98d14",
+      "unresolved": true
+    }
+  ]
+}

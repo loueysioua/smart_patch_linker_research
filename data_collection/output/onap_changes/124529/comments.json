@@ -1,0 +1,42 @@
+{
+  "id": "ccsdk%2Ffeatures~master~I84c01ccce48e721ea83756b8081e5a3d57d8bac4",
+  "change_id": "I84c01ccce48e721ea83756b8081e5a3d57d8bac4",
+  "_number": 124529,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "17436eec_6f4369a4",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPVESMsgValidator.java",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "Wondering why we would need this validation as the VES Collector already validates the message it receives and only publishes them to DMaaP if the received message is valid. Is there a plan to extend mountpoint-registrar to receive messages which do not come from the VES-collector into DMaaP but somehow directly into DMaaP?",
+      "author": {
+        "account_id": 6215,
+        "name": "Ravi Pendurty",
+        "display_name": null,
+        "email": "ravi.pendurty@highstreet-technologies.com",
+        "username": "pendurty"
+      },
+      "updated": "2021-09-30 12:54:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "5423f85e_75022783",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPVESMsgValidator.java",
+      "patchset_number": 2,
+      "line": 23,
+      "message": "There are several reasons. First of all, as you mentioned, we take into consideration, that someone can put message directly into DMaaP. We also don't want to duplicate VES colletor validation, so we left it as interface, that all consumers can have it's own way of validation. And finally this approach allows as to check values of fields in incoming messages. Let's say in our fault message there will be some wierd value in one of required fields, that will make all event as a trash and unusefull in further processing. Or let's say in our nearly comming commits about CM events we will want to know if some objects exists, if they have to according to other fields value. This allows us to stop processing and not send further or save into DB events, that are in some way corrupted from our point of view.",
+      "author": {
+        "account_id": 7854,
+        "name": "Rafal Wrzesniak",
+        "display_name": null,
+        "email": "r.wrzesniak@partner.samsung.com",
+        "username": "rwrzesniak"
+      },
+      "updated": "2021-10-01 07:15:34.000000000",
+      "in_reply_to": "17436eec_6f4369a4",
+      "unresolved": false
+    }
+  ]
+}

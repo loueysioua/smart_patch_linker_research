@@ -1,0 +1,103 @@
+{
+  "id": "oom~master~Id133d6bb83d55d8dac65447e5828b7793069cefb",
+  "change_id": "Id133d6bb83d55d8dac65447e5828b7793069cefb",
+  "_number": 139164,
+  "change_comments": [
+    {
+      "id": "d9935df1_505624b3",
+      "patchset_number": 2,
+      "message": "Startup of sdnc pod fails due to Memory limits.\nI saw in lens during startup the memory consumption of 7,132G for the sdnc container.\nI was able to fix it by setting the memory like this:\n```\n    javaOptions:\n      maxGCPauseMillis: 100\n      parallelGCThreads : 3\n      numberGCLogFiles: 10\n      minMemory: 1028m\n      maxMemory: 6144m\n      gcLogOptions: \"\"\n\n```",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2024-10-22 08:09:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "09c40fa9_2dbd6c43",
+      "patchset_number": 2,
+      "message": "Additionally, could you please increase the SDNC Chart.yaml version (e.g. 15.1.0)",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2024-10-23 07:07:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "83d3633d_47944e81",
+      "patchset_number": 12,
+      "message": "Dan, you did override all other changes (Chart.yaml, config files) of Patchset 11.\nCould you please include them again...",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2024-12-16 16:18:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "45451bae_6602627e",
+      "patchset_number": 12,
+      "message": "Sorry, yes I did override the other changes.  I just cherry picked patchset 11 to restore them and reapplied my version changes which looks like it did the trick (I compared patchset 11 and 13 and saw only my version changes)",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2024-12-17 20:11:01.000000000",
+      "in_reply_to": "83d3633d_47944e81",
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "87108718_ebce3206",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 2,
+      "line": 319,
+      "message": "currently the startup fails due to missing java memory:\n```\n2024-10-22T01:57:00,541 | ERROR | activator-1-thread-2 | BootFeaturesInstaller            | 17 - org.apache.karaf.features.core - 4.4.4 |  -   | Error installing boot features\njava.lang.OutOfMemoryError: Java heap spaceat java.lang.Object.clone(Native Method) ~[?:?]\n\tat org.apache.felix.resolver.util.OpenHashMap.clone(OpenHashMap.java:819) ~[?:?]\n\tat org.apache.felix.resolver.util.OpenHashMapList.deepClone(OpenHashMapList.java:35) ~[?:?]\n\tat org.apache.felix.resolver.Candidates.copy(Candidates.java:1143) ~[?:?]\n\tat org.apache.felix.resolver.Candidates.permutate(Candidates.java:1196) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl$ResolveSession.permutateIfNeeded(ResolverImpl.java:155) ~[?:?]\n\tat org.apache.felix.resolver.Candidates.checkSubstitutes(Candidates.java:344) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl.checkConsistency(ResolverImpl.java:606) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl.findValidCandidates(ResolverImpl.java:574) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl.doResolve(ResolverImpl.java:437) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl.resolve(ResolverImpl.java:420) ~[?:?]\n\tat org.apache.felix.resolver.ResolverImpl.resolve(ResolverImpl.java:374) ~[?:?]\n\tat org.apache.karaf.features.internal.region.SubsystemResolver.resolve(SubsystemResolver.java:256) ~[?:?]\n\tat org.apache.karaf.features.internal.service.Deployer.deploy(Deployer.java:399) ~[?:?]\n\tat org.apache.karaf.features.internal.service.FeaturesServiceImpl.doProvision(FeaturesServiceImpl.java:1069) ~[?:?]\n\tat org.apache.karaf.features.internal.service.FeaturesServiceImpl.lambda$doProvisionInThread$13(FeaturesServiceImpl.java:1004) ~[?:?]\n\tat org.apache.karaf.features.internal.service.FeaturesServiceImpl$$Lambda$299/0x0000000100497bd0.call(Unknown Source) ~[?:?]\n\tat java.util.concurrent.FutureTask.run(Unknown Source) [?:?]\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source) [?:?]\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source) [?:?]\n\tat java.lang.Thread.run(Unknown Source) [?:?] (bearbeitet) \n```",
+      "author": {
+        "account_id": 2679,
+        "name": "Andreas Geissler",
+        "display_name": null,
+        "email": "andreas@geisibee.de",
+        "username": "andreasgeissler"
+      },
+      "updated": "2024-10-22 08:09:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a7cdd50d_abd0afdc",
+      "file_path": "kubernetes/sdnc/values.yaml",
+      "patchset_number": 2,
+      "line": 319,
+      "message": "Updated memory settings in values.yaml to match the values used manually posted above",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2024-10-24 14:49:48.000000000",
+      "in_reply_to": "87108718_ebce3206",
+      "unresolved": false
+    }
+  ]
+}

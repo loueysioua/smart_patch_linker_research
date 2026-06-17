@@ -1,0 +1,76 @@
+{
+  "id": "sdc~master~I83f539caccd29799f613d4e0bb65c7d7e6b97b45",
+  "change_id": "I83f539caccd29799f613d4e0bb65c7d7e6b97b45",
+  "_number": 121706,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "46be21dd_62367a39",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/impl/onboarding/OnboardingPackageProcessor.java",
+      "patchset_number": 5,
+      "line": 164,
+      "message": "I find the logic a little confusing, also is changing the previous behaviour. There is a mix with validation need and manifest read problems.\n\nI suggest to change to:\n\nif(manifest == null){\nreportError(ErrorLevel.ERROR, COULD_NOT_READ_MANIFEST_FILE.formatMessage(SdcCommon.MANIFEST_NAME, packageFileName));\nreturn null;\n}\n\nif (manifestValidationRequired) {\n\n  List<String> errors = validateZipPackage(manifest);\n  if (!errors.isEmpty()) {\n    errors.forEach(message -> reportError(ErrorLevel.ERROR, message));\n    return null;\n  }\n}\n\nreturn return new OnboardPackageInfo(\n  new OnboardPackage(packageName, packageExtension, ByteBuffer.wrap(packageFileContent),                               packageContent), OnboardingTypesEnum.ZIP);",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2021-06-09 11:33:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b43d1435_e05770c7",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/impl/onboarding/OnboardingPackageProcessor.java",
+      "patchset_number": 5,
+      "line": 164,
+      "message": "That's wanted, and i think i know why it's confusing.\nIt's due to my commit message, it's not only the zip validation that we would like to disable but the Manifest.json enforcement.\n\nValidation is done with the manifest (so validation = manifest check), here what we want to achieve is a way to ingest the zip even if the manifest is not there and when the new Flag is set to false in the onboarding config\nIt works because the manifest nullity is verified in the validateZipPackage method (and below calls cf. ManifestAnalyzer...)\n\nSo when the flag is set to true (which is the default), the behavior is not changed.\nWhen it's false the manifest check + validation are just not used, what matters is the return code         \nreturn new OnboardPackageInfo(\n                        new OnboardPackage(packageName, packageExtension, ByteBuffer.wrap(packageFileContent),\n                                packageContent), OnboardingTypesEnum.ZIP);\n\n\nI can't do something like you suggested:\nif(manifest == null){\nreportError(ErrorLevel.ERROR, COULD_NOT_READ_MANIFEST_FILE.formatMessage(SdcCommon.MANIFEST_NAME, packageFileName));\nreturn null;\n}\nBecause that won't fit my need\n\nI could make the code less concise to be more explicit (or obviously different) if it's still not clear to you (I could have missed something!)\nwhat do you think ?",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-06-09 15:02:03.000000000",
+      "in_reply_to": "46be21dd_62367a39",
+      "unresolved": true
+    },
+    {
+      "id": "dd1ee285_5040ea6b",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/impl/onboarding/OnboardingPackageProcessor.java",
+      "patchset_number": 5,
+      "line": 164,
+      "message": "Ok...\nSo if the manifestValidationRequired is not required, you will always return the new OnboardPackageInfo. You don't need to go through the validation or anything else.\n\nI believe you just need to add this before the previous logic:\n\nif (!manifestValidationRequired) {\n            return new OnboardPackageInfo(\n                new OnboardPackage(packageName, packageExtension, ByteBuffer.wrap(packageFileContent),\n                    packageContent), OnboardingTypesEnum.ZIP);\n}\n\n//leave the previous logic\nif (manifest != null) {\n[...]\n\n\nThe way it is, when manifestValidationRequired is false, you still call the validation for nothing.\n\nAlso, if you have a manifestValidationRequired as false and the manifest is null, I believe it will give a NullPointerException in the validation logic:\n\norg.openecomp.sdc.vendorsoftwareproduct.impl.onboarding.OnboardingPackageProcessor#validateZipPackage\norg.openecomp.sdc.vendorsoftwareproduct.impl.onboarding.ManifestAnalyzer#hasHelmEntries\n\nbecause the manifest will be null but you are still calling the validation.\n\nPlease, check if that solution suits your need. If so, I believe the code will be more clear.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2021-06-09 16:19:27.000000000",
+      "in_reply_to": "b43d1435_e05770c7",
+      "unresolved": true
+    },
+    {
+      "id": "7f257e81_30827f97",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/main/java/org/openecomp/sdc/vendorsoftwareproduct/impl/onboarding/OnboardingPackageProcessor.java",
+      "patchset_number": 5,
+      "line": 164,
+      "message": "Done",
+      "author": {
+        "account_id": 23,
+        "name": "S�bastien Determe",
+        "display_name": null,
+        "email": "sebastien.determe@intl.att.com",
+        "username": "sebdet"
+      },
+      "updated": "2021-06-10 16:27:52.000000000",
+      "in_reply_to": "dd1ee285_5040ea6b",
+      "unresolved": false
+    }
+  ]
+}

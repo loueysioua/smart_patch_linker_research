@@ -1,0 +1,122 @@
+{
+  "id": "cps~master~I86d6af446966790d9e45045b330f0c411fcd0f1d",
+  "change_id": "I86d6af446966790d9e45045b330f0c411fcd0f1d",
+  "_number": 138268,
+  "change_comments": [
+    {
+      "id": "d32ddb6b_e5df7fea",
+      "patchset_number": 3,
+      "message": "all looks good.\nif u can write a simple test to prove that the error code is changed from 500 to 400 now.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-18 11:13:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b478a022_0af8e2ee",
+      "patchset_number": 3,
+      "message": "test a case for invalid JSON string at the controller layer is not applicable because controller just delegates the input to service layer and only then the data is validated. The only input validated at controller layer is the timestamp.",
+      "author": {
+        "account_id": 7846,
+        "name": "Arpit Singh",
+        "display_name": "Arpit",
+        "email": "as00745003@techmahindra.com",
+        "username": "arpitsingh"
+      },
+      "updated": "2024-07-19 11:16:20.000000000",
+      "in_reply_to": "d32ddb6b_e5df7fea",
+      "unresolved": false
+    },
+    {
+      "id": "5ee4ce0b_a2c5ec97",
+      "patchset_number": 5,
+      "message": "makes sense now.\nWe might be able to get the correct response code when using POSTMAN and forcefully provide Accept header as application/json , BUT when using swagger , in case of any validation issue it will result in 5XX response code instead of 4XX.\n\nThis fix will streamline our openapi specs as well.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-24 10:48:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "8176b3e2_a8adfbe2",
+      "file_path": "cps-rest/docs/openapi/components.yml",
+      "patchset_number": 4,
+      "line": 379,
+      "message": "just thinking now.\nif you change the content to application/json now , does it need to have a relevant schema for the same and not just string ??",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2024-07-22 11:00:18.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "613da1d9_50402686",
+      "file_path": "cps-rest/docs/openapi/components.yml",
+      "patchset_number": 4,
+      "line": 379,
+      "message": "no a schema is not required as this handles the response in case of a write operation. So, when we post some data to be written to database usually nothing is returned in response body.\nAs per my understanding, since Created response was set to \"text/plain\" while other scenarios like BadRequest, Unauthorized, etc were set to \"application/json\", it was causing a conflict as to what the proper response format should be and hence it fell back to response code 500 as a default.\nAnd you can see that for the delta feature where we have a POST operation the response used is OK instead of Created because there, we return the delta report and OK response uses \"application/json\" which is consistent with other responses.",
+      "author": {
+        "account_id": 7846,
+        "name": "Arpit Singh",
+        "display_name": "Arpit",
+        "email": "as00745003@techmahindra.com",
+        "username": "arpitsingh"
+      },
+      "updated": "2024-07-23 06:49:26.000000000",
+      "in_reply_to": "8176b3e2_a8adfbe2",
+      "unresolved": true
+    },
+    {
+      "id": "324f19cb_70d05c38",
+      "file_path": "cps-rest/docs/openapi/components.yml",
+      "patchset_number": 4,
+      "line": 379,
+      "message": "the exception was thrown in the logs is as follows:\n\n{\"logTimeStamp\":\"2024-07-16T04:33:37.169Z\",\"logLevel\":\"WARN\",\"traceId\":\"fbd1027522dd80aa37bb77459bc23d41\",\"principalId\":\"cpsuser\",\"serviceName\":\"cps-application\",\"message\":\n\"Failure in @ExceptionHandler org.onap.cps.rest.exceptions.CpsRestExceptionHandler#handleBadRequestExceptions(Exception)\",\n\"spanId\":\"183859adcbaaa53a\",\"processId\":\"17552\",\"threadName\":\"qtp1169606246-25\",\"class\":\"o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver\",\n\"exception\":\"\\r\norg.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation\\r\n\\tat org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:256)\\r\n\\tat org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:245)\\r\n\\tat org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)\\r\n\\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:136)\\r\n\\tat org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:432)\\r\n\\tat org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:74)\\r\n\\tat org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:175)\\r\n\\tat org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:80)\\r\n\\tat org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1357)\\r\n\\tat org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1160)\\r\n\\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1106)\\r\n\\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)\\r\n\\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)\\r\n\\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)\\r\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:547)\\r\n\\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)\\r\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHolder.handle(ServletHolder.java:736)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$ChainEnd.doFilter(ServletHandler.java:1614)\\r\n\\tat org.eclipse.jetty.ee10.websocket.servlet.WebSocketUpgradeFilter.doFilter(WebSocketUpgradeFilter.java:195)\\r\n\\tat org.eclipse.jetty.ee10.servlet.FilterHolder.doFilter(FilterHolder.java:205)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1586)\\r\n\\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\\r\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\r\n\\tat org.eclipse.jetty.ee10.servlet.FilterHolder.doFilter(FilterHolder.java:205)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1586)\\r\n\\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\\r\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\r\n\\tat org.eclipse.jetty.ee10.servlet.FilterHolder.doFilter(FilterHolder.java:205)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1586)\\r\n\\tat org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:109)\\r\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\r\n\\tat org.eclipse.jetty.ee10.servlet.FilterHolder.doFilter(FilterHolder.java:205)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1586)\\r\n\\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\\r\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\r\n\\tat org.eclipse.jetty.ee10.servlet.FilterHolder.doFilter(FilterHolder.java:205)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1586)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler$MappedServlet.handle(ServletHandler.java:1547)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletChannel.dispatch(ServletChannel.java:814)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletChannel.handle(ServletChannel.java:431)\\r\n\\tat org.eclipse.jetty.ee10.servlet.ServletHandler.handle(ServletHandler.java:464)\\r\n\\tat org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:571)\\r\n\\tat org.eclipse.jetty.ee10.servlet.SessionHandler.handle(SessionHandler.java:703)\\r\n\\tat org.eclipse.jetty.server.handler.ContextHandler.handle(ContextHandler.java:765)\\r\n\\tat org.eclipse.jetty.server.Server.handle(Server.java:179)\\r\n\\tat org.eclipse.jetty.server.internal.HttpChannelState$HandlerInvoker.run(HttpChannelState.java:619)\\r\n\\tat org.eclipse.jetty.server.internal.HttpConnection.onFillable(HttpConnection.java:411)\\r\n\\tat org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:322)\\r\n\\tat org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:99)\\r\n\\tat org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)\\r\n\\tat org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:478)\\r\n\\tat org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:441)\\r\n\\tat org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:293)\\r\n\\tat org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.produce(AdaptiveExecutionStrategy.java:195)\\r\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:971)\\r\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.doRunJob(QueuedThreadPool.java:1201)\\r\n\\tat org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1156)\\r\n\\tat java.base/java.lang.Thread.run(Thread.java:833)\\r\n\\r\n\"}",
+      "author": {
+        "account_id": 7846,
+        "name": "Arpit Singh",
+        "display_name": "Arpit",
+        "email": "as00745003@techmahindra.com",
+        "username": "arpitsingh"
+      },
+      "updated": "2024-07-23 09:42:51.000000000",
+      "in_reply_to": "613da1d9_50402686",
+      "unresolved": true
+    },
+    {
+      "id": "a40fe3aa_309e78e3",
+      "file_path": "cps-rest/docs/openapi/components.yml",
+      "patchset_number": 4,
+      "line": 379,
+      "message": "From the stack trace the following piece of info helped me find the problem:\n\n{\"logTimeStamp\":\"2024-07-16T04:33:37.169Z\",\"logLevel\":\"WARN\",\"traceId\":\"fbd1027522dd80aa37bb77459bc23d41\",\"principalId\":\"cpsuser\",\"serviceName\":\"cps-application\",\"message\":\n\"Failure in @ExceptionHandler org.onap.cps.rest.exceptions.CpsRestExceptionHandler#handleBadRequestExceptions(Exception)\",\n\"spanId\":\"183859adcbaaa53a\",\"processId\":\"17552\",\"threadName\":\"qtp1169606246-25\",\"class\":\"o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver\",\n\"exception\":\"\\r\norg.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation\\r",
+      "author": {
+        "account_id": 7846,
+        "name": "Arpit Singh",
+        "display_name": "Arpit",
+        "email": "as00745003@techmahindra.com",
+        "username": "arpitsingh"
+      },
+      "updated": "2024-07-23 09:43:45.000000000",
+      "in_reply_to": "324f19cb_70d05c38",
+      "unresolved": true
+    }
+  ]
+}

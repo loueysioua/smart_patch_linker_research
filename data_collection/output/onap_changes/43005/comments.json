@@ -1,0 +1,263 @@
+{
+  "id": "oom~master~I1ceb0ee27bd758f9d1dac5e3dfac808dbeaae6ab",
+  "change_id": "I1ceb0ee27bd758f9d1dac5e3dfac808dbeaae6ab",
+  "_number": 43005,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_3554f2fd",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 117,
+      "message": "Dave had these comments:\n\nWill that create a unique file instance for each node? Just thinking you could have local shards, in such case you would want each node to have its own instance of the daexim directory.",
+      "author": {
+        "account_id": 1733,
+        "name": "Aaron Hay",
+        "display_name": null,
+        "email": "aaron.hay@att.com",
+        "username": "ah415j"
+      },
+      "updated": "2018-04-16 12:20:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d56b4eb7",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 117,
+      "message": "There will be a separate persistent volume for each appc instance. Therefore effectively there will be a unique file per instance.\nDidn't grasp the nodes and local shards in this context. do you mean k8s nodes or appc instances?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-16 12:25:24.000000000",
+      "in_reply_to": "5a93c517_3554f2fd",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b5ad62eb",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 117,
+      "message": "MD-SAL shards can be replicated or local, Dave wanted to make sure if you had a local shard that it was backed up and could be restored. I think we are good here based on your response.",
+      "author": {
+        "account_id": 1733,
+        "name": "Aaron Hay",
+        "display_name": null,
+        "email": "aaron.hay@att.com",
+        "username": "ah415j"
+      },
+      "updated": "2018-04-16 12:31:05.000000000",
+      "in_reply_to": "5a93c517_3554f2fd",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_55c5fe59",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "There's an outstanding bug raised to make the default APP-C deployment have just a single instance (OOM-926).  Clustering will be enabled in a production version of the top-level values.yaml.\nI suggest wrapping the creation of the 2nd and 3rd PVs in a condition that checks against the replicaCount for APP-C.  That way we'll avoid any unnecessary PVs.",
+      "author": {
+        "account_id": 659,
+        "name": "James MacNider",
+        "display_name": null,
+        "email": "James.MacNider@amdocs.com",
+        "username": "jmac"
+      },
+      "updated": "2018-04-16 13:20:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9a7f25e0",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "I see the MDSAL data in a different parent directory structure than the APPC database data. Is there a reason to segment the data in different parent directory (/dockerdata-nfs/appc vs. /dockerdata-nfs/onap/appc) structures?\n\n$ ls -la /dockerdata-nfs/appc/appc\ntotal 20\ndrwxr-xr-x 5 root root 4096 Apr 19 06:55 .\ndrwxr-xr-x 3 root root 4096 Apr 19 06:55 ..\ndrwxr-xr-x 2 root root 4096 Apr 19 06:55 mdsal0\ndrwxr-xr-x 2 root root 4096 Apr 19 06:55 mdsal1\ndrwxr-xr-x 2 root root 4096 Apr 19 06:55 mdsal2\n\n$ ls -la /dockerdata-nfs/onap/appc/data\ntotal 1921904\ndrwxr-xr-x 7  999 docker       4096 Apr 19 06:55 .\ndrwxr-xr-x 3 root root         4096 Apr 16 17:05 ..\n-rw-r----- 1  999 docker        177 Apr 16 17:05 appc-appc-db-0-bin.000001\n-rw-r----- 1  999 docker    3038723 Apr 16 17:05 appc-appc-db-0-bin.000002\n-rw-r----- 1  999 docker 1073766970 Apr 17 03:41 appc-appc-db-0-bin.000003\n-rw-r----- 1  999 docker  597030280 Apr 17 08:57 appc-appc-db-0-bin.000004\n-rw-r----- 1  999 docker        177 Apr 17 10:44 appc-appc-db-0-bin.000005\n-rw-r----- 1  999 docker   16901635 Apr 17 11:07 appc-appc-db-0-bin.000006\n-rw-r----- 1  999 docker   18978620 Apr 17 11:36 appc-appc-db-0-bin.000007\n-rw-r----- 1  999 docker   30357749 Apr 17 16:45 appc-appc-db-0-bin.000008\n-rw-r----- 1  999 docker   17904905 Apr 17 19:36 appc-appc-db-0-bin.000009\n-rw-r----- 1  999 docker   16903179 Apr 19 06:51 appc-appc-db-0-bin.000010\n-rw-r----- 1  999 docker      66640 Apr 19 06:58 appc-appc-db-0-bin.000011\n-rw-r----- 1  999 docker        308 Apr 19 06:55 appc-appc-db-0-bin.index\ndrwxr-x--- 2  999 docker       4096 Apr 16 18:01 appcctl\n-rw-r----- 1  999 docker         56 Apr 16 17:05 auto.cnf\n-rw------- 1  999 docker       1675 Apr 16 17:05 ca-key.pem\n-rw-r--r-- 1  999 docker       1107 Apr 16 17:05 ca.pem\n-rw-r--r-- 1  999 docker       1107 Apr 16 17:05 client-cert.pem\n-rw------- 1  999 docker       1679 Apr 16 17:05 client-key.pem\n-rw-r----- 1  999 docker        965 Apr 19 06:51 ib_buffer_pool\n-rw-r----- 1  999 docker   79691776 Apr 19 06:58 ibdata1\n-rw-r----- 1  999 docker   50331648 Apr 19 06:58 ib_logfile0\n-rw-r----- 1  999 docker   50331648 Apr 19 06:58 ib_logfile1\n-rw-r----- 1  999 docker   12582912 Apr 19 06:56 ibtmp1\ndrwxr-x--- 2  999 docker       4096 Apr 16 17:05 mysql\ndrwxr-x--- 2  999 docker       4096 Apr 16 17:05 performance_schema\n-rw------- 1  999 docker       1679 Apr 16 17:05 private_key.pem\n-rw-r--r-- 1  999 docker        451 Apr 16 17:05 public_key.pem\ndrwxr-x--- 2  999 docker       4096 Apr 16 18:07 sdnctl\n-rw-r--r-- 1  999 docker       1107 Apr 16 17:05 server-cert.pem\n-rw------- 1  999 docker       1675 Apr 16 17:05 server-key.pem\ndrwxr-x--- 2  999 docker      12288 Apr 16 17:05 sys\n\n\n$ kubectl get pv\nNAME                CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                             STORAGECLASS        REASON    AGE\nappc-appc-data0     1Gi        RWO            Retain           Bound     onap/appc-appc-data-appc-appc-2   appc-appc-data                12s\nappc-appc-data1     1Gi        RWO            Retain           Bound     onap/appc-appc-data-appc-appc-0   appc-appc-data                12s\nappc-appc-data2     1Gi        RWO            Retain           Bound     onap/appc-appc-data-appc-appc-1   appc-appc-data                12s\nappc-appc-db-data   1Gi        RWX            Retain           Bound     onap/appc-appc-db-data            appc-appc-db-data             12s",
+      "author": {
+        "account_id": 1733,
+        "name": "Aaron Hay",
+        "display_name": null,
+        "email": "aaron.hay@att.com",
+        "username": "ah415j"
+      },
+      "updated": "2018-04-19 11:03:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5aeafd74",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "The folders do need to be separate, as they're owned by PVs from different charts, but should share a common parent.",
+      "author": {
+        "account_id": 659,
+        "name": "James MacNider",
+        "display_name": null,
+        "email": "James.MacNider@amdocs.com",
+        "username": "jmac"
+      },
+      "updated": "2018-04-19 14:26:09.000000000",
+      "in_reply_to": "5a93c517_9a7f25e0",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a4b51b33",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "I see a problem when I uninstall APPC with these new volumes. They do not clean up properly and I can not install APPC again.\n\n$ helm install local/onap -n appc --namespace onap\nError: release appc failed: object is being deleted: persistentvolumes \"appc-appc-data1\" already exists\nubuntu@k8s-master:~/oom/kubernetes$ helm del --purge appc\nrelease \"appc\" deleted\nubuntu@k8s-master:~/oom/kubernetes$ kubectl get pvc\nNo resources found.\nubuntu@k8s-master:~/oom/kubernetes$ kubectl get pv\nNAME              CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS        CLAIM                             STORAGECLASS     REASON    AGE\nappc-appc-data0   1Gi        RWO            Retain           Terminating   onap/appc-appc-data-appc-appc-2   appc-appc-data             4d\nappc-appc-data1   1Gi        RWO            Retain           Terminating   onap/appc-appc-data-appc-appc-0   appc-appc-data             4d\nappc-appc-data2   1Gi        RWO            Retain           Terminating   onap/appc-appc-data-appc-appc-1   appc-appc-data             4d",
+      "author": {
+        "account_id": 1733,
+        "name": "Aaron Hay",
+        "display_name": null,
+        "email": "aaron.hay@att.com",
+        "username": "ah415j"
+      },
+      "updated": "2018-04-23 15:17:16.000000000",
+      "in_reply_to": "5a93c517_5aeafd74",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d4d6d04e",
+      "file_path": "kubernetes/appc/values.yaml",
+      "patchset_number": 1,
+      "line": 116,
+      "message": "Aaron, you can see in the error that the object is being deleted. You should let k8s finish cleanup of the deleted PVs and then try to redeploy appc.\nI deployed appc, purged it and deployed again:\nroot@borislav-new-rancher:~/onap/master/appc/oom/kubernetes# kgpa\nNAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE\nkube-system   heapster-76b8cd7b5-l9sdn               1/1       Running   0          10d\nkube-system   kube-dns-5d7b4487c9-j5ctf              3/3       Running   0          10d\nkube-system   kubernetes-dashboard-f9577fffd-9sqfc   1/1       Running   0          10d\nkube-system   monitoring-grafana-997796fcf-krq9l     1/1       Running   0          10d\nkube-system   monitoring-influxdb-56fdcd96b-tvtm2    1/1       Running   0          10d\nkube-system   tiller-deploy-54bcc55dd5-sxcl2         1/1       Running   0          10d\nonap          aaa-appc-0                             2/2       Running   0          5m\nonap          aaa-appc-1                             2/2       Running   0          5m\nonap          aaa-appc-2                             2/2       Running   0          5m\nonap          aaa-appc-cdt-54df796868-vnk4b          1/1       Running   0          5m\nonap          aaa-appc-db-0                          2/2       Running   0          5m\nonap          aaa-appc-dgbuilder-856445d5d-gjgs4     1/1       Running   0          5m\nroot@borislav-new-rancher:~/onap/master/appc/oom/kubernetes# kg pv\nNAME               CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                           STORAGECLASS       REASON    AGE\naaa-appc-data0     1Gi        RWO            Retain           Bound     onap/aaa-appc-data-aaa-appc-2   aaa-appc-data                5m\naaa-appc-data1     1Gi        RWO            Retain           Bound     onap/aaa-appc-data-aaa-appc-0   aaa-appc-data                5m\naaa-appc-data2     1Gi        RWO            Retain           Bound     onap/aaa-appc-data-aaa-appc-1   aaa-appc-data                5m\naaa-appc-db-data   1Gi        RWX            Retain           Bound     onap/aaa-appc-db-data           aaa-appc-db-data             5m\nroot@borislav-new-rancher:~/onap/master/appc/oom/kubernetes# kg pvc -n onap\nNAME                       STATUS    VOLUME             CAPACITY   ACCESS MODES   STORAGECLASS       AGE\naaa-appc-data-aaa-appc-0   Bound     aaa-appc-data1     1Gi        RWO            aaa-appc-data      2h\naaa-appc-data-aaa-appc-1   Bound     aaa-appc-data2     1Gi        RWO            aaa-appc-data      2h\naaa-appc-data-aaa-appc-2   Bound     aaa-appc-data0     1Gi        RWO            aaa-appc-data      2h\naaa-appc-db-data           Bound     aaa-appc-db-data   1Gi        RWX            aaa-appc-db-data   5m\n\nYou can see the PVCs are 2h olds while the PVs are 5m old.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-25 13:43:49.000000000",
+      "in_reply_to": "5a93c517_a4b51b33",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_74e49cdf",
+      "file_path": "kubernetes/appc/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 187,
+      "message": "Should this be commented out?  I am confused by commenting out this piece but keeping the persistence.enabled values.yaml entry.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-04-25 15:02:46.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_54cf2056",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "I don't see a definition for .Values.persistence.existingClaim.  If one were to define this and set it to true, what would the expected behaviour/use case be?  Is this for installing on top of an old deployment to (re-)use the MD-SAL DB?",
+      "author": {
+        "account_id": 659,
+        "name": "James MacNider",
+        "display_name": null,
+        "email": "James.MacNider@amdocs.com",
+        "username": "jmac"
+      },
+      "updated": "2018-04-25 15:04:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d40a5089",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 1,
+      "line": 16,
+      "message": "In production usually the PVs will be created separately. This PV is basic, to make ONAP deploy OOB.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-25 15:07:30.000000000",
+      "in_reply_to": "5a93c517_54cf2056",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b405447b",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 1,
+      "line": 38,
+      "message": "Implemented.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-25 15:07:30.000000000",
+      "in_reply_to": "5a93c517_55c5fe59",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_543de029",
+      "file_path": "kubernetes/appc/templates/statefulset.yaml",
+      "patchset_number": 1,
+      "line": 187,
+      "message": "It is not commented. Helm still parses and works with this.\nThe '#'-s can be removed though everywhere...",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-25 15:16:29.000000000",
+      "in_reply_to": "5a93c517_74e49cdf",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_413f5bb4",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Just curious, is it needed to support a cluster size of 5?",
+      "author": {
+        "account_id": 659,
+        "name": "James MacNider",
+        "display_name": null,
+        "email": "James.MacNider@amdocs.com",
+        "username": "jmac"
+      },
+      "updated": "2018-04-26 11:58:25.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8ee907e8",
+      "file_path": "kubernetes/appc/templates/pv.yaml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "I do not know what size of a cluster maybe needed, however 5 looks like a nice number. I doubt the cluster will be larger.\nAPPC did test with 3.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-04-29 11:11:25.000000000",
+      "in_reply_to": "5a93c517_413f5bb4",
+      "unresolved": false
+    }
+  ]
+}

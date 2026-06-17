@@ -1,0 +1,258 @@
+{
+  "id": "dcaegen2%2Fplatform%2Finventory-api~master~I72e9602018ada44e36339a89034bee56bc9f8e8c",
+  "change_id": "I72e9602018ada44e36339a89034bee56bc9f8e8c",
+  "_number": 101370,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2020-02-07 08:18:09.000000000",
+    "updated": "2020-02-18 19:30:35.000000000",
+    "submitted": "2020-02-18 19:09:59.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 3433,
+      "name": "Bogumil Zebek",
+      "display_name": null,
+      "email": "bogumil.zebek@nokia.com",
+      "username": "bogumil_zebek"
+    },
+    "submitter": {
+      "account_id": 93,
+      "name": "Vijay Venkatesh Kumar",
+      "display_name": null,
+      "email": "vijayv81@gmail.com",
+      "username": "vv770d"
+    }
+  },
+  "subject": "Extract jdbi query",
+  "commit_message": "Extract jdbi query\n\nIssue-ID: DCAEGEN2-2032\nSigned-off-by: Zebek Bogumil <bogumil.zebek@nokia.com>\nChange-Id: I72e9602018ada44e36339a89034bee56bc9f8e8c\n",
+  "change_log": {
+    "entry_count": 16,
+    "entries": [
+      {
+        "id": "1f66b6d36e0260e1138ab92ac9c993f40be13204",
+        "author": {
+          "account_id": 3433,
+          "name": "Bogumil Zebek",
+          "display_name": null,
+          "email": "bogumil.zebek@nokia.com",
+          "username": "bogumil_zebek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-07 08:18:09.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "7bc1f6e5dbecf814a3c884234d227eef5c4eade9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-07 08:20:42.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-inventory-api-master-verify-java/154/",
+        "patchset_number": 1
+      },
+      {
+        "id": "039bbcf73736fcce1b584f2edc8b03f8eab2cc4e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-07 08:23:35.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-inventory-api-master-verify-java/154/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-inventory-api-master-verify-java/154",
+        "patchset_number": 1
+      },
+      {
+        "id": "185abd3e5edbda540de8c643c394376d6ba35f6c",
+        "author": {
+          "account_id": 4015,
+          "name": "Shadi Haidar",
+          "display_name": null,
+          "email": "sh1986@att.com",
+          "username": "sh1986"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-07 16:32:50.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "02c280a350ef839c89de7ba422ee41fabcd4ad30",
+        "author": {
+          "account_id": 3433,
+          "name": "Bogumil Zebek",
+          "display_name": null,
+          "email": "bogumil.zebek@nokia.com",
+          "username": "bogumil_zebek"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-02-11 07:43:44.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "3663d82c204dd8fd1e6fae455400b70ba5f8ab94",
+        "author": {
+          "account_id": 4015,
+          "name": "Shadi Haidar",
+          "display_name": null,
+          "email": "sh1986@att.com",
+          "username": "sh1986"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-11 14:02:48.000000000",
+        "message": "Patch Set 1:\n\nWithout the change I'm suggesting, the wild card match for typeName will fail - you can try it yourself and see. If you do GET \"/dcae-service-types?typeName=somepartialtypename*\" it will not work; it was working before your change.\nThe reason for this I think, is you have to call resolveTypeName(typeName) AFTER the  DcaeServiceTypesQueryStatement.create() method. \nSince this method sets \"type_name LIKE :typeName\" if typeName.contains(\"*\"); and then resolveTypeName() changes * to % by doing: replaceAll(\"\\\\*\", \"%\")\nIf you don't follow this sequence and replace * to % before calling DcaeServiceTypesQueryStatement.create() then we won't do \"type_name LIKE :typeName\" so we loose the LIKE when we have wildcard match.\nAs for typeName is used in line 122 and 172; this might be an issue if we're using wild card match and we have results more than the default offset which is not likely since we're matching against partial typeName and not getting all dcae-service-tpyes; you could however, call again the resolveTypeName() before these lines but we never had any issues w/ this.",
+        "patchset_number": 1
+      },
+      {
+        "id": "429044eda796f5b96b39c1755df9c2191f88bcb2",
+        "author": {
+          "account_id": 3433,
+          "name": "Bogumil Zebek",
+          "display_name": null,
+          "email": "bogumil.zebek@nokia.com",
+          "username": "bogumil_zebek"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-12 13:26:35.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "34a4515fff3b31d569067073ca7e57185308f166",
+        "author": {
+          "account_id": 3433,
+          "name": "Bogumil Zebek",
+          "display_name": null,
+          "email": "bogumil.zebek@nokia.com",
+          "username": "bogumil_zebek"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-02-12 13:27:17.000000000",
+        "message": "Patch Set 1:\n\n> Patch Set 1:\n> \n> Without the change I'm suggesting, the wild card match for typeName will fail - you can try it yourself and see. If you do GET \"/dcae-service-types?typeName=somepartialtypename*\" it will not work; it was working before your change.\n> The reason for this I think, is you have to call resolveTypeName(typeName) AFTER the  DcaeServiceTypesQueryStatement.create() method. \n> Since this method sets \"type_name LIKE :typeName\" if typeName.contains(\"*\"); and then resolveTypeName() changes * to % by doing: replaceAll(\"\\\\*\", \"%\")\n> If you don't follow this sequence and replace * to % before calling DcaeServiceTypesQueryStatement.create() then we won't do \"type_name LIKE :typeName\" so we loose the LIKE when we have wildcard match.\n> As for typeName is used in line 122 and 172; this might be an issue if we're using wild card match and we have results more than the default offset which is not likely since we're matching against partial typeName and not getting all dcae-service-tpyes; you could however, call again the resolveTypeName() before these lines but we never had any issues w/ this.\n\nOk, Now I understand where was wrong. Thanks!",
+        "patchset_number": 1
+      },
+      {
+        "id": "1de45eed2fa2910749f62f36ae46bec20dc846c9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-12 13:30:23.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-inventory-api-master-verify-java/157/",
+        "patchset_number": 2
+      },
+      {
+        "id": "74d2e32f9e00062127a1d80b7f8dea13c5727a9b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-12 13:33:33.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-inventory-api-master-verify-java/157/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-inventory-api-master-verify-java/157",
+        "patchset_number": 2
+      },
+      {
+        "id": "8ad691cd259bb4d5ea320213c1fca2b2f3f2f3f5",
+        "author": {
+          "account_id": 4015,
+          "name": "Shadi Haidar",
+          "display_name": null,
+          "email": "sh1986@att.com",
+          "username": "sh1986"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-12 13:48:09.000000000",
+        "message": "Patch Set 2: Code-Review+1\n\nThank you Bogumil for this update.",
+        "patchset_number": 2
+      },
+      {
+        "id": "41276c91f993e235888a8e3f16b6a0af09ea7403",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-18 19:09:56.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "8b479c597a7343c535334895c7a3f6a10b2c6399",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-18 19:09:59.000000000",
+        "message": "Change has been successfully merged by Vijay Venkatesh Kumar",
+        "patchset_number": 2
+      },
+      {
+        "id": "440057d2586ae0e97e3ebf6675fd686b74d0d150",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-18 19:10:05.000000000",
+        "message": "Patch Set 2:\n\nstage-release",
+        "patchset_number": 2
+      },
+      {
+        "id": "c6cdbcf6471a857dabcc75c874af227a9ca2471f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-18 19:29:25.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-inventory-api-master-merge-java/101/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-inventory-api-master-merge-java/101",
+        "patchset_number": 2
+      },
+      {
+        "id": "1df7dcdfa8282e960096ed993fadc35c0dad797c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-18 19:30:35.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-inventory-api-maven-stage-master/225/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-inventory-api-maven-stage-master/225\n\nhttps://jenkins.onap.org/job/dcaegen2-platform-inventory-api-maven-docker-stage-master/227/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-inventory-api-maven-docker-stage-master/227",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

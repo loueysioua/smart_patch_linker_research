@@ -1,0 +1,229 @@
+{
+  "id": "oom~master~I8452cd1f52e941c0a3ebd15eb39b1eecc97a0ded",
+  "change_id": "I8452cd1f52e941c0a3ebd15eb39b1eecc97a0ded",
+  "_number": 120211,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "bbf79a6e_5bba4c4c",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 165,
+      "message": "Hmm... I know what you are trying to achieve here but I'm a little bit afraid that it may get complicated really quickly.\n\nHow about allowing just to input env definition here directly using toYaml function?\n\nI realize that it may put a little bit more boilerplate in the values.yaml but then it gives a full flexibility to the template user. In short:\n\nin values.yaml:\n applicationEnv: >\n   - name: JAVA_OPTS\n     value: '-Dlogback.configurationFile=/etc/ONAP/dcae-hv-ves-collector/logback.xml'\n   - name: MY_SECRET\n     {{- include \"common.secret.envFromSecretFast\" (dict \"global\" . \"uid\" $envValue.secretUid \"key\" myKey) | indent 2 }}\n\nthen in this tamplate you would just do sth like:\n\n{{ tpl .Values.applicationEnv . | toYaml | indent $asNeeded }}\n\nThis should avoid issues if someone needs to reference another secret, access some certificate or o any other crazy stuff that k8s API allows.\n\n@Jack\n@Sylvain\nWhat do you think?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-06 21:31:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2e678478_4d9b18b2",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 165,
+      "message": "yeah, I kind of think like Krzysztof\nBut if you want to continue on this way, I'd propose to create a function and call it here so it's easier to debug",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-04-07 11:49:48.000000000",
+      "in_reply_to": "bbf79a6e_5bba4c4c",
+      "unresolved": true
+    },
+    {
+      "id": "0de9024a_6f768194",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 165,
+      "message": "I dislike the idea of asking users to write fragments of Helm templates in the values.yaml.  Common templates should, in my opinion, provide some level of abstraction.  I was trying to hide the details of the low-level common templates from the users.  In this particular instance, we would be asking DCAE microservice authors to learn the details of OOM common secret management.  I was trying to hide that.\n\nI guess it is a difference in philosophy.  Do we expect everyone who contributes a component to ONAP (even something very small, like a DCAE microservice) to understand the details of the OOM common templates?  Or do we try to provide something more abstract?  \n\nHistorically in DCAE (using the Cloudify deployment mechanism), we have tended towards abstraction.  We ask users to supply some information about their microservices (the image to use, the ports exposed, the location of log files, the placement of certs/keys, etc.) in the Cloudify blueprint, but we don't expect them to understand much about the mechanics of deployment into Kubernetes.  (In fact we moved from simple deployments into Docker to k8s deployment without requiring substantive changes to the blueprints.)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-07 13:41:39.000000000",
+      "in_reply_to": "2e678478_4d9b18b2",
+      "unresolved": true
+    },
+    {
+      "id": "2336bc63_6cb3d6a9",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 162,
+      "message": "BTW. We tend to not use $ as it does not allow us to make a few tricks that we are using from time to time so if possible please create a variable before the loop and then use $dot instead of $",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-07 14:34:28.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ac317832_e967182f",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 165,
+      "message": "I've moved the setting of microservice-specific environment variables into a separate sub-template/function, as Sylvain suggested.  (See patchset 4.)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-13 14:56:01.000000000",
+      "in_reply_to": "0de9024a_6f768194",
+      "unresolved": false
+    },
+    {
+      "id": "04798d52_4c13a53f",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 3,
+      "line": 162,
+      "message": "Done",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-13 15:58:57.000000000",
+      "in_reply_to": "2336bc63_6cb3d6a9",
+      "unresolved": false
+    },
+    {
+      "id": "9cdbf691_2c3f9dd9",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "6 {{ end }} without any indent that's unreadable. Please indent this correctly as we do in other templates",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-15 10:34:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "edc556d8_ab0adc63",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "What is \"correct indentation\" in Helm?\n\nIf the output were not white-space sensitive, I would have done it like this:\n\n{{- define \"dcaegen2-services-common._ms-specific-env-vars\" -}}\n    {{- $global := . }}\n    {{- if .Values.applicationEnv }}\n        {{- range $envName, $envValue := .Values.applicationEnv }}\n            {{- if kindIs \"string\" $envValue }}\n                - name: {{ $envName }}\n                  value: {{ $envValue | quote }}\n            {{- else }}\n                {{- if $envValue.secretUid }}\n                    {{- if $envValue.key }}\n                        - name: {{ $envName }}\n                        {{- include \"common.secret.envFromSecretFast\" (dict \"global\" $global \"uid\" $envValue.secretUid \"key\" $envValue.key) | nindent 2 }}\n                    {{- end }}\n               {{- end }}\n            {{- end -}}\n        {{- end }}\n    {{- end }}\n{{- end -}}\n\nHowever, this makes the output indented differently depending on which condition is met.  Seems like templates should generate text that's not indented at all.\n\nAlternatively, we could do this:\n\n{{- define \"dcaegen2-services-common._ms-specific-env-vars\" -}}\n    {{- $global := . }}\n    {{- if .Values.applicationEnv }}\n        {{- range $envName, $envValue := .Values.applicationEnv }}\n            {{- if kindIs \"string\" $envValue }}\n- name: {{ $envName }}\n  value: {{ $envValue | quote }}\n            {{- else }}\n                {{- if $envValue.secretUid }}\n                    {{- if $envValue.key }}\n- name: {{ $envName }}\n  {{- include \"common.secret.envFromSecretFast\" (dict \"global\" $global \"uid\" $envValue.secretUid \"key\" $envValue.key) | nindent 2 }}\n                    {{- end }}\n               {{- end }}\n            {{- end -}}\n        {{- end }}\n    {{- end }}\n{{- end -}}\n\nTo me, that's no more readable.  In fact, I find it harder to see what's going on.  Using 2-space indentation rather than 4 makes it even worse, in my view.\n\nPlease make a clear statement about how you expect Helm to be indented.  I've got more changes coming, and other people on the DCAE team are also making changes, so we need to know--not just indentation rules, but any other standards you expect to be met.  It takes days or weeks to cycle through even a small change to OOM, so it's best if we get it \"right\" at the beginning, rather than going through several cycles to make everything \"correct\".",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-15 14:19:39.000000000",
+      "in_reply_to": "9cdbf691_2c3f9dd9",
+      "unresolved": true
+    },
+    {
+      "id": "4dead069_27b89d45",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "Perhaps using \"printf\" to generate the text would be acceptable.  It has the downside that the format of the text being emitted isn't immediately obvious, but it does allow for clean indentation.  In cases where a template has a high ratio of \"{{}}\" to emitted text, this might be a good trade-off.  (In this case, however, there may be some issue with the envFromSecretFast output.)",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-15 16:23:15.000000000",
+      "in_reply_to": "edc556d8_ab0adc63",
+      "unresolved": true
+    },
+    {
+      "id": "fe93b4fa_1feaeaee",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "Perhaps this?\n\n{{- define \"dcaegen2-services-common._ms-specific-env-vars\" -}}\n  {{- $global := . }}\n  {{- if .Values.applicationEnv }}\n    {{- range $envName, $envValue := .Values.applicationEnv }}\n      {{- if kindIs \"string\" $envValue }}\n        {{- printf \"- name: %s\\n  value: %s\\n\" $envName ($envValue | quote) }}\n      {{- else }}\n        {{- if $envValue.secretUid }}\n          {{- if $envValue.key }}\n            {{- $secret := include \"common.secret.envFromSecretFast\" (dict \"global\" $global \"uid\" $envValue.secretUid \"key\" $envValue.key) | indent 2 -}}\n            {{- printf \"- name: %s\\n%s\\n\" $envName $secret }}\n          {{- end }}\n        {{- end }}\n      {{- end -}}\n    {{- end }}\n  {{- end }}\n{{- end -}}\n\nI prefer 4-space indentation (because 2-space indentation overlaps with the 3-character opening sequence \"{{-\"), but the convention appears to be 2 spaces.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-15 19:10:13.000000000",
+      "in_reply_to": "4dead069_27b89d45",
+      "unresolved": true
+    },
+    {
+      "id": "106d92be_0fe5dafb",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "Sorry for not being precise enough.\n\nSo usually we are using style where we indent only the \"technical lines\" (those that are starting with {{ and just leave \"rest of the text\" not indented at all (checkout common/common for examples).\nSylvain tends to sometimes use a different style where he indents stuff inside {{ like:\n {{ if a }}\n {{   if b }}\n DoSomeStupidStuff\n {{   end }}\n {{ end }}\n\nso we haven't yet found a consisting indent style so whatever you decide to do is fine as long as it's clear and readable:)",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-16 07:56:42.000000000",
+      "in_reply_to": "fe93b4fa_1feaeaee",
+      "unresolved": true
+    },
+    {
+      "id": "4df213e3_21e7cff1",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 5,
+      "line": 69,
+      "message": "I've adopted a 2-space indentation for the \"technical lines\" and leaving the literal text as is.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2021-04-19 21:02:47.000000000",
+      "in_reply_to": "106d92be_0fe5dafb",
+      "unresolved": false
+    },
+    {
+      "id": "4f659928_bbdcf0f7",
+      "file_path": "kubernetes/dcaegen2-services/common/dcaegen2-services-common/templates/_deployment.tpl",
+      "patchset_number": 9,
+      "line": 61,
+      "message": "in my opinion this is over defensive and can hide issues that we've in our helm charts.\n\nIf we keep it as is and someone makes a typo for example kye: abcd then the line below will never be evaluated. Personally I'd prefer one of two options instead of ifs:\n1) Just use fail if those two are not provided\n2) Just assume that they are always provided and let it blow later if they are not",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-04-27 20:17:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

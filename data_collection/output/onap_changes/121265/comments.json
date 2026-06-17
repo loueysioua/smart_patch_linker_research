@@ -1,0 +1,314 @@
+{
+  "id": "policy%2Fpap~master~I0efe03e835db3c4b2136f7e742bba0e78dc2ac44",
+  "change_id": "I0efe03e835db3c4b2136f7e742bba0e78dc2ac44",
+  "_number": 121265,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "2eb6ec25_f91f01c5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "I don't think this is going to work.   \nOn the drools review, the agreement was that it was to have no changes on this, being OK to keep sending the policy-ids deployed as before.   \nIt will probably also break xacml as it does not support the deploy and undeploy lists yet.   I think this is also comparing different types, getPolicies() returns policy-ids while getPoliciesToBeDeployed() returns full tosca policies.   \nThis implementation also loses functionality as it does not verify that the policies in the undeploy list have being truly undeployed.   That was supported too in the previous implementation.\nI suggest to keep the getPolicies as before and what needs to be checked is that the policiesToBeDeployed are a subset of getPolicies, and policiesToBeUndeployed yields the empty set in the intersection with the getPolicies set.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-05-11 21:54:01.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d6aa113c_7d15295e",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 100,
+      "message": "are any changes needed in this method?  (I don't remember off hand.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-11 22:16:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b0e1681e_ff67b9fa",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "agreed, that should do it (though I don't think there's any mismatch on types).\n\nNote: for the undeployed case, there's nothing that can be done about it other than to log the undeploy failures.  (Other option would be to remove the PDP from the rotation, but I don't think we want to do that.  For that matter, the others would probably fail, too.)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-11 22:16:34.000000000",
+      "in_reply_to": "2eb6ec25_f91f01c5",
+      "unresolved": true
+    },
+    {
+      "id": "b584c27a_296f9211",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "Agree with the comments.\nAbout the \"undeploy failure\" case, if a policy fails to undeploy, should that be added to deployedPolicies list? similar to how the policies that failed to deploy are added to undeployedPolicies list.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-05-12 10:35:38.000000000",
+      "in_reply_to": "b0e1681e_ff67b9fa",
+      "unresolved": true
+    },
+    {
+      "id": "4889a469_269edde1",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "at this point, I'm thinking they should be left off the list, so that PAP will try to undeploy them again when the next heartbeat comes in, thus it will retry at each heartbeat.  However, we could add them to the list so that no auto-retry occurs and leave it up to the PAP client to manually request an undeploy again.\n\nnot sure we want to spend a lot of time on this, as it seems very unlikely",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-12 12:13:56.000000000",
+      "in_reply_to": "b584c27a_296f9211",
+      "unresolved": true
+    },
+    {
+      "id": "ec112542_7360ecc5",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 1,
+      "line": 104,
+      "message": "yeah agreed. Undeployment falure is highly unlikely. So, both the options are fine with me.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2021-05-12 13:06:57.000000000",
+      "in_reply_to": "4889a469_269edde1",
+      "unresolved": true
+    },
+    {
+      "id": "b23a849e_ca6eb5a7",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 103,
+      "message": "\"getPoliciesToBeDeployed\" => \"getPoliciesToBeUndeployed\"",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 13:46:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6f94bc19_e55e576d",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 107,
+      "message": "I think this can be deleted",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 13:46:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b8973901_94461f4c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 110,
+      "message": "maybe add a check here to see if the actualSet still contains anything in expectedUndeploySet.  If so, log a message listing those that failed to undeploy",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 13:46:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d019f29d_266f3a0c",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 111,
+      "message": "I don't think this is true, only the first condition is necessary",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 13:46:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d199002e_b3d1b4fd",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 114,
+      "message": "don't think this is needed - if it's true, then the first condition will be true, too",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 13:46:23.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "37033393_13c72d30",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 103,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-05-27 15:18:56.000000000",
+      "in_reply_to": "b23a849e_ca6eb5a7",
+      "unresolved": false
+    },
+    {
+      "id": "54d7be1e_f8524ee6",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 107,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-05-27 15:18:56.000000000",
+      "in_reply_to": "6f94bc19_e55e576d",
+      "unresolved": false
+    },
+    {
+      "id": "4d7a305e_484c8748",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 110,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-05-27 15:18:56.000000000",
+      "in_reply_to": "b8973901_94461f4c",
+      "unresolved": false
+    },
+    {
+      "id": "9d30049d_088dbd14",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 111,
+      "message": "Ack",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-05-27 15:18:56.000000000",
+      "in_reply_to": "d019f29d_266f3a0c",
+      "unresolved": false
+    },
+    {
+      "id": "ae0b0a4c_826bcfa2",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 4,
+      "line": 114,
+      "message": "Done",
+      "author": {
+        "account_id": 6722,
+        "name": "Wayne Dunican",
+        "display_name": null,
+        "email": "wayne.dunican@est.tech",
+        "username": "waynedunican"
+      },
+      "updated": "2021-05-27 15:18:56.000000000",
+      "in_reply_to": "d199002e_b3d1b4fd",
+      "unresolved": false
+    },
+    {
+      "id": "461c1ac1_94c78861",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 5,
+      "line": 107,
+      "message": "just log a message here - still need to do the steps below (i.e., undeploy failed policies)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 17:16:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bde7e9d9_d8c5ae18",
+      "file_path": "main/src/main/java/org/onap/policy/pap/main/comm/msgdata/UpdateReq.java",
+      "patchset_number": 5,
+      "line": 107,
+      "message": "Done",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-05-27 18:57:58.000000000",
+      "in_reply_to": "461c1ac1_94c78861",
+      "unresolved": false
+    }
+  ]
+}

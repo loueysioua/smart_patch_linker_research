@@ -1,0 +1,144 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~I7b3ceb97a628e3af5bda3178d182f4207069e86d",
+  "change_id": "I7b3ceb97a628e3af5bda3178d182f4207069e86d",
+  "_number": 98857,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c6580406_3992f184",
+      "file_path": "dcae-policy/tox-local.ini",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "no 37?",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2019-11-26 13:49:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d80ee4eb_946df508",
+      "file_path": "dcae-policy/tox.ini",
+      "patchset_number": 1,
+      "line": 14,
+      "message": "why was this commented out in other plugins but not here? why the difference?",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2019-11-26 13:49:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "7483753e_7bbac0a6",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 1,
+      "line": 25,
+      "message": "please delete no longer needed code rather than commenting out",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2019-11-26 13:49:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "49cc6430_64991a07",
+      "file_path": "k8s/setup.py",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "is there a cloudify specific reason you are making this change? This is far less pythonic. Especially if plugins can ever be pipped. Unless there is a cloudify specific reason to move from install_requires to requirements, I do not agree with this change as it is an anti pattern. With the possibly exception of the kubernetes==9.0.0 since install_Requires isn't really the place for exact dependencies, so that should not have been like that to begin with probably.",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2019-11-26 13:49:48.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e07f0113_b846f78b",
+      "file_path": "dcae-policy/tox-local.ini",
+      "patchset_number": 1,
+      "line": 3,
+      "message": "37 does not appear available in the verify job environment.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2019-11-26 18:35:07.000000000",
+      "in_reply_to": "c6580406_3992f184",
+      "unresolved": false
+    },
+    {
+      "id": "40607219_73a50cef",
+      "file_path": "dcae-policy/tox.ini",
+      "patchset_number": 1,
+      "line": 14,
+      "message": "This plugin is the only one whose tests do want to write to the logs directory. I did not add it into tox-local.ini, as I don't know why you'd need an alternate file in the first place.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2019-11-26 18:35:07.000000000",
+      "in_reply_to": "d80ee4eb_946df508",
+      "unresolved": false
+    },
+    {
+      "id": "e4a9daab_ae21b466",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 1,
+      "line": 25,
+      "message": "I did not actually know whether the importer was still needed as the comment above states - tests working without it doesn't mean production will too.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2019-11-26 18:35:07.000000000",
+      "in_reply_to": "7483753e_7bbac0a6",
+      "unresolved": false
+    },
+    {
+      "id": "78dce5e5_6b79499e",
+      "file_path": "k8s/setup.py",
+      "patchset_number": 1,
+      "line": 30,
+      "message": "This pattern was the results of my previous attempts to get consistent results with tox and the ccsdk plugins. Even with latest setuptools, it doesn't appear full PEP 508 syntax may be used in install_requires.\n\nI also originally wanted to preserve the 2.7 version staying with the previous cloudify packages, thus using environment markers. CCSDK uses == in install_requires even more than DCAEGEN2, for possibly valid reasons (?).\n\nAs a compromise, it works when I have install_requires with cloudify-common>=5.0.0, without specifying markers or the github source link, keeping the fuller requirements.txt intact for the tox venvs. Of course, an actually python3-compatible version of cloudify-common needs to land in PyPI for installs to work without the requirements file. And once that is true, the requirements file should drop the github link.\n\ndcaegen2-platform-plugins/relationships$ tox\nGLOB sdist-make: dcaegen2-platform-plugins/relationships/setup.py\nERROR: invocation failed (exit code 1), logfile: dcaegen2-platform-plugins/relationships/.tox/log/GLOB-0.log\n================================================================================================ log start =================================================================================================\nerror in relationshipplugin setup command: 'install_requires' must be a string or list of strings containing valid project/version requirement specifiers; Invalid requirement, parse error at \"'python_v'\"\n\n================================================================================================= log end ==================================================================================================\nERROR: FAIL could not package project - v = InvocationError('python3 setup.py sdist --formats=zip --dist-dir dcaegen2-platform-plugins/relationships/.tox/dist', 1)",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2019-11-26 18:35:07.000000000",
+      "in_reply_to": "49cc6430_64991a07",
+      "unresolved": false
+    }
+  ]
+}

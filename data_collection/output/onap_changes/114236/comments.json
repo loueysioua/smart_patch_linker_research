@@ -1,0 +1,76 @@
+{
+  "id": "oom~master~Icdc8cf6fc84cb3b3c337b4f4e5320980eee06337",
+  "change_id": "Icdc8cf6fc84cb3b3c337b4f4e5320980eee06337",
+  "_number": 114236,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "69973069_7c10a911",
+      "file_path": "kubernetes/so/templates/deployment.yaml",
+      "patchset_number": 24,
+      "line": 45,
+      "message": "Hmmm how about extending ingress template so  that it generates also a job that could run this script instead of using init container to do it?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-02-04 22:24:53.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "21511a4b_05b4a928",
+      "file_path": "kubernetes/so/templates/deployment.yaml",
+      "patchset_number": 24,
+      "line": 45,
+      "message": "the thing is that we need to have the retrieved values for pem files.\nSo either we run aaf_* stuff twice (one for SO or component as it needs truststore, one for Ingress) and we can do as you proposed, either we stay this way.\nWe could generate this init_container in \"container_importer\" for certInitializer but I wanted first to see how many components would need this...",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-02-08 08:13:07.000000000",
+      "in_reply_to": "69973069_7c10a911",
+      "unresolved": true
+    },
+    {
+      "id": "9318ae35_6130beb2",
+      "file_path": "kubernetes/so/templates/deployment.yaml",
+      "patchset_number": 24,
+      "line": 45,
+      "message": "couldn't you just run it once in a separate job, put it in secret and then just reuse this secret here after you've waited for the job to complete?",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-02-08 12:58:14.000000000",
+      "in_reply_to": "21511a4b_05b4a928",
+      "unresolved": true
+    },
+    {
+      "id": "898b7176_2d3dbf1f",
+      "file_path": "kubernetes/so/templates/deployment.yaml",
+      "patchset_number": 24,
+      "line": 45,
+      "message": "I should then create a secret with the files needed for the ingress (ca.crt. ca.key and cacert.pm) + values for SO (truststore + password for truststore)\nMaybe creating two secrets ?\nand for the \"service\" secret (SO here), we could set it as optionnal + give what we want (here truststore + truststore password)?\nWould require a complete rewrite though.",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-02-08 13:28:12.000000000",
+      "in_reply_to": "9318ae35_6130beb2",
+      "unresolved": true
+    }
+  ]
+}

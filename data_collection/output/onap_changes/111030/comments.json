@@ -1,0 +1,110 @@
+{
+  "id": "integration%2Fdocker%2Fonap-java11~master~I80f5edea0c4d579e132229c8567a22de7b146d01",
+  "change_id": "I80f5edea0c4d579e132229c8567a22de7b146d01",
+  "_number": 111030,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8b61dde2_c7a8f477",
+      "file_path": "Dockerfile",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "That's unusual...\nUSR means Unix System Resources it's not abbreviation from user;)\n\nI'd prefer if we keep our stuff in /opt or /home or /app but not in this dir",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2020-08-10 10:01:58.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "68b3112d_d3cd604f",
+      "file_path": "Dockerfile",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "Ack",
+      "author": {
+        "account_id": 1215,
+        "name": "Morgan Richomme",
+        "display_name": null,
+        "email": "morgan.richomme@orange.com",
+        "username": "mrichomme"
+      },
+      "updated": "2020-08-10 11:47:50.000000000",
+      "in_reply_to": "8b61dde2_c7a8f477",
+      "unresolved": false
+    },
+    {
+      "id": "d018f5cd_42a840fb",
+      "file_path": "Dockerfile",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "Can this directory be used in ONAP Docker container images without initialization (i.e. relying on its creation in the base image)?\n\nI'll spin up codesearch VM [1] and report results\n\n[1] https://git.onap.org/integration/tree/bootstrap/codesearch/",
+      "author": {
+        "account_id": 5047,
+        "name": "Pawe? Wieczorek",
+        "display_name": "Pawel Wieczorek",
+        "email": "pawel-wieczorek@outlook.com",
+        "username": "pwieczorek"
+      },
+      "updated": "2020-08-10 13:44:10.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "1d75cec1_44930f47",
+      "file_path": "Dockerfile",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "I am not sure to get your comment \nYou would prefer /opt/onap to /app?\nI do not have a strong view, I think both can be used, no?",
+      "author": {
+        "account_id": 1215,
+        "name": "Morgan Richomme",
+        "display_name": null,
+        "email": "morgan.richomme@orange.com",
+        "username": "mrichomme"
+      },
+      "updated": "2020-08-10 13:57:36.000000000",
+      "in_reply_to": "d018f5cd_42a840fb",
+      "unresolved": true
+    },
+    {
+      "id": "75fce1c0_25e9e81c",
+      "file_path": "Dockerfile",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "Let me clarify: either \"/opt/onap\" or \"/app\" is fine with me.\n\nWhat I meant was following scenario:\n\n1. Base Docker container image (\"onap/java11\") is created with its directory tree as set in this Dockerfile\n2. Subproject creates a new Docker container image using \"onap/java11\" is its base layer (e.g. \"FROM onap/java11\")\n3. Building Subproject Docker container image might request accessing path that is neither available in the base layer nor explicitly created in Subproject Dockerfile\n\nScenario above would be quickly detected (during next Docker container image build) and could only occur if there was an attempt to change path (e.g. chmod) before ADDing/COPYing anything there (\"If <dest> doesn’t exist, it is created along with all missing directories in its path.\" [1][2])\n\nI run codesearch [3] and found 25 occurrences of requesting \"/opt/onap\":\n\n- 13 implicitly creating directory tree (WORKDIR, COPY, ADD)\n- 9 copying directory tree from build artifacts\n- 3 explicitly creating directory tree\n\nI raised this matter just because I saw that path several times in Dockerfiles. I did not inspect it further at the time and I was unaware how it is used there. Now I know there was no reason to worry.\n\nAlso if change from FHS-like [4] paths like \"/opt/onap\" to \"/app\" means ONAP projects intend to go distroless [5][6] then I would be more than happy to see progress in that direction.\n\n[1] https://docs.docker.com/engine/reference/builder/#add\n[2] https://docs.docker.com/engine/reference/builder/#copy\n[3] $ /home/vagrant/go/bin/hound -files Dockerfile /opt/onap\n[4] https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03s13.html\n[5] https://github.com/GoogleContainerTools/distroless\n[6] https://hackernoon.com/distroless-containers-hype-or-true-value-2rfl3wat",
+      "author": {
+        "account_id": 5047,
+        "name": "Pawe? Wieczorek",
+        "display_name": "Pawel Wieczorek",
+        "email": "pawel-wieczorek@outlook.com",
+        "username": "pwieczorek"
+      },
+      "updated": "2020-08-11 09:17:02.000000000",
+      "in_reply_to": "1d75cec1_44930f47",
+      "unresolved": true
+    },
+    {
+      "id": "04b09269_4571bebd",
+      "file_path": "Dockerfile",
+      "patchset_number": 2,
+      "line": 14,
+      "message": "Ok thanks for the long explanation",
+      "author": {
+        "account_id": 1215,
+        "name": "Morgan Richomme",
+        "display_name": null,
+        "email": "morgan.richomme@orange.com",
+        "username": "mrichomme"
+      },
+      "updated": "2020-08-11 15:29:33.000000000",
+      "in_reply_to": "75fce1c0_25e9e81c",
+      "unresolved": true
+    }
+  ]
+}

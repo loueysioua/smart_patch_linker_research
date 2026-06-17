@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I6963fced5608b62a41b73fef5070c21cf45d6fbe",
+  "change_id": "I6963fced5608b62a41b73fef5070c21cf45d6fbe",
+  "_number": 98072,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c5130061_fe1bc855",
+      "file_path": "policy-management/src/test/java/org/onap/policy/drools/controller/internal/MavenDroolsController3Test.java",
+      "patchset_number": 2,
+      "line": 57,
+      "message": "\"volatile\" => \"final\"?\n\nsame comment below and in some of the other files",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 20:20:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "01559ce3_972a29fa",
+      "file_path": "policy-management/src/test/java/org/onap/policy/drools/controller/internal/MavenDroolsController3Test.java",
+      "patchset_number": 3,
+      "line": 57,
+      "message": "don't think \"volatile\" is needed",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-06 20:53:55.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bd89b450_0eeb2d63",
+      "file_path": "policy-core/src/main/java/org/onap/policy/drools/util/KieUtils.java",
+      "patchset_number": 4,
+      "line": 62,
+      "message": "How about 'installArtifact(File kmodule, File pom, String drlKJarPath, File... drls)', which should take care of the next method as well. It might be nice to still support the use of 'String' instead of 'File', so you don't break existing calls (e.g. in application-specific code).\n\nAlso, what happened to the details in the Javadoc description?",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-07 10:10:51.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6806239e_ac75a34e",
+      "file_path": "policy-core/src/main/java/org/onap/policy/drools/util/KieUtils.java",
+      "patchset_number": 4,
+      "line": 62,
+      "message": "Or could combine the two methods and use:\n  File...drls",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 13:59:25.000000000",
+      "in_reply_to": "bd89b450_0eeb2d63",
+      "unresolved": true
+    },
+    {
+      "id": "dad882cc_e3bddb50",
+      "file_path": "policy-core/src/main/java/org/onap/policy/drools/util/KieUtils.java",
+      "patchset_number": 4,
+      "line": 62,
+      "message": "A few comments on this thread regarding KieUtils.java:\n  \n1) I don't like the varargs proposal as it forces caller to spell out the arguments in every call \"installArtifact( .. file1, file2, file3, .., fileN).   Ugly if you have let's say to explicitly pass 10 drl arguments, it is also more difficult to maintain generically in the client side.\n\n2) This functionality now supports multiple drls to test upgrade scenarios and preserves the file names given to the kie libraries as they also play a role during upgrades, trying to mimic brmsgw behavior here with regards to names.   The previous\"String drl\" method would need to be changed to pass file names as well.   I shouldn't have added that method in the first place when I created the KieUtils.java class in the first place.\n\n3) When I created this class was for testing rules jar, still I think that's the case all over, all the occurrences to the \"String\" method deleted in ONAP seem to occur just in this method.\n\n4) The parameters section in the javadoc. find them difficult to maintain and don't provide much value.   But could add them back if desired.   Same approach is taken in some other files, omit the parameters section, I believe for the same reason.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2019-11-07 14:45:47.000000000",
+      "in_reply_to": "6806239e_ac75a34e",
+      "unresolved": true
+    },
+    {
+      "id": "4571b0ba_7583a539",
+      "file_path": "policy-core/src/main/java/org/onap/policy/drools/util/KieUtils.java",
+      "patchset_number": 4,
+      "line": 62,
+      "message": "#1) I disagree.  Most of the times this is used, the client spells them out anyway, and then has to wrap them in a list.  On the other hand, since it already takes a number of similar looking arguments, maybe its best left as a list so it's clear this is a different type of thing than the other arguments.  Regardless, that was just a suggestion, so if you prefer this, that's fine.\n#4) Yes and no.  It's useful for some parameters, particularly if the developer describes it a bit more (e.g., drlKJarPath).  However, a lot of the times, they do seem pretty superfluous.  At least checkstyle lets you know if a parameter is deleted or renamed.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-11-07 14:58:38.000000000",
+      "in_reply_to": "dad882cc_e3bddb50",
+      "unresolved": true
+    },
+    {
+      "id": "17efb82c_b69b3a84",
+      "file_path": "policy-core/src/main/java/org/onap/policy/drools/util/KieUtils.java",
+      "patchset_number": 4,
+      "line": 62,
+      "message": "Regarding varargs, you can explicitly pass an array:\n\nimport java.util.*;\n\npublic class VarargsTest\n{\n  static public void main(String args[])\n  {\n    List<String> list = new LinkedList<>();\n    list.add(\"c\");\n    list.add(\"d\");\n\n    varargs(\"a\", \"b\");\t\t\t// standard call\n    varargs(args);\t\t\t\t// passing an array\n    varargs(list.toArray(new String[0]));\t// converting a list\n  }\n\n  static public void varargs(String... args)\n  {\n    System.out.println(\"varargs called: \" + Arrays.asList(args));\n  }\n}\n\n$ java VarargsTest x y z\nvarargs called: [a, b]\nvarargs called: [x, y, z]\nvarargs called: [c, d]",
+      "author": {
+        "account_id": 743,
+        "name": "Ralph Straubs",
+        "display_name": null,
+        "email": "rs8887@att.com",
+        "username": "rs8887"
+      },
+      "updated": "2019-11-11 09:14:26.000000000",
+      "in_reply_to": "4571b0ba_7583a539",
+      "unresolved": true
+    }
+  ]
+}

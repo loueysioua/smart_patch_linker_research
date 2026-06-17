@@ -1,0 +1,93 @@
+{
+  "id": "dmaap%2Fmessagerouter%2Fmessageservice~master~Id5e1ef7de9d1241f65e5b7617237517e1f5deebd",
+  "change_id": "Id5e1ef7de9d1241f65e5b7617237517e1f5deebd",
+  "_number": 129924,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "13ed6f95_a1410b8b",
+      "file_path": "src/main/java/org/onap/dmaap/dmf/mr/service/impl/TopicServiceImpl.java",
+      "patchset_number": 1,
+      "line": 518,
+      "message": "Really nice leanup on current code, including logging.",
+      "author": {
+        "account_id": 7617,
+        "name": "David McWeeney",
+        "display_name": null,
+        "email": "david.mcweeney@est.tech",
+        "username": "david.mcweeney"
+      },
+      "updated": "2022-07-14 11:40:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b01c8316_8d08d037",
+      "file_path": "src/main/java/org/onap/dmaap/dmf/mr/service/impl/TopicServiceImpl.java",
+      "patchset_number": 1,
+      "line": 413,
+      "message": "Is this correct? \n\nThe current existing functionality calls \"topic.permitWritesFromUser(producerId, user);\".\n\nHowever, the default value for useCustomAcls is false, so calling the above in the new code will now be off by default.\nIsn't this contrary to current functionality, thus will break it?",
+      "author": {
+        "account_id": 7617,
+        "name": "David McWeeney",
+        "display_name": null,
+        "email": "david.mcweeney@est.tech",
+        "username": "david.mcweeney"
+      },
+      "updated": "2022-07-14 11:40:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ccedf572_23179395",
+      "file_path": "src/main/java/org/onap/dmaap/dmf/mr/service/impl/TopicServiceImpl.java",
+      "patchset_number": 1,
+      "line": 413,
+      "message": "Bit of a hack to avoid the acl update.\nSDC and clients use this api to grant access to the SDC topics.\nWe need to prevent this now as we create the topics via Strimzi",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-07-14 11:46:55.000000000",
+      "in_reply_to": "b01c8316_8d08d037",
+      "unresolved": true
+    },
+    {
+      "id": "43706514_32b8ebc3",
+      "file_path": "src/main/java/org/onap/dmaap/dmf/mr/service/impl/TopicServiceImpl.java",
+      "patchset_number": 1,
+      "line": 413,
+      "message": "Ah ok, I get you.\n\nWould this impact on any other MR clients that might update to this version of MR, however have not yet moved over the Strimzi for topic creation?\n\nOr would we advise just setting the \"useCustomAcls\" to yes?",
+      "author": {
+        "account_id": 7617,
+        "name": "David McWeeney",
+        "display_name": null,
+        "email": "david.mcweeney@est.tech",
+        "username": "david.mcweeney"
+      },
+      "updated": "2022-07-14 11:49:55.000000000",
+      "in_reply_to": "ccedf572_23179395",
+      "unresolved": true
+    },
+    {
+      "id": "7077f4bd_2effd4d0",
+      "file_path": "src/main/java/org/onap/dmaap/dmf/mr/service/impl/TopicServiceImpl.java",
+      "patchset_number": 1,
+      "line": 413,
+      "message": "Im hoping disabling it by default won't break anything.\nAs far as I'm aware, only SDC is using the create api. All other clients just post to a new topic and it gets created automatically.",
+      "author": {
+        "account_id": 4405,
+        "name": "Fiachra Corcoran",
+        "display_name": "Fiachra Corcoran (EST)",
+        "email": "fiachra.corcoran@est.tech",
+        "username": "efiacor"
+      },
+      "updated": "2022-07-14 12:22:46.000000000",
+      "in_reply_to": "43706514_32b8ebc3",
+      "unresolved": true
+    }
+  ]
+}

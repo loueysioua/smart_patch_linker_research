@@ -1,0 +1,144 @@
+{
+  "id": "aai%2Faai-common~master~Ie2684c42d5c6330aea553dc708817a87e4abf36b",
+  "change_id": "Ie2684c42d5c6330aea553dc708817a87e4abf36b",
+  "_number": 85309,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "054e7ab0_a1b59914",
+      "file_path": "Dockerfiles/aai-common/Dockerfile",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "We don't need the git package anymore so you can remove this dependency",
+      "author": {
+        "account_id": 75,
+        "name": "Venkata Harish Kajur",
+        "display_name": null,
+        "email": "vk250x@att.com",
+        "username": "vk250x"
+      },
+      "updated": "2019-04-26 15:25:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ef9a2d37_fef60f90",
+      "file_path": "Dockerfiles/aai-common/Dockerfile",
+      "patchset_number": 2,
+      "line": 22,
+      "message": "Done",
+      "author": {
+        "account_id": 5040,
+        "name": "Dmitrii Puzikov",
+        "display_name": null,
+        "email": "d.puzikov2@partner.samsung.com",
+        "username": "dpuzikov"
+      },
+      "updated": "2019-04-29 10:27:05.000000000",
+      "in_reply_to": "054e7ab0_a1b59914",
+      "unresolved": false
+    },
+    {
+      "id": "5de48b53_fbbe76cc",
+      "file_path": "Dockerfiles/aai-common/Dockerfile",
+      "patchset_number": 2,
+      "line": 27,
+      "message": "Also nss issue was fixed by Alpine team, no need to install it explicitly.",
+      "author": {
+        "account_id": 5040,
+        "name": "Dmitrii Puzikov",
+        "display_name": null,
+        "email": "d.puzikov2@partner.samsung.com",
+        "username": "dpuzikov"
+      },
+      "updated": "2019-04-29 10:27:05.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9983dc72_bdd89cf6",
+      "file_path": "Dockerfiles/aai-common/Dockerfile.alpine",
+      "patchset_number": 4,
+      "line": 27,
+      "message": "In the recent onap discuss, they mentioned the security vulnerability to using the shadow package.\n\nhttps://alpinelinux.org/posts/Docker-image-vulnerability-CVE-2019-5021.html\n\nIt seems that adding the following should address that concern from the article. \n\n# make sure root login is disabled\nsed -i -e 's/^root::/root:!:/' /etc/shadow",
+      "author": {
+        "account_id": 75,
+        "name": "Venkata Harish Kajur",
+        "display_name": null,
+        "email": "vk250x@att.com",
+        "username": "vk250x"
+      },
+      "updated": "2019-05-12 18:34:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "29182d80_4a49db82",
+      "file_path": "Dockerfiles/aai-common/Dockerfile.alpine",
+      "patchset_number": 4,
+      "line": 28,
+      "message": "I don't think we need the util-linux and vim packages. Its not necessary as basic vi comes with the docker image. It shaves off another 30 MB of the common image.",
+      "author": {
+        "account_id": 75,
+        "name": "Venkata Harish Kajur",
+        "display_name": null,
+        "email": "vk250x@att.com",
+        "username": "vk250x"
+      },
+      "updated": "2019-05-12 18:34:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a4b4a2b3_21461db9",
+      "file_path": "Dockerfiles/aai-common/Dockerfile.alpine",
+      "patchset_number": 4,
+      "line": 27,
+      "message": "According to the article mentioned:\n\"... The issue was fixed in the following Docker image releases (7 March 2019):\nv3.9.2 ...\"\n\nVersion of Alpine used in aai-common:\n# cat /etc/os-release \n...\nVERSION_ID=3.9.3\n...\n\nalso checking of /etc/shadow shows that:\n# cat /etc/shadow\nroot:!::0:::::\n\nI believe we're safe here.",
+      "author": {
+        "account_id": 5040,
+        "name": "Dmitrii Puzikov",
+        "display_name": null,
+        "email": "d.puzikov2@partner.samsung.com",
+        "username": "dpuzikov"
+      },
+      "updated": "2019-05-13 09:48:44.000000000",
+      "in_reply_to": "9983dc72_bdd89cf6",
+      "unresolved": false
+    },
+    {
+      "id": "9475deeb_6c03791f",
+      "file_path": "Dockerfiles/aai-common/Dockerfile.alpine",
+      "patchset_number": 4,
+      "line": 28,
+      "message": "Package util-linux provides uuidgen binary which is used in shell scripts.(aai-resources, aai-traversal, aai-schema-service). vim was kept as it was in original image. Will remove it if you think vi is enough.",
+      "author": {
+        "account_id": 5040,
+        "name": "Dmitrii Puzikov",
+        "display_name": null,
+        "email": "d.puzikov2@partner.samsung.com",
+        "username": "dpuzikov"
+      },
+      "updated": "2019-05-13 09:48:44.000000000",
+      "in_reply_to": "29182d80_4a49db82",
+      "unresolved": false
+    },
+    {
+      "id": "4f513fbf_45232cc6",
+      "file_path": "Dockerfiles/aai-common/Dockerfile.alpine",
+      "patchset_number": 4,
+      "line": 28,
+      "message": "In that case, we need the util-linux package and you can go ahead and remove the vim package.",
+      "author": {
+        "account_id": 75,
+        "name": "Venkata Harish Kajur",
+        "display_name": null,
+        "email": "vk250x@att.com",
+        "username": "vk250x"
+      },
+      "updated": "2019-05-13 14:28:48.000000000",
+      "in_reply_to": "9475deeb_6c03791f",
+      "unresolved": false
+    }
+  ]
+}

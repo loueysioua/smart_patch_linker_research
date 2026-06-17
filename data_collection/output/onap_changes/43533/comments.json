@@ -1,0 +1,127 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Ia577921c613f7beea41fc8a10f4adea60b4be797",
+  "change_id": "Ia577921c613f7beea41fc8a10f4adea60b4be797",
+  "_number": 43533,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_25ccb288",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/BusTopicSource.java",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "Let's not use deprecated unless we have to.   In my experience, it never goes away.   If it's not used, and has not value, let's remove it.   It should only affect this repo.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-19 15:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_25a11294",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 1,
+      "line": 129,
+      "message": "I'm thinking for the consumer id, may be better to place the machine's host/container name (I don't think there's restrictions in the consumerInstance, although not 100% sure).   It may be more informative for debugging.  Is there a reason to prefer the consumerGroup also as the instance ?",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-19 15:39:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_65b2bae6",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/BusTopicSource.java",
+      "patchset_number": 1,
+      "line": 33,
+      "message": "I'll remove it",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 16:34:57.000000000",
+      "in_reply_to": "5a93c517_25ccb288",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_25c83254",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 1,
+      "line": 129,
+      "message": "For topics used by pooled controllers, we need the consumerGroup to be the same across all JVM instances, while the consumerInstance must be different across all instances.  With this strategy, only the consumerGroup need be specified in the property file.  Where this behavior is NOT needed, the property file can specify a consumerInstance of \"0\" (or just let it default to a UUID).",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 16:34:57.000000000",
+      "in_reply_to": "5a93c517_25a11294",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a569a2fa",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 1,
+      "line": 129,
+      "message": "If you don't mind, let's change the \n\nthis.consumerInstance = uuid \n\nto \n\nthis.consumerInstance = NetworkUtil.getHostname() or something like that, I don't recall the exact name, it is in policy-util package (provided it does not carry relevance in the pooling work) \n\nIt is good to have something descriptive, and that's the point of the consumerId.   When working with DMaaP folks, it would be very useful I think, when doing debugging on the DMaaP side to know exactly the identity of the pdp-d making the query.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-19 16:45:17.000000000",
+      "in_reply_to": "5a93c517_25c83254",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_65463a7d",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 1,
+      "line": 129,
+      "message": "Is this guaranteed to be unique, even if multiple instances are run on the same machine (e.g., inside of separate dockers or separate VMs)?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2018-04-19 16:49:04.000000000",
+      "in_reply_to": "5a93c517_a569a2fa",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_403e8c8c",
+      "file_path": "policy-endpoints/src/main/java/org/onap/policy/drools/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+      "patchset_number": 1,
+      "line": 129,
+      "message": "I think so, each container has it own hostname.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2018-04-19 17:49:14.000000000",
+      "in_reply_to": "5a93c517_65463a7d",
+      "unresolved": false
+    }
+  ]
+}

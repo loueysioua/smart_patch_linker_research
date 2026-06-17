@@ -1,0 +1,350 @@
+{
+  "id": "oom~master~I8dd3e79768c83b1553a05c892cf418f840931255",
+  "change_id": "I8dd3e79768c83b1553a05c892cf418f840931255",
+  "_number": 46439,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-05-07 18:42:56.000000000",
+    "updated": "2018-05-23 01:34:59.000000000",
+    "submitted": "2018-05-17 15:21:31.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2319,
+      "name": "Sylvain Desbureaux",
+      "display_name": null,
+      "email": "sylvain.desbureaux@orange.com",
+      "username": "sdesbure"
+    },
+    "submitter": {
+      "account_id": 131,
+      "name": "Mandeep Khinda",
+      "display_name": null,
+      "email": "Mandeep.Khinda@gmail.com",
+      "username": "mkhinda"
+    }
+  },
+  "subject": "Add External Interface NBI project into OOM",
+  "commit_message": "Add External Interface NBI project into OOM\n\nNBI (North Bound Interface) is one of the new project added for Beijing\nrelease.\n\nFeatures added\n==============\n\nMongoDB common chart\n--------------------\n\nAbility to start a mongo container, with a chart consistent with other\ncommon charts (readiness, liveness, persistence, resources, nfs,\nservice, ...).\n\nSpecific configuration:\n  * name of the db to create if needed\n\nNBI chart\n---------\n\nAbility to start a mariadb container, with a chart consistent with other\ncommon charts (readiness, liveness, persistence, resources, nfs,\nservice, ...).\n\nSpecific configuration:\n  * name of the db to create if needed\n  * name of the user that has access to the db\n  * password of the user that has access to the db\n  * root password of the database\n\nAbility to start a NBI container, with a chart consistent with other\ncommon charts (readiness, liveness, persistence, resources, nfs,\nservice, ...).\n\nSpecific configuration:\n  * log level\n  * cloudOwner\n  * ecompInstanceId\n  * openStackRegion\n  * openStackServiceTenantName\n  * sdc_authorization\n  * aai_authorization\n  * so_authorization\n\nONAP chart\n----------\n\nAdded a requirement on NBI chart, possibility to enable/disable and\nconfiguration to push to the chart.\n\nCurrent Status\n==============\n\n- [*] adding a common chart for mongodb\n- [*] make mongo chart compiling\n- [*] testing the mongodb common role\n- [*] creating a mariadb chart inside nbi helm\n- [*] testing the mariadb chart\n- [*] make mariadb chart compiling\n- [*] make nbi use these charts\n- [*] make nbi chart compiling\n- [*] test the whole solution\n- [*] create a service for nbi\n\nChange-Id: I8dd3e79768c83b1553a05c892cf418f840931255\nIssue-ID: EXTAPI-54\nSigned-off-by: Sylvain Desbureaux <sylvain.desbureaux@orange.com>\n",
+  "change_log": {
+    "entry_count": 23,
+    "entries": [
+      {
+        "id": "a51b9839f6642b1cecb8eaf6308a47100022f7b8",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-07 18:42:56.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d23e6cb2058e1e8272ba801a4026436e65e72ecd",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-11 19:00:01.000000000",
+        "message": "Patch Set 1:\n\n(8 comments)\n\nI understand this is a WIP. I jumped on this to see if I could help resolve some of the issues you are encountering during testing. I have made some comments that will help address some of the problems. If you would like we could do a zoom session to work through this together. Please feel free to reach out to me via email if this is of interest to you.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b705cc362dcdc889e0efa9289d11e7b3038ad145",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-14 15:34:21.000000000",
+        "message": "Patch Set 1:\n\nHi Mike,\nthanks a lot for the review. I've understood all your propositions but I'm not sure for mariadb and mongo:\n - for mongo, I create a new folder in common (like mysql one) and add a requirement on it (like appc is doing with mysql). is it right?\n- for mariadb, you propose to create a chart like clamp. Why not using a common one (like mariadb gallera)?\n\nI'll propose some changes quickly",
+        "patchset_number": 1
+      },
+      {
+        "id": "090e0cf37f312499bc639ade0a18ba4e644d46a2",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-14 18:31:54.000000000",
+        "message": "Patch Set 1:\n\nHey Sylvain,\n\nYour proposal for using monger is correct - modeling it after what appc does for mysql.\n\nUnfortunately, the helm chart for mariadb-galera is not yet ready for general consumption. It is being worked on for the Casablanca timeframe.  The best thing to do right now is to copy the embedded mariadb chart for either SO or Policy. These are the best examples right now (not clamp as mentioned previously) on how you can configure mariadb with an application specific db schema and initial dataset. One example uses a job.yaml to do this and the other uses an init container. A standardized way of doing this will be introduced in Casablanca as we migrate over to the mariadb cluster.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d3072985ea05cf4a664eb7bd4339a6178a06eff9",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 13:48:26.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "6dbd13dbeffebf7d543dfad3d6f35155e52ba98e",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 13:50:36.000000000",
+        "message": "Uploaded patch set 3.",
+        "patchset_number": 3
+      },
+      {
+        "id": "ad1b7f95a59d793080d559cd3262c8167f8849d5",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 13:51:42.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "6b1c29861614519ef6a5a978d8624b76b5532ca9",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 13:56:40.000000000",
+        "message": "Uploaded patch set 5.",
+        "patchset_number": 5
+      },
+      {
+        "id": "4481ba3ec7bf194eda6344faf97f4e11f919c344",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-15 15:35:21.000000000",
+        "message": "Uploaded patch set 6.",
+        "patchset_number": 6
+      },
+      {
+        "id": "23949a96b482fb27ccf409c9d39d5b13cf7f4e9c",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-16 07:03:58.000000000",
+        "message": "Uploaded patch set 7.",
+        "patchset_number": 7
+      },
+      {
+        "id": "5f8cc2caf8d0c27208ab4b66398aca600215ef12",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-16 13:46:23.000000000",
+        "message": "Uploaded patch set 8.",
+        "patchset_number": 8
+      },
+      {
+        "id": "85766e8849cc5ece37a63946d465cb716534a2ce",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-16 15:52:28.000000000",
+        "message": "Uploaded patch set 9.",
+        "patchset_number": 9
+      },
+      {
+        "id": "81eeafa04307f5267fa90f1f916a12d19d8b652c",
+        "author": {
+          "account_id": 269,
+          "name": "Eric Debeau",
+          "display_name": null,
+          "email": "eric.debeau@orange.com",
+          "username": "eric.debeau"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-16 18:02:32.000000000",
+        "message": "Patch Set 9: Code-Review+1\n\nWorking fine in Orange Lab\nHealthCheck OK\ncloud@onap-k8s:~$ kubectl get pods --all-namespaces -o=wide\nNAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE       IP              NODE\nkube-system   heapster-76b8cd7b5-79jpf               1/1       Running   0          2d        10.42.41.168    onap-k8s.novalocal\nkube-system   kube-dns-5d7b4487c9-svvhv              3/3       Running   0          2d        10.42.162.212   onap-k8s.novalocal\nkube-system   kubernetes-dashboard-f9577fffd-g5tjj   1/1       Running   0          2d        10.42.59.56     onap-k8s.novalocal\nkube-system   monitoring-grafana-997796fcf-vgzzl     1/1       Running   0          2d        10.42.206.130   onap-k8s.novalocal\nkube-system   monitoring-influxdb-56fdcd96b-qdhgh    1/1       Running   0          2d        10.42.16.134    onap-k8s.novalocal\nkube-system   tiller-deploy-54bcc55dd5-scdnw         1/1       Running   0          2d        10.42.217.172   onap-k8s.novalocal\nonap          dev-nbi-69ffdcc5d7-wmmgd               1/1       Running   1          33m       10.42.66.203    onap-k8s.novalocal\nonap          dev-nbi-mariadb-5b9597d49f-qqbmt       1/1       Running   0          33m       10.42.2.190     onap-k8s.novalocal\nonap          dev-nbi-mongo-0                        1/1       Running   0          33m       10.42.100.137   onap-k8s.novalocal\nonap          dev-robot-6cc48c696b-kjh86             1/1       Running   0          33m       10.42.38.146    onap-k8s.novalocal",
+        "patchset_number": 9
+      },
+      {
+        "id": "361cd2c0eaae4fa4fc97982d7a05ea81943b4491",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-17 07:01:42.000000000",
+        "message": "Uploaded patch set 10.",
+        "patchset_number": 10
+      },
+      {
+        "id": "0fd88d2aa7890a54d2e69697c861094385367804",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-17 14:40:10.000000000",
+        "message": "Uploaded patch set 11.",
+        "patchset_number": 11
+      },
+      {
+        "id": "c5457b2cd9509ac96352be5e2c70250edda8dbbc",
+        "author": {
+          "account_id": 2319,
+          "name": "Sylvain Desbureaux",
+          "display_name": null,
+          "email": "sylvain.desbureaux@orange.com",
+          "username": "sdesbure"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-05-17 14:43:38.000000000",
+        "message": "Patch Set 11: Code-Review+1\n\n(1 comment)\n\nOk for me to change externalPort to internalPort (I've copied policy service I think at first time)",
+        "patchset_number": 11
+      },
+      {
+        "id": "a34c740bec29e1f4de8e469eb94dd72093b49b21",
+        "author": {
+          "account_id": 127,
+          "name": "Mike Elliott",
+          "display_name": null,
+          "email": "mike.elliott@amdocs.com",
+          "username": "melliott"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-17 14:57:05.000000000",
+        "message": "Uploaded patch set 12.",
+        "patchset_number": 12
+      },
+      {
+        "id": "847f50e88c00c1fc5eeac82820864aace7a57069",
+        "author": {
+          "account_id": 131,
+          "name": "Mandeep Khinda",
+          "display_name": null,
+          "email": "Mandeep.Khinda@gmail.com",
+          "username": "mkhinda"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-17 15:21:30.000000000",
+        "message": "Patch Set 12: Code-Review+2 Verified+1",
+        "patchset_number": 12
+      },
+      {
+        "id": "531300c8ef75c26ed95c0afc66304726eef7ce98",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-05-17 15:21:31.000000000",
+        "message": "Change has been successfully merged by Mandeep Khinda",
+        "patchset_number": 12
+      },
+      {
+        "id": "dfb9a50208b7952b84dca25ebe7de28763aa21a3",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-23 01:15:36.000000000",
+        "message": "Patch Set 12:\n\nIn reference to OOM-1097 - I am OK but HC is down for NBI chart deployment\n12:22:42 Downloading mongo from repo http://127.0.0.1:8879",
+        "patchset_number": 12
+      },
+      {
+        "id": "cbd658923404e5d6331f2e59ab5305b6b576f7c6",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-23 01:15:49.000000000",
+        "message": "Patch Set 12:\n\nhttp://jenkins.onap.info/job/oom-cd-master/2990/consoleFull",
+        "patchset_number": 12
+      },
+      {
+        "id": "c7ab79ce87d9512ffe0ef04fa35e87bdaf70e51d",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-23 01:27:36.000000000",
+        "message": "Patch Set 12:\n\nran clean build on cd.onap.info - ok there as well\n\n[nbi]\nmake[1]: Entering directory '/home/ubuntu/oom/kubernetes'\nHang tight while we grab the latest from your chart repositories...\n...Successfully got an update from the \"local\" chart repository\n...Successfully got an update from the \"stable\" chart repository\nUpdate Complete. ?Happy Helming!?\nSaving 2 charts\nDownloading common from repo http://127.0.0.1:8879\nDownloading mongo from repo http://127.0.0.1:8879\nDeleting outdated charts\n==> Linting nbi\n[INFO] Chart.yaml: icon is recommended\n\n1 chart(s) linted, no failures\nSuccessfully packaged chart and saved it to: /home/ubuntu/oom/kubernetes/dist/packages/nbi-2.0.0.tgz\nmake[1]: Leaving directory '/home/ubuntu/oom/kubernetes'\n\n[robot]\nmake[1]: Entering directory '/home/ubuntu/oom/kubernetes'\nHang tight while we grab the latest from your chart repositories...\n...Successfully got an update from the \"local\" chart repository\n...Successfully got an update from the \"stable\" chart repository\nUpdate Complete. ?Happy Helming!?\nSaving 1 charts\nDownloading common from repo http://127.0.0.1:8879\nDeleting outdated charts\n==> Linting robot",
+        "patchset_number": 12
+      },
+      {
+        "id": "0617097868b1ec7aaa84df656f176688f684b82c",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-05-23 01:34:59.000000000",
+        "message": "Patch Set 12:\n\nonap          onap-nbi-869db5bd6-xcpcr                    1/1       Running   3          5m\nonap          onap-nbi-mariadb-665b756dc-lnlwp            1/1       Running   0          5m\nonap          onap-nbi-mongo-0                            1/1       Running   0          5m",
+        "patchset_number": 12
+      }
+    ]
+  }
+}

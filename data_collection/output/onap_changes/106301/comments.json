@@ -1,0 +1,450 @@
+{
+  "id": "sdc~master~I5a62daabcc436f28fba1f09317c5723281df15bf",
+  "change_id": "I5a62daabcc436f28fba1f09317c5723281df15bf",
+  "_number": 106301,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "45f203c2_94d86d01",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 2,
+      "line": 4717,
+      "message": "The exception should be thrown rather than returned.\nthe code after the refactor is a bit harder to read than needed in my eyes, i think all this logic shouldn't be a 1 liner.",
+      "author": {
+        "account_id": 6152,
+        "name": "Elad Ben David",
+        "display_name": null,
+        "email": "eb7504@intl.att.com",
+        "username": "elad.ben.david"
+      },
+      "updated": "2020-05-05 14:49:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "24bea09f_943b0705",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 2,
+      "line": 4717,
+      "message": "Not sure what you mean here: 'orElseThrow' does throw an Exception if the content of an Optional is not found.\nHowever, I agree the Supplier could be extracted into its own separate method.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 15:08:30.000000000",
+      "in_reply_to": "45f203c2_94d86d01",
+      "unresolved": true
+    },
+    {
+      "id": "5a5a9ddb_c6d98934",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 2,
+      "line": 4717,
+      "message": "Right.. my mistake regarding the exception throw.",
+      "author": {
+        "account_id": 6152,
+        "name": "Elad Ben David",
+        "display_name": null,
+        "email": "eb7504@intl.att.com",
+        "username": "elad.ben.david"
+      },
+      "updated": "2020-05-05 15:13:17.000000000",
+      "in_reply_to": "24bea09f_943b0705",
+      "unresolved": true
+    },
+    {
+      "id": "ac592be8_2e27a6d4",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4737,
+      "message": "looks better :)\nanother thing - More specific ActionStatus could fit better here.",
+      "author": {
+        "account_id": 6152,
+        "name": "Elad Ben David",
+        "display_name": null,
+        "email": "eb7504@intl.att.com",
+        "username": "elad.ben.david"
+      },
+      "updated": "2020-05-05 15:36:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "01d0872c_54f0312a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4737,
+      "message": "Since I'm still new to the project, I would be more than happy to change it to a more specific value if you tell me which one to use!",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 15:58:40.000000000",
+      "in_reply_to": "ac592be8_2e27a6d4",
+      "unresolved": true
+    },
+    {
+      "id": "8a5a9d4d_e25bb851",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4731,
+      "message": "is this only my impression, this LOG prints on different from original condition?\n\nin original:\nif component=getComponentByUuid(componentType, componentUuid) is null, componentInstance==null, print LOG\n\nin new code:\nif getComponentByUuid(componentType, componentUuid) return null, componentOpt is empty, LOG prints if isPresent()\n\nAm I missing something?",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 17:12:59.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "788d8326_baee6ec2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4731,
+      "message": "Not sure I understand your comment: there is no 'componentInstance' any more since it is replaced by 'componentInstanceOpt'.\nIf 'componentInstanceOpt' is empty (equivalent to 'null'), we print the message.\nHowever, since 'componentOpt' could also be empty, we test this first before we trigger a NPE by calling 'component.getName()'.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 17:38:18.000000000",
+      "in_reply_to": "8a5a9d4d_e25bb851",
+      "unresolved": true
+    },
+    {
+      "id": "00a3d4e1_4d7c4fba",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4703,
+      "message": "1. getComponentByUuid return null, component is null",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "75a443d4_408d9c6f",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4704,
+      "message": "2. componentInstance is null",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a7c88d24_3eb516dc",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4711,
+      "message": "3. print log",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "915f2749_72a24986",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4707,
+      "message": "1. getComponentByUuid return null, componentOpt is empty",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9806c0f4_f69466de",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4709,
+      "message": "2. componentInstanceOpt is empty",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "38ba6b91_25ea77a2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4726,
+      "message": "3. componentOpt is empty",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e7c8d5a4_d17ed721",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4728,
+      "message": "4. return false\n5. skip print LOG",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 18:04:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4a437eb4_28133be2",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4711,
+      "message": "If 'component' is null, the debug will not be printed since there'll be a NPE when we try to access 'component.getName()'.\n\nThe goal of this CR is to get rid of this NPE (amongst others).",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 18:27:21.000000000",
+      "in_reply_to": "a7c88d24_3eb516dc",
+      "unresolved": true
+    },
+    {
+      "id": "e7fe01ae_59621f74",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4728,
+      "message": "This is indeed correct: this case would be handled in the 'else' branch.",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 18:27:21.000000000",
+      "in_reply_to": "e7c8d5a4_d17ed721",
+      "unresolved": true
+    },
+    {
+      "id": "b8c97ef5_3a78a646",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4731,
+      "message": "Hi @Vasyl, \n\nWe've checked out the code and overall we have three different cases.\n\nFirst case, `componentOpt` is not empty, but `componentInstanceOpt` happens to be empty (because component.getComponentInstances() returns an empty stream (line 4714)). In this case, the log is printed as expected.\n\nSecond case, both `componentOpt` and `componentInstanceOpt` are not empty. In this case, `generateByActionStatusComponentException` is never called and the value is returned as expected (line 4718).\n\nLast case, `componentOpt` is empty, and therefore `componentInstanceOpt` is empty too (This case is actually not covered by the previous code). Line 4736 is then executed, a `ByActionStatusComponentException` is returned but the error message is different (By the way, if you have any suggestion regarding the message or the action status, please tell us).\n\nThe logic of this code is not easy to get to be honest and a proper refactoring would be required. However, I would suggest to do this in another change. If you have not done it yet, I highly suggest you to check out the code to get a better understanding of this function.\n\nDoes this answer your questions?",
+      "author": {
+        "account_id": 6614,
+        "name": "Francis Toth",
+        "display_name": null,
+        "email": "francis.toth@yoppworks.com",
+        "username": "francistoth"
+      },
+      "updated": "2020-05-05 19:01:22.000000000",
+      "in_reply_to": "788d8326_baee6ec2",
+      "unresolved": true
+    },
+    {
+      "id": "5a55855d_ccfdf989",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4731,
+      "message": "Hi @Francis,\n\nI was talking about \"Last case, `componentOpt` is empty, and therefore `componentInstanceOpt` is empty too\".\nOk, I see your point, you print different message, by going to ELSE.",
+      "author": {
+        "account_id": 5562,
+        "name": "Vasyl Razinkov",
+        "display_name": "Vasyl Razinkov",
+        "email": "razinkov@hotmail.com",
+        "username": "vasraz"
+      },
+      "updated": "2020-05-05 19:39:14.000000000",
+      "in_reply_to": "b8c97ef5_3a78a646",
+      "unresolved": true
+    },
+    {
+      "id": "bbaa101e_e334c8f9",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 2,
+      "line": 4717,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "5a5a9ddb_c6d98934",
+      "unresolved": false
+    },
+    {
+      "id": "a3a7d9bd_3d0fc8ba",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4703,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "00a3d4e1_4d7c4fba",
+      "unresolved": false
+    },
+    {
+      "id": "d3300dd4_0b98538a",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4704,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "75a443d4_408d9c6f",
+      "unresolved": false
+    },
+    {
+      "id": "0f0bf55c_88334b0c",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4711,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "4a437eb4_28133be2",
+      "unresolved": false
+    },
+    {
+      "id": "e4307e76_c3538af4",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4707,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "915f2749_72a24986",
+      "unresolved": false
+    },
+    {
+      "id": "d6b7d07f_74b1dbf5",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4709,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "9806c0f4_f69466de",
+      "unresolved": false
+    },
+    {
+      "id": "90088432_68fd0359",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4726,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "38ba6b91_25ea77a2",
+      "unresolved": false
+    },
+    {
+      "id": "23cd08b5_e5417c27",
+      "file_path": "catalog-be/src/main/java/org/openecomp/sdc/be/components/impl/ArtifactsBusinessLogic.java",
+      "patchset_number": 3,
+      "line": 4728,
+      "message": "Done",
+      "author": {
+        "account_id": 6597,
+        "name": "Chris Andre",
+        "display_name": null,
+        "email": "chris.andre@yoppworks.com",
+        "username": "Chris.Andre"
+      },
+      "updated": "2020-05-05 19:44:55.000000000",
+      "in_reply_to": "e7fe01ae_59621f74",
+      "unresolved": false
+    }
+  ]
+}

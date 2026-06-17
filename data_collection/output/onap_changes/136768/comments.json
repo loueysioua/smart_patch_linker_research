@@ -1,0 +1,139 @@
+{
+  "id": "cps~master~I88fb313c3ee773ef1382ec6222df4f46d1a88324",
+  "change_id": "I88fb313c3ee773ef1382ec6222df4f46d1a88324",
+  "_number": 136768,
+  "change_comments": [
+    {
+      "id": "e8606d8f_577b0007",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-08 11:22:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "166aa107_f4cf0b51",
+      "patchset_number": 1,
+      "message": "recheck",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-08 11:46:39.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "59107bc1_ac1c8059",
+      "patchset_number": 1,
+      "message": "As agreed. Update this to refer to a new jira for 'Deployment Alignment'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-12-11 18:12:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "d76d8430_4f04d05c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/config/NcmpConfiguration.java",
+      "patchset_number": 1,
+      "line": 69,
+      "message": "It is no longer possible to set read timeout when using apache httpclient. CPS fails to start giving exception:\n   \n> HttpComponentsClientHttpRequestFactory has the setReadTimeout method marked as deprecated\n  \nSee https://github.com/spring-projects/spring-boot/issues/32857",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-08 13:35:02.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "6682562f_8adbe2c1",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/config/NcmpConfiguration.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "This should use @Value so it can be overridden in application.yaml",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-08 14:31:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f8caaa78_752f422c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/config/NcmpConfiguration.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "We may want to use different restTemplates for NCMP passthrough operations and DMI liveness checks. If the connection pool is full with long-running DMI operations, the liveness check may incorrectly time out. \nWe may also want different connection/read timeouts for liveness checks vs passthrough operations",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-08 14:31:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d55d4e74_e5c7c579",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/config/NcmpConfiguration.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "is taht easy to do ?!",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-12-11 18:13:43.000000000",
+      "in_reply_to": "f8caaa78_752f422c",
+      "unresolved": true
+    },
+    {
+      "id": "bcc682ef_a9c14193",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/config/NcmpConfiguration.java",
+      "patchset_number": 1,
+      "line": 76,
+      "message": "Yes. Basically we define two RestTemplate @Beans here (or in separate @Configuration classes):\n\n    public RestTemplate restTemplate() { ... }\n    public RestTemplate dmiHealthRestTemplate() { ... }\n  \nand use @Qualifier to select which RestTemplate from other classes:\n\n    @Qualifier(\"dmiHealthRestTemplate\")\n    private RestTemplate dmiHealthRestTemplate;\n\nAnother reason for wanting this is to have different connection timeouts. For DMI liveness, we check DMI /actuator/health every 30 seconds by default, but our connection timeout here is set to 3 minutes - the timeout should be only 30 seconds or less.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-12-12 13:35:20.000000000",
+      "in_reply_to": "d55d4e74_e5c7c579",
+      "unresolved": true
+    }
+  ]
+}

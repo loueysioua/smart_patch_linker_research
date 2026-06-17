@@ -1,0 +1,76 @@
+{
+  "id": "aai%2Fsearch-data-service~master~I3547e79ff27220a49539d9cfdf48ac534f155f10",
+  "change_id": "I3547e79ff27220a49539d9cfdf48ac534f155f10",
+  "_number": 66323,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_4de458e0",
+      "file_path": "src/main/java/org/onap/aai/sa/searchdbabstraction/util/ElasticSearchPayloadTranslator.java",
+      "patchset_number": 1,
+      "line": 74,
+      "message": "This doesn't need to be declared outside of the for loop.",
+      "author": {
+        "account_id": 703,
+        "name": "Tian Lee",
+        "display_name": null,
+        "email": "TianL@amdocs.com",
+        "username": "TianL"
+      },
+      "updated": "2018-09-13 12:52:00.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_0debc078",
+      "file_path": "src/main/java/org/onap/aai/sa/searchdbabstraction/util/ElasticSearchPayloadTranslator.java",
+      "patchset_number": 1,
+      "line": 80,
+      "message": "You probably should have some defensive code in here just in case the jsonObject does not contain the fields you expect to.  If an NPE is thrown from here is it handled gracefully anywhere?",
+      "author": {
+        "account_id": 1157,
+        "name": "Dave Adams",
+        "display_name": null,
+        "email": "Dave.Adams@amdocs.com",
+        "username": "da490c"
+      },
+      "updated": "2018-09-13 13:06:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_ad7accba",
+      "file_path": "src/main/java/org/onap/aai/sa/searchdbabstraction/util/ElasticSearchPayloadTranslator.java",
+      "patchset_number": 1,
+      "line": 71,
+      "message": "Another behavior you could have in here pretty easily is a default behavior in absence of the es-payload-translation file.\n\nIf you pull out the file object:\n\nFile translationFile = new File(pathToTranslationFile);\n\nif ( !translationFile.exists() ) {\n   // log(Payload translation skipped, assuming 2.4.1 syntax or something;\n   return source;\n} \n\n// do the rest of your flow",
+      "author": {
+        "account_id": 1157,
+        "name": "Dave Adams",
+        "display_name": null,
+        "email": "Dave.Adams@amdocs.com",
+        "username": "da490c"
+      },
+      "updated": "2018-09-13 13:10:56.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_4d1f786c",
+      "file_path": "src/main/java/org/onap/aai/sa/searchdbabstraction/util/ElasticSearchPayloadTranslator.java",
+      "patchset_number": 1,
+      "line": 72,
+      "message": "You could wrap all of the translation logic in a general try {} catch (Exception e) {} block as means to handle parse exceptions of the translation file, and return the original source request.\n\nIn a way you would be trading one error, potentially for another.   Another idea would be to extract an interface for the PayloadTranslator and then wire-in specific ES payload translation implementations via spring-wiring dedicated to instances of elasticsearch.  Depending on the deployment model different translation implementation could be layered in without changing any code.\n\nJust some ideas...",
+      "author": {
+        "account_id": 1157,
+        "name": "Dave Adams",
+        "display_name": null,
+        "email": "Dave.Adams@amdocs.com",
+        "username": "da490c"
+      },
+      "updated": "2018-09-13 13:17:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

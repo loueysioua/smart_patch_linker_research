@@ -1,0 +1,356 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fpolicy-handler~master~Ief9a2ae4541300308caaf97377f4ed051535dbe4",
+  "change_id": "Ief9a2ae4541300308caaf97377f4ed051535dbe4",
+  "_number": 83067,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-03-22 19:38:37.000000000",
+    "updated": "2019-04-11 16:13:15.000000000",
+    "submitted": "2019-04-02 23:35:58.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1949,
+      "name": "Alex Shatov",
+      "display_name": null,
+      "email": "ashatov@hotmail.com",
+      "username": "alex_sh"
+    },
+    "submitter": {
+      "account_id": 93,
+      "name": "Vijay Venkatesh Kumar",
+      "display_name": null,
+      "email": "vijayv81@gmail.com",
+      "username": "vv770d"
+    }
+  },
+  "subject": "5.0.0 policy-handler - new PDP API or old PDP API",
+  "commit_message": "5.0.0 policy-handler - new PDP API or old PDP API\n\n- in R4 Dublin the policy-engine introduced a totally new API\n- policy-handler now has a startup option to either use the new PDP API\n  or the old PDP API that was created-updated before the end of 2018\n- see README.md and README_pdp_api_v0.md for instructions on how to\n  setup the policy-handler running either with the new PDP API\n  or the old (pdp_api_v0) PDP API\n- this is a massive refactoring that changed almost all the source files,\n  but kept the old logic when using the old (pdp_api_v0) PDP API\n- all the code related to PDP API version is split into two subfolders\n  = pdp_api/ contains the new PDP API source code\n  = pdp_api_v0/ contains the old (2018) PDP API source code\n  = pdp_client.py imports from either pdp_api or pdp_api_v0\n  = the rest of the code is only affected when it needs to branch\n    the logic\n- logging to policy_handler.log now shows the path of the source file to\n  allow tracing which PDP API is actually used\n- when the new PDP API is used, the policy-update flow is disabled\n  = passive mode of operation\n  = no web-socket\n  = no periodic catch_up\n  = no policy-filters\n  = reduced web-API - only a single /policy_latest endpoint is available\n    /policies_latest returns 404\n    /catch_up request is accepted, but ignored\n- on new PDP API: http /policy_latest returns the new data from the\n  new PDP API with the following fields added by the policy-handler\n  to keep other policy related parts intact in R4\n  (see pdp_api/policy_utils.py)\n  = \"policyName\" = policy_id + \".\" + \"policyVersion\" + \".xml\"\n  = \"policyVersion\" = str(\"metadata\".\"policy-version\")\n  = \"config\" - is the renamed \"properties\" from the new PDP API response\n- unit tests are split into two subfolders as well\n  = main/ for the new PDP API testing\n  = pdp_api_v0/ for the old (2018) PDP API\n- removed the following line from the license text of changed files\n  ECOMP is a trademark and service mark of AT&T Intellectual Property.\n\n- the new PDP API is expected to be extended and redesigned in R5 El Alto\n- on retiring the old PDP API - the intention is to be able to remove\n  the pdp_api_v0/ subfolder and minimal related cleanup of the code\n  that imports that as well as the cleanup of the config.py, etc.\n\nChange-Id: Ief9a2ae4541300308caaf97377f4ed051535dbe4\nSigned-off-by: Alex Shatov <alexs@att.com>\nIssue-ID: DCAEGEN2-1128\n",
+  "change_log": {
+    "entry_count": 23,
+    "entries": [
+      {
+        "id": "9b00b32b64cad86aa81ca1c0664d6825d52b0d37",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-03-22 19:38:37.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "efd6a93e7e8e1fc9f1845eb88d5ee7cb886eb124",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-22 19:44:51.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/70/",
+        "patchset_number": 1
+      },
+      {
+        "id": "e739f46aa956ccc4fe33b44faa2397971f27e384",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-22 19:51:55.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/70/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/70",
+        "patchset_number": 1
+      },
+      {
+        "id": "37e2f9d1b98c76883687e676ead6e15bffeada29",
+        "author": {
+          "account_id": 1907,
+          "name": "Andrew Gauld",
+          "display_name": null,
+          "email": "agauld@att.com",
+          "username": "ag1282"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-29 14:41:31.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "f2174e4cc495ad5abdf94afdda252a2d3add5539",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-03-31 05:37:47.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)\n\nMinor comments\n1) Remove following line from all impacted files license headers\n# ECOMP is a trademark and service mark of AT&T Intellectual Property.\n2) Would prefer pdp_api_2018 renamed as pdp_api_getConfig (or pdp_api_v0). This change is not mandatory if others are fine with current naming.",
+        "patchset_number": 1
+      },
+      {
+        "id": "294d50a09b7d9c237d1aed0a051aa5981334126b",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-01 14:44:38.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a7d4a079fcc9af30384e181811b721585d089788",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-01 14:46:18.000000000",
+        "message": "Uploaded patch set 3: Commit message was updated.",
+        "patchset_number": 3
+      },
+      {
+        "id": "91f3aa0b4b01f74b7390688935dd056c89015c83",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 14:46:20.000000000",
+        "message": "Patch Set 2:\n\nNo Builds Executed",
+        "patchset_number": 2
+      },
+      {
+        "id": "f3739dfab7241a3c239cee019e36f02efe760372",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 14:47:26.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/71/",
+        "patchset_number": 3
+      },
+      {
+        "id": "25e403b6a57565b86b63267e71881ec263802851",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 14:54:07.000000000",
+        "message": "Patch Set 3: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/71/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/71/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/71",
+        "patchset_number": 3
+      },
+      {
+        "id": "136b5b3c0622a6428a6cb4975b452773dd0764dd",
+        "author": {
+          "account_id": 1907,
+          "name": "Andrew Gauld",
+          "display_name": null,
+          "email": "agauld@att.com",
+          "username": "ag1282"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 14:54:38.000000000",
+        "message": "Patch Set 3: Code-Review+1",
+        "patchset_number": 3
+      },
+      {
+        "id": "01ffa7c16180f69993de394ddd14d926dcaf405d",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-01 15:32:54.000000000",
+        "message": "Uploaded patch set 4.",
+        "patchset_number": 4
+      },
+      {
+        "id": "b6710c4c1429ab8a5230360b050678602c9d47e1",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 15:35:44.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/72/",
+        "patchset_number": 4
+      },
+      {
+        "id": "a94997bbdfb37bdf0fc4126242bea0295f5f4132",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 15:42:43.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/72/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/72",
+        "patchset_number": 4
+      },
+      {
+        "id": "1bad8fb4455dbb9344b1feb3b10f9e491ddb90c3",
+        "author": {
+          "account_id": 1907,
+          "name": "Andrew Gauld",
+          "display_name": null,
+          "email": "agauld@att.com",
+          "username": "ag1282"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-01 15:45:51.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "db790224643370be834b94995f649e1e9fcefd44",
+        "author": {
+          "account_id": 511,
+          "name": "Jack Lucas",
+          "display_name": null,
+          "email": "jflos@sonoris.net",
+          "username": "jackl"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 21:30:57.000000000",
+        "message": "Patch Set 4: Code-Review+1",
+        "patchset_number": 4
+      },
+      {
+        "id": "b3aeca106fabe9f18ed943d2854f0865b58d9f55",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 23:35:56.000000000",
+        "message": "Patch Set 4: Code-Review+2",
+        "patchset_number": 4
+      },
+      {
+        "id": "9935cc7002eee2e16cc809eeafc773e239b0549c",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-04-02 23:35:58.000000000",
+        "message": "Change has been successfully merged by Vijay Venkatesh Kumar",
+        "patchset_number": 4
+      },
+      {
+        "id": "a620dc022ca6f701da45c0fba1658c7d7095a88e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 23:47:45.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-merge-java/50/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-merge-java/50",
+        "patchset_number": 4
+      },
+      {
+        "id": "f5b076eea2a130a0c5f5169478eb156eafa73a39",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-02 23:57:48.000000000",
+        "message": "Patch Set 4:\n\nplease release",
+        "patchset_number": 4
+      },
+      {
+        "id": "824c195daf39f2d8475a04695ebe6c25f93a981a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-03 00:09:53.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-release-version-java-daily/426/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-release-version-java-daily/426",
+        "patchset_number": 4
+      },
+      {
+        "id": "fe9ea6c83f4887e26e9f2ed866c3d3b03632426f",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-11 16:02:42.000000000",
+        "message": "Patch Set 4:\n\nrun-sonar",
+        "patchset_number": 4
+      },
+      {
+        "id": "f88165283a52df7f54dcf18992f03822d682854f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-04-11 16:13:15.000000000",
+        "message": "Patch Set 4:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-sonar/427/ : SUCCESS (skipped)\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-sonar/427",
+        "patchset_number": 4
+      }
+    ]
+  }
+}

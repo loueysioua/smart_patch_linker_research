@@ -1,0 +1,416 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I96e4cf3ac75920ed909da9063ba0b788b55474e4",
+  "change_id": "I96e4cf3ac75920ed909da9063ba0b788b55474e4",
+  "_number": 84107,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "13b61e60_226aa7dd",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProvider.kt",
+      "patchset_number": 1,
+      "line": 112,
+      "message": "Can't we create GsonAdapter for this, and register it inside ConfigParser? \n\nWe would avoid this weird `withRouting` method.\n\nThis would also allow Routing inside of file-configuration, however we can approach it in few ways (@piotr.jaszczyk):\n1. let it be\n2. add one more \"validation\" in ConfModule class which checks if routing was set in file and for example log.warn() or maybe overwrite it with None",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 07:23:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "be9718f3_68d6180c",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProvider.kt",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "For nicer reading:\n\n    .map(JsonObject::reader)\n    .map(configParser::parseConfiguration)\n\nAnd btw. rename parser's method to `parse`, so:\n\n    .map(JsonObject::reader)\n    .map(configurationParser::parse)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ee42968b_0a8f0559",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "Let's not include this logic here, so that merger stays focused on \"just merging\". I believe this should be:\n\n    private fun mergeStreamsConfig(baseOption: Option<List<KafkaSink>>,\n                                   updateOption: Option<List<KafkaSink>>) =\n    baseOption.updateToGivenOrNone(updateOption)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3da463d2_b42da7f8",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/JsonConfigurationParser.kt",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "This looks scary, can't we somehow hide it?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bad8aa04_991e2139",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/StreamsAdapter.kt",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "Consider adding some test",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b7969eaa_b7569e9c",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/JsonConfigurationParserTest.kt",
+      "patchset_number": 2,
+      "line": 83,
+      "message": "parsing",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8d99f944_afd3e3c1",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/JsonConfigurationParserTest.kt",
+      "patchset_number": 2,
+      "line": 84,
+      "message": "parses",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-04 10:56:40.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e2a5cbcb_88bc6e7f",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProvider.kt",
+      "patchset_number": 2,
+      "line": 86,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-04 13:50:46.000000000",
+      "in_reply_to": "be9718f3_68d6180c",
+      "unresolved": false
+    },
+    {
+      "id": "d40decd6_562115f3",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationMerger.kt",
+      "patchset_number": 2,
+      "line": 75,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-04 13:50:46.000000000",
+      "in_reply_to": "ee42968b_0a8f0559",
+      "unresolved": false
+    },
+    {
+      "id": "41972a31_e8cf8c84",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/JsonConfigurationParser.kt",
+      "patchset_number": 2,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-04 13:50:46.000000000",
+      "in_reply_to": "3da463d2_b42da7f8",
+      "unresolved": false
+    },
+    {
+      "id": "23eb5b82_cd184e2d",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/StreamsAdapter.kt",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-04 13:50:46.000000000",
+      "in_reply_to": "bad8aa04_991e2139",
+      "unresolved": false
+    },
+    {
+      "id": "a12e7852_e04df40a",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProvider.kt",
+      "patchset_number": 4,
+      "line": 88,
+      "message": "Let's do this in single map call. It will look a little bit uglier, but we have to remember about thread safety. `Reader` is \"very stateful\" (tm) ;-) so we probably should avoid passing it in the reactive stream.\n\n\"very stateful\" - not only we can change it put almost any method call may result in a race condition",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-05 12:14:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ce5f7622_50e932a3",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/StreamsAdapter.kt",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "After seeing this I'm not so sure whether it's better solution than current one...",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-05 12:14:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "65a9724d_181c274b",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 4,
+      "line": 37,
+      "message": "Follow the Kotlin naming convention",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-05 12:14:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "487acd7c_1c666a6c",
+      "file_path": "sources/hv-collector-utils/pom.xml",
+      "patchset_number": 4,
+      "line": 94,
+      "message": "I do not want every HV-VES sub-module to depend on gson. Please move these utilities to configuration module as it shall be used only there.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-05 12:14:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ffe7f5b2_04b5af49",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProvider.kt",
+      "patchset_number": 4,
+      "line": 88,
+      "message": "Ok, gonna revert",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-05 12:45:01.000000000",
+      "in_reply_to": "a12e7852_e04df40a",
+      "unresolved": false
+    },
+    {
+      "id": "c8cd202f_5ed20a0d",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/StreamsAdapter.kt",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "Imo its bad design of DataStreams api to take object with a single root key. It results in a code like this. \n\nThe alternative not using gson adapters, was to pass the whole configuration json, so DataStreams api could extract that streams_publishes root key from there. It was even worse solution.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-05 12:45:01.000000000",
+      "in_reply_to": "ce5f7622_50e932a3",
+      "unresolved": false
+    },
+    {
+      "id": "7035de90_35340ac4",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 4,
+      "line": 37,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-05 12:45:01.000000000",
+      "in_reply_to": "65a9724d_181c274b",
+      "unresolved": false
+    },
+    {
+      "id": "72a88904_0ef1e0d6",
+      "file_path": "sources/hv-collector-utils/pom.xml",
+      "patchset_number": 4,
+      "line": 94,
+      "message": "Done",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-04-05 12:45:01.000000000",
+      "in_reply_to": "487acd7c_1c666a6c",
+      "unresolved": false
+    },
+    {
+      "id": "19d33937_9cf764df",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/gsonadapters/StreamsAdapter.kt",
+      "patchset_number": 4,
+      "line": 49,
+      "message": "It's not bad design of DataStreams API. This is the only way we can distinguish streams' directions (sinks vs sources). It's rather our bad usage of GSON adapters. Maybe we shouldn't use them after all...\n\nFor now let's postpone this change request. Probably we will flatten the configuration next week so it might be irrelevant.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-04-05 12:53:05.000000000",
+      "in_reply_to": "c8cd202f_5ed20a0d",
+      "unresolved": false
+    },
+    {
+      "id": "1070859c_dd3dddfe",
+      "file_path": "sources/hv-collector-configuration/src/main/kotlin/org/onap/dcae/collectors/veshv/config/impl/partial_configuration.kt",
+      "patchset_number": 9,
+      "line": 60,
+      "message": "If we are disabling both Ser and Des, then I believe we can replace this with @Transient",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-08 13:04:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8e03b400_65f4fa7a",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/CbsConfigurationProviderTest.kt",
+      "patchset_number": 9,
+      "line": 194,
+      "message": "Can we make this whole invalidConf a bit more \"invalid\" ? I mean, without running this test I was not able to see if it;s wrong streams_publishes or will it throw because `server` is in wrong format (and even after running I had to look closely what is wrong with this key).",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-08 13:04:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cd1cd29c_b0a8356e",
+      "file_path": "sources/hv-collector-configuration/src/test/kotlin/org/onap/dcae/collectors/veshv/config/impl/ConfigurationValidatorTest.kt",
+      "patchset_number": 9,
+      "line": 208,
+      "message": "consider rename",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-08 13:04:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1df5af2d_eacf0503",
+      "file_path": "sources/hv-collector-ssl/src/test/kotlin/org/onap/dcae/collectors/veshv/ssl/boundary/SecurityKeysPathsTest.kt",
+      "patchset_number": 9,
+      "line": 31,
+      "message": "This SecurityKeysPaths class is probably no longer needed at all (as far as I remember we create it and immediately call `asImmutablesSecurityKeys`). Please try to inline it if it's not a lot of effort or add this little task to jira issue for moving this logic out of Validator.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-04-08 13:04:43.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

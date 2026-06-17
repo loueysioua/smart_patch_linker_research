@@ -1,0 +1,93 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~Ic9a852bb058075b2b03aa6382ed33e23a4cca8b5",
+  "change_id": "Ic9a852bb058075b2b03aa6382ed33e23a4cca8b5",
+  "_number": 101406,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9711d374_c651bbba",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 300,
+      "message": "Notice the single caller of this function on line 501 always assigns both tls_info and tls_config, meaning these defaults are never used.\n\nTools like pylint would flag these as dangerous defaults, though that's only dangerous if one modifies them in the function.\n\nThe line 501 call already ensures tls_info is an empty dict if unset, the same could be done for tls_config. However, lines 316 and 319 still assume tls_config will definitely be set to a dict with at least those keys, and line 309 probably doesn't mean to set cert_directory to None, ever.\n\nAll this just to say, the ={} are not doing anything ov value here.\n\nFor that matter, the get(...) or {} I should've done for the _add_elk_logging_sidecar call as well.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-02-10 11:32:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "eda44c49_5576038e",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "In case the tls key is optional, and unset, the second .get call in these two lines will fail anyway. \n\nThe configure.configure() function seems to have a builtin default for each of the keys here available to it. Another thing is that it doesn't really merge the subdicts like \"tls\", but has them replaced by whatever comes out of consul.\n\nUsing .get here suggests plugin_conf could be missing these keys where it shall not, and that having None in these constants is supported, which I doubt.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-02-10 11:32:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "83d5a246_f59cd178",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 2,
+      "line": 270,
+      "message": "This guards against tls_info being None (i.e. not present in kwargs), and its cert_directory being set to a False (None, '') value. But it doesn't guard against cert_directory not being present in tls_info. I guess it is more likely that someone will leave the entry out entirely than that they will set it to empty/null.\n\nFor optional dict values like tls_info, which should be dicts, one can either use the more compact kwargs.get(\"tls_info\", {}), or kwargs.get(\"tls_info\") or {}.\n\nThe second form guards against the value being set to None, and does not create the empty dict unless the first term is a False (None, {}) value - a tiny advantage or drawback in case \"tls_info\" is actually set to an empty dict.\n\nIf one ensures line 269 sets tls_info to a dict, the expression on this line could be tls_info.get(\"cert_directory\") or COMPONENT_CERT_DIR. The default is set if cert_directory is missing or a False (None, '') value.",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-02-10 11:32:54.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "45e33892_10a4cb27",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "Doesn't the same reasoning apply to lines 40-43 and line 45?  Is the principle you want to apply that we should use [] rather than .get() if some value is guaranteed to be present?  Or are you specifically targeting the .get().get() because the second get() could fail?",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2020-02-24 13:40:22.000000000",
+      "in_reply_to": "eda44c49_5576038e",
+      "unresolved": true
+    },
+    {
+      "id": "01572a7c_5b54ccb1",
+      "file_path": "k8s/k8splugin/tasks.py",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "Yes, the same reasoning applies for the other gets as well. If configure.configure guaranteed the structure of plugin_conf, then code using it wouldn't need to be as defensive.\n\nIf you want to keep using .get, then the first get should supply a default empty dict.\n\nI see max_wait is not handled in configure._set_defaults - perhaps it should, to really have the defaults in one place?",
+      "author": {
+        "account_id": 6172,
+        "name": "Miroslav Los",
+        "display_name": null,
+        "email": "miroslav.los@pantheon.tech",
+        "username": "mirlos"
+      },
+      "updated": "2020-02-24 13:59:31.000000000",
+      "in_reply_to": "45e33892_10a4cb27",
+      "unresolved": true
+    }
+  ]
+}

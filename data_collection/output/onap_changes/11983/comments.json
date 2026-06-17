@@ -1,0 +1,110 @@
+{
+  "id": "policy%2Fdrools-pdp~master~I3f37e7fab15f2f3072b442b43b79b8241c61e306",
+  "change_id": "I3f37e7fab15f2f3072b442b43b79b8241c61e306",
+  "_number": 11983,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9a437d4f_e0e127ff",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 3,
+      "line": 132,
+      "message": "Delete @Ignore",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 19:36:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_80c93b7a",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 3,
+      "line": 152,
+      "message": "I think it is better to remove lines 153-160.   I don't think it will add junit coverage, and it is junitted quite a bit in policy-endpoints.   My concern is because the sleep() interval may be sufficient in some cases, others not, depending on the jenkins server load, so may cause some junit failures once in a while.   Do you know if the jenkins failures you got before are related to this?   I can access older logs (have been deleted).",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 19:36:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_00df8b3c",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 3,
+      "line": 181,
+      "message": "use something similar to this to make sure that fout is automatically closed:\n\n    final File controllerPropertiesFile = controllerPropertiesPath.toFile();\n    try (FileWriter writer = new FileWriter(controllerPropertiesFile)) {\n      properties.store(writer, \"Machine created Policy Controller Configuration\");\n    } catch (final Exception e) {\n      logger.warn(\"{}: {} cannot be saved\", this, controllerName, e);\n      return false;\n    }\n\nfrom\n\nhttps://git.onap.org/policy/drools-pdp/tree/policy-management/src/main/java/org/onap/policy/drools/persistence/FileSystemPersistence.java\n\nnote the try-with-resources usage",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 19:36:18.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_208def31",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 3,
+      "line": 152,
+      "message": "I had looked at the logs for the previous build failures. The first was due to my code, the subsequent failures all failed in the policy-endpoints module.",
+      "author": {
+        "account_id": 1645,
+        "name": "Drew Magnusen",
+        "display_name": null,
+        "email": "dm741q@att.com",
+        "username": "dm741q"
+      },
+      "updated": "2017-09-15 19:49:53.000000000",
+      "in_reply_to": "9a437d4f_80c93b7a",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_2094cf35",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "I missed this, in the else case, you may want to add a fail statement",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2017-09-15 20:01:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_60a9b77a",
+      "file_path": "feature-healthcheck/src/test/java/org/onap/policy/drools/healthcheck/HealthCheckFeatureTest.java",
+      "patchset_number": 4,
+      "line": 147,
+      "message": "A fail here wouldn't be appropriate. By default, each Reports object contains a Report on the status of the PDP-D. Which in this junit is not alive because we don't need to test it. When we iterate onto the Report object for the PDP-D we just want to ignore it, not fail the junit.\n\nThis is what the Reports string looks like during the junit:\nReports [healthy=false, details=[\n  Report \n   [name=PDP-D, url=self, healthy=false,\n    code=500, message=not alive],\n  Report \n   [name=HEALTHCHECK, \n    url=http://localhost:7777/healthcheck/test,\n    healthy=true, code=200, message=All Alive]\n   ]\n  ]",
+      "author": {
+        "account_id": 1645,
+        "name": "Drew Magnusen",
+        "display_name": null,
+        "email": "dm741q@att.com",
+        "username": "dm741q"
+      },
+      "updated": "2017-09-15 20:14:20.000000000",
+      "in_reply_to": "9a437d4f_2094cf35",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,1378 @@
+{
+  "id": "aai%2Faai-common~master~I1e82bf4f0706704679d14aac98969fa00beed758",
+  "change_id": "I1e82bf4f0706704679d14aac98969fa00beed758",
+  "_number": 136861,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2023-12-19 10:56:58.000000000",
+    "updated": "2023-12-28 08:55:55.000000000",
+    "submitted": "2023-12-28 08:46:57.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 7849,
+      "name": "Fiete Ostkamp",
+      "display_name": null,
+      "email": "fiete.ostkamp@telekom.de",
+      "username": "fostkamp"
+    },
+    "submitter": {
+      "account_id": 2701,
+      "name": "Lukasz Rajewski",
+      "display_name": null,
+      "email": "lukasz.rajewski@t-mobile.pl",
+      "username": "rajewluk"
+    }
+  },
+  "subject": "Refactor ErrorLogHelper",
+  "commit_message": "Refactor ErrorLogHelper\n\n- change is designed to not make any changes to the serialised objects [1]\n- introduce common error response object that is used for both service and policy, xml + json format\n- separate creation of error response and the marshalling of it\n- increase test coverage\n- use jackson object mappers for marshalling json and xml objects instead of custom MapperUtil\n- make code more functional\n- use more descriptive variable names\n\n[1] only the internal representation changes to account for both\nService- and PolicyException\n\nIssue-ID: AAI-3695\nSigned-off-by: Fiete Ostkamp <Fiete.Ostkamp@telekom.de>\nChange-Id: I1e82bf4f0706704679d14aac98969fa00beed758\n",
+  "change_log": {
+    "entry_count": 96,
+    "entries": [
+      {
+        "id": "c3b2557007f87600f632e58882c1f94fbbfabf4b",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:56:58.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6f0b7241a7f2dac14037ad46790b92e709f2015d",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:57:10.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7260845116",
+        "patchset_number": 1
+      },
+      {
+        "id": "f82ace0a688eb705f761da8dee943a0a8be8b83f",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:57:11.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 1
+      },
+      {
+        "id": "8b89e5d98459e66fce1e32675fbe78c09f091b5c",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:57:34.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a6d2255a2dc93ed7a23b15825997e4a6bf01403e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 10:57:36.000000000",
+        "message": "Patch Set 1:\n\nNo Builds Executed",
+        "patchset_number": 1
+      },
+      {
+        "id": "02722a27490e0146d23f95c719c2330a868b2b82",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:58:05.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nCANCELLED: https://github.com/onap/.github/actions/runs/7260845116",
+        "patchset_number": 1
+      },
+      {
+        "id": "d62e606f971ffc9225035362a54da4d12b0884d3",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 10:58:17.000000000",
+        "message": "Patch Set 2:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7260850905",
+        "patchset_number": 2
+      },
+      {
+        "id": "0ddb6219c9fa56161630edc6a9efbe3f26df8a1b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 10:59:38.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1260/",
+        "patchset_number": 2
+      },
+      {
+        "id": "292995d4ba2f8faa74dba179693b02bd7c9105bb",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 11:00:08.000000000",
+        "message": "Patch Set 2: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7260850905",
+        "patchset_number": 2
+      },
+      {
+        "id": "b36c60e1d89e58a95afe77a5af39a721bc2b4e00",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 11:08:01.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1260/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1260",
+        "patchset_number": 2
+      },
+      {
+        "id": "57bc4b8a3f574cc9672ff8817673f519807eadc6",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 14:23:36.000000000",
+        "message": "Uploaded patch set 3.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 3
+      },
+      {
+        "id": "6a2aaf956da263be800898f8d648329002a4b1c5",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 14:23:51.000000000",
+        "message": "Patch Set 3:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7263161481",
+        "patchset_number": 3
+      },
+      {
+        "id": "2919d8084d49a76e8d19921ca0f9e9026feb2f52",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 14:24:48.000000000",
+        "message": "Patch Set 3:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1261/",
+        "patchset_number": 3
+      },
+      {
+        "id": "4304689616cdd947ef5f74cbc083520713c89bac",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 14:26:07.000000000",
+        "message": "Patch Set 3: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7263161481",
+        "patchset_number": 3
+      },
+      {
+        "id": "367d479cb7b28d6b436c0360903d5b76b1a6538b",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 14:32:47.000000000",
+        "message": "Patch Set 3: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1261/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1261",
+        "patchset_number": 3
+      },
+      {
+        "id": "cfd9be314a82849366698756feee2fbfbb6d5685",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 15:15:54.000000000",
+        "message": "Uploaded patch set 4.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 4
+      },
+      {
+        "id": "afe1bba66c5d885b242cc0d81b0350ef79c28dda",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 15:16:08.000000000",
+        "message": "Patch Set 4:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7263804841",
+        "patchset_number": 4
+      },
+      {
+        "id": "7c3e2a8e4e1088fee0e09f6ac67f8dff49aa62bc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 15:16:46.000000000",
+        "message": "Patch Set 4:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1262/",
+        "patchset_number": 4
+      },
+      {
+        "id": "8f56c0d08e331d5d03e2db8a7c0ebff83783f483",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-19 15:17:54.000000000",
+        "message": "Patch Set 4: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7263804841",
+        "patchset_number": 4
+      },
+      {
+        "id": "d3922c8ab235a634539eba7f8bd5e349c9efc100",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-19 15:24:40.000000000",
+        "message": "Patch Set 4: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1262/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1262",
+        "patchset_number": 4
+      },
+      {
+        "id": "0a9b0ece11f99c67134fd2936820d6b9a72b2d75",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 09:02:45.000000000",
+        "message": "Uploaded patch set 5.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 5
+      },
+      {
+        "id": "7a792b4e362a04d1cc64e2e2876f89bc9f486214",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 09:02:58.000000000",
+        "message": "Patch Set 5:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7273162063",
+        "patchset_number": 5
+      },
+      {
+        "id": "46237853c0ef6b5d4d61fb425cf7045f73866fee",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 09:03:44.000000000",
+        "message": "Patch Set 5:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1263/",
+        "patchset_number": 5
+      },
+      {
+        "id": "9aefcc7d2dde150b790223bd711bdaa2b73d0a81",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 09:05:22.000000000",
+        "message": "Patch Set 5: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7273162063",
+        "patchset_number": 5
+      },
+      {
+        "id": "6b308a23b5536b486ca49beb0f74227a0a4e0ff3",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 09:11:44.000000000",
+        "message": "Patch Set 5: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1263/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1263",
+        "patchset_number": 5
+      },
+      {
+        "id": "543c711a5a56cf83c45622521ef4813d27bdb35f",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 13:34:27.000000000",
+        "message": "Uploaded patch set 6.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 6
+      },
+      {
+        "id": "7931272e794bc8296fbd384b733b6fb3a6159633",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 13:34:40.000000000",
+        "message": "Patch Set 6:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7276136453",
+        "patchset_number": 6
+      },
+      {
+        "id": "acc6d34dd078520bdbebcfae9667efd1f0685239",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 13:35:28.000000000",
+        "message": "Patch Set 6:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1264/",
+        "patchset_number": 6
+      },
+      {
+        "id": "33e055c7945225dc588127067a0f1ad45e8b7250",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 13:36:36.000000000",
+        "message": "Patch Set 6: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7276136453",
+        "patchset_number": 6
+      },
+      {
+        "id": "7aa48bd093a48b412c84e922dfc7b7d96c2a6d64",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 13:38:48.000000000",
+        "message": "Patch Set 6: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1264/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1264/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1264",
+        "patchset_number": 6
+      },
+      {
+        "id": "d4ec71c8c440affbb6014ab209aed911901550a8",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 16:06:20.000000000",
+        "message": "Uploaded patch set 7.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 7
+      },
+      {
+        "id": "860a3bd67cfc482620ec28dd74b2764097c4ce19",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 16:06:34.000000000",
+        "message": "Patch Set 7:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7277899374",
+        "patchset_number": 7
+      },
+      {
+        "id": "bd6d8edfe1c25a21f2e0546e8600e1810e025c37",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 16:07:06.000000000",
+        "message": "Patch Set 7:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1265/",
+        "patchset_number": 7
+      },
+      {
+        "id": "af80869b5d472e6e99041851fd032b4a98487f5c",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 16:08:30.000000000",
+        "message": "Patch Set 7: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7277899374",
+        "patchset_number": 7
+      },
+      {
+        "id": "399052d0bedb824f813b1b1ad925cdd98966f0ed",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 16:15:06.000000000",
+        "message": "Patch Set 7: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1265/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1265",
+        "patchset_number": 7
+      },
+      {
+        "id": "6e6c412cdd66c13ee032d4505ac0511736cfdc9b",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 19:20:34.000000000",
+        "message": "Uploaded patch set 8.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 8
+      },
+      {
+        "id": "4dad70c8d5227a4e9e60c3a25e31fe7dd80a1483",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 19:20:48.000000000",
+        "message": "Patch Set 8:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7279861420",
+        "patchset_number": 8
+      },
+      {
+        "id": "7014b321a989221e2eb0c0843700405dbc01057c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 19:21:16.000000000",
+        "message": "Patch Set 8:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1266/",
+        "patchset_number": 8
+      },
+      {
+        "id": "d3f4fdd1bc27a983661866c100f4610a4ba39c6a",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-20 19:22:37.000000000",
+        "message": "Patch Set 8: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7279861420",
+        "patchset_number": 8
+      },
+      {
+        "id": "ab2737d39669a719bf8ee1377fc83b07f63d42e4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-20 19:29:16.000000000",
+        "message": "Patch Set 8: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1266/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1266",
+        "patchset_number": 8
+      },
+      {
+        "id": "7c33e4b1f9f88b57d3681dea2024254ef14401b9",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 13:26:19.000000000",
+        "message": "Uploaded patch set 9.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 9
+      },
+      {
+        "id": "fb626cda72300eff4ff5490d99bfb483531f0e9f",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 13:26:34.000000000",
+        "message": "Patch Set 9:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7288746839",
+        "patchset_number": 9
+      },
+      {
+        "id": "f341073b005db5cdf5eb8ec825c5858533115c44",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 13:27:06.000000000",
+        "message": "Patch Set 9:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1267/",
+        "patchset_number": 9
+      },
+      {
+        "id": "c1b050ab380cc4194f5d1853fde654b33447f687",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 13:28:24.000000000",
+        "message": "Patch Set 9: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7288746839",
+        "patchset_number": 9
+      },
+      {
+        "id": "d12d79c7bdc5f3e7773e3d7b063b3faa86f3e9f9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 13:30:04.000000000",
+        "message": "Patch Set 9: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1267/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project aai-els-onap-logging has 4 violations. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1267/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1267",
+        "patchset_number": 9
+      },
+      {
+        "id": "237c810bbd44b799b0e68e0a07c299ae25f7cf45",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 14:28:23.000000000",
+        "message": "Uploaded patch set 10.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 10
+      },
+      {
+        "id": "8ccf499c08160846081a76f255b55aa621410669",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 14:28:38.000000000",
+        "message": "Patch Set 10:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7289416415",
+        "patchset_number": 10
+      },
+      {
+        "id": "c6cd7863caec8fdef0a479ada0cd3f803465756f",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 14:29:50.000000000",
+        "message": "Patch Set 10:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1268/",
+        "patchset_number": 10
+      },
+      {
+        "id": "04acf8c4520b5163f67439e2c44f9f1a7c5c98bb",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 14:30:54.000000000",
+        "message": "Patch Set 10: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7289416415",
+        "patchset_number": 10
+      },
+      {
+        "id": "be8e4b552214cc743f57c8ba3c038e1703418d8e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 14:32:15.000000000",
+        "message": "Patch Set 10: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1268/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project aai-els-onap-logging has 8 violations. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1268/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1268",
+        "patchset_number": 10
+      },
+      {
+        "id": "a829695b3acede1c0e4912cc7e8b1449d828d815",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:05:15.000000000",
+        "message": "Uploaded patch set 11.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 11
+      },
+      {
+        "id": "5951e043ca6c54702bc5d1435f5e65b5b918c6e1",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:05:30.000000000",
+        "message": "Patch Set 11:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7289822174",
+        "patchset_number": 11
+      },
+      {
+        "id": "dab3793556d0952ade5d3d36f18d74ede6b41ade",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 15:06:05.000000000",
+        "message": "Patch Set 11:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1269/",
+        "patchset_number": 11
+      },
+      {
+        "id": "a634380ca42c625304c36b7108db024268c46d41",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:07:47.000000000",
+        "message": "Patch Set 11: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7289822174",
+        "patchset_number": 11
+      },
+      {
+        "id": "47d09857404ad382ec7e66f6c1af7837f8c70493",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 15:08:54.000000000",
+        "message": "Patch Set 11: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1269/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1269/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1269",
+        "patchset_number": 11
+      },
+      {
+        "id": "819a8924e6163c7f9bc1377b4b171c2c2be88e07",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:13:10.000000000",
+        "message": "Uploaded patch set 12.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 12
+      },
+      {
+        "id": "ab8b548b84f1b1bc419bbbdfae26088c3010837b",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:13:24.000000000",
+        "message": "Patch Set 12:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7289917319",
+        "patchset_number": 12
+      },
+      {
+        "id": "ed432443cdcd34dec25b7d74b84b8133f0053471",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 15:14:00.000000000",
+        "message": "Patch Set 12:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1270/",
+        "patchset_number": 12
+      },
+      {
+        "id": "f46be56383b30f392591f5f8f6f8b3dc84514fc4",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-21 15:15:16.000000000",
+        "message": "Patch Set 12: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7289917319",
+        "patchset_number": 12
+      },
+      {
+        "id": "10af49864f6a02233876e9b5aeb12390d6460449",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-21 15:17:20.000000000",
+        "message": "Patch Set 12: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1270/ : FAILURE\n\nThere are test failures. Please look in the log to identify them. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1270/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1270",
+        "patchset_number": 12
+      },
+      {
+        "id": "184f6960cbf579d247f67354c4fcb1fe2d79a3a1",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 11:19:13.000000000",
+        "message": "Uploaded patch set 13.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 13
+      },
+      {
+        "id": "9824f10b857df7a0f483e25ac97bfa8f5172a78f",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 11:19:26.000000000",
+        "message": "Patch Set 13:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7299296328",
+        "patchset_number": 13
+      },
+      {
+        "id": "f6aa45de21cca213b8e97d82f437a25f98ddcc6e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 11:20:03.000000000",
+        "message": "Patch Set 13:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1271/",
+        "patchset_number": 13
+      },
+      {
+        "id": "c6208fa958158fd1db4265aae697f9ab9c2d4d91",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 11:21:27.000000000",
+        "message": "Patch Set 13: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7299296328",
+        "patchset_number": 13
+      },
+      {
+        "id": "be87b8920e538f0cdf7bd4c90783bc04221d442c",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 11:28:25.000000000",
+        "message": "Patch Set 13: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1271/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1271",
+        "patchset_number": 13
+      },
+      {
+        "id": "9d9b3acf2e14d10fa59437916050dc0a1770fc22",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 11:57:25.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 13
+      },
+      {
+        "id": "ea5f849b62714b17cc863ef6183d7ea884613939",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 12:06:42.000000000",
+        "message": "Uploaded patch set 14.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 14
+      },
+      {
+        "id": "e1301d82487e9ef0ac7f0b81fe1c65230f7dbf05",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 12:06:57.000000000",
+        "message": "Patch Set 14:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7299660327",
+        "patchset_number": 14
+      },
+      {
+        "id": "708cc4343ed97867613a7ea119d94701bf303cca",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 12:07:31.000000000",
+        "message": "Patch Set 14:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1272/",
+        "patchset_number": 14
+      },
+      {
+        "id": "5807be2a4b24011861505254122db129a2c06d06",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 12:08:58.000000000",
+        "message": "Patch Set 14: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7299660327",
+        "patchset_number": 14
+      },
+      {
+        "id": "9538469ea6c54873a196c4d1df6931ce4aaa9331",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 12:15:39.000000000",
+        "message": "Patch Set 14: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1272/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1272",
+        "patchset_number": 14
+      },
+      {
+        "id": "4ac3815f9055d7700c3c08bf6326f925010dd448",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 13:01:09.000000000",
+        "message": "Uploaded patch set 15.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 15
+      },
+      {
+        "id": "73880d94c0c9f74a37b339c6518d29ef35a2814d",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 13:01:24.000000000",
+        "message": "Patch Set 15:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7300164275",
+        "patchset_number": 15
+      },
+      {
+        "id": "9eb2361d2b5942a19930f50f0de2ea006096b696",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 13:01:58.000000000",
+        "message": "Patch Set 15:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1273/",
+        "patchset_number": 15
+      },
+      {
+        "id": "ca10e8ea85ee20ebc4ab3f13cc14e49c4c30e5b7",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 13:03:12.000000000",
+        "message": "Patch Set 15: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7300164275",
+        "patchset_number": 15
+      },
+      {
+        "id": "ff75d89b12fa182006eb45b816176ca7de0ebeb4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 13:10:11.000000000",
+        "message": "Patch Set 15: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1273/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1273",
+        "patchset_number": 15
+      },
+      {
+        "id": "4bfc26a156ab5b0ba3bd9180e2ab73d5a4d7aee7",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:02:55.000000000",
+        "message": "Uploaded patch set 16.\n\nOutdated Votes:\n* Verified+1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 16
+      },
+      {
+        "id": "12c91955ef8a015d9e717b47f18caefdbfa348b4",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:03:07.000000000",
+        "message": "Patch Set 16:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7300692247",
+        "patchset_number": 16
+      },
+      {
+        "id": "1d3b12f4e441730e3834bff4afe3b7ce269fa674",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:03:45.000000000",
+        "message": "Patch Set 16:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1274/",
+        "patchset_number": 16
+      },
+      {
+        "id": "f1ef23ebba6cad3b454b7f3e6cd6d65a1e90ba49",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:05:01.000000000",
+        "message": "Patch Set 16: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7300692247",
+        "patchset_number": 16
+      },
+      {
+        "id": "126ac54343ac0a3f6de99d618e9cde2019c5433e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:06:14.000000000",
+        "message": "Patch Set 16: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1274/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project aai-els-onap-logging has 2 violations. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1274/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1274",
+        "patchset_number": 16
+      },
+      {
+        "id": "115c8fe9f0fc12813cec6860c6be6b99c3e7e286",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:06:28.000000000",
+        "message": "Patch Set 17: Commit message was updated.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 17
+      },
+      {
+        "id": "1da23b774a1d58f5b2bbeb1cf2797890b02ba409",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:06:41.000000000",
+        "message": "Patch Set 17:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7300727739",
+        "patchset_number": 17
+      },
+      {
+        "id": "418ad4380e2cd1d78447f5037a31f7437195edea",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:07:16.000000000",
+        "message": "Patch Set 17:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1275/",
+        "patchset_number": 17
+      },
+      {
+        "id": "2d1c3af984ba1812635fc0253737e60f25d056cb",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:08:29.000000000",
+        "message": "Patch Set 17: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7300727739",
+        "patchset_number": 17
+      },
+      {
+        "id": "f65e180c0f569651da36c7db3a94031e2b1257c7",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:09:45.000000000",
+        "message": "Patch Set 17: Verified-1\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1275/ : FAILURE\n\nSubmitted patch does not pass required checkstyle rules. Sub-project aai-els-onap-logging has 2 violations. ( https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1275/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1275",
+        "patchset_number": 17
+      },
+      {
+        "id": "7f94294ff360ffb394e5fb25f9677448f5f864c1",
+        "author": {
+          "account_id": 7849,
+          "name": "Fiete Ostkamp",
+          "display_name": null,
+          "email": "fiete.ostkamp@telekom.de",
+          "username": "fostkamp"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:12:13.000000000",
+        "message": "Uploaded patch set 18.\n\nOutdated Votes:\n* Verified+1, Verified-1 (copy condition: \"changekind:NO_CHANGE\")\n",
+        "patchset_number": 18
+      },
+      {
+        "id": "b624181bfb26ff74d7d73ebaf266bdea5ed36c0f",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:12:27.000000000",
+        "message": "Patch Set 18:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7300780953",
+        "patchset_number": 18
+      },
+      {
+        "id": "268c3780a5f4063f04ef87232ac6e5be9e31d78e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:13:06.000000000",
+        "message": "Patch Set 18:\n\nBuild Started https://jenkins.onap.org/job/aai-aai-common-master-verify-java/1276/",
+        "patchset_number": 18
+      },
+      {
+        "id": "ebcdd892129465ded55cae303fa0122c3eda1398",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-22 14:14:16.000000000",
+        "message": "Patch Set 18: Verified+1\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7300780953",
+        "patchset_number": 18
+      },
+      {
+        "id": "701349be1edf53428a39003da288b5bc7b8032db",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-22 14:21:18.000000000",
+        "message": "Patch Set 18: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-verify-java/1276/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-verify-java/1276",
+        "patchset_number": 18
+      },
+      {
+        "id": "df34ce80df34259a95bde3783fb3de0ccde85d22",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-28 08:46:52.000000000",
+        "message": "Patch Set 18: Code-Review+2",
+        "patchset_number": 18
+      },
+      {
+        "id": "760f3418f6fdfc66450b10cff4f9005c0ece667c",
+        "author": {
+          "account_id": 2701,
+          "name": "Lukasz Rajewski",
+          "display_name": null,
+          "email": "lukasz.rajewski@t-mobile.pl",
+          "username": "rajewluk"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-28 08:46:57.000000000",
+        "message": "Change has been successfully merged",
+        "patchset_number": 18
+      },
+      {
+        "id": "af63d0497b808117285ee4aff599f12647eda438",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-28 08:47:11.000000000",
+        "message": "Patch Set 1:\n\nSTARTED: https://github.com/onap/.github/actions/runs/7345993279",
+        "patchset_number": 1
+      },
+      {
+        "id": "55b79e1b4fd71e5b3ae9f2000a5dc578a6d17656",
+        "author": {
+          "account_id": 8351,
+          "name": "ONAP Required GHA",
+          "display_name": null,
+          "email": "releng+onap.required.gha@linuxfoundation.org",
+          "username": "onap.required.gha"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2023-12-28 08:49:08.000000000",
+        "message": "Patch Set 1:\n\nSUCCESS: https://github.com/onap/.github/actions/runs/7345993279",
+        "patchset_number": 1
+      },
+      {
+        "id": "311d7fd79a9715ebddf9a5387cbf78dba2f3d5d9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2023-12-28 08:55:55.000000000",
+        "message": "Patch Set 18:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/aai-aai-common-master-merge-java/592/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/aai-aai-common-master-merge-java/592",
+        "patchset_number": 18
+      }
+    ]
+  }
+}

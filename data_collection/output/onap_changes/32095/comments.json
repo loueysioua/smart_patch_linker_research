@@ -1,0 +1,433 @@
+{
+  "id": "sdc~master~I3e091ba7ce592fae536da1eaf28a220284b846c3",
+  "change_id": "I3e091ba7ce592fae536da1eaf28a220284b846c3",
+  "_number": 32095,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_0e719cdf",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 1,
+      "line": 82,
+      "message": "You have to check every single property for null before pushing it into MDC. We don't want the logging to fail because of a non-populated property.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-20 08:32:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ce7654d7",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "All these must be constants. Even here in this code you're using them twice. In general this long row of put()'s and remove()'s looks ugly. Let's think how to make this code cleaner. \n\nAlso, try not to invent the name but re-use the ones that are being already used in logback.xml - it will make changing the configuration later easier (or won't be even required).",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-20 08:32:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_54017668",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 4,
+      "line": 39,
+      "message": "I think you might be right prefixing these with something distinguishable. Let's introduce a prefix, and then add it to the constants. Example:\nprivate static final String PREFIX = \"onap.log.\";\nprivate static final String BEGIN_TIMESTAMP = PREFIX + \"BeginTimestamp\" and so on.\nBTW, I believe this same prefix should be shared with the implementation of context service.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-20 21:10:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_742d92fd",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 4,
+      "line": 42,
+      "message": "This must be a constant, no reason for it to be a field.\n\n// ISO 8601 https://en.wikipedia.org/wiki/ISO_8601\nprivate static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(...);",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-20 21:10:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fa03c93f",
+      "file_path": "catalog-be/src/main/resources/config/logback.xml",
+      "patchset_number": 7,
+      "line": 12,
+      "message": "Unfortunately, you can't just update the pattern because the file is shared with Catalog. Let's think how to get around it.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1a01d537",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 7,
+      "line": 19,
+      "message": "We need a good javadoc here",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_baf9c14f",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 7,
+      "line": 36,
+      "message": "Meaningful Javadoc on all the getters.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3a9db10a",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 7,
+      "line": 37,
+      "message": "I think according to the Java coding style enums must be defined at the top of the enclosing class.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9a9c0511",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 7,
+      "line": 38,
+      "message": "It should be just an enam. I don't think there's place for any additional info here - it's just an indication. Don't decide here what string will be associated with each value. Besides, it's redundant because name() does the same. Run System.out.println(StatusCode.COMPLETE.name()) or System.out.println(StatusCode.ERROR.name())",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5aa2fd4b",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/Logger.java",
+      "patchset_number": 7,
+      "line": 96,
+      "message": "Why these new empty lines?",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fa8ae9bd",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/test/java/org/openecomp/sdc/logging/api/SpyAuditData.java",
+      "patchset_number": 7,
+      "line": 1,
+      "message": "Please add a license header",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ba90e1ed",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 7,
+      "line": 42,
+      "message": "A comment explaining what this format is can be helpful (because it's not so obvious). I think I sent you a link.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7abed966",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 7,
+      "line": 95,
+      "message": "I prefer a blank line before it, as the method is more than one line and it kind of \"sticks\" to the signature.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9ac3a5ec",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggingServiceProvider.java",
+      "patchset_number": 7,
+      "line": 30,
+      "message": "Blank lines could help visually separate different sections of the code, making it easier to read.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3ab4d180",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/test/java/org/openecomp/sdc/logging/api/LoggerTest.java",
+      "patchset_number": 7,
+      "line": null,
+      "message": "You should have just renamed this class, instead of delete/create - git knows how to handle it.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:22:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_daa4cd4c",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 7,
+      "line": 100,
+      "message": "This could be DATE_FORMAT.format(data.getStartTime()). \n\nFor example,\n\nSystem.out.println(DATE_FORMAT.format(System.currentTimeMillis()));\n\nprints 2018-02-21T13:33:57.506+02:00 (based on the local machine's clock - exactly what we need)\n\n\nPlease research a bit what would be a good way to pass a date. Although \"long\" should work, I'm not sure it's the best solution.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7a65791c",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 7,
+      "line": 102,
+      "message": "Well, I wouldn't do it. Too much brains for a logger :) I'd let invalid values slip in - it will make clear the application has a problem. It doesn't matter if the field will be blank, or negative, or garbled - it's clear something is wrong.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-21 11:38:27.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bf01a506",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 13,
+      "line": 30,
+      "message": "This is not a correct Javadoc format",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c5be2065",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 13,
+      "line": 33,
+      "message": "This to be compared to metrics data. It seems like we should go for the builder pattern here for a few reasons: 1) it will save the need to implement AuditData every time; 2) it will support gracefully addition of new field - they will be just added without forcing the existing clients who implement the interface to fix their implementation.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e5c31ceb",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-api/src/main/java/org/openecomp/sdc/logging/api/AuditData.java",
+      "patchset_number": 13,
+      "line": 49,
+      "message": "It's a public API, Javadoc is needed here.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_45b21095",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 13,
+      "line": 98,
+      "message": "It's reasonable to require a non-null value here.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_65af0c2b",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 13,
+      "line": 103,
+      "message": "We wanted to skip the instantiation of Date here. DATE_FORMAT.format(data.getStartTime()) should work fine.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_25a58446",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggerWrapper.java",
+      "patchset_number": 13,
+      "line": 107,
+      "message": "Problematic. 1) Right now it's redundant, we can just use data.getStatusCode().name(); 2) It's incorrect to assume that anything other than COMPLETE is ERROR. Can be easily broken. If you insist on having a mapping, and there's no mapping for a value, just use it \"as is\" (.name());",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c565c01e",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggingServiceProvider.java",
+      "patchset_number": 13,
+      "line": 31,
+      "message": "Can it be package private?",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4579b0c6",
+      "file_path": "openecomp-be/lib/openecomp-sdc-logging-lib/openecomp-sdc-logging-core/src/main/java/org/openecomp/sdc/logging/slf4j/SLF4JLoggingServiceProvider.java",
+      "patchset_number": 13,
+      "line": 37,
+      "message": "These don't seem in use.",
+      "author": {
+        "account_id": 329,
+        "name": "Vitaly Emporopulo",
+        "display_name": null,
+        "email": "Vitaliy.Emporopulo@amdocs.com",
+        "username": "vempo"
+      },
+      "updated": "2018-02-27 07:28:35.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

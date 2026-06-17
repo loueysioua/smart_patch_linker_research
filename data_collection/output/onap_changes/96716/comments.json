@@ -1,0 +1,161 @@
+{
+  "id": "sdc~master~I7f19a7356e1cd34deca0a168b3cb707ef657b9cb",
+  "change_id": "I7f19a7356e1cd34deca0a168b3cb707ef657b9cb",
+  "_number": 96716,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ee3359a1_59e58459",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/heat/HeatParameterType.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "This file represent HEAT types, HEAT is not supporting\nscalar-unit.size,  scalar-unit.time and scalar-unit.frequency, they are TOSCA types.\nAccording to heat spec heat type can be ONLY one of the following \n<string | number | json | comma_delimited_list | boolean>\nhttps://docs.openstack.org/heat/latest/template_guide/hot_spec.html#\nsee Parameters section\n\nYou can't change the heat file to be invalid\nThe translation which was done was from number to float\nif you want to represent it differently in TOSCA you can but it should be valid translation, the input is number.\nPlease note that the size in heat OS::Cinder::Volume is define in GB, according to heat spec - https://docs.openstack.org/heat/latest/template_guide/openstack.html#OS::Cinder::Volume\nso if you change the translation to tosca scalar-unit.size, the units should be aligned.\nWe define it in TOSCA as MB so this is why we added (*1024) to heat size in order to get TOSCA size\nMaybe the default value in the TOSCA type can be changed to GB and then the (*1024) can be removed, I don't remember why it was set to be MB",
+      "author": {
+        "account_id": 2871,
+        "name": "shiri amichai",
+        "display_name": null,
+        "email": "shiri.amichai@amdocs.com",
+        "username": "shiria"
+      },
+      "updated": "2019-10-30 07:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b3602e58_29ee81b1",
+      "file_path": "openecomp-be/lib/openecomp-sdc-translator-lib/openecomp-sdc-translator-core/src/test/resources/mock/heat/nested/nestedundervolume/inputs/ocgapp_01_volume.env",
+      "patchset_number": 1,
+      "line": 4,
+      "message": "heat size if in GB",
+      "author": {
+        "account_id": 2871,
+        "name": "shiri amichai",
+        "display_name": null,
+        "email": "shiri.amichai@amdocs.com",
+        "username": "shiria"
+      },
+      "updated": "2019-10-30 07:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "55ff4269_28bb1f7b",
+      "file_path": "openecomp-be/lib/openecomp-sdc-translator-lib/openecomp-sdc-translator-core/src/test/resources/mock/heat/nested/nestedundervolume/inputs/ocgapp_01_volume.yaml",
+      "patchset_number": 1,
+      "line": 9,
+      "message": "invalid heat type",
+      "author": {
+        "account_id": 2871,
+        "name": "shiri amichai",
+        "display_name": null,
+        "email": "shiri.amichai@amdocs.com",
+        "username": "shiria"
+      },
+      "updated": "2019-10-30 07:16:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "31cee12b_53097e68",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/heat/HeatParameterType.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Hi Shiri Amichai, thank you for your comments. As HEAT does not support scalar unit type, I understand that the translation should be done from number to scalar.unit.size and the default size value to GB, as according to TOSCA spec, the scalar-unit type can be used to define scalar values along with a unit from the list of recognized units - http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html. If you agree with that I can proceed with the changes.",
+      "author": {
+        "account_id": 5629,
+        "name": "Anderson Ribeiro",
+        "display_name": null,
+        "email": "anderson.ribeiro@est.tech",
+        "username": "aribeiro"
+      },
+      "updated": "2019-10-30 15:48:27.000000000",
+      "in_reply_to": "ee3359a1_59e58459",
+      "unresolved": false
+    },
+    {
+      "id": "21bc2837_d5072a60",
+      "file_path": "catalog-model/src/main/java/org/openecomp/sdc/be/model/heat/HeatParameterType.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Correct",
+      "author": {
+        "account_id": 2871,
+        "name": "shiri amichai",
+        "display_name": null,
+        "email": "shiri.amichai@amdocs.com",
+        "username": "shiria"
+      },
+      "updated": "2019-11-12 13:09:00.000000000",
+      "in_reply_to": "31cee12b_53097e68",
+      "unresolved": false
+    },
+    {
+      "id": "284a78d8_4bad5988",
+      "file_path": "common/onap-tosca-datatype/src/main/java/org/onap/sdc/tosca/datatypes/model/ScalarUnitValidator.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "According to Tosca Spec 3.2.6.2\nWhitespace: any number of spaces (including zero or none) SHALL be allowed between the scalar value and the unit value.\n\nThe pattern matching accounts for only 1 space. \n\nAlso, the matcher class [a-z][A-Z]{1,3} would pass even for a string which might not fall under the \"Recognized units\" for scalar type (3.2.6.4.1, 3.2.6.5.1 and 3.2.6.6.1). \ne.g 10 abc",
+      "author": {
+        "account_id": 1631,
+        "name": "Ojas Dubey",
+        "display_name": null,
+        "email": "Ojas.Dubey@amdocs.com",
+        "username": "ojasdubey"
+      },
+      "updated": "2019-11-18 11:34:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d6c5c337_a023b2dc",
+      "file_path": "openecomp-be/lib/openecomp-heat-lib/src/main/java/org/openecomp/sdc/heat/datatypes/DefinedHeatParameterTypes.java",
+      "patchset_number": 3,
+      "line": 121,
+      "message": "May be this method can be used in the validato. Looks more in line with the spec.",
+      "author": {
+        "account_id": 1631,
+        "name": "Ojas Dubey",
+        "display_name": null,
+        "email": "Ojas.Dubey@amdocs.com",
+        "username": "ojasdubey"
+      },
+      "updated": "2019-11-18 11:34:30.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "340d2678_9f8d2b25",
+      "file_path": "common/onap-tosca-datatype/src/main/java/org/onap/sdc/tosca/datatypes/model/ScalarUnitValidator.java",
+      "patchset_number": 3,
+      "line": 41,
+      "message": "Hi Ojas, I have changed the regex to allow spaces between the scalar value and the unit value. \n\nThis regex is used to check if the String structure matches with the Tosca Scalar Unit Types structure. There is another method that validates if the given String has a Recognized Tosca unit.",
+      "author": {
+        "account_id": 5629,
+        "name": "Anderson Ribeiro",
+        "display_name": null,
+        "email": "anderson.ribeiro@est.tech",
+        "username": "aribeiro"
+      },
+      "updated": "2019-11-18 16:10:27.000000000",
+      "in_reply_to": "284a78d8_4bad5988",
+      "unresolved": false
+    },
+    {
+      "id": "6b4c5c28_6b3e4b25",
+      "file_path": "openecomp-be/lib/openecomp-heat-lib/src/main/java/org/openecomp/sdc/heat/datatypes/DefinedHeatParameterTypes.java",
+      "patchset_number": 3,
+      "line": 121,
+      "message": "I have moved it to the ScalarUnitValidator class.",
+      "author": {
+        "account_id": 5629,
+        "name": "Anderson Ribeiro",
+        "display_name": null,
+        "email": "anderson.ribeiro@est.tech",
+        "username": "aribeiro"
+      },
+      "updated": "2019-11-18 16:10:27.000000000",
+      "in_reply_to": "d6c5c337_a023b2dc",
+      "unresolved": false
+    }
+  ]
+}

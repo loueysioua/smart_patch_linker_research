@@ -1,0 +1,212 @@
+{
+  "id": "policy%2Fclamp~master~Ie86db5652be26df085234f0699f0363081d06af0",
+  "change_id": "Ie86db5652be26df085234f0699f0363081d06af0",
+  "_number": 122446,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "e83b2891_51cbf952",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "so this isn't for scope=test anymore",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-06 15:00:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d14fb1a1_dd4022b2",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "No, the Springboot applications won't start if the scope is test. This caught us because of course the unit tests all worked, it was only when we ran the springboot applications outside of the unit tests that we discovered this.",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-06 15:23:12.000000000",
+      "in_reply_to": "e83b2891_51cbf952",
+      "unresolved": true
+    },
+    {
+      "id": "da17c512_ad9b7eef",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "In theory, the springfox-boot-starter library (line 39) pulls transitively versions of older swagger-models versions (1.5.X) so this may not be needed if you are not using policy-endpoints or other base, that pulls the 1.6.x versions pulled in by other libraries ie. policy-endpoints.   I discovered that recently as in the case of drools-apps, the 1.5.x swagger-modesl are picked up transitively into the classpath and were in conflict with 1.6.x swagger libraries from policy-common breaking the telemetry api in honolulu and master.  FYI, as here you may end up in classpath with similar configuration with this library, conflicting with the one pulled in in an older version from line 139.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-07-07 00:49:41.000000000",
+      "in_reply_to": "d14fb1a1_dd4022b2",
+      "unresolved": true
+    },
+    {
+      "id": "b5d638c0_04acd8fa",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "I dug into this for the last few hours. It seems that Swagger has changed its group name from \"io.swagger\" to \"io.swagger.core.v3\". 1.6.2 is the last version of the \"io.swagger\" group but \"2.1.10\" is the latest version of the \"io.swagger.core.v3\" group.\n\nFor example 1.6.2 See:\nhttps://mvnrepository.com/artifact/io.swagger/swagger-annotations\nand:\n2.1.10 https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations\n\nNow, the Swagger dependencies are used in common and models as well as CLAMP. I will upgrade swagger for all the components in subsequent reviews.\n\nHowever, this issue is blocking us in CLAMP, we can't get our builds and tests to work without this change so would it be OK to merge this change to bring everything up to 1.6.2 and I'll upgrade the swagger on everything in later reviews?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-07 10:17:11.000000000",
+      "in_reply_to": "da17c512_ad9b7eef",
+      "unresolved": true
+    },
+    {
+      "id": "ecd703c2_8b69e7a6",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "should we merge, even though this doesn't build?",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-07 11:42:43.000000000",
+      "in_reply_to": "b5d638c0_04acd8fa",
+      "unresolved": true
+    },
+    {
+      "id": "5b2f07a8_a823312e",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "Liam, the spring-boot-starter in line 139 pulls in the 1.5.20 versions of swagger-common and swagger-annotations (not the 2.1.10 from io.swagger.core.v3), those must be received if you see them from something else, which would be a 3 way conflict, 1.5.20, 1.6.2x, and 2.1.x.   1.5.x and 1.6.2x have incompatibilities which is the problem I was hitting.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-07-07 12:13:15.000000000",
+      "in_reply_to": "ecd703c2_8b69e7a6",
+      "unresolved": true
+    },
+    {
+      "id": "7146da90_4ff2ca0d",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "@Jim it should build now that Saul's review is merged\n@Jorge the springboot is pulling in the 2.1.2 in CLAMP, it's coming in springfox-boot-starter\n    <groupId>io.swagger.core.v3</groupId>\n    <artifactId>swagger-models</artifactId>\n\nThis looks like a right mess.\n\nThis review fixes our problems in CLAMP for now, could we pull it in and then investigate he Swagger issues in a separate JIRA?",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-07 12:58:12.000000000",
+      "in_reply_to": "ecd703c2_8b69e7a6",
+      "unresolved": true
+    },
+    {
+      "id": "6527e029_f5a54030",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "FYI from when I was looking yesterday, the  springfox-swagger2 3.0.0 pom (included from springfox-boot-starter 3.0.0): https://repo1.maven.org/maven2/io/springfox/springfox-swagger2/3.0.0/springfox-swagger2-3.0.0.pom that pulls in the 1.5.20 jars.  I think I concluded that was coming here when it was showing up in my classpath together with the 1.6.x versions.",
+      "author": {
+        "account_id": 477,
+        "name": "Jorge Hernandez",
+        "display_name": null,
+        "email": "jorge.hernandez-herrero@att.com",
+        "username": "jhh"
+      },
+      "updated": "2021-07-07 13:19:52.000000000",
+      "in_reply_to": "7146da90_4ff2ca0d",
+      "unresolved": true
+    },
+    {
+      "id": "5c2a7cb4_6fd4d010",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "Looks like excluding the dependencies won't work, When we try to start the CLAMP backend we get the following exceptions:\n\nCaused by: java.lang.IllegalStateException: Failed to introspect Class [springfox.documentation.oas.mappers.ServiceModelToOpenApiMapperImpl] from ClassLoader [org.springframework.boot.loader.LaunchedURLClassLoader@63c12fb0]\n\tat org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:481)\n\tat org.springframework.util.ReflectionUtils.doWithLocalMethods(ReflectionUtils.java:321)\n\tat org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:267)\n\t... 40 common frames omitted\nCaused by: java.lang.NoClassDefFoundError: io/swagger/v3/oas/models/info/Contact\n\tat java.base/java.lang.Class.getDeclaredMethods0(Native Method)\n\tat java.base/java.lang.Class.privateGetDeclaredMethods(Class.java:3166)\n\tat java.base/java.lang.Class.getDeclaredMethods(Class.java:2309)\n\tat org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:463)\n\t... 42 common frames omitted\nCaused by: java.lang.ClassNotFoundException: io.swagger.v3.oas.models.info.Contact\n\tat java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:471)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:589)\n\tat org.springframework.boot.loader.LaunchedURLClassLoader.loadClass(LaunchedURLClassLoader.java:151)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-07 14:15:40.000000000",
+      "in_reply_to": "6527e029_f5a54030",
+      "unresolved": true
+    },
+    {
+      "id": "0c57e2c4_90022af9",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "I was thinking we'd exclude it in policy-parent, and then explicitly include it in policy-clamp.  Or since the java package names are different, we don't necessarily need to exclude it at all.  Instead, we could just modify that one new class in policy-common to use the new swagger-models/annotations, while leaving the old policy-endpoints code alone (i.e., using the old annotations).\n\nOr is that the rub?  policy-clamp needs policy-endpoints, but with the new annotations?  If so, we could use both the old AND new annotations in policy-endpoints, but hopefully limit such as mess to that one jar.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2021-07-07 14:26:06.000000000",
+      "in_reply_to": "5c2a7cb4_6fd4d010",
+      "unresolved": true
+    },
+    {
+      "id": "a02a3ee0_99ac86ab",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "It's only the Springboot/Springfox that's using the new annotations. None of our direct classes are using the new annotations at the moment (the next patch takes out the only usage).",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-07 14:59:23.000000000",
+      "in_reply_to": "0c57e2c4_90022af9",
+      "unresolved": true
+    },
+    {
+      "id": "1a71ce93_86ddd072",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 130,
+      "message": "Ack",
+      "author": {
+        "account_id": 2787,
+        "name": "Liam Fallon",
+        "display_name": null,
+        "email": "liam.fallon@est.tech",
+        "username": "liamfallon"
+      },
+      "updated": "2021-07-09 10:44:30.000000000",
+      "in_reply_to": "a02a3ee0_99ac86ab",
+      "unresolved": false
+    }
+  ]
+}

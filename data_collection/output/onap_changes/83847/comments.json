@@ -1,0 +1,110 @@
+{
+  "id": "sdc~master~I8fc5d50d74d3dd8031c96ee16708489dc7c789b8",
+  "change_id": "I8fc5d50d74d3dd8031c96ee16708489dc7c789b8",
+  "_number": 83847,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8095ec81_b82f97cc",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/test/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImplTest.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "sonar\n\nGeneric exceptions should never be thrown\n \nCode smell\n \nMajor\nsquid:S00112\n \nUsing such generic exceptions as Error, RuntimeException, Throwable, and Exception prevents calling methods from handling true, system-generated exceptions differently than application-generated errors.\nNoncompliant Code Example\n  public void foo(String bar) throws Throwable { // Noncompliant    throw new RuntimeException(\"My Message\"); // Noncompliant  }  \nCompliant Solution\n  public void foo(String bar) {    throw new MyOwnRuntimeException(\"My Message\");  }  \nExceptions\nGeneric exceptions in the signatures of overriding methods are ignored, because overriding method has to follow signature of the throw declaration in the superclass. The issue will be raised on superclass declaration of the method (or won't be raised at all if superclass is not part of the analysis).\n  @Override  public void myMethod() throws Exception {...}  \nGeneric exceptions are also ignored in the signatures of methods that make calls to methods that throw generic exceptions.\n  public void myOtherMethod throws Exception {    doTheThing(); // this method throws Exception  }  \nSee\nMITRE, CWE-397 - Declaration of Throws for Generic Exception\nCERT, ERR07-J. - Do not throw RuntimeException, Exception, or Throwable",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-02 06:17:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5e1b049a_1cc49572",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/pom.xml",
+      "patchset_number": 2,
+      "line": 209,
+      "message": "Please use constant for this",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-02 06:17:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e125e598_aec17de7",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Sonar Blocker!\n\nResources should be closed\n \nBug\n \nBlocker\nsquid:S2095\n \nConnections, streams, files, and other classes that implement the Closeable interface or its super-interface, AutoCloseable, needs to be closed after use. Further, that close call must be made in a finally block otherwise an exception could keep the call from being made. Preferably, when class implements AutoCloseable, resource should be created using \"try-with-resources\" pattern and will be closed automatically.\nFailure to properly close resources will result in a resource leak which could bring first the application and then perhaps the box it's on to their knees.\nNoncompliant Code Example\n  private void readTheFile() throws IOException {    Path path = Paths.get(this.fileName);    BufferedReader reader = Files.newBufferedReader(path, this.charset);    // ...    reader.close(); // Noncompliant    // ...    Files.lines(\"input.txt\").forEach(System.out::println); // Noncompliant: The stream needs to be closed  }    private void doSomething() {    OutputStream stream = null;    try {      for (String property : propertyList) {        stream = new FileOutputStream(\"myfile.txt\"); // Noncompliant        // ...      }    } catch (Exception e) {      // ...    } finally {      stream.close(); // Multiple streams were opened. Only the last is closed.    }  }  \nCompliant Solution\n  private void readTheFile(String fileName) throws IOException {      Path path = Paths.get(fileName);      try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {        reader.readLine();        // ...      }      // ..      try (Stream<String> input = Files.lines(\"input.txt\")) {        input.forEach(System.out::println);      }  }    private void doSomething() {    OutputStream stream = null;    try {      stream = new FileOutputStream(\"myfile.txt\");      for (String property : propertyList) {        // ...      }    } catch (Exception e) {      // ...    } finally {      stream.close();    }  }  \nExceptions\nInstances of the following classes are ignored by this rule because close has no effect:\njava.io.ByteArrayOutputStream\njava.io.ByteArrayInputStream\njava.io.CharArrayReader\njava.io.CharArrayWriter\njava.io.StringReader\njava.io.StringWriter\nJava 7 introduced the try-with-resources statement, which implicitly closes Closeables. All resources opened in a try-with-resources statement are ignored by this rule.\n  try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {    //...  }  catch ( ... ) {    //...  }  \nSee\nMITRE, CWE-459 - Incomplete Cleanup\nCERT, FIO04-J. - Release resources when they are no longer needed\nCERT, FIO42-C. - Close files when they are no longer needed\nTry With Resources",
+      "author": {
+        "account_id": 2119,
+        "name": "Oren Haim Zvi Kleks",
+        "display_name": null,
+        "email": "orenkleks@hotmail.com",
+        "username": "shrek2000"
+      },
+      "updated": "2019-04-02 06:17:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0ef7b773_7c8d22cd",
+      "file_path": "openecomp-be/api/openecomp-sdc-rest-webapp/vendor-software-products-rest/vendor-software-products-rest-services/src/test/java/org/openecomp/sdcrests/vsp/rest/services/OrchestrationTemplateCandidateImplTest.java",
+      "patchset_number": 2,
+      "line": 58,
+      "message": "Done",
+      "author": {
+        "account_id": 4813,
+        "name": "Sergey Sachkov",
+        "display_name": null,
+        "email": "sergey.sachkov@est.tech",
+        "username": "kooper"
+      },
+      "updated": "2019-04-02 09:23:19.000000000",
+      "in_reply_to": "8095ec81_b82f97cc",
+      "unresolved": false
+    },
+    {
+      "id": "2ddc2d9f_85b17aa5",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/pom.xml",
+      "patchset_number": 2,
+      "line": 209,
+      "message": "Done",
+      "author": {
+        "account_id": 4813,
+        "name": "Sergey Sachkov",
+        "display_name": null,
+        "email": "sergey.sachkov@est.tech",
+        "username": "kooper"
+      },
+      "updated": "2019-04-02 09:23:19.000000000",
+      "in_reply_to": "5e1b049a_1cc49572",
+      "unresolved": false
+    },
+    {
+      "id": "31bb2c19_d1de5cfa",
+      "file_path": "openecomp-be/backend/openecomp-sdc-vendor-software-product-manager/src/test/java/org/openecomp/sdc/vendorsoftwareproduct/security/SecurityManagerTest.java",
+      "patchset_number": 2,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 4813,
+        "name": "Sergey Sachkov",
+        "display_name": null,
+        "email": "sergey.sachkov@est.tech",
+        "username": "kooper"
+      },
+      "updated": "2019-04-02 09:23:19.000000000",
+      "in_reply_to": "e125e598_aec17de7",
+      "unresolved": false
+    }
+  ]
+}

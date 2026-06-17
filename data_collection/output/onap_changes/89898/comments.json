@@ -1,0 +1,331 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fhv-ves~master~I9d0568a5fc296604d7ac7a45b8bbd0289b845938",
+  "change_id": "I9d0568a5fc296604d7ac7a45b8bbd0289b845938",
+  "_number": 89898,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "6e394206_8a2df33f",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/main.kt",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "And what if we get null or await fails? Shoudln't we return ExitFailure then?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fd1ba1ac_8b2d4760",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerMetrics.kt",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "After applying my comment from MicroPromMetProv, this would become:\n```\n\ninternal class MicrometerMetrics private constructor(private val registry: PrometheusMeterRegistry) : Metrics() {\n\n    fun lastStatus(): Mono<String> = Mono.fromCallable {\n        registry.scrape()\n    }\n\n    companion object {\n        val INSTANCE by lazy { MicrometerMetrics(PrometheusMeterRegistry(PrometheusConfig.DEFAULT)) }\n    }\n}\n```\nwhich seems a lot nicer.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "511bb5fe_df8f257c",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerPrometheusMetricsProvider.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "We are including whole healthcheck module to only use this interface.\n\nAs kafka-consumer module is self-contained and is not exposing any API, I believe it's completely fine to use `MicrometerMetrics` \ndirectly, i.e. move lastStatus inside of it (maybe also rename to PrometheusMetrics), omit whole providing stuff.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b90102a0_bb04eebd",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "As far as I remember, this path was 'standardized' in SDK as `/metrics`.",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "451e7714_d801e91d",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "That's third place in our codebase with these lines next to each other - maybe something like `bindAsServerHandle` ?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a2f2482b_35f72243",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/server_handle.kt",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "Please explain this change in commit message, as it seems completely unrelated to scope of this task.\n\nAlso, why no return statement?\n\nWhy not using `.sync` like it was in previous versions?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 10:42:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "27a323b4_35a7d068",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerPrometheusMetricsProvider.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "I implemented it as it was in main module. Didn't want to mix up few approaches. If you tell its fine, ill refactor this a little bit. Also i think it would be good to extract a metrics module in the future.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 11:48:09.000000000",
+      "in_reply_to": "511bb5fe_df8f257c",
+      "unresolved": true
+    },
+    {
+      "id": "b74a0551_1dca43b9",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "Copied endpoint from HealthCheckApiServer in healh-check module",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 11:48:09.000000000",
+      "in_reply_to": "b90102a0_bb04eebd",
+      "unresolved": true
+    },
+    {
+      "id": "b9ac18dd_ddf6c1d2",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 42,
+      "message": "Will do some refactor",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 11:48:09.000000000",
+      "in_reply_to": "451e7714_d801e91d",
+      "unresolved": true
+    },
+    {
+      "id": "5006f5d9_3c3219ad",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/server_handle.kt",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "It does exactly same thing as previous version, but you dont have to block the returned mono, which was done in every usage of this method",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 11:48:09.000000000",
+      "in_reply_to": "a2f2482b_35f72243",
+      "unresolved": true
+    },
+    {
+      "id": "c980b4dc_6fd4ad9c",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerPrometheusMetricsProvider.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "I guess we could use SDK-moher for this purpose, after all it's our code xd \n\nCan you try to see if using `dcaegen2-sdk-moher-metrics` wouldn't make our life easier here?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 12:04:15.000000000",
+      "in_reply_to": "27a323b4_35a7d068",
+      "unresolved": true
+    },
+    {
+      "id": "8b0a282a_e25fee5d",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "I think it will be nicer to use standardized path, maybe even you could use SDK MetricsRoutes here?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 12:04:15.000000000",
+      "in_reply_to": "b74a0551_1dca43b9",
+      "unresolved": true
+    },
+    {
+      "id": "2469afb3_98b58c2e",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/server_handle.kt",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "I see what it does, it's just that it does not seem related at all to 'exposing prometheus metrics' and while reviewing it's very confusing. \n\nAnd still, `await` returns Future, so it's effect is not immediate. When you are not returning this Future, you are changing the behavior quite a lot.\n\nSo to do \"exactly same thing\" you would need to write `override fun await() = ctx.channel().closeFuture().await()`",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 12:04:15.000000000",
+      "in_reply_to": "5006f5d9_3c3219ad",
+      "unresolved": true
+    },
+    {
+      "id": "dab8615d_215dbf98",
+      "file_path": "sources/hv-collector-utils/src/main/kotlin/org/onap/dcae/collectors/veshv/utils/server_handle.kt",
+      "patchset_number": 2,
+      "line": 65,
+      "message": "I meant that the effect is the same, but you dont have to additionally block the mono.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 12:16:46.000000000",
+      "in_reply_to": "2469afb3_98b58c2e",
+      "unresolved": true
+    },
+    {
+      "id": "ef00ab7a_754dde4d",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerPrometheusMetricsProvider.kt",
+      "patchset_number": 2,
+      "line": 30,
+      "message": "I dont think there's time for that right now, since Kornel is already waiting with his MR. We can do it later though.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 12:21:27.000000000",
+      "in_reply_to": "27a323b4_35a7d068",
+      "unresolved": true
+    },
+    {
+      "id": "a122bb6c_757a74a7",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/api/PrometheusApiServer.kt",
+      "patchset_number": 2,
+      "line": 40,
+      "message": "I would rather leave that as it is in our healthcheck module. We can create separate task for unifying these enpoints with the standard.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 12:21:27.000000000",
+      "in_reply_to": "8b0a282a_e25fee5d",
+      "unresolved": true
+    },
+    {
+      "id": "ff1eb31f_6d258ef7",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/MicrometerMetrics.kt",
+      "patchset_number": 7,
+      "line": 31,
+      "message": "not needed",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 13:15:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "96ebcddb_00c75b71",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/http/PrometheusApiServer.kt",
+      "patchset_number": 7,
+      "line": 42,
+      "message": "No change after all? :)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-19 13:15:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ac4f7630_df0e3867",
+      "file_path": "sources/hv-collector-kafka-consumer/src/main/kotlin/org/onap/dcae/collectors/veshv/kafkaconsumer/metrics/http/PrometheusApiServer.kt",
+      "patchset_number": 7,
+      "line": 42,
+      "message": "This change, just like the one with await is indeed not related to this commit. I added a todo that could potentially handle this one aswell.",
+      "author": {
+        "account_id": 3081,
+        "name": "Jakub Dudycz",
+        "display_name": null,
+        "email": "jakub.dudycz@nokia.com",
+        "username": "dudini1"
+      },
+      "updated": "2019-06-19 13:35:12.000000000",
+      "in_reply_to": "96ebcddb_00c75b71",
+      "unresolved": true
+    }
+  ]
+}

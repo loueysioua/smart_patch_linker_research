@@ -1,0 +1,144 @@
+{
+  "id": "oom~master~Ic18626ca679c8cbc6ce7aee95ac4b9c40dc5bcfe",
+  "change_id": "Ic18626ca679c8cbc6ce7aee95ac4b9c40dc5bcfe",
+  "_number": 90609,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "4bf8c245_ad0d118d",
+      "file_path": "kubernetes/vid/templates/ingress.yaml",
+      "patchset_number": 3,
+      "line": 7,
+      "message": "Why not use existing templates (common.fullname etc.)?\nthis comment is related all over the file.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-07-15 11:55:45.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3c84a2f6_e317f11a",
+      "file_path": "kubernetes/vid/templates/ingress.yaml",
+      "patchset_number": 5,
+      "line": 19,
+      "message": "Although in this case it is correct, I am thinking about a more general approach of defining the ingress via values.yaml (which allows override). Similar to common.resources template maybe.\nExample where this approach won't work is AAI (there are many paths):\n# aai\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /aai\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /services/aai/webapp\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /services/routerService\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /api/v2/storeAnalytics\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /rest/search\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /rest/subscription\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /rest/visualization\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /auditSearchQuery\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /visualization\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /subscription\n      - backend:\n          serviceName: {{ .Values.ingress.service.aai.name }}\n          servicePort: {{ .Values.ingress.service.aai.port }}\n        path: /favicon.ico",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-07-18 13:17:23.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5c554c6a_534e7b00",
+      "file_path": "kubernetes/vid/templates/ingress.yaml",
+      "patchset_number": 7,
+      "line": 26,
+      "message": "I think the annotations need to come from values.yaml also.\nSimilar to: \n{{- with .Values.ingress.annotations }}\n  annotations:\n{{ toYaml . | indent 4 }}\n{{- end }}\nand in values.yaml there can be:\n  annotations:\n    nginx.ingress.kubernetes.io/proxy-body-size: \"500m\"\n    nginx.ingress.kubernetes.io/ssl-redirect: \"false\"\n    nginx.ingress.kubernetes.io/secure-backends: \"false\"\n    nginx.ingress.kubernetes.io/configuration-snippet: |\n      more_set_headers \"EPService: true\";\n    nginx.ingress.kubernetes.io/server-snippet: |\n      underscores_in_headers on;\n    ingress.kubernetes.io/ssl-redirect: \"false\"\n    ingress.kubernetes.io/secure-backends: \"false\"\n    ingress.kubernetes.io/configuration-snippet: |\n      more_set_headers \"EPService: true\";\n    ingress.kubernetes.io/server-snippet: |\n      underscores_in_headers on;",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-07-31 13:17:32.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "12538bc6_58f4d619",
+      "file_path": "kubernetes/vid/templates/ingress.yaml",
+      "patchset_number": 7,
+      "line": 14,
+      "message": "One more thing\n\nI'm missing something - is it HTTP (no S) only?",
+      "author": {
+        "account_id": 5047,
+        "name": "Pawe? Wieczorek",
+        "display_name": "Pawel Wieczorek",
+        "email": "pawel-wieczorek@outlook.com",
+        "username": "pwieczorek"
+      },
+      "updated": "2019-07-31 13:33:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ef2c3b0c_ac546cec",
+      "file_path": "kubernetes/common/common/templates/_ingress.tpl",
+      "patchset_number": 10,
+      "line": 14,
+      "message": "I am not sure there will be externalPort2 for every service. Would you like to consider changing this to \"externalPort\" instead?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-08-07 14:21:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "30b618d0_79e5c12d",
+      "file_path": "kubernetes/common/common/templates/_ingress.tpl",
+      "patchset_number": 10,
+      "line": 25,
+      "message": "why not just bring the annotations from values.yaml file similarly to tls definition below?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-08-07 14:21:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "cf8c8aa6_5d902880",
+      "file_path": "kubernetes/common/common/templates/_ingress.tpl",
+      "patchset_number": 10,
+      "line": 27,
+      "message": "There may be some times when there are no annotations, in this case, let's leave the annotations section empty.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-08-07 14:21:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "eac377c6_794be4a1",
+      "file_path": "kubernetes/common/common/templates/_ingress.tpl",
+      "patchset_number": 10,
+      "line": 40,
+      "message": "There is a tiny \"tab\" here. Better replace it with spaces I guess.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2019-08-07 14:21:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

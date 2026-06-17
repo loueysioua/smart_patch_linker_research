@@ -1,0 +1,196 @@
+{
+  "id": "vfc%2Fnfvo%2Flcm~master~Ib6fc4b0d94490eac1318fe548d14016823638900",
+  "change_id": "Ib6fc4b0d94490eac1318fe548d14016823638900",
+  "_number": 27883,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2018-01-10 22:03:41.000000000",
+    "updated": "2018-02-12 20:41:16.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 2255,
+      "name": "Dénes Németh",
+      "display_name": null,
+      "email": "denes.nemeth@nokia.com",
+      "username": "thelittlemouse"
+    },
+    "submitter": null
+  },
+  "subject": "fix cloud operations not to require admin right",
+  "commit_message": "fix cloud operations not to require admin right\n\nChange-Id: Ib6fc4b0d94490eac1318fe548d14016823638900\nIssue-ID: VFC-656\nSigned-off-by: Denes Nemeth <denes.nemeth@nokia.com>\n",
+  "change_log": {
+    "entry_count": 12,
+    "entries": [
+      {
+        "id": "799a65d01cb25d3820f957077f72dfcfbc21515d",
+        "author": {
+          "account_id": 2255,
+          "name": "Dénes Németh",
+          "display_name": null,
+          "email": "denes.nemeth@nokia.com",
+          "username": "thelittlemouse"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-10 22:03:41.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "3b1a4bb97c79c5e5cca195c33a2ce1e2fd21d06a",
+        "author": {
+          "account_id": 1389,
+          "name": "Fu Jinhua",
+          "display_name": null,
+          "email": "fu.jinhua@zte.com.cn",
+          "username": "fujinhua"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-11 11:01:08.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "1fb4ba79ae803d4428b862aac51f62e8198c7450",
+        "author": {
+          "account_id": 2255,
+          "name": "Dénes Németh",
+          "display_name": null,
+          "email": "denes.nemeth@nokia.com",
+          "username": "thelittlemouse"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-11 12:06:22.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\n1. Do you think it is realistic to get cloud account with admin privileges in real world use cases. The administrator is a \"god\" entity in the cloud without any restrictions? \n2. The list tenants is also OpenStack specific the notion of tenant does not exists in Azure nor in vCloud nor in EC2. \n3. I am not sure that multi cloud is a really \"multi cloud\". The current VF-C implementation only works with OpenStack and nothing else even if it is using multi cloud.\n4. windriver vio also supports the identity\n\nCurrently all clouds supported by multicloud supports the identity call. Azure in multicloud is an empty directory. I think in the current situation it is a lot better to use token get, than list tenants.",
+        "patchset_number": 1
+      },
+      {
+        "id": "174447f0cbbffb0f2a287111ed300ca237aba77a",
+        "author": {
+          "account_id": 1389,
+          "name": "Fu Jinhua",
+          "display_name": null,
+          "email": "fu.jinhua@zte.com.cn",
+          "username": "fujinhua"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-11 14:22:29.000000000",
+        "message": "Patch Set 1:\n\n> 1. Do you think it is realistic to get cloud account with admin\n > privileges in real world use cases. The administrator is a \"god\"\n > entity in the cloud without any restrictions?\nFujinhua: I agree with you about this, so in real use cases, we can config the tenant only has list tenant right.\n > 2. The list tenants is also OpenStack specific the notion of tenant\n > does not exists in Azure nor in vCloud nor in EC2.\nFujinhua: The list tenants interface of multi-cloud is different from that in openstack, it is an abstract interface of all vims, for example, vcloud can use vapp to replace tenant, here list tenant is an unified interface for all vims. In R2, multi-cloud plan to improve the adaptor interfaces to satisfy all vims.\n > 3. I am not sure that multi cloud is a really \"multi cloud\". The\n > current VF-C implementation only works with OpenStack and nothing\n > else even if it is using multi cloud.\nFujinhua: In Onap R1 use cases, only vio and windriver vim which are consistent with openstack interfaces, which lead to your misunderstanding to multi-cloud.\n > 4. windriver vio also supports the identity\n > \n > Currently all clouds supported by multicloud supports the identity\n > call. Azure in multicloud is an empty directory. I think in the\n > current situation it is a lot better to use token get, than list\n > tenants.\nFujinhua: Yes, you are right about this, but the token interface is a proxy interface which are called by so and app-c components, vf-c cannot use the proxy interfaces, vf-c can only use the abstract interfaces(unified interfaces for all vims), in onap R2 or later, multi-cloud plan to discard the proxy interfaces little by little, and only support abstract interfaces.\nFinally, in your codes, you set the tenantid with the tenant which is defined in ESR, not the tenant in connect info, here we need get the tenantid of the tenant in connect info, you can see the original codes again.",
+        "patchset_number": 1
+      },
+      {
+        "id": "36da37a18dd41782286bb072360361cce299b6f0",
+        "author": {
+          "account_id": 2255,
+          "name": "Dénes Németh",
+          "display_name": null,
+          "email": "denes.nemeth@nokia.com",
+          "username": "thelittlemouse"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-11 16:11:41.000000000",
+        "message": "Patch Set 1:\n\n> > 1. Do you think it is realistic to get cloud account with admin\n > > privileges in real world use cases. The administrator is a \"god\"\n > > entity in the cloud without any restrictions?\n > Fujinhua: I agree with you about this, so in real use cases, we can\n > config the tenant only has list tenant right.\n[Denes]  I think listing the tenants is also non realistic. Allowing a normal user to \"know\" all the users in the system is also a security risk.\n > > 2. The list tenants is also OpenStack specific the notion of\n > tenant\n > > does not exists in Azure nor in vCloud nor in EC2.\n > Fujinhua: The list tenants interface of multi-cloud is different\n > from that in openstack, it is an abstract interface of all vims,\n > for example, vcloud can use vapp to replace tenant, here list\n > tenant is an unified interface for all vims. In R2, multi-cloud\n > plan to improve the adaptor interfaces to satisfy all vims.\n[Denes] I think if someone can implement the \"list tenants\" for all clouds in a cloud agnostic way, than the \"get current tenant\" is also implementable. I seriously dough that someone can implement this kind of functionality in a cloud agnostic way. But still switching to the \"get_token\" till someone is able to implement list / get tenant in a cloud agnostic way is a better solution than the current one.\n\n > > 3. I am not sure that multi cloud is a really \"multi cloud\". The\n > > current VF-C implementation only works with OpenStack and nothing\n > > else even if it is using multi cloud.\n > Fujinhua: In Onap R1 use cases, only vio and windriver vim which\n > are consistent with openstack interfaces, which lead to your\n > misunderstanding to multi-cloud.\nI know that they want to build a cloud abstraction, but till this is not there the current solution introduces a limitation to the system.\n\n > > 4. windriver vio also supports the identity\n > >\n > > Currently all clouds supported by multicloud supports the\n > identity\n > > call. Azure in multicloud is an empty directory. I think in the\n > > current situation it is a lot better to use token get, than list\n > > tenants.\n > Fujinhua: Yes, you are right about this, but the token interface is\n > a proxy interface which are called by so and app-c components, vf-c\n > cannot use the proxy interfaces, vf-c can only use the abstract\n > interfaces(unified interfaces for all vims), in onap R2 or later,\n > multi-cloud plan to discard the proxy interfaces little by little,\n > and only support abstract interfaces.\n > Finally, in your codes, you set the tenantid with the tenant which\n > is defined in ESR, not the tenant in connect info, here we need get\n > the tenantid of the tenant in connect info, you can see the\n > original codes again.\nBoth codes set the tenant id (uuid) to the self.tenant_id field.\nI see no difference in the result. Please correct me if I am wrong.\n\nold\n                self.tenant_id = tenant[\"id\"]\nnew\n        self.tenant_id = token['token']['project']['id']",
+        "patchset_number": 1
+      },
+      {
+        "id": "11fe5965960dbc74d8522e9e37be95dfdef08dac",
+        "author": {
+          "account_id": 1389,
+          "name": "Fu Jinhua",
+          "display_name": null,
+          "email": "fu.jinhua@zte.com.cn",
+          "username": "fujinhua"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-12 00:52:32.000000000",
+        "message": "Patch Set 1:\n\n1. About your questions to Multi-Cloud, I invite Bin Yang(Committer of Multi-Cloud) join this topic, can Bin Yang answer Denes's questions about Multi-Cloud?\n2. About your codes, you use \"token = get_token(self.vim_id)\" to get the token, and you did not pass the variable connect_info[\"tenant\"] to the token interface, so multi-Cloud will use the tenant which is defined in ESR to get the token, so \"self.tenant_id = token['token']['project']['id']\" will get the id of tenant which is defined in ESR, not the id of connect_info[\"tenant\"]. While our codes list all tenants info, and  select the tenant id based on name matching, so our codes get the id of connect_info[\"tenant\"].\nNote: Tenant which is defined in ESR is different from tenant which is passed by connect_info, tenant defined in ESR is an admin tenant, while tenant passed by connect_info is a vnf tenant.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d1fb3097267f76b10f21da916f2a5aab1bd08b79",
+        "author": {
+          "account_id": 1889,
+          "name": "Bin Yang",
+          "display_name": null,
+          "email": "bin.yang@windriver.com",
+          "username": "biny993"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-12 02:42:29.000000000",
+        "message": "Patch Set 1:\n\nAs a committer of Multi-VIM/Cloud project, I am going to judge which points are correct or not, just want to share a bigger scope of context and try to come up with some generic questions and possible solutions.\n\nContext: multicloud is a shim layer to mediate interaction between ONAP components and underlying VIM/clouds, in ONAP R1 we implemented 2 set of NBI (northbound API) for ONAP components: Proxied OpenStack APIs which are tested with SO/APPC/DCAEgen2, and another set of NBIs which is abstract layer between VF-C and MultiCloud. The reason we had 2 seperate NBIs is \"backward compatibility\", since SO/APPC/DCAEgen2 seed codes are using OpenStack APIs and VF-C seed codes using the abstract APIs of MultiVIM. Now MultiVIM becomes MultiCloud. To facilitate the integration between MultiCloud with all these components, we decided exposes NBIs in this way.\nOn the southbound, MultiCloud has implemented adaptors (referred as  multicloud plugins) for vanilla OpenStack Ocata and Wind River's OpenStack (Titanium Cloud), as well as VMware VIO. Microsoft Azure was planning to implemented a translator from OpenStack API to Azure API, but didn't happen yet.\n\nQuestions:\nQ1: who and why ONAP components need privilege to 'list project'?\nAnswer 1: well, it is not only that VF-C performs this operation, but also APPC does the same. Now we know exactly why VF-C need this operation, while I am still not clear why APPC need it. I had raised the question to APPC team but no clear answer yet. If we take further step to think about it in bigger scope, it is actually be the question 2 as below. \n\nQ2: What APIs and privileges does ONAP platform as a whole needed to underlying VIM/Clouds?\nA2: There are multiple ONAP components interacting with underlying VIM/Clouds, assuming various APIs/privileges granted to them respectively. That means, just membership of a tenant/user to underlying VIM/Cloud is not enough for ONAP platform to orchestrate VNFs. On the other side, it seems 'admin' privilege is too much for an orchestrator. This is not the observation observed only from ONAP community, we had encountered the same challenge in other practices (I am from Wind River and we offered commercialized OpenStack ) . So IMHO, I think we need re-think about the role definition in underlying VIM/Clouds in context of NFV. As a experimental, we tried to add a role named 'can_list_projects' to fulfill ONAP's requirement temporarily.\n\nQ4: How MultiCloud can help?\nA4: that is case by case. e.g. given the reason why VF-C need 'list project' , multicloud could return a list of projects which was registrated in AAI instead of forwarding the requests to underlying VIM. Who and When to register those list of projects into AAI is another question and feasible, either manually or automaticatlly. \n\nSuggestion to this commit change:\nYou cannot fix/workaround the issue you intends to resolve by this single commit, we need come up with more holistic solution.\nI would suggest you put a hold on this change and keep an eye on the community discussion on related topic, or just initiate this discussion with the whole community. \nThanks.",
+        "patchset_number": 1
+      },
+      {
+        "id": "c5d3c11adc17ba89a54270921b0242d03cef70d6",
+        "author": {
+          "account_id": 1889,
+          "name": "Bin Yang",
+          "display_name": null,
+          "email": "bin.yang@windriver.com",
+          "username": "biny993"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-12 06:23:59.000000000",
+        "message": "Patch Set 1:\n\n> As a committer of Multi-VIM/Cloud project, I am going to judge\n > which points are correct or not, just want to share a bigger scope\n > of context and try to come up with some generic questions and\n > possible solutions.\n > \n > Context: multicloud is a shim layer to mediate interaction between\n > ONAP components and underlying VIM/clouds, in ONAP R1 we\n > implemented 2 set of NBI (northbound API) for ONAP components:\n > Proxied OpenStack APIs which are tested with SO/APPC/DCAEgen2, and\n > another set of NBIs which is abstract layer between VF-C and\n > MultiCloud. The reason we had 2 seperate NBIs is \"backward\n > compatibility\", since SO/APPC/DCAEgen2 seed codes are using\n > OpenStack APIs and VF-C seed codes using the abstract APIs of\n > MultiVIM. Now MultiVIM becomes MultiCloud. To facilitate the\n > integration between MultiCloud with all these components, we\n > decided exposes NBIs in this way.\n > On the southbound, MultiCloud has implemented adaptors (referred as\n >  multicloud plugins) for vanilla OpenStack Ocata and Wind River's\n > OpenStack (Titanium Cloud), as well as VMware VIO. Microsoft Azure\n > was planning to implemented a translator from OpenStack API to\n > Azure API, but didn't happen yet.\n > \n > Questions:\n > Q1: who and why ONAP components need privilege to 'list project'?\n > Answer 1: well, it is not only that VF-C performs this operation,\n > but also APPC does the same. Now we know exactly why VF-C need this\n > operation, while I am still not clear why APPC need it. I had\n > raised the question to APPC team but no clear answer yet. If we\n > take further step to think about it in bigger scope, it is actually\n > be the question 2 as below.\n > \n > Q2: What APIs and privileges does ONAP platform as a whole needed\n > to underlying VIM/Clouds?\n > A2: There are multiple ONAP components interacting with underlying\n > VIM/Clouds, assuming various APIs/privileges granted to them\n > respectively. That means, just membership of a tenant/user to\n > underlying VIM/Cloud is not enough for ONAP platform to orchestrate\n > VNFs. On the other side, it seems 'admin' privilege is too much for\n > an orchestrator. This is not the observation observed only from\n > ONAP community, we had encountered the same challenge in other\n > practices (I am from Wind River and we offered commercialized\n > OpenStack ) . So IMHO, I think we need re-think about the role\n > definition in underlying VIM/Clouds in context of NFV. As a\n > experimental, we tried to add a role named 'can_list_projects' to\n > fulfill ONAP's requirement temporarily.\n > \n > Q4: How MultiCloud can help?\n > A4: that is case by case. e.g. given the reason why VF-C need 'list\n > project' , multicloud could return a list of projects which was\n > registrated in AAI instead of forwarding the requests to underlying\n > VIM. Who and When to register those list of projects into AAI is\n > another question and feasible, either manually or automaticatlly.\n > \n > Suggestion to this commit change:\n > You cannot fix/workaround the issue you intends to resolve by this\n > single commit, we need come up with more holistic solution.\n > I would suggest you put a hold on this change and keep an eye on\n > the community discussion on related topic, or just initiate this\n > discussion with the whole community.\n > Thanks.\n\nI mean, I am not going to \"judge which points are correct or not\", sorry for the typo",
+        "patchset_number": 1
+      },
+      {
+        "id": "f0ee1e8c5f90c1559aea4a024d5b027e06e1e756",
+        "author": {
+          "account_id": 2255,
+          "name": "Dénes Németh",
+          "display_name": null,
+          "email": "denes.nemeth@nokia.com",
+          "username": "thelittlemouse"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-29 10:04:44.000000000",
+        "message": "Patch Set 1:\n\nWould it not be possible to fix this as it is in the merge request, and later ask multi vim team to implement tenant listing for non admin users in a way that it is using the token get to return a list of a single tenant",
+        "patchset_number": 1
+      },
+      {
+        "id": "66f794c389bdfed7655b67bc357ae1fd22acb9c0",
+        "author": {
+          "account_id": 1389,
+          "name": "Fu Jinhua",
+          "display_name": null,
+          "email": "fu.jinhua@zte.com.cn",
+          "username": "fujinhua"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-01-29 10:58:25.000000000",
+        "message": "Patch Set 1:\n\nSorry, I cannot merge it because your codes are wrong, as you can see my previous reply, here I confirmed it again, in our original codes, self.tenant_id is the id of the connect_info[\"tenant\"], but in your codes, you ignore the connect_info[\"tenant\"], and only pass the vimid to get the tenant id, so you got the wrong tenant id. To fix it, we need an interface which can get tenant id by vimid and tenant name.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6ef080028cc0fb39eab87bf37b63b8ad1baa8b63",
+        "author": {
+          "account_id": 141,
+          "name": "maopeng zhang",
+          "display_name": null,
+          "email": "zhang.maopeng1@zte.com.cn",
+          "username": "maopengzhang"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-02-11 06:54:54.000000000",
+        "message": "Patch Set 1:\n\nI agree with bin and jinhua. Sugguest abandon the submit.\n1. The code change should be in the mulicloud project as the project interface and function agreed.\n2. The changing code does not satisfy the requirement of non-administrator for the whole ONAP.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5b20ba8f9dafcda0ab902f83b09b8db340387ab7",
+        "author": {
+          "account_id": 2255,
+          "name": "Dénes Németh",
+          "display_name": null,
+          "email": "denes.nemeth@nokia.com",
+          "username": "thelittlemouse"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-02-12 20:41:16.000000000",
+        "message": "Abandoned\n\nshould be fixed in multi vim",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

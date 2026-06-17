@@ -1,0 +1,161 @@
+{
+  "id": "oom%2Foffline-installer~master~I1af2bfef5aa4d6c7b819f5fc40f95c6e8303598c",
+  "change_id": "I1af2bfef5aa4d6c7b819f5fc40f95c6e8303598c",
+  "_number": 78368,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8e5ccfd6_76dd97b9",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "I don't like nginx role here. I would rather publish nexus port and check readiness on that instead.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-13 14:03:14.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0c516622_9363dc1b",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Ok. I did not changed the functionality from old. At least this should work same way.\n\nAnd I don't know why it was done like this, i.e. nginx needs to be started in the middle. Is it because below waiting loop needs nginx to be up to query nexus healthcheck? Is that what you mean with \"publish nexus port\" that we could run healtcheck loop without starting nginx?\nThat would be great change and we could move nginx role to playbook after nexus.\n\nIf that's possible I want to do that change also as part of this commit. Or separate commit?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-13 15:07:14.000000000",
+      "in_reply_to": "8e5ccfd6_76dd97b9",
+      "unresolved": false
+    },
+    {
+      "id": "88e872bd_131f1e73",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "nginx.conf has nexus specified as upstream so nginx won't start without nexus already listening on the ports specified in that config and container will crash.\nSince port is not published (bound to port on host) you can communicate with nexus only through nginx. I would say that's why this loop is after nginx. So yeah if you bind port 8081 you can query nexus health there.\nI am ok with that change to be in this commit.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-13 15:33:14.000000000",
+      "in_reply_to": "0c516622_9363dc1b",
+      "unresolved": false
+    },
+    {
+      "id": "0bc1223f_c3121a9b",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-02-14 06:06:17.000000000",
+      "in_reply_to": "88e872bd_131f1e73",
+      "unresolved": false
+    },
+    {
+      "id": "9fbd6a89_13f595a6",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 36,
+      "message": "doesn't work because of certificates.\nwith validate_certs: no it fails because of some weird error message.\nI suggest you put some address with http instead of https and that works.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-02-15 09:47:34.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8833e533_ede431a3",
+      "file_path": "ansible/roles/nexus/tasks/install.yml",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "Hmmm... actually why does nginx specify it as upstream server instead of proxying directly there? using proxy_pass to http:// address will not crash nginx.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-02-15 10:10:35.000000000",
+      "in_reply_to": "0bc1223f_c3121a9b",
+      "unresolved": false
+    },
+    {
+      "id": "cea6f9cf_f2bc66fc",
+      "file_path": "ansible/roles/nginx/templates/nginx.conf.j2",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "redundant newline?",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-03-04 12:36:49.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c107b450_98088aca",
+      "file_path": "ansible/roles/nginx/templates/nginx.conf.j2",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "yes, I could remove it.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 13:30:22.000000000",
+      "in_reply_to": "cea6f9cf_f2bc66fc",
+      "unresolved": false
+    },
+    {
+      "id": "ec73b715_0994357e",
+      "file_path": "ansible/roles/nginx/templates/nginx.conf.j2",
+      "patchset_number": 4,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-04 17:11:03.000000000",
+      "in_reply_to": "cea6f9cf_f2bc66fc",
+      "unresolved": false
+    }
+  ]
+}

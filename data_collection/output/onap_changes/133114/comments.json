@@ -1,0 +1,433 @@
+{
+  "id": "cps~master~If09f22478df8703290c8fc24aa6fe2a11c90788a",
+  "change_id": "If09f22478df8703290c8fc24aa6fe2a11c90788a",
+  "_number": 133114,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "f6b1223a_584cfb4d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 386,
+      "message": "I'm concerned about this:\n- If this deletes some schema sets and then throws an exception, the next line (deleteDataNodes) will not execute.\n- When it falls back to individual delete, when it tries to deleteSchemaSetWithCascade on line 380, it would fail again with SchemaSetNotFoundException, because it was already deleted here.\n- This would result in schema set being deleted, but not data node.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:11:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fc2d33be_40b05f2a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 387,
+      "message": "NB this does not throw DataNodeNotFound or DataValidationException as previous implementation did, so those errors will not be reported (they would be logged in deleteDataNodes)",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:11:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4dacccee_87472c2a",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/InventoryPersistenceImpl.java",
+      "patchset_number": 2,
+      "line": 190,
+      "message": "Does this need instrumentation metric? The underlying cpsDataService.deleteDataNodes is instrumented.",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:11:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c9efcda1_40682ed7",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 334,
+      "message": "NB: Extract constant DELETE_BATCH_SIZE",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:25:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d9d0d98c_cfd8f493",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 386,
+      "message": "we had a similar issue before with yang resources and resolved it use this method: org.onap.cps.spi.repository.YangResourceRepository#deleteOrphans\nYou could do something similar here and ensure that fragments.deletOrphans is call at the end in a finally block (in CPS-Core!)\nBut as agreed we can do this in a follow up commit/subtask  to adres 'robustness issues'",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:25:30.000000000",
+      "in_reply_to": "f6b1223a_584cfb4d",
+      "unresolved": true
+    },
+    {
+      "id": "48c968ce_4aa251b5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/InventoryPersistenceImpl.java",
+      "patchset_number": 2,
+      "line": 190,
+      "message": "instrumentation on cps service method is probably good enough",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:25:30.000000000",
+      "in_reply_to": "4dacccee_87472c2a",
+      "unresolved": false
+    },
+    {
+      "id": "5f4fa570_4d2ef307",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImplRegistrationSpec.groovy",
+      "patchset_number": 2,
+      "line": 280,
+      "message": "NB: I think you can also do it as an array\n\n>> [{}, {throw...}, {} ]\n\nNot 100% sure though and maybe you current format is more readable, whatever you prefer...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:25:30.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ed4ed623_92725ecd",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 386,
+      "message": "This is not an issue: inventoryPersistence.deleteSchemaSetWithCascade already swallows that SchemaSetNotFoundException\nThis scenario is covered in unit test 'Remove CmHandle: Partial Success'",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:26:06.000000000",
+      "in_reply_to": "f6b1223a_584cfb4d",
+      "unresolved": false
+    },
+    {
+      "id": "39283731_1d96cb69",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 325,
+      "message": "Sonar is complaining about cognitive complexity being 18 > 15",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:29:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c14f0031_92578d4e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/InventoryPersistenceImpl.java",
+      "patchset_number": 2,
+      "line": 191,
+      "message": "Needs unit test",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:32:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ecd4a75b_4e2f18a8",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 325,
+      "message": "i was think about extracting part out already, looks Ike SOnar is forcing you now :-)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:34:25.000000000",
+      "in_reply_to": "39283731_1d96cb69",
+      "unresolved": true
+    },
+    {
+      "id": "73faa40a_1c957451",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 362,
+      "message": "I think if you extract this into a new method your complexity will be OK",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 10:34:25.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2a160f29_2909fa1d",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 334,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:48:27.000000000",
+      "in_reply_to": "c9efcda1_40682ed7",
+      "unresolved": false
+    },
+    {
+      "id": "43d3eafa_7067d4ec",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 362,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:48:27.000000000",
+      "in_reply_to": "73faa40a_1c957451",
+      "unresolved": false
+    },
+    {
+      "id": "26541012_7c190e58",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/inventory/InventoryPersistenceImpl.java",
+      "patchset_number": 2,
+      "line": 191,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:48:27.000000000",
+      "in_reply_to": "c14f0031_92578d4e",
+      "unresolved": false
+    },
+    {
+      "id": "d0d0b3fd_e9afeec6",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImplRegistrationSpec.groovy",
+      "patchset_number": 2,
+      "line": 280,
+      "message": "Ack",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 10:48:27.000000000",
+      "in_reply_to": "5f4fa570_4d2ef307",
+      "unresolved": false
+    },
+    {
+      "id": "1cdc0a81_83066846",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 344,
+      "message": "NB: suggestion \n\nCmHandleRegistrationResponse cmHandleRegistrationResponse = deleteCmHandle(cmHandleId);\ngetcmHandleRegistrationResponseFordelete(cmHandleId);",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 11:03:36.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "527e73fe_26a8b38f",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 325,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 11:08:04.000000000",
+      "in_reply_to": "ecd4a75b_4e2f18a8",
+      "unresolved": false
+    },
+    {
+      "id": "a6a85380_3e05fcde",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 344,
+      "message": "I don't follow. The responses are based on the exceptions thrown. Or you mean to rename the method to deleteCmHandle?",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 11:26:28.000000000",
+      "in_reply_to": "1cdc0a81_83066846",
+      "unresolved": true
+    },
+    {
+      "id": "fe6934bb_a8893f5b",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImplRegistrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 279,
+      "message": "NB got confused would prefer if these were separated:\n'cm-handle deletion fails on batch'\nmockInventoryPersistence.deleteDataNodes(_) >> { throw new RuntimeException(\"Failed\") }\nand: 'cm-handle deletion is successful for 1st and 3rd; failed for 2nd'\nmockInventoryPersistence.deleteDataNode(_) >> {} >> { throw new RuntimeException(\"Failed\") } >> {}",
+      "author": {
+        "account_id": 7830,
+        "name": "Luke Gleeson",
+        "display_name": null,
+        "email": "luke.gleeson@est.tech",
+        "username": "lukegleeson"
+      },
+      "updated": "2023-02-02 12:40:09.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a5abcaba_f402a84c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 344,
+      "message": "well the method does 2 things always a problem when naming method and should be reconsidered in the future...\n\nmayeb\n\ndeleteCmHandleAndGetCmHandleRegistrationResponse is a better suggestion\n(in general don't shorten classnames when used in method names or variables)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-02-02 12:40:54.000000000",
+      "in_reply_to": "a6a85380_3e05fcde",
+      "unresolved": true
+    },
+    {
+      "id": "bfe151ee_32725ed3",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 337,
+      "message": "NB : ?",
+      "author": {
+        "account_id": 7957,
+        "name": "Sourabh Sourabh",
+        "display_name": null,
+        "email": "sourabh.sharma.lnf@gmail.com",
+        "username": "sourabh_sourabh"
+      },
+      "updated": "2023-02-02 13:27:16.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "4af2c56c_8225e478",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 337,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 13:32:31.000000000",
+      "in_reply_to": "bfe151ee_32725ed3",
+      "unresolved": false
+    },
+    {
+      "id": "cb55fb2d_c3f9af5e",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 5,
+      "line": 344,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 13:32:31.000000000",
+      "in_reply_to": "a5abcaba_f402a84c",
+      "unresolved": false
+    },
+    {
+      "id": "ccaf9c2a_6d95d064",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImplRegistrationSpec.groovy",
+      "patchset_number": 5,
+      "line": 279,
+      "message": "Done",
+      "author": {
+        "account_id": 6742,
+        "name": "Daniel Hanrahan",
+        "display_name": null,
+        "email": "daniel.hanrahan@est.tech",
+        "username": "danielhanrahan"
+      },
+      "updated": "2023-02-02 13:32:31.000000000",
+      "in_reply_to": "fe6934bb_a8893f5b",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "id": "oom~master~I096ffb211afdd7df7438f5bb276ecc6b0fbfc09d",
+  "change_id": "I096ffb211afdd7df7438f5bb276ecc6b0fbfc09d",
+  "_number": 43397,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2018-04-17 16:46:31.000000000",
+    "updated": "2018-04-17 20:37:33.000000000",
+    "submitted": "2018-04-17 20:37:33.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1733,
+      "name": "Aaron Hay",
+      "display_name": null,
+      "email": "aaron.hay@att.com",
+      "username": "ah415j"
+    },
+    "submitter": {
+      "account_id": 497,
+      "name": "Borislav Glozman",
+      "display_name": null,
+      "email": "borislav.glozman@amdocs.com",
+      "username": "BorislavG"
+    }
+  },
+  "subject": "Update APPC charts for Nitrogen ODL",
+  "commit_message": "Update APPC charts for Nitrogen ODL\n\nSDNC directory renamed to ccsdk based on latest ccsdk update.\nFiles startODL.sh and appc.properties updated based on Nitrogen ODL.\n\nChange-Id: I096ffb211afdd7df7438f5bb276ecc6b0fbfc09d\nIssue-ID: OOM-951\nSigned-off-by: Aaron Hay <ah415j@att.com>\n",
+  "change_log": {
+    "entry_count": 8,
+    "entries": [
+      {
+        "id": "905d15cbd2d499a6812c5f62b89b4cc7c60fd10f",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-17 16:46:31.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "b6a3e9453947c9a5206b176a5fc5f0305022f5ce",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-17 16:57:01.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "496b6561f9ba8000f2bafb54e2b9161a1f8794bf",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-17 17:48:20.000000000",
+        "message": "Patch Set 1: Code-Review+1\n\nAPPC startup became longish...\n\"Total Appc install took 930 seconds\"\n\nAll bundles started successfully:\nopendaylight-user@root>list | grep -v Active\nSTART LEVEL 100 , List Threshold: 50\n ID | State    | Lvl | Version                             | Name\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n 31 | Resolved |  80 | 4.0.10                              | Apache Karaf :: Diagnostic :: Boot\n190 | Resolved |  80 | 0.7.1                               | config-persister-directory-xml-adapter, Hosts: 192\n191 | Resolved |  80 | 0.7.1                               | config-persister-file-xml-adapter, Hosts: 192\n\nI see some feature not installed:\nopendaylight-user@root>feature:list  | grep appc | grep -v \"\\| x\"\nappc-event-listener                              | 1.3.0.SNAPSHOT   |          | Uninstalled | appc-event-listener-1.3.0-SNAPSHOT               | event listener\nappc-ssh-adapter                                 | 1.3.0.SNAPSHOT   |          | Started     | appc-ssh-adapter-1.3.0-SNAPSHOT                  | appc-ssh-adapter\nappc-dispatcher                                  | 1.3.0.SNAPSHOT   |          | Uninstalled | appc-dispatcher-1.3.0-SNAPSHOT                   | appc-dispatcher\n\n\nManually starting appc-dispatcher and appc-event-listener succeeded.\nappc-ssh-adapter stays \"Started\", but without \"x\".\nDoes it look OK?\n\n\n\nThere is still this error during start:\n 88% [===============================================================>        ]17:35:15.384 [Start Level: Equinox Container: d0233aa9-6542-0018-165e-978c3d441146] ERROR o.o.a.dao.util.dbcp.DBConnectionPool - Get connection failure\njava.sql.SQLException: Cannot create JDBC driver of class '' for connect URL ''\n        at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2023) ~[commons-dbcp2-2.0.1.jar:2.0.1]\n        at org.apache.commons.dbcp2.BasicDataSource.createDataSource(BasicDataSource.java:1897) ~[commons-dbcp2-2.0.1.jar:2.0.1]\n        at org.apache.commons.dbcp2.BasicDataSource.getConnection(BasicDataSource.java:1413) ~[commons-dbcp2-2.0.1.jar:2.0.1]\n        at org.onap.appc.dao.util.dbcp.DBConnectionPool.getConnection(DBConnectionPool.java:84) ~[bundleFile:na]\n        at org.onap.appc.dao.util.AppcDatabaseConnectionPool.init(AppcDatabaseConnectionPool.java:89) [bundleFile:na]\n        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_162]\n        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_162]\n        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_162]\n        at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_162]\n        at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:299) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:980) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:736) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:848) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:811) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79) [bundleFile:1.7.1]\n        at java.util.concurrent.FutureTask.run(FutureTask.java:266) [na:1.8.0_162]\n        at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:255) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:186) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:724) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:411) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:276) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:300) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:269) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:265) [bundleFile:1.7.1]\n        at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:255) [bundleFile:1.7.1]\n        at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500) [bundleFile:1.1.1]\n        at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433) [bundleFile:1.1.1]\n        at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725) [bundleFile:1.1.1]\n        at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463) [bundleFile:1.1.1]\n        at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422) [bundleFile:1.1.1]\n        at org.eclipse.osgi.internal.framework.EquinoxEventPublisher$2.call(EquinoxEventPublisher.java:189) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHookPrivileged(ServiceRegistry.java:1280) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHooksPrivileged(ServiceRegistry.java:1263) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.notifyEventHooksPrivileged(EquinoxEventPublisher.java:186) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEventPrivileged(EquinoxEventPublisher.java:146) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:75) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:67) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor.publishModuleEvent(EquinoxContainerAdaptor.java:102) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.Module.publishEvent(Module.java:466) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.Module.start(Module.java:457) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1582) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1562) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1533) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1476) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n        at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:340) [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\nCaused by: java.sql.SQLException: No suitable driver\n        at java.sql.DriverManager.getDriver(DriverManager.java:315) ~[na:1.8.0_162]\n        at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2007) ~[commons-dbcp2-2.0.1.jar:2.0.1]\n        ... 47 common frames omitted\n17:35:15.384 [Start Level: Equinox Container: d0233aa9-6542-0018-165e-978c3d441146] ERROR o.o.a.d.u.AppcDatabaseConnectionPool - DB connection pool is created failed.Please make sure the provided information is correct.\n\nWould be nice if you could take care of it at some later date.",
+        "patchset_number": 1
+      },
+      {
+        "id": "0e1913eb16705b9362c3b9f0977b83ebf07a4ae4",
+        "author": {
+          "account_id": 201,
+          "name": "Jerome Doucerain",
+          "display_name": null,
+          "email": "jerome.doucerain@bell.ca",
+          "username": "jdoucerain"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-17 17:58:47.000000000",
+        "message": "Patch Set 1:\n\n(1 comment)",
+        "patchset_number": 1
+      },
+      {
+        "id": "d9823239d5a30de987cefaa2dbe63861685b8db3",
+        "author": {
+          "account_id": 49,
+          "name": "Patrick Brady",
+          "display_name": null,
+          "email": "patrick.brady@att.com",
+          "username": "pb071"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-17 19:18:48.000000000",
+        "message": "Patch Set 1:\n\n> (1 comment)\n\nThe 60 seconds wait is copied from ccsdk which is where we inherit our opendaylight install from. When I have time, I plan to make a process check.",
+        "patchset_number": 1
+      },
+      {
+        "id": "8314401a8061657f4ea9e60026f2425abef166c5",
+        "author": {
+          "account_id": 1733,
+          "name": "Aaron Hay",
+          "display_name": null,
+          "email": "aaron.hay@att.com",
+          "username": "ah415j"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-04-17 20:21:36.000000000",
+        "message": "Patch Set 1:\n\n> APPC startup became longish...\n > \"Total Appc install took 930 seconds\"\n > \n > All bundles started successfully:\n > opendaylight-user@root>list | grep -v Active\n > START LEVEL 100 , List Threshold: 50\n > ID | State    | Lvl | Version                             | Name\n > ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n > 31 | Resolved |  80 | 4.0.10                              | Apache\n > Karaf :: Diagnostic :: Boot\n > 190 | Resolved |  80 | 0.7.1                               |\n > config-persister-directory-xml-adapter, Hosts: 192\n > 191 | Resolved |  80 | 0.7.1                               |\n > config-persister-file-xml-adapter, Hosts: 192\n > \n > I see some feature not installed:\n > opendaylight-user@root>feature:list  | grep appc | grep -v \"\\| x\"\n > appc-event-listener                              | 1.3.0.SNAPSHOT  \n > |          | Uninstalled | appc-event-listener-1.3.0-SNAPSHOT      \n >         | event listener\n > appc-ssh-adapter                                 | 1.3.0.SNAPSHOT  \n > |          | Started     | appc-ssh-adapter-1.3.0-SNAPSHOT         \n >         | appc-ssh-adapter\n > appc-dispatcher                                  | 1.3.0.SNAPSHOT  \n > |          | Uninstalled | appc-dispatcher-1.3.0-SNAPSHOT          \n >         | appc-dispatcher\n > \n > \n > Manually starting appc-dispatcher and appc-event-listener\n > succeeded.\n > appc-ssh-adapter stays \"Started\", but without \"x\".\n > Does it look OK?\n > \n > \n > \n > There is still this error during start:\n > 88% [===============================================================>\n >        ]17:35:15.384 [Start Level: Equinox Container:\n > d0233aa9-6542-0018-165e-978c3d441146] ERROR o.o.a.dao.util.dbcp.DBConnectionPool\n > - Get connection failure\n > java.sql.SQLException: Cannot create JDBC driver of class '' for\n > connect URL ''\n > at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2023)\n > ~[commons-dbcp2-2.0.1.jar:2.0.1]\n > at org.apache.commons.dbcp2.BasicDataSource.createDataSource(BasicDataSource.java:1897)\n > ~[commons-dbcp2-2.0.1.jar:2.0.1]\n > at org.apache.commons.dbcp2.BasicDataSource.getConnection(BasicDataSource.java:1413)\n > ~[commons-dbcp2-2.0.1.jar:2.0.1]\n > at org.onap.appc.dao.util.dbcp.DBConnectionPool.getConnection(DBConnectionPool.java:84)\n > ~[bundleFile:na]\n > at org.onap.appc.dao.util.AppcDatabaseConnectionPool.init(AppcDatabaseConnectionPool.java:89)\n > [bundleFile:na]\n > at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n > ~[na:1.8.0_162]\n > at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n > ~[na:1.8.0_162]\n > at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n > ~[na:1.8.0_162]\n > at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_162]\n > at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:299)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:980)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:736)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:848)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:811)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79)\n > [bundleFile:1.7.1]\n > at java.util.concurrent.FutureTask.run(FutureTask.java:266)\n > [na:1.8.0_162]\n > at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:255)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:186)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:724)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:411)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:276)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:300)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:269)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:265)\n > [bundleFile:1.7.1]\n > at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:255)\n > [bundleFile:1.7.1]\n > at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500)\n > [bundleFile:1.1.1]\n > at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433)\n > [bundleFile:1.1.1]\n > at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725)\n > [bundleFile:1.1.1]\n > at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463)\n > [bundleFile:1.1.1]\n > at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422)\n > [bundleFile:1.1.1]\n > at org.eclipse.osgi.internal.framework.EquinoxEventPublisher$2.call(EquinoxEventPublisher.java:189)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHookPrivileged(ServiceRegistry.java:1280)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHooksPrivileged(ServiceRegistry.java:1263)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.notifyEventHooksPrivileged(EquinoxEventPublisher.java:186)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEventPrivileged(EquinoxEventPublisher.java:146)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:75)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:67)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor.publishModuleEvent(EquinoxContainerAdaptor.java:102)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.Module.publishEvent(Module.java:466)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.Module.start(Module.java:457)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1582)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1562)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1533)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1476)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:340)\n > [org.eclipse.osgi-3.10.101.v20150820-1432.jar:na]\n > Caused by: java.sql.SQLException: No suitable driver\n > at java.sql.DriverManager.getDriver(DriverManager.java:315)\n > ~[na:1.8.0_162]\n > at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2007)\n > ~[commons-dbcp2-2.0.1.jar:2.0.1]\n > ... 47 common frames omitted\n > 17:35:15.384 [Start Level: Equinox Container: d0233aa9-6542-0018-165e-978c3d441146]\n > ERROR o.o.a.d.u.AppcDatabaseConnectionPool - DB connection pool is\n > created failed.Please make sure the provided information is\n > correct.\n > \n > Would be nice if you could take care of it at some later date.\n\nPatrick Brady provided the response below in the JIRA:\n\nThe appc-dispatcher feature should not be installed anymore. Its just an aggregator feature, the features that are part of it are being installed individually.\nThe appc-event-listener is set to not install by default for now because if no dmaap server is available is prevents opendaylight from restarting properly. When I have time, I am planning to change how the opendaylight restarts which might fix this.",
+        "patchset_number": 1
+      },
+      {
+        "id": "41dcaa6915abce9bef38fd395c6e8713650a2296",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2018-04-17 20:37:27.000000000",
+        "message": "Patch Set 1: Code-Review+2 Verified+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "4edf6e01fe665d86413716ea8ffa589fc048e32c",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2018-04-17 20:37:33.000000000",
+        "message": "Change has been successfully merged by Borislav Glozman",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

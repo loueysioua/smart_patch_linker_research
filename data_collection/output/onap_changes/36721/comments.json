@@ -1,0 +1,4224 @@
+{
+  "id": "oom~master~I6b1a85017d79b92afcae44cf823ab000a10ce4be",
+  "change_id": "I6b1a85017d79b92afcae44cf823ab000a10ce4be",
+  "_number": 36721,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "5a93c517_9fd48e48",
+      "file_path": "kubernetes/aai/templates/log-configmap.yaml",
+      "patchset_number": 6,
+      "line": 1,
+      "message": "shouldn't the specific logback sit in their respective charts?\nAlso, let's have one configmap.yaml",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-20 13:39:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_da3224f2",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "I see that in more than 1 place, you've deviated from the standard we tried to set for the image tag.\nPlease stick to:\n\"{{ .Values.global.repository | default .Values.repository }}/{{ .Values.image }}\"\n\nI know that when using docker hub there some magic that has to happen because you don't specify a repo.  I figured this out when doing the mysql chart for APPC.\n\nPlease use this in values.yaml\nrepository: registry.hub.docker.com\nimage: library/IMAGE-NAME:IMAGE-VERSION\n\nWe should be able to host a copy of any of these docker hub images in a local repo and not be forced to use docker hub.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 14:52:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1a716c77",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "this is an init container image, so we need to differentiate between the app image and this one.\nhow about:\n{{ .Values.init.repository }}/{{ .Values.init.image }}?",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-20 15:18:31.000000000",
+      "in_reply_to": "5a93c517_da3224f2",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3a6ea897",
+      "file_path": "kubernetes/aai/templates/log-configmap.yaml",
+      "patchset_number": 6,
+      "line": 1,
+      "message": "I think you are right about the logback,\nin so log configmap is separated, do you think we should also join them?",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-20 15:18:31.000000000",
+      "in_reply_to": "5a93c517_9fd48e48",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9a033c76",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "take a look at mike's example in the SO chart.\nHe used something like:\nimage: \"{{ .Values.global.loggingRepository }}/{{ .Values.global.loggingImage }}\"\n\nimage: \"{{ .Values.global.repository | default .Values.repository }}/{{ .Values.image }}\"",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 15:45:30.000000000",
+      "in_reply_to": "5a93c517_1a716c77",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f52a938f",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 6,
+      "line": 71,
+      "message": "Why flip all of these to true?  Shouldn't it just be aai?",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 18:54:15.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_300fa930",
+      "file_path": "kubernetes/aai/templates/service.yaml",
+      "patchset_number": 6,
+      "line": 4,
+      "message": "There is another issue to solve here.\nThe service name used to be aai-service and was fixed.  Many other apps that want to talk to aai used the KubeDNS entry \"aai-service.namespace\".  Now the service is named \"release-aai\" after the chart name and the communication via service is broken.  \n\nWe either rename the chart from aai to aai-service or find and update all references to aai-service.namespace and prefix it with the release and drop the word service to align with the chart name.\nother ideas are welcome but I think they should stick to some sort of standard and not be 1 off band-aid fixes.",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 19:06:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9081dd4f",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 6,
+      "line": 17,
+      "message": "This should be:\nrepository: nexus3.onap.org:10001\nimage: aaionap/haproxy:1.1.0",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 19:53:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1095cd87",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 6,
+      "line": 33,
+      "message": "I couldn't find these parameters being used anywhere.  Is there a reason why you added them?",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 19:53:53.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f0b94116",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 6,
+      "line": 17,
+      "message": "Sorry...my bad.  should be:\nrepository: registry.hub.docker.com\nimage: aaionap/hbase:1.2.0\n\nsudo docker pull nexus3.onap.org:10001/aaionap/haproxy:1.1.0\nPulling repository nexus3.onap.org:10001/aaionap/haproxy\nError: image aaionap/haproxy:1.1.0 not found\n\nsudo docker pull registry.hub.docker.com/aaionap/haproxy:1.1.0\n1.1.0: Pulling from aaionap/haproxy",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-20 20:22:15.000000000",
+      "in_reply_to": "5a93c517_9081dd4f",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8bba0b6d",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "yes, but this image is not logging, nor the main pod image.\nI think it is best to add under init\nalso, the image is not available in the repo you listed, but is in the docker.io repo",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-21 12:16:55.000000000",
+      "in_reply_to": "5a93c517_9a033c76",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ee04fd19",
+      "file_path": "kubernetes/aai/templates/log-configmap.yaml",
+      "patchset_number": 6,
+      "line": 1,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-21 12:16:55.000000000",
+      "in_reply_to": "5a93c517_3a6ea897",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ee539de0",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 6,
+      "line": 17,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-21 12:16:55.000000000",
+      "in_reply_to": "5a93c517_f0b94116",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4e47311e",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 6,
+      "line": 33,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-21 12:16:55.000000000",
+      "in_reply_to": "5a93c517_1095cd87",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2ea2e59a",
+      "file_path": "kubernetes/onap/values.yaml",
+      "patchset_number": 6,
+      "line": 71,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-21 12:16:55.000000000",
+      "in_reply_to": "5a93c517_f52a938f",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_b1173a54",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 6,
+      "line": 39,
+      "message": "my bad..I should have been clearer.  I meant to use the example from SO as a guide not as what we should use in this AAI chart :)\nWhat I was hoping to convey is using something like this:\nimage: \"{{ .Values.global.dockerhubRepository }}/{{ .Values.global.busyboxImage }}\"",
+      "author": {
+        "account_id": 131,
+        "name": "Mandeep Khinda",
+        "display_name": null,
+        "email": "Mandeep.Khinda@gmail.com",
+        "username": "mkhinda"
+      },
+      "updated": "2018-03-21 13:49:16.000000000",
+      "in_reply_to": "5a93c517_8bba0b6d",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7ec3a48a",
+      "file_path": "kubernetes/aai/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Should be ONAP Active and Available Inventory",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be404c08",
+      "file_path": "kubernetes/aai/charts/data-router/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Please update",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5eba680b",
+      "file_path": "kubernetes/aai/charts/data-router/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "should be aai-data-router",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e47901d",
+      "file_path": "kubernetes/aai/charts/data-router/resources/appconfig/auth/client-cert-onap.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "location should be kubernetes/aai/charts/aai-data-router/resources/config/auth/client-cert-onap.p12",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e5108d7",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 46,
+      "message": "Should be {{ include \"common.name\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be57ecc9",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 55,
+      "message": "Please create a parameter in values.yaml:\n.Values.config.keyStorePassword",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de5c38f0",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 59,
+      "message": "Please create a parameter in values.yaml:\n.Values.config.keyStorePassword",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e6bdc86",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 137,
+      "message": "Should be path: {{ .Values.global.persistence.mountPath | default .Values.persistence.mountPath }}/{{ .Release.Namespace }}/{{ .Values.persistence.mountSubPath }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ec4a85e",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "space",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe87b410",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 20,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be812cfd",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 24,
+      "message": "Still needed?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de867813",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "missing {}. Is it needed at all?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e94e035",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 50,
+      "message": "What about specific nodePort: parameter?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be984c6b",
+      "file_path": "kubernetes/aai/charts/elasticsearch/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "update",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de9d185b",
+      "file_path": "kubernetes/aai/charts/elasticsearch/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "should be aai-elasticsearch",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fedc941a",
+      "file_path": "kubernetes/aai/charts/elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 8,
+      "line": 158,
+      "message": "I didn't see this port in deployment or services",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3ec3dc39",
+      "file_path": "kubernetes/aai/charts/elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 8,
+      "line": 165,
+      "message": "user parameter {{.Values.service.internalPort}}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3eac3c8c",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "should be {{ include \"common.fullname\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1ebb80c5",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "Need to use loggingrepository. Otherwise when deploying from onap (and if there is override of global.repository) the container won't find the image.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ea9087a",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 94,
+      "message": "Change like in data-router.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_beafec7c",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "add {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_deb438d3",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "add {} or remove completely.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7ec96459",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 50,
+      "message": "space",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_deebd8ae",
+      "file_path": "kubernetes/aai/charts/hbase/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9ecd5060",
+      "file_path": "kubernetes/aai/charts/hbase/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "should be aai-hbase",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe033474",
+      "file_path": "kubernetes/aai/charts/hbase/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 23,
+      "message": "This is problematic, because repository is not onap.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_befdac70",
+      "file_path": "kubernetes/aai/charts/hbase/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 67,
+      "message": "eliminate dockerdata-nfs.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe2a54e6",
+      "file_path": "kubernetes/aai/charts/hbase/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "This will create too large port. wrong parameter.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de02f86e",
+      "file_path": "kubernetes/aai/charts/hbase/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 34,
+      "message": "should come from values.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be34cc4a",
+      "file_path": "kubernetes/aai/charts/hbase/values.yaml",
+      "patchset_number": 8,
+      "line": 15,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e306055",
+      "file_path": "kubernetes/aai/charts/hbase/values.yaml",
+      "patchset_number": 8,
+      "line": 42,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de399842",
+      "file_path": "kubernetes/aai/charts/modelloader/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e3e442b",
+      "file_path": "kubernetes/aai/charts/modelloader/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "aai-modelloader",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e48bccb",
+      "file_path": "kubernetes/aai/charts/modelloader/resources/appconfig/auth/aai-os-cert.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "should be kubernetes/aai/charts/aai-modelloader/resources/config/auth/aai-os-cert.p12",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e4588b1",
+      "file_path": "kubernetes/aai/charts/modelloader/resources/appconfig/model-loader.properties",
+      "patchset_number": 8,
+      "line": null,
+      "message": "should be under resources/config",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be0b6c7c",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "should be {{ include \"common.fullname\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de10b8aa",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "should be in a separate file named {{ include \"common.fullname\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e25e408",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 21,
+      "message": "should be {{ include \"common.fullname\" . }}-log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e1f5cb9",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "This is not the right parameter.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e1ca8c1",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe7814fa",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e69d027",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de8758d6",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 48,
+      "message": "There should be another parameter. This one should have the value of internalPort.\nExample:\n  type: NodePort\n  name: log-kibana\n  externalPort: 5601\n  internalPort: 5601\n  nodePort: 53",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e767c07",
+      "file_path": "kubernetes/aai/charts/resources-service/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e734815",
+      "file_path": "kubernetes/aai/charts/resources-service/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe5fb473",
+      "file_path": "kubernetes/aai/charts/resources-service/resources/log/logback.xml",
+      "patchset_number": 8,
+      "line": 6,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be592c90",
+      "file_path": "kubernetes/aai/charts/resources-service/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "same as before",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de5e7876",
+      "file_path": "kubernetes/aai/charts/resources-service/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 7,
+      "message": "config/log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e4d1cc5",
+      "file_path": "kubernetes/aai/charts/resources-service/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "wrong param.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fec6d415",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e4a68ad",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 22,
+      "message": "needed?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1ecce034",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bed04cca",
+      "file_path": "kubernetes/aai/charts/search-data/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ded518ba",
+      "file_path": "kubernetes/aai/charts/search-data/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7edac4ea",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/analysis-config.json",
+      "patchset_number": 8,
+      "line": null,
+      "message": "should be under resources/config",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3ee43cab",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/elastic-search.properties",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ee10899",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/elastic-search.properties",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1ef38074",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/filter-config.json",
+      "patchset_number": 8,
+      "line": null,
+      "message": "should be under resources/config",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_deec3892",
+      "file_path": "kubernetes/aai/charts/search-data/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "same as before",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e016438",
+      "file_path": "kubernetes/aai/charts/search-data/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "separate file",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3efbdc48",
+      "file_path": "kubernetes/aai/charts/search-data/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 31,
+      "message": "parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e9aa014",
+      "file_path": "kubernetes/aai/charts/search-data/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dea3d84d",
+      "file_path": "kubernetes/aai/charts/search-data/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e8884c6",
+      "file_path": "kubernetes/aai/charts/sparky-be/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e8550af",
+      "file_path": "kubernetes/aai/charts/sparky-be/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "aee-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e8fc8cc",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/auth/aai-os-cert.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "location",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1ec140e4",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/elasticsearch.properties",
+      "patchset_number": 8,
+      "line": 10,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_beb5ac7f",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/elasticsearch.properties",
+      "patchset_number": 8,
+      "line": 11,
+      "message": "parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9eac7037",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/model/aai_oxm_v9.xml",
+      "patchset_number": 8,
+      "line": null,
+      "message": "location",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ea6e854",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/search-service.properties",
+      "patchset_number": 8,
+      "line": 9,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe625415",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "rename",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e6860f4",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 32,
+      "message": "separate",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de7198e1",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 31,
+      "message": "parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e7644da",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "wrong value. should be nodePort",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e7310e7",
+      "file_path": "kubernetes/aai/charts/sparky-be/values.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e80bc8a",
+      "file_path": "kubernetes/aai/charts/sparky-be/values.yaml",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe49f48e",
+      "file_path": "kubernetes/aai/charts/traversal/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be436c6b",
+      "file_path": "kubernetes/aai/charts/traversal/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de48b889",
+      "file_path": "kubernetes/aai/charts/traversal/resources/log/logback.xml",
+      "patchset_number": 8,
+      "line": null,
+      "message": "should be under resources/config/log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7e5de447",
+      "file_path": "kubernetes/aai/charts/traversal/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e575c28",
+      "file_path": "kubernetes/aai/charts/traversal/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "wrong",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe301409",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e54a820",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 22,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e362004",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de3f58d5",
+      "file_path": "kubernetes/aai/resources/aai-data/chef-config/dev/.knife/solo.rb",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Why is it under aai/resources? To which chart is it related?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e21d0b6",
+      "file_path": "kubernetes/aai/resources/haproxy/haproxy.cfg",
+      "patchset_number": 8,
+      "line": 98,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3e2e7ca6",
+      "file_path": "kubernetes/aai/resources/haproxy/haproxy.cfg",
+      "patchset_number": 8,
+      "line": 108,
+      "message": "aai-",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e2b4894",
+      "file_path": "kubernetes/aai/resources/log/filebeat/filebeat.yml",
+      "patchset_number": 8,
+      "line": 24,
+      "message": "remove",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe17b452",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "rename to {{ include \"common.fullname\" . }}-log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de167855",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 12,
+      "message": "rename to {{ include \"common.fullname\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e08f02e",
+      "file_path": "kubernetes/aai/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 35,
+      "message": "{{ include \"common.name\" . }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e02680c",
+      "file_path": "kubernetes/aai/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 36,
+      "message": "Like Mandeep suggested, use something like {{ .Values.global.dockerhubRepository }}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_990faa2e",
+      "file_path": "kubernetes/aai/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "should be nodePort",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_391c566a",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 14,
+      "message": "What is this for?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_f9258eae",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "change",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_192b9a83",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 25,
+      "message": "missing {}",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_d92452b1",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 49,
+      "message": "use parameter nodePort.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_79397ed7",
+      "file_path": "kubernetes/onap/requirements.yaml",
+      "patchset_number": 8,
+      "line": 15,
+      "message": "no need to touch this... however after rebase it will be fixed automatically.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-26 10:20:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6fe68c18",
+      "file_path": "kubernetes/aai/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7ec3a48a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4f9b9072",
+      "file_path": "kubernetes/aai/charts/data-router/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be404c08",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be3923da",
+      "file_path": "kubernetes/aai/charts/data-router/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5eba680b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe1fab59",
+      "file_path": "kubernetes/aai/charts/data-router/resources/appconfig/auth/client-cert-onap.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e47901d",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e30e7e9",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e5108d7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e5cd724",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 55,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be57ecc9",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de3d0fbd",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 59,
+      "message": "added keyManagerPassword",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de5c38f0",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e79ff91",
+      "file_path": "kubernetes/aai/charts/data-router/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 137,
+      "message": "used {{ include \"common.namespace\" . }} instead",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e6bdc86",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7ef07bc9",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5ec4a85e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dee3cf03",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 20,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe87b410",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bee60315",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 24,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be812cfd",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1ee29703",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de867813",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ed81f53",
+      "file_path": "kubernetes/aai/charts/data-router/values.yaml",
+      "patchset_number": 8,
+      "line": 50,
+      "message": "type not needed and deleted",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1e94e035",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3ebaf3e1",
+      "file_path": "kubernetes/aai/charts/elasticsearch/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be984c6b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9eed47f2",
+      "file_path": "kubernetes/aai/charts/elasticsearch/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de9d185b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3eb673dd",
+      "file_path": "kubernetes/aai/charts/elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 8,
+      "line": 158,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fedc941a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5ebb3fc4",
+      "file_path": "kubernetes/aai/charts/elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 8,
+      "line": 165,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3ec3dc39",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_898f4f75",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3eac3c8c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bef7e38b",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "we override with the subchart value. this is a preparation for when all images are hosted in one repo",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1ebb80c5",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7ef15b94",
+      "file_path": "kubernetes/aai/charts/elasticsearch/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 94,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5ea9087a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e301f56",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_beafec7c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe348b4b",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_deb438d3",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e3a9736",
+      "file_path": "kubernetes/aai/charts/elasticsearch/values.yaml",
+      "patchset_number": 8,
+      "line": 50,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7ec96459",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_29bb9b73",
+      "file_path": "kubernetes/aai/charts/hbase/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_deebd8ae",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_09b6df8a",
+      "file_path": "kubernetes/aai/charts/hbase/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9ecd5060",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6f7bec29",
+      "file_path": "kubernetes/aai/charts/hbase/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 23,
+      "message": "why?\nthis allows the use of a future hosted repo for all images +\nfor now the value is taken from the subchart, and replaces the global",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe033474",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8f78b82c",
+      "file_path": "kubernetes/aai/charts/hbase/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 67,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_befdac70",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e7edfe5",
+      "file_path": "kubernetes/aai/charts/hbase/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe2a54e6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be6cc337",
+      "file_path": "kubernetes/aai/charts/hbase/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 34,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de02f86e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6fa20c9c",
+      "file_path": "kubernetes/aai/charts/hbase/values.yaml",
+      "patchset_number": 8,
+      "line": 15,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be34cc4a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_de698f26",
+      "file_path": "kubernetes/aai/charts/hbase/values.yaml",
+      "patchset_number": 8,
+      "line": 42,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1e306055",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8f9f5850",
+      "file_path": "kubernetes/aai/charts/modelloader/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de399842",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e730715",
+      "file_path": "kubernetes/aai/charts/modelloader/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e3e442b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5e657f43",
+      "file_path": "kubernetes/aai/charts/modelloader/resources/appconfig/auth/aai-os-cert.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e48bccb",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_242502ab",
+      "file_path": "kubernetes/aai/charts/modelloader/resources/appconfig/model-loader.properties",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e4588b1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8433b6f5",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be0b6c7c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a43032e9",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de10b8aa",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a447d24a",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 21,
+      "message": "since there are other mappings to that name, decided to leave as filebeat",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e25e408",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3eee738c",
+      "file_path": "kubernetes/aai/charts/modelloader/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e1f5cb9",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1eedb78b",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e1ca8c1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_be01233b",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe7814fa",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_04a56603",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e69d027",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9ef8e74a",
+      "file_path": "kubernetes/aai/charts/modelloader/values.yaml",
+      "patchset_number": 8,
+      "line": 48,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de8758d6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4fc0702a",
+      "file_path": "kubernetes/aai/charts/resources-service/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e767c07",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_feb56b7e",
+      "file_path": "kubernetes/aai/charts/resources-service/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e734815",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_beafe32a",
+      "file_path": "kubernetes/aai/charts/resources-service/resources/log/logback.xml",
+      "patchset_number": 8,
+      "line": 6,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe5fb473",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c4ae9ee7",
+      "file_path": "kubernetes/aai/charts/resources-service/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be592c90",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_deac2f38",
+      "file_path": "kubernetes/aai/charts/resources-service/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e4d1cc5",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_efdcdc1a",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fec6d415",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fe6c8b0a",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 22,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e4a68ad",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1e7297e5",
+      "file_path": "kubernetes/aai/charts/resources-service/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1ecce034",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_6f6c4c37",
+      "file_path": "kubernetes/aai/charts/search-data/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_bed04cca",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9e546722",
+      "file_path": "kubernetes/aai/charts/search-data/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_ded518ba",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c4dc5e77",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/analysis-config.json",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7edac4ea",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_84bdf604",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/elastic-search.properties",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3ee43cab",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e4c07a7e",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/elastic-search.properties",
+      "patchset_number": 8,
+      "line": 5,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5ee10899",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4437eeb0",
+      "file_path": "kubernetes/aai/charts/search-data/resources/appconfig/filter-config.json",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1ef38074",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_24466224",
+      "file_path": "kubernetes/aai/charts/search-data/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_deec3892",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ef5ffc73",
+      "file_path": "kubernetes/aai/charts/search-data/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e016438",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_64630ab2",
+      "file_path": "kubernetes/aai/charts/search-data/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3efbdc48",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0f658844",
+      "file_path": "kubernetes/aai/charts/search-data/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1e9aa014",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c471be78",
+      "file_path": "kubernetes/aai/charts/search-data/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_dea3d84d",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cf5ec076",
+      "file_path": "kubernetes/aai/charts/sparky-be/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e8884c6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_29aabbd4",
+      "file_path": "kubernetes/aai/charts/sparky-be/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e8550af",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_846bb684",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/auth/aai-os-cert.p12",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e8fc8cc",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e4f5dacb",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/elasticsearch.properties",
+      "patchset_number": 8,
+      "line": 10,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1ec140e4",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8402d6b2",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/elasticsearch.properties",
+      "patchset_number": 8,
+      "line": 11,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_beb5ac7f",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a4ffd2a9",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/model/aai_oxm_v9.xml",
+      "patchset_number": 8,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9eac7037",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_442cce4a",
+      "file_path": "kubernetes/aai/charts/sparky-be/resources/appconfig/search-service.properties",
+      "patchset_number": 8,
+      "line": 9,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5ea6e854",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0426c668",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe625415",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_242bc231",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 32,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1e6860f4",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a416f2ef",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 31,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de7198e1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_24e2e203",
+      "file_path": "kubernetes/aai/charts/sparky-be/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e7644da",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_84f096ca",
+      "file_path": "kubernetes/aai/charts/sparky-be/values.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e7310e7",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a4ed92f1",
+      "file_path": "kubernetes/aai/charts/sparky-be/values.yaml",
+      "patchset_number": 8,
+      "line": 43,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e80bc8a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_44ba8ee2",
+      "file_path": "kubernetes/aai/charts/traversal/Chart.yaml",
+      "patchset_number": 8,
+      "line": 2,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe49f48e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_64bf8ad1",
+      "file_path": "kubernetes/aai/charts/traversal/Chart.yaml",
+      "patchset_number": 8,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_be436c6b",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_c4cd3e88",
+      "file_path": "kubernetes/aai/charts/traversal/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_7e5de447",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e4caba6d",
+      "file_path": "kubernetes/aai/charts/traversal/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 16,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e575c28",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_84c73664",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 18,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe301409",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_a4c4b25f",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 22,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e54a820",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_44a12ea8",
+      "file_path": "kubernetes/aai/charts/traversal/values.yaml",
+      "patchset_number": 8,
+      "line": 45,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_1e362004",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_44884e22",
+      "file_path": "kubernetes/aai/resources/aai-data/chef-config/dev/.knife/solo.rb",
+      "patchset_number": 8,
+      "line": null,
+      "message": "it is related to both resources and traversal",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de3f58d5",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_648d4a31",
+      "file_path": "kubernetes/aai/resources/haproxy/haproxy.cfg",
+      "patchset_number": 8,
+      "line": 98,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e21d0b6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_04824600",
+      "file_path": "kubernetes/aai/resources/haproxy/haproxy.cfg",
+      "patchset_number": 8,
+      "line": 108,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_3e2e7ca6",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e4787a2d",
+      "file_path": "kubernetes/aai/resources/log/filebeat/filebeat.yml",
+      "patchset_number": 8,
+      "line": 24,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e2b4894",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0499e66d",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_fe17b452",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8475f633",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 8,
+      "line": 12,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_de167855",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8f22f8ff",
+      "file_path": "kubernetes/aai/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 35,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_9e08f02e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_249e6257",
+      "file_path": "kubernetes/aai/templates/deployment.yaml",
+      "patchset_number": 8,
+      "line": 36,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_5e02680c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cf1000ab",
+      "file_path": "kubernetes/aai/templates/service.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_990faa2e",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_e49f1a4f",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 14,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_391c566a",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_44b60ede",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 17,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_f9258eae",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0fe268d5",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 25,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_192b9a83",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_49baa7e2",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 8,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 10:34:49.000000000",
+      "in_reply_to": "5a93c517_d92452b1",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bbf850c5",
+      "file_path": "kubernetes/aai/charts/aai-data-router/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 151,
+      "message": "Please use {{.Values.persistence.mountSubPath}} variable.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dbf51ccc",
+      "file_path": "kubernetes/aai/charts/aai-data-router/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "not needed.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fb25785c",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 11,
+      "line": 158,
+      "message": "why not under service?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bb1ff008",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 94,
+      "message": "Please use {{.Values.persistence.mountSubPath}} variable.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3bd3e039",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/values.yaml",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "better under service.\nAlso, for it to make any effect, I think it needs to be a service...",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bbcdb088",
+      "file_path": "kubernetes/aai/charts/aai-hbase/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 23,
+      "message": "Since hbase is not in nexus3.onap.org, a different repository parameter should be used.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1bb944e9",
+      "file_path": "kubernetes/aai/charts/aai-hbase/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 67,
+      "message": "Please use {{.Values.persistence.mountSubPath}} variable.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9bc47460",
+      "file_path": "kubernetes/aai/charts/aai-modelloader/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "no need.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fbaa5884",
+      "file_path": "kubernetes/aai/charts/aai-resources/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "should be under resources/config/log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bb94d044",
+      "file_path": "kubernetes/aai/charts/aai-resources/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 415,
+      "message": "space",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fb81f8fb",
+      "file_path": "kubernetes/aai/charts/aai-search-data/resources/config/elastic-search.properties",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "better be a parameter.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_9b9b1472",
+      "file_path": "kubernetes/aai/charts/aai-search-data/resources/config/elastic-search.properties",
+      "patchset_number": 11,
+      "line": 5,
+      "message": "Why not under service?",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_bb7b7028",
+      "file_path": "kubernetes/aai/charts/aai-search-data/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "should be under resources/config/log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5bbb4cc4",
+      "file_path": "kubernetes/aai/charts/aai-search-data/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "not needed",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fbe6d8e7",
+      "file_path": "kubernetes/aai/charts/aai-sparky-be/resources/config/aai.properties",
+      "patchset_number": 11,
+      "line": 9,
+      "message": "Better be a parameter.\nNeed to make sure that all places that point to aai service have the right value.",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_7bdac818",
+      "file_path": "kubernetes/aai/charts/aai-sparky-be/resources/config/elasticsearch.properties",
+      "patchset_number": 11,
+      "line": 10,
+      "message": "better have a parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_3b04407d",
+      "file_path": "kubernetes/aai/charts/aai-sparky-be/resources/config/search-service.properties",
+      "patchset_number": 11,
+      "line": 9,
+      "message": "better have a parameter",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_5b090c94",
+      "file_path": "kubernetes/aai/charts/aai-sparky-be/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "redundant",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_1b038474",
+      "file_path": "kubernetes/aai/charts/aai-traversal/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "better be under resources/config/log",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_dbf43c89",
+      "file_path": "kubernetes/aai/resources/log/filebeat/filebeat.yml",
+      "patchset_number": 11,
+      "line": 24,
+      "message": "use:\nhosts: [\"{{.Values.config.logstashServiceName}}.{{.Release.Namespace}}:{{.Values.config.logstashPort}}\"]",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_fb34984b",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "Please rename according to convension",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 11:52:04.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8eff50aa",
+      "file_path": "kubernetes/aai/values.yaml",
+      "patchset_number": 12,
+      "line": 95,
+      "message": "This line should be deleted",
+      "author": {
+        "account_id": 497,
+        "name": "Borislav Glozman",
+        "display_name": null,
+        "email": "borislav.glozman@amdocs.com",
+        "username": "BorislavG"
+      },
+      "updated": "2018-03-27 13:32:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ceab18d5",
+      "file_path": "kubernetes/aai/charts/aai-data-router/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 151,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_bbf850c5",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_714d09c4",
+      "file_path": "kubernetes/aai/charts/aai-data-router/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_dbf51ccc",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8e2bd093",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/resources/config/elasticsearch.yml",
+      "patchset_number": 11,
+      "line": 158,
+      "message": "it is not defined as a service",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_fb25785c",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2eb63cdd",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 94,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_bb1ff008",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4e1dc872",
+      "file_path": "kubernetes/aai/charts/aai-elasticsearch/values.yaml",
+      "patchset_number": 11,
+      "line": 15,
+      "message": "internal configuration, not a service",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_3bd3e039",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cecd585f",
+      "file_path": "kubernetes/aai/charts/aai-hbase/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 23,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_bbcdb088",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_0e17c052",
+      "file_path": "kubernetes/aai/charts/aai-hbase/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 67,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_1bb944e9",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8ed750ed",
+      "file_path": "kubernetes/aai/charts/aai-modelloader/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_9bc47460",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ae01ec3a",
+      "file_path": "kubernetes/aai/charts/aai-resources/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_fbaa5884",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_eefdb46f",
+      "file_path": "kubernetes/aai/charts/aai-resources/templates/deployment.yaml",
+      "patchset_number": 11,
+      "line": 415,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_bb94d044",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_ce08f82f",
+      "file_path": "kubernetes/aai/charts/aai-search-data/resources/config/elastic-search.properties",
+      "patchset_number": 11,
+      "line": 5,
+      "message": "not a service",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_9b9b1472",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cefeb838",
+      "file_path": "kubernetes/aai/charts/aai-search-data/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_bb7b7028",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_cef47889",
+      "file_path": "kubernetes/aai/charts/aai-search-data/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_5bbb4cc4",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8e4510b5",
+      "file_path": "kubernetes/aai/charts/aai-sparky-be/templates/secret.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_5b090c94",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_4ef38873",
+      "file_path": "kubernetes/aai/charts/aai-traversal/resources/log/logback.xml",
+      "patchset_number": 11,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_1b038474",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_2e12bcb4",
+      "file_path": "kubernetes/aai/resources/log/filebeat/filebeat.yml",
+      "patchset_number": 11,
+      "line": 24,
+      "message": "Done",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_dbf43c89",
+      "unresolved": false
+    },
+    {
+      "id": "5a93c517_8ea67052",
+      "file_path": "kubernetes/aai/templates/configmap.yaml",
+      "patchset_number": 11,
+      "line": 4,
+      "message": "the name is shared between subcharts and also {{ include \"common.fullname\" . }}-log is used for logbacks in each chart",
+      "author": {
+        "account_id": 1881,
+        "name": "Karen Joseph",
+        "display_name": null,
+        "email": "keren.joseph@amdocs.com",
+        "username": "kerenj"
+      },
+      "updated": "2018-03-27 17:02:33.000000000",
+      "in_reply_to": "5a93c517_fb34984b",
+      "unresolved": false
+    }
+  ]
+}

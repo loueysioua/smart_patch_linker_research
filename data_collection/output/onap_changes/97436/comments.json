@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fmodels~master~I139a7ca3e1e2d0cd50bbd86d0cdf499f215be74f",
+  "change_id": "I139a7ca3e1e2d0cd50bbd86d0cdf499f215be74f",
+  "_number": 97436,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "a16e1455_76c4a665",
+      "file_path": "models-interactions/model-actors/actor.cds/src/main/java/org/onap/policy/controlloop/actor/cds/request/CdsActionRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "if this method is invoked very often, then this \"gson\" object should be made static, as it may be costly to create.\n\nThis all seems kind of tricky to me.  First, I'm not sure that toString() should be used to serialize the data - perhaps another method name would be better.  Second, rather than doing structure conversion during the gson translation, perhaps a more clear alternative would be to copy the fields to a class that has the same structure as the desired output, which could then be encoded using a StandardCoder so-as not to be as dependent on gson.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-22 22:18:24.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ed45df56_766f26db",
+      "file_path": "models-interactions/model-actors/actor.cds/src/main/java/org/onap/policy/controlloop/actor/cds/request/CdsActionRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "Sure will make the gson object static and also use another method instead of toString().\n\nRegarding the second comment: The structure can be achieved through a class. Where I was having issues was to be able to dynamically generate the keys for the root-node and child-node. The @SerializedName accepts only constants. The generation logic for CDS payload is as below where $actionName is a dynamic field:\n\n{\n    \"$actionName-request\":{\n        \"resolution-key\":\"\",\n        \"$actionName-properties\":{\n            \"service-instance.service-instance-id\":\"\",\n            \"generic-vnf.vnf-id\":\"\",\n            \"data\":\"{\\\"active-streams\\\":\\\"7\\\"}\"\n        }\n    }\n}\n\nThe only way I could generate such a JSON object was to use a custom serializer.",
+      "author": {
+        "account_id": 159,
+        "name": "Rashmi Pujar",
+        "display_name": null,
+        "email": "rashmi.c.pujar@gmail.com",
+        "username": "rashmi.pujar"
+      },
+      "updated": "2019-10-23 14:17:34.000000000",
+      "in_reply_to": "a16e1455_76c4a665",
+      "unresolved": false
+    },
+    {
+      "id": "03528e56_c0aeee71",
+      "file_path": "models-interactions/model-actors/actor.cds/src/main/java/org/onap/policy/controlloop/actor/cds/request/CdsActionRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "Got it.  So could create a method within this class to do the serialization.  That method could simply populate a Map<String,Object> and then pass the map to a StandardCoder",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-23 14:48:24.000000000",
+      "in_reply_to": "ed45df56_766f26db",
+      "unresolved": false
+    },
+    {
+      "id": "ddd05fd8_d801496d",
+      "file_path": "models-interactions/model-actors/actor.cds/src/main/java/org/onap/policy/controlloop/actor/cds/request/CdsActionRequest.java",
+      "patchset_number": 2,
+      "line": 41,
+      "message": "a LinkedHashMap, so that order is maintained",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-10-23 14:53:48.000000000",
+      "in_reply_to": "03528e56_c0aeee71",
+      "unresolved": false
+    }
+  ]
+}

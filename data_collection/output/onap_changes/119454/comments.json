@@ -1,0 +1,127 @@
+{
+  "id": "oom~master~I072af937434a52b81811d26890269bbb4c135b62",
+  "change_id": "I072af937434a52b81811d26890269bbb4c135b62",
+  "_number": 119454,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "15fd6256_9b986af1",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/resources/config/overrides/override.yaml",
+      "patchset_number": 3,
+      "line": 19,
+      "message": "please don't put it directly but use init container with envsubstitute command as cnf-adapter does it:\nhttps://github.com/onap/oom/blob/master/kubernetes/so/components/so-cnf-adapter/templates/deployment.yaml",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-18 07:10:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "02dd1e4b_4f991fe9",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 3,
+      "line": 78,
+      "message": "instead of putting it here directly please use external secret mechanism as cnf adapter is doing",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-18 07:10:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "f973ad19_8f5365ae",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 4,
+      "line": 31,
+      "message": "This should come from the external secrets. \nFor example:\n  - uid: cnf-adapter-mso-key\n    name: '{{ include \"common.release\" . }}-so-cnf-mso-key'\n    type: password\n    externalSecret: '{{ tpl (default \"\" .Values.mso.msoKeySecret) . }}'\n    password: '{{ .Values.mso.msoKey }}'\n\n\nand then in the deployment.yaml\n\n          env:\n            - name: MSO_KEY\n              {{- include \"common.secret.envFromSecretFast\" (dict \"global\" . \"uid\" \"cnf-adapter-mso-key\" \"key\" \"password\") | indent 14 }}",
+      "author": {
+        "account_id": 897,
+        "name": "Seshu Kumar Mudiganti",
+        "display_name": null,
+        "email": "seshukumar.mudiganti@windriver.com",
+        "username": "seshukm"
+      },
+      "updated": "2021-03-18 17:29:26.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "df401b5d_46579da9",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 4,
+      "line": 31,
+      "message": "Ok I see its done down. Will need the same for auth",
+      "author": {
+        "account_id": 897,
+        "name": "Seshu Kumar Mudiganti",
+        "display_name": null,
+        "email": "seshukumar.mudiganti@windriver.com",
+        "username": "seshukm"
+      },
+      "updated": "2021-03-18 17:39:00.000000000",
+      "in_reply_to": "f973ad19_8f5365ae",
+      "unresolved": true
+    },
+    {
+      "id": "2c3b727b_4b28ab5c",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 4,
+      "line": 79,
+      "message": "this can be done same as msokey",
+      "author": {
+        "account_id": 897,
+        "name": "Seshu Kumar Mudiganti",
+        "display_name": null,
+        "email": "seshukumar.mudiganti@windriver.com",
+        "username": "seshukm"
+      },
+      "updated": "2021-03-18 17:39:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "96e01bd5_703296eb",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 4,
+      "line": 79,
+      "message": "same comment as seshu's comment L31",
+      "author": {
+        "account_id": 2319,
+        "name": "Sylvain Desbureaux",
+        "display_name": null,
+        "email": "sylvain.desbureaux@orange.com",
+        "username": "sdesbure"
+      },
+      "updated": "2021-03-18 17:39:03.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "2e1e4c87_448f7407",
+      "file_path": "kubernetes/so/components/so-sdnc-adapter/values.yaml",
+      "patchset_number": 5,
+      "line": 88,
+      "message": "Please add to so/values.yaml below lines in section so-sdnc-adapter:\n mso:\n   msoKeySecret: *mso-key",
+      "author": {
+        "account_id": 4965,
+        "name": "Krzysztof Opasiak",
+        "display_name": null,
+        "email": "k.opasiak@samsung.com",
+        "username": "kopasiak"
+      },
+      "updated": "2021-03-18 20:59:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

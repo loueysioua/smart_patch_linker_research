@@ -1,0 +1,76 @@
+{
+  "id": "policy%2Fpap~master~Ia9d33b721dab87b91896612e6efcf65378a5c0ff",
+  "change_id": "Ia9d33b721dab87b91896612e6efcf65378a5c0ff",
+  "_number": 108328,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ca9bb40f_88f41c87",
+      "file_path": "testsuites/stability/src/main/resources/papsetup/setup_pap.sh",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "I'm OK with this since we typically only run stability tests on the master branch.  However, this value could be obtained from the .gitreview file.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-05-27 16:31:41.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "0f0ded60_364cb3d4",
+      "file_path": "testsuites/stability/src/main/resources/papsetup/setup_pap.sh",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "The CSIT file which I referred had the GERRIT_BRANCH set as master, hence followed the same.\nAs suggested, its good to obtain the same from .gitreview file , fixed in patch 2.",
+      "author": {
+        "account_id": 6458,
+        "name": "Aditya Puthuparambil",
+        "display_name": null,
+        "email": "aditya.puthuparambil@est.tech",
+        "username": "aditya.puthuparambil"
+      },
+      "updated": "2020-05-28 11:16:14.000000000",
+      "in_reply_to": "ca9bb40f_88f41c87",
+      "unresolved": true
+    },
+    {
+      "id": "1cec9eb8_276fb30b",
+      "file_path": "testsuites/stability/src/main/resources/papsetup/setup_pap.sh",
+      "patchset_number": 2,
+      "line": 37,
+      "message": "I don't think this will work as gerrit will make an assumption about which branch to pull from (probably master), which defeats the purpose.  So I guess we have a choice as to how to run the stability test:\n1) if we just want to copy the relevant files (e.g., setup_pap.sh, jmx) to the target VM,\n   then we can just leave the branch hard-coded, as you had it before; or\n2) if we use git-clone to pull the whole pap repo onto the target VM, then we don't even need\n   to determine the branch and can extract the version directly from the pom in the cloned\n   repo.  Something like:\n     GIT_TOP=$(git rev-parse --show-toplevel)\n     POLICY_PAP_VERSION_EXTRACT=$(xmllint --xpath\n       '/*[local-name()=\"project\"]/*[local-name()=\"version\"]/text()'\n       \"${GIT_TOP}\"/pom.xml)",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-05-28 12:07:39.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "243f3f78_5daf9bc3",
+      "file_path": "testsuites/stability/src/main/resources/papsetup/setup_pap.sh",
+      "patchset_number": 1,
+      "line": 34,
+      "message": "good point on the CSIT, I'll see if that can't be fixed",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-05-28 12:37:50.000000000",
+      "in_reply_to": "0f0ded60_364cb3d4",
+      "unresolved": true
+    }
+  ]
+}

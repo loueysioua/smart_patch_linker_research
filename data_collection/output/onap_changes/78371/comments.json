@@ -1,0 +1,2167 @@
+{
+  "id": "dcaegen2%2Fcollectors%2Fdatafile~master~I5dfc75a08da0e870fafa3ee1bc83574aca16aabd",
+  "change_id": "I5dfc75a08da0e870fafa3ee1bc83574aca16aabd",
+  "_number": 78371,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1b4ea5a1_c5a2d0ca",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 111,
+      "message": "The task counting (currently only used in a trace) needs to be updated to count correctly: \n\n\n .doOnEach(signal -> {if (signal.isOnNext()) taskCounter.inc();})\n\n(and the same for the decrement)",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 06:37:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7d6b7ed1_d84f6998",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Let's extract constant with this path.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "bbed4962_ed117e3a",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "Can we handle port with value of -1 (returned by URI.getPort when port is missing)? If not maybe let's keep it as null or (even better) Option.empty()?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "35d1fc47_847163de",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "Is it possible for this string to contain only userName, as in for `http://user@host.com/` it will contain \"user\" ? If so, it's worth checking it here (return Option.empty when size != 2), because fileServerData expects array with two elements.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "dfc7291c_aeb7c6d7",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "Reorder methods so public ones are first and they are in an usage order.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6550d417_075b214a",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Flux defer makes sense almost only when preparing the flux in a public API. So if this method were public we should change it to `return Flux.defer(()-> jsonObject ? createMsgs(...) : getMsgsFromArr(...));`. The whole point of using defer is to defer the execution of this code to the moment of subscription, thus making the stream compliant with laziness of rx.\n\nIn this case I believe we can just skip this Flux.defer as this private method is used in getMessagesFromJson in flatMap operator which (as any other such operator) already defers the subscription.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7db65b7b_ab77254e",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 108,
+      "message": "Similar comment as above.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4d88105_e8d5ec64",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 230,
+      "message": "Maybe we could refactor this method so it returns Optional<Scheme> so there would be no need to handle exception here. If we insist on logging the message we could do that there, too.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1625c1d3_cf9c7747",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 286,
+      "message": "BTW. this whole class is growing and has many private methods. Maybe we can split it into few package-scoped classes?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5d1d589e_b771f45f",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisher.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "If we know that the Flux will always contain at most one element, we should probably return Mono. Reactor API provides some nice additional features for Mono and an easy way to convert it to Flux if necessary.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5459719c_406832a8",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/FileCollector.java",
+      "patchset_number": 1,
+      "line": 62,
+      "message": "Why are we caching this? Is is to support retry? If so maybe we can move retry logic to collectFile method so it will retry only the thing which needs retry. Just a suggestion.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a4109add_a7f723ce",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "This class does lots of IO. Maybe we should use Schedulers.elastic() for IO operations (removing file, reading from DMaaP, etc.) so we won't block other schedulers? See https://projectreactor.io/docs/core/release/reference/#schedulers",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ee33005d_d5e9209d",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Can't we use AtomicInteger for it?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "71248811_aa9ed5f3",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "Does this class live for the whole time of running DFC? If so, is this set somehow cleared? Otherwise we have a memory leak.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f6d3c371_ef147abb",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 111,
+      "message": "Or we can use `doOnNext`",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": "1b4ea5a1_c5a2d0ca",
+      "unresolved": false
+    },
+    {
+      "id": "db8f7d32_c1062a49",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 134,
+      "message": "If we expect this list to be big, we can use one of generation methods described in https://projectreactor.io/docs/core/release/reference/#producing. Otherwise, it's ok.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "65573953_617a7dd9",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/utils/JsonMessage.java",
+      "patchset_number": 1,
+      "line": 88,
+      "message": "Can't we get rid of these IDE-specific comments? Maybe it would be better to reconfigure IDE (Eclipse?) instead of adding them everywhere?",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f4061800_55c62d04",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClient.java",
+      "patchset_number": 1,
+      "line": 107,
+      "message": "Is this class a component/service (aka. singleton)? If so I believe this won't be thread-safe.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "81403c08_2729cb66",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClient.java",
+      "patchset_number": 1,
+      "line": 105,
+      "message": "In the future we shall probably use DCAE-SDK here. So temporarily we can leave this method as-is. Otherwise, we can improve a few things.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "44cda281_35cd0548",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "We can just \"throw Exception\" in test method, leaving this check for JUnit framework.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a42e9f63_46f428d6",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "We can use `assertThrows`",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "700382ab_30c3be33",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 174,
+      "message": "I believe `Californium-SR4` is used in spring 5.1.4.RELEASE.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 07:15:17.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "94445248_d6427f62",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 59,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "7d6b7ed1_d84f6998",
+      "unresolved": false
+    },
+    {
+      "id": "064c877a_3467dd3d",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "The port is required by the current implementation. If that can be optional, it will be implemented separately.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "bbed4962_ed117e3a",
+      "unresolved": false
+    },
+    {
+      "id": "6870e1df_a65ba3f8",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 77,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "35d1fc47_847163de",
+      "unresolved": false
+    },
+    {
+      "id": "1e80a2c4_01c93dd1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 97,
+      "message": "Done, public are first (but the order is not changed).",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "dfc7291c_aeb7c6d7",
+      "unresolved": false
+    },
+    {
+      "id": "70ed1267_c3c05148",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 98,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "6550d417_075b214a",
+      "unresolved": false
+    },
+    {
+      "id": "6dd4dff6_91d62a90",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 230,
+      "message": "The scheme is not optional. There are too much Optionals and conditions in this code already when exceptions should be used.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "d4d88105_e8d5ec64",
+      "unresolved": false
+    },
+    {
+      "id": "393cfb6f_80334853",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 1,
+      "line": 286,
+      "message": "That is a possible future improvement.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "1625c1d3_cf9c7747",
+      "unresolved": false
+    },
+    {
+      "id": "084881c7_f38d4a60",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisher.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "Yes, that is known. There are several places in this component that should return a Mono instead of a Flux. \nThat will be a later change (but then in all places where it can be).",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "5d1d589e_b771f45f",
+      "unresolved": false
+    },
+    {
+      "id": "c318915c_a28bfd00",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/FileCollector.java",
+      "patchset_number": 1,
+      "line": 62,
+      "message": "The caching is for the retry. \nThe intention is to just to retry this (file collection). \nIt seems to work fine.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "5459719c_406832a8",
+      "unresolved": false
+    },
+    {
+      "id": "ad40eb8d_0c52ddd1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "We will probably experient more with this when we will test more massive load. \nBut what I want here is a typical thread pool behavior in the sense that if too many items are issued, they should get queued (until there are available execution resources). If the threads are cached or not does probably not matter in this application. \n\nThis is the description of the paralell scheduler: \n\"that hosts a fixed pool of single-threaded ExecutorService-base workers and is suited for parallel work.\"",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "a4109add_a7f723ce",
+      "unresolved": false
+    },
+    {
+      "id": "ab23793e_fdb4ce69",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 52,
+      "message": "Yes, that is better.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "ee33005d_d5e9209d",
+      "unresolved": false
+    },
+    {
+      "id": "9e180b5d_9a298804",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "It is by design. It will remember all files handled by this process. \nIf that is wise can be debated. The XNF will report not only new files but all files collected during the last 24 hours. So for each new file, ~100 already reported files are also included.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "71248811_aa9ed5f3",
+      "unresolved": false
+    },
+    {
+      "id": "d39fb084_ea7841ac",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 111,
+      "message": "Yes",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "f6d3c371_ef147abb",
+      "unresolved": false
+    },
+    {
+      "id": "e5b9eda4_4a379492",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 134,
+      "message": "Cool, but we only expect the size to be ~100 items.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "db8f7d32_c1062a49",
+      "unresolved": false
+    },
+    {
+      "id": "7016162b_a31af827",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/utils/JsonMessage.java",
+      "patchset_number": 1,
+      "line": 88,
+      "message": "I agree. That can be a later thing. Everybody must then to the same reconfiguration.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "65573953_617a7dd9",
+      "unresolved": false
+    },
+    {
+      "id": "93b8d050_ee94ca7c",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClient.java",
+      "patchset_number": 1,
+      "line": 107,
+      "message": "No, this class should be OK. \nBut there might be other singletons that must be fixed left after this commit. For instance key store.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "f4061800_55c62d04",
+      "unresolved": false
+    },
+    {
+      "id": "874cfe29_176d31b8",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClient.java",
+      "patchset_number": 1,
+      "line": 105,
+      "message": "Yes, I heard discussion about it.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "81403c08_2729cb66",
+      "unresolved": false
+    },
+    {
+      "id": "3252be83_5e1d3636",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 44,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "44cda281_35cd0548",
+      "unresolved": false
+    },
+    {
+      "id": "7bd448b9_e64640e2",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 1,
+      "line": 54,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "a42e9f63_46f428d6",
+      "unresolved": false
+    },
+    {
+      "id": "6486d578_84a0e0b1",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 174,
+      "message": "There is another commit in the pipe that deal with the pom file.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 08:57:04.000000000",
+      "in_reply_to": "700382ab_30c3be33",
+      "unresolved": false
+    },
+    {
+      "id": "41fef134_8d8f3a6a",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "OK. Fine. So port is required & there is no meaningful default.\n\nIn that case is the URI somehow validated, so we are sure that URI contains all necessary information? If not maybe we should throw exception in @Value.Check annotated method in FileServerData. This way we won't propagate invalid port number = -1 and wait for Sftp or Ftps client to fail.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 09:53:53.000000000",
+      "in_reply_to": "064c877a_3467dd3d",
+      "unresolved": false
+    },
+    {
+      "id": "832b05fc_2a13b120",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "OK. Just keep in mind that parallel scheduler is \"Optimized for fast Runnable executions\". If you throw too many blocking operations to it, it can slow down your entire app. Generally speaking it's recommended not to block parallel scheduler.",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-02-14 09:53:53.000000000",
+      "in_reply_to": "ad40eb8d_0c52ddd1",
+      "unresolved": false
+    },
+    {
+      "id": "3a150a3b_d3fc21d1",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "We discussed this. It will be fixed as an own task.\nEach supported FTP protocol has a well known port. \nI agree that it then should be an optional.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 09:59:18.000000000",
+      "in_reply_to": "064c877a_3467dd3d",
+      "unresolved": false
+    },
+    {
+      "id": "f2efd536_a1757bed",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 50,
+      "message": "Yes, we will see. Probably this might change later.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 09:59:18.000000000",
+      "in_reply_to": "832b05fc_2a13b120",
+      "unresolved": false
+    },
+    {
+      "id": "a85a939f_223cfb54",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 1,
+      "line": 70,
+      "message": "I fixed this in patchset 3.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 14:05:20.000000000",
+      "in_reply_to": "3a150a3b_d3fc21d1",
+      "unresolved": false
+    },
+    {
+      "id": "dec16b8e_c2253984",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "We need to figure out a way to remove files that are \"out of scope\" from this set. Maybe we can use a HashMap with sourceName as key and a list of published files as value instead. Then we can remove any files in the list that are no longer included in the latest message after the message has been handled. That would leave us with a list with about a hundred files per node at the maximum.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2019-02-14 14:50:25.000000000",
+      "in_reply_to": "9e180b5d_9a298804",
+      "unresolved": false
+    },
+    {
+      "id": "495bad29_548536c1",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 174,
+      "message": "Yes, in https://gerrit.onap.org/r/#/c/78373/ we step spring to 5.1.4.RELEASE. So in this commit here we should remove the version for reactor-bom since we don't need to specify the version here.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2019-02-14 14:50:25.000000000",
+      "in_reply_to": "6486d578_84a0e0b1",
+      "unresolved": false
+    },
+    {
+      "id": "9c94d5b1_7800dbfe",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 1,
+      "line": 85,
+      "message": "Yes, or maybe a timestamp updated each access and then purge in regular intervals.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 15:49:20.000000000",
+      "in_reply_to": "dec16b8e_c2253984",
+      "unresolved": false
+    },
+    {
+      "id": "cac0077e_2fb90634",
+      "file_path": "pom.xml",
+      "patchset_number": 1,
+      "line": 174,
+      "message": "Done, the dependency is removed.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-14 15:49:20.000000000",
+      "in_reply_to": "495bad29_548536c1",
+      "unresolved": false
+    },
+    {
+      "id": "7a8120b8_6b6aa19a",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClientTest.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Please add \"target/\" to the path so the collected file ends up in a folder that is ignored by git.",
+      "author": {
+        "account_id": 3763,
+        "name": "Henrik Andersson",
+        "display_name": null,
+        "email": "henrik.b.andersson@est.tech",
+        "username": "elinuxhenrik"
+      },
+      "updated": "2019-02-15 13:18:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8bebeb8a_b0888b90",
+      "file_path": "datafile-app-server/pom.xml",
+      "patchset_number": 5,
+      "line": 4,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "f0b4d7d6_19f4596f",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/configuration/DatafileAppConfig.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "change Nordix to say 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "99257ccf_4c8ccd39",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/configuration/SchedulerConfig.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "change Nordix to say 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5d617bb4_0747b65c",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "change Nordix to say 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "51c1732b_e16a989d",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileReadyMessage.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "change to say 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6830307d_7d1024fc",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Put back the 2018 copyright notice for Nokia\nAdd a second line with a 2018-2019 Nordix notice",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "be46fec5_84b20c4e",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 5,
+      "line": 47,
+      "message": "FileReadyMessages ??",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "09b4b26e_9d0b826b",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisher.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "is this file based on another file from Nokia?\nshould you have done a \"git mv\" to rename?\nshould Nordix be 2019 ??",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8e368dd1_51f3e5d2",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/FileCollector.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0be0ad84_b8a32af4",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/FileCollector.java",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "This isn't you.\n\nIf Henrik DID write this code, because this file is based on code from him, then you need to put back the NOKIA copyright notice.\n\nDid you use a \"git rm\" instead of \"git mv\" to rename a previous file to this one?",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "500ac254_72055ffe",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7b70a025_7cb6a0a3",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/model/FileDataTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2019?\nif based on previous code from last year, then 2018-2019.\nIf based on code that NOKIA wrote, then include their copyright as well.",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "722df20a_6839ffe3",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParserTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Put back the 2018 copyright notice\nChange Nordix to 2018-2019.",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "c794940c_cacbd276",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DMaaPMessageConsumerTaskImplTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Put back the 2018 copyright notice\nChange Nordix to say 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e5538a9d_ecc03b9d",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisherTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e4679bd8_31f21e7c",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/XnfCollectorTaskImplTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d2a0f8b3_ce5e00b6",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/utils/JsonMessage.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2d21e668_d05064ab",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/exceptions/DatafileTaskException.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018 becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b20c9770_ee228b16",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/model/CommonFunctions.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "86fa1a62_a5cf5abe",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/model/MessageMetaData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018 -> 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ac35ebd5_855990d7",
+      "file_path": "datafile-commons/src/test/java/org/onap/dcaegen2/collectors/datafile/model/CommonFunctionsTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "913e8443_211d0936",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FTPSClientWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018 -> 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "73879921_5adbc2ce",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FileServerData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9f717fe9_75ea94be",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "994538c0_77aaee13",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/IFTPSClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4530cf13_61122012",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/Scheme.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "is this a rename of a previous file, or based on previous code?\nIf so, then it should say 2018-2019\nIf not, then it should say 2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3bbc8339_ea2ac64e",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "5265c69a_99e1ece5",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/FileSystemResourceWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "d4f08daa_36d765ee",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/FileWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "15229eba_f7fff9b7",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/IFile.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "132861a7_51c01f9e",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/IFileSystemResource.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "7dfbfe5b_65b8efef",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix becomes 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a6bf84ca_6bc70e43",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "ddec2735_29236261",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "is this new code or based on previous code?\nIf new code, then 2019\nIf based on previous code, the 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "af5b3b9b_590df959",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "75230da0_5896eddf",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClientTest.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "sounds like a reasonable suggestion",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": "7a8120b8_6b6aa19a",
+      "unresolved": false
+    },
+    {
+      "id": "f4f5b468_c24fd740",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/service/HttpUtilsTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "2f45d0c3_e871f0aa",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Nordix 2018-2019",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fdefed3e_c19dfae2",
+      "file_path": "pom.xml",
+      "patchset_number": 5,
+      "line": 4,
+      "message": "2018-2019 for Nordix",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2019-02-15 15:21:58.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "b3ac8659_f0ba1d5e",
+      "file_path": "datafile-app-server/pom.xml",
+      "patchset_number": 5,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "8bebeb8a_b0888b90",
+      "unresolved": false
+    },
+    {
+      "id": "250c7d40_a11b21c5",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/configuration/DatafileAppConfig.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "f0b4d7d6_19f4596f",
+      "unresolved": false
+    },
+    {
+      "id": "43bc43b2_7ecb225e",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/configuration/SchedulerConfig.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "99257ccf_4c8ccd39",
+      "unresolved": false
+    },
+    {
+      "id": "6273e8c1_0f6b97bb",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "5d617bb4_0747b65c",
+      "unresolved": false
+    },
+    {
+      "id": "81154933_9307a609",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/model/FileReadyMessage.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "51c1732b_e16a989d",
+      "unresolved": false
+    },
+    {
+      "id": "6ca15805_13bb7f9d",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/service/JsonMessageParser.java",
+      "patchset_number": 5,
+      "line": 47,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "be46fec5_84b20c4e",
+      "unresolved": false
+    },
+    {
+      "id": "ea46a833_5dc1f7d6",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisher.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "09b4b26e_9d0b826b",
+      "unresolved": false
+    },
+    {
+      "id": "a0457425_b083dd7a",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/FileCollector.java",
+      "patchset_number": 5,
+      "line": 39,
+      "message": "For a while there was two very similar implementations where one was probably based on the other .. but by now all lines in it are probably changed.",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "0be0ad84_b8a32af4",
+      "unresolved": false
+    },
+    {
+      "id": "ac78ac8a_a282a039",
+      "file_path": "datafile-app-server/src/main/java/org/onap/dcaegen2/collectors/datafile/tasks/ScheduledTasks.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "500ac254_72055ffe",
+      "unresolved": false
+    },
+    {
+      "id": "97d31685_b681cf89",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/model/FileDataTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "7b70a025_7cb6a0a3",
+      "unresolved": false
+    },
+    {
+      "id": "2ae28c36_0c7d33cf",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DMaaPMessageConsumerTaskImplTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "c794940c_cacbd276",
+      "unresolved": false
+    },
+    {
+      "id": "55b747f2_fe44d84d",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/DataRouterPublisherTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "e5538a9d_ecc03b9d",
+      "unresolved": false
+    },
+    {
+      "id": "ad15705a_9409082a",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/tasks/XnfCollectorTaskImplTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "e4679bd8_31f21e7c",
+      "unresolved": false
+    },
+    {
+      "id": "964007b3_a38e7472",
+      "file_path": "datafile-app-server/src/test/java/org/onap/dcaegen2/collectors/datafile/utils/JsonMessage.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "d2a0f8b3_ce5e00b6",
+      "unresolved": false
+    },
+    {
+      "id": "8df06432_5354a9a5",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/exceptions/DatafileTaskException.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "2d21e668_d05064ab",
+      "unresolved": false
+    },
+    {
+      "id": "7e54d44c_88e2bf9a",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/model/CommonFunctions.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "b20c9770_ee228b16",
+      "unresolved": false
+    },
+    {
+      "id": "24950eea_327f06b2",
+      "file_path": "datafile-commons/src/main/java/org/onap/dcaegen2/collectors/datafile/model/MessageMetaData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "86fa1a62_a5cf5abe",
+      "unresolved": false
+    },
+    {
+      "id": "9934272a_3f828604",
+      "file_path": "datafile-commons/src/test/java/org/onap/dcaegen2/collectors/datafile/model/CommonFunctionsTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "ac35ebd5_855990d7",
+      "unresolved": false
+    },
+    {
+      "id": "1a1b7149_604b9c8b",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FTPSClientWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "913e8443_211d0936",
+      "unresolved": false
+    },
+    {
+      "id": "f9a9dfe2_ed340f96",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FileServerData.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "73879921_5adbc2ce",
+      "unresolved": false
+    },
+    {
+      "id": "6426d41b_a5671d96",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "9f717fe9_75ea94be",
+      "unresolved": false
+    },
+    {
+      "id": "f57d9a9e_4281b34d",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/IFTPSClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "994538c0_77aaee13",
+      "unresolved": false
+    },
+    {
+      "id": "3d9cc065_f9deda4f",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/Scheme.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "4530cf13_61122012",
+      "unresolved": false
+    },
+    {
+      "id": "4e999469_33eaf4fa",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "3bbc8339_ea2ac64e",
+      "unresolved": false
+    },
+    {
+      "id": "da8e9702_a7abe8ee",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/FileSystemResourceWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "5265c69a_99e1ece5",
+      "unresolved": false
+    },
+    {
+      "id": "beb7d626_0ceddbdd",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/FileWrapper.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "d4f08daa_36d765ee",
+      "unresolved": false
+    },
+    {
+      "id": "d148f942_c6e53fb8",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/IFile.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "15229eba_f7fff9b7",
+      "unresolved": false
+    },
+    {
+      "id": "b6b176b8_923fdaa9",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/io/IFileSystemResource.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "132861a7_51c01f9e",
+      "unresolved": false
+    },
+    {
+      "id": "21fd9cbb_7ba41fa7",
+      "file_path": "datafile-dmaap-client/src/main/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClient.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "7dfbfe5b_65b8efef",
+      "unresolved": false
+    },
+    {
+      "id": "326c5916_f17b4c73",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/FtpsClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "a6bf84ca_6bc70e43",
+      "unresolved": false
+    },
+    {
+      "id": "e1ebdc0e_47452d42",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SchemeTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "ddec2735_29236261",
+      "unresolved": false
+    },
+    {
+      "id": "fb5a5728_fcb1aa80",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "af5b3b9b_590df959",
+      "unresolved": false
+    },
+    {
+      "id": "3b59a256_023655ff",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/ftp/SftpClientTest.java",
+      "patchset_number": 5,
+      "line": 46,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "7a8120b8_6b6aa19a",
+      "unresolved": false
+    },
+    {
+      "id": "98ffefee_b6ccd389",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/service/HttpUtilsTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "f4f5b468_c24fd740",
+      "unresolved": false
+    },
+    {
+      "id": "46a7a75c_bba0cfbd",
+      "file_path": "datafile-dmaap-client/src/test/java/org/onap/dcaegen2/collectors/datafile/service/producer/DmaapProducerReactiveHttpClientTest.java",
+      "patchset_number": 5,
+      "line": 3,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "2f45d0c3_e871f0aa",
+      "unresolved": false
+    },
+    {
+      "id": "358ae346_dd3575c8",
+      "file_path": "pom.xml",
+      "patchset_number": 5,
+      "line": 4,
+      "message": "Done",
+      "author": {
+        "account_id": 5072,
+        "name": "Patrik Buhr",
+        "display_name": null,
+        "email": "patrik.buhr@est.tech",
+        "username": "PatrikBuhr"
+      },
+      "updated": "2019-02-15 15:53:59.000000000",
+      "in_reply_to": "fdefed3e_c19dfae2",
+      "unresolved": false
+    }
+  ]
+}

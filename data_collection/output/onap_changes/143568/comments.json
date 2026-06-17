@@ -1,0 +1,305 @@
+{
+  "id": "cps~master~Ia818e8bf342ac212b365f7c24038ee285acd3f24",
+  "change_id": "Ia818e8bf342ac212b365f7c24038ee285acd3f24",
+  "_number": 143568,
+  "change_comments": [
+    {
+      "id": "a0a032e3_9d2047d8",
+      "patchset_number": 2,
+      "message": "recheck",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-03-10 15:14:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "3aa7511d_b743ec47",
+      "patchset_number": 2,
+      "message": "recheck",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-03-10 16:37:19.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "0927b636_cb5b02ba",
+      "patchset_number": 2,
+      "message": "just some suggestions for test",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-03-12 13:31:52.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "e27fdf11_d9776f4c",
+      "patchset_number": 2,
+      "message": "Looks good, one NB",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-04-10 09:14:42.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "a0622a3b_4be33460",
+      "patchset_number": 3,
+      "message": "small issue with test",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-04-14 09:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "ad2b6d9b_4e12bfef",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 2,
+      "line": 204,
+      "message": "NB: use *_\nI think I saw AI generate even something like\n 0 * mockCloudEventKafkaTemplateForExactlyOnceSemantics.*\n or similar to show there are no interactions at all",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-03-12 13:31:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ea3c8897_77eea92c",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 2,
+      "line": 209,
+      "message": "NB: probably would certae 2 separate methods for clarity:\nverifyAnyLogEntry()\nverifyLastLogEnrty()",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-03-12 13:31:52.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "baea0f33_08e45318",
+      "file_path": "cps-service/src/main/java/org/onap/cps/events/EventProducer.java",
+      "patchset_number": 2,
+      "line": 171,
+      "message": "I know it wasn't an initial requirement in the epic you created, but we often measure end to end througput of cm events, and one metric that we usually assert is the latency. The time difference between the actual event that happened on the node and the time when someone can consume that very same event from the final topic. Would it be a huge request to introduce a new gauge metric which propagates the elapsed time between the input cloudevent's time field and the current time?",
+      "author": {
+        "account_id": 8559,
+        "name": "Daniel Molnar",
+        "display_name": null,
+        "email": "dani.molnar2001@gmail.com",
+        "username": "molnardani"
+      },
+      "updated": "2026-03-17 15:13:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c31188ef_2c4e4b6b",
+      "file_path": "cps-service/src/main/java/org/onap/cps/events/EventProducer.java",
+      "patchset_number": 2,
+      "line": 177,
+      "message": "wouldn't it worth to add a metric here that counts the number of outsent cm events? So it is incremented with the number of events in the batch. Because so far we sort of had this metric with the single event consumer, the @Timed annotation gave us the exact number of processed events, but with batch processing, this exact number is lost and we only have the information about the processed batches, and not the processed cm events. What do you think?",
+      "author": {
+        "account_id": 8559,
+        "name": "Daniel Molnar",
+        "display_name": null,
+        "email": "dani.molnar2001@gmail.com",
+        "username": "molnardani"
+      },
+      "updated": "2026-03-17 15:13:00.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "34557a6f_83196b84",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/config/ExactlyOnceSemanticsKafkaConfigSpec.groovy",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "NB: separate words in description",
+      "author": {
+        "account_id": 8171,
+        "name": "Sean Beirne",
+        "display_name": "Seán Beirne",
+        "email": "sean.beirne@est.tech",
+        "username": "seanbeirne"
+      },
+      "updated": "2026-04-10 09:14:42.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fe3fd6cd_541c54c2",
+      "file_path": "cps-ncmp-service/src/test/groovy/org/onap/cps/ncmp/config/ExactlyOnceSemanticsKafkaConfigSpec.groovy",
+      "patchset_number": 2,
+      "line": 62,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-13 08:36:35.000000000",
+      "in_reply_to": "34557a6f_83196b84",
+      "unresolved": false
+    },
+    {
+      "id": "94849f40_68980c80",
+      "file_path": "cps-service/src/main/java/org/onap/cps/events/EventProducer.java",
+      "patchset_number": 2,
+      "line": 171,
+      "message": "will be on seperate story",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-13 08:36:35.000000000",
+      "in_reply_to": "baea0f33_08e45318",
+      "unresolved": false
+    },
+    {
+      "id": "0175382d_3730c850",
+      "file_path": "cps-service/src/main/java/org/onap/cps/events/EventProducer.java",
+      "patchset_number": 2,
+      "line": 177,
+      "message": "will be on separate story",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-13 08:36:35.000000000",
+      "in_reply_to": "c31188ef_2c4e4b6b",
+      "unresolved": false
+    },
+    {
+      "id": "b40f240e_68f38314",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 2,
+      "line": 204,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-13 08:36:35.000000000",
+      "in_reply_to": "ad2b6d9b_4e12bfef",
+      "unresolved": false
+    },
+    {
+      "id": "69bfe67f_b5131b5f",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 2,
+      "line": 209,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-13 08:36:35.000000000",
+      "in_reply_to": "ea3c8897_77eea92c",
+      "unresolved": false
+    },
+    {
+      "id": "d9b49ff3_721c1474",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 3,
+      "line": 204,
+      "message": "* is missing so you could get false positives!\nuse 0 * mockCloudEventKafkaTemplateForExactlyOnceSemantics.send(*_)\nor even 0 * mockCloudEventKafkaTemplateForExactlyOnceSemantics._ (NEW, checks no interactions with mock at all)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-04-14 09:48:07.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "601af817_3319d5a7",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 3,
+      "line": 204,
+      "message": "use 0 mockCloudEventKafkaTemplateForExactlyOnceSemantics.send(*_)\nor even 0 * mockCloudEventKafkaTemplateForExactlyOnceSemantics._ (NEW, checks no interactions with mock at all)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2026-04-14 10:25:26.000000000",
+      "in_reply_to": "d9b49ff3_721c1474",
+      "unresolved": true
+    },
+    {
+      "id": "ff67b058_b075f56b",
+      "file_path": "cps-service/src/test/groovy/org/onap/cps/events/EventProducerSpec.groovy",
+      "patchset_number": 3,
+      "line": 204,
+      "message": "Done",
+      "author": {
+        "account_id": 7931,
+        "name": "Lee Anjella Macabuhay",
+        "display_name": null,
+        "email": "lee.anjella.macabuhay@est.tech",
+        "username": "emaclee"
+      },
+      "updated": "2026-04-14 10:30:36.000000000",
+      "in_reply_to": "d9b49ff3_721c1474",
+      "unresolved": false
+    }
+  ]
+}

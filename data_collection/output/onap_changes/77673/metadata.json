@@ -1,0 +1,160 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fpolicy-handler~master~If7dd21c008d9906aca97939be65dfa9c2f007535",
+  "change_id": "If7dd21c008d9906aca97939be65dfa9c2f007535",
+  "_number": 77673,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2019-01-31 21:09:25.000000000",
+    "updated": "2019-02-05 21:15:53.000000000",
+    "submitted": "2019-02-05 21:04:23.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1949,
+      "name": "Alex Shatov",
+      "display_name": null,
+      "email": "ashatov@hotmail.com",
+      "username": "alex_sh"
+    },
+    "submitter": {
+      "account_id": 93,
+      "name": "Vijay Venkatesh Kumar",
+      "display_name": null,
+      "email": "vijayv81@gmail.com",
+      "username": "vv770d"
+    }
+  },
+  "subject": "4.6.0 policy-handler - active-passive",
+  "commit_message": "4.6.0 policy-handler - active-passive\n\nDCAEGEN2-931:\n- exposed POST /reconfigure endpoint on the web-server\n  that initiates the reconfigure process right away\n\nDCAEGEN2-932:\n- mode_of_operation: active or passive\n  = active is as before this change\n  = in passive mode the policy-handler\n    * closes the web-socket to PDP\n    * skips the periodic catch_ups\n    * still periodically checks for reconfigure\n    * still allows usig the web-server to retrieve policies from PDP\n- default is active\n\n- when mode_of_operation changes from passive to active,\n  the policy-handler invokes the catch_up right away\n\n- config-kv contains the optional override field mode_of_operation\n  = changing the mode_of_operation in config-kv and invoking\n    POST /reconfigure will bring the new value and change the\n    mode of operation of the policy-handler if no service_activator\n    section is provided in consul-kv record\n\n- if config-kv contains the service_activator section,\n  = the policy-handler registers with service_activator - untested\n  = and receives the mode_of_operation - untested\n  = service_activator can POST-notify the policy-handler to\n    initiate the /reconfigure\n\n- reduced the default web-socket ping interval from 180 to 30\n  seconds because PDP changed its default timeout on the web-socket\n  from 400 seconds to 50 seconds\n\nChange-Id: If7dd21c008d9906aca97939be65dfa9c2f007535\nSigned-off-by: Alex Shatov <alexs@att.com>\nIssue-ID: DCAEGEN2-931\nIssue-ID: DCAEGEN2-932\n",
+  "change_log": {
+    "entry_count": 9,
+    "entries": [
+      {
+        "id": "3d2a9d921014b3e65157ceebb5785b090fd23995",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-01-31 21:09:25.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "c060c89de35b4270cab7a0cecc23fd3e2a737010",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 21:11:49.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/69/",
+        "patchset_number": 1
+      },
+      {
+        "id": "6a6fa0a20172be7dedaae7eea30a6ef83f6314f4",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 21:18:55.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/69/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/69",
+        "patchset_number": 1
+      },
+      {
+        "id": "79d9f5c2f73d586b9f4d941e2746c43963958913",
+        "author": {
+          "account_id": 1907,
+          "name": "Andrew Gauld",
+          "display_name": null,
+          "email": "agauld@att.com",
+          "username": "ag1282"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-01-31 21:42:24.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "9c2b44aa01a59e41988350249372a6e5bf0a5f93",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-04 15:20:26.000000000",
+        "message": "Patch Set 1:\n\n@Terry - Can you review/confirm if this change is okay to be merged",
+        "patchset_number": 1
+      },
+      {
+        "id": "f62510362320e942a8b80a0b33f3e80ea1586ede",
+        "author": {
+          "account_id": 2835,
+          "name": "Terry Schmalzried",
+          "display_name": null,
+          "email": "ts862m@att.com",
+          "username": "ts862m"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-04 18:28:35.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "0e0c69250ddb763dd081559b9786dab935c41a54",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 21:04:22.000000000",
+        "message": "Patch Set 1: Code-Review+2",
+        "patchset_number": 1
+      },
+      {
+        "id": "615411b86aa4499b1ee16f760c617aa2ffa6e7d1",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2019-02-05 21:04:23.000000000",
+        "message": "Change has been successfully merged by Vijay Venkatesh Kumar",
+        "patchset_number": 1
+      },
+      {
+        "id": "349ca55859bc3975caa03a934ebab24a6b6ab184",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2019-02-05 21:15:53.000000000",
+        "message": "Patch Set 1:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-merge-java/49/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-merge-java/49",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

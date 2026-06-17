@@ -1,0 +1,161 @@
+{
+  "id": "oom%2Foffline-installer~master~I2baa3f4c7d69b8dff109b5f8ae984134caf2af7d",
+  "change_id": "I2baa3f4c7d69b8dff109b5f8ae984134caf2af7d",
+  "_number": 75452,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9adffdf1_932db397",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "This does not work - undefined variable. This works:\n\"{{ hostvars[groups.infrastructure[0]].ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }}\"\n\nBut the first return address is wrong - idempotency is broken, because after first playbook run there are created new docker interfaces and this will return first non-loopback address which in my case was 172.16.0.0/16 instead of the desired one 10.0.0.0/8",
+      "author": {
+        "account_id": 4886,
+        "name": "Petr Ospalý",
+        "display_name": null,
+        "email": "p.ospaly@email.cz",
+        "username": "p.ospaly"
+      },
+      "updated": "2019-01-09 14:00:59.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_a1f65cf7",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 1,
+      "line": 23,
+      "message": "Hey, honestly it is a bit interesting that the first ip address changes over time. if you would do \"ip addr\" on linux then first is always lo, then physical interfaces go, interfaces created later are shown later.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-01-11 11:22:17.000000000",
+      "in_reply_to": "9adffdf1_932db397",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_2a28fce0",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 4,
+      "line": 7,
+      "message": "this is not good name (kubernetes is using 10.42.x.x by default) it should be e.g infrastructure_subnet ? (not sure if adding new param is worth for being able to specify hostname in ansible_host but probably yes)",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-01-16 10:22:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_ea1d14bf",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "this will not work for HA (as Petr wrote) probably we need to comment it so we can come back to it later ...",
+      "author": {
+        "account_id": 4009,
+        "name": "Michal Ptacek",
+        "display_name": null,
+        "email": "m.ptacek@partner.samsung.com",
+        "username": "Michal.Ptacek"
+      },
+      "updated": "2019-01-16 10:22:10.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_6a8124c2",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 4,
+      "line": 7,
+      "message": "Hmm not sure if it is a bad name as in... kubernetes_subnet=subnet for kubernetes internode communication. the 10.42.0.0 whatever is called a podnetwork, 10.43 is a service network. so i do not see any overlap.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-01-16 10:29:33.000000000",
+      "in_reply_to": "9adffdf1_2a28fce0",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_2a6f9c2c",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "Still wondering how much we need it or not",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-01-16 10:29:33.000000000",
+      "in_reply_to": "9adffdf1_ea1d14bf",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_4a0b002a",
+      "file_path": "ansible/inventory/hosts.yml",
+      "patchset_number": 4,
+      "line": 7,
+      "message": "For me it is confusing. You are right about those names not overlapping nevertheless when looking at it with my \"fresh\" eyes my mind immediately jumps to idea of some kubernetes network subnet (whatever that might be). I think that it should be some other name that describes this subnet better for the new user.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-01-16 12:46:02.000000000",
+      "in_reply_to": "9adffdf1_6a8124c2",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_a5017f06",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "I am just wary of using subnet as a variable. It might lead to misconfiguration when wrong netmask is used. And if it is only place when this is/will be used I think it might be \"safer\" to use specific ip provided in variable by user.",
+      "author": {
+        "account_id": 5052,
+        "name": "Milan Verešpej",
+        "display_name": null,
+        "email": "m.verespej@partner.samsung.com",
+        "username": "milan.verespej"
+      },
+      "updated": "2019-01-16 12:46:02.000000000",
+      "in_reply_to": "9adffdf1_2a6f9c2c",
+      "unresolved": false
+    },
+    {
+      "id": "9adffdf1_850c7b3c",
+      "file_path": "ansible/roles/docker/tasks/main.yml",
+      "patchset_number": 4,
+      "line": 23,
+      "message": "I am not sure if there will never be any situation where something else will need it. hmmm...",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-01-16 12:59:40.000000000",
+      "in_reply_to": "9adffdf1_a5017f06",
+      "unresolved": false
+    }
+  ]
+}

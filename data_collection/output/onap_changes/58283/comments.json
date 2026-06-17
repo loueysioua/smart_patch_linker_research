@@ -1,0 +1,144 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fplugins~master~I1de728b3efd0725d4a3da996d95ec61e68f56ab4",
+  "change_id": "I1de728b3efd0725d4a3da996d95ec61e68f56ab4",
+  "_number": 58283,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "1a76adc5_f6ab7ed4",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "I see some scary code -- notably a regex -- being added here, but I don't see the cooresponding unit tests. Scary things should be unit tested. Many a bug has been caused by bad regex..",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2018-08-01 01:34:37.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_7ca0adf4",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "linter will complain about lowcase naming of the constants == they do not like variables on the global scope in the module",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2018-08-01 13:07:47.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_bc5e4511",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "optional: \n1. would it make sense to relax handling of the white spaces - not requiring to have a single space like [ ]* ?\n\n2. Does it really need to be Python specific regex ?",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2018-08-01 13:07:47.000000000",
+      "in_reply_to": "1a76adc5_f6ab7ed4",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_bc9ba571",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "vote to relaxation - in DCAEGEN2-649 there is an example (\"30s\") that does not match the current regex == no space between the number and \"s\":\n'for instance \"30s\" to specify 30 seconds'",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2018-08-01 14:12:26.000000000",
+      "in_reply_to": "1a76adc5_bc5e4511",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_3c7235e6",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "There is no space in the RE.  The cursor movement here seems to indicate that there is, but it's not present in the code I pushed.  I just pulled down an archive of this change and verified that there is no space.  Using the archive, I did a quick test:\n\n>>> from k8sclient.k8sclient import _parse_interval\n>>> _parse_interval(\"30s\")\n30\n>>> _parse_interval(\"30 s\")\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n  File \"k8sclient/k8sclient.py\", line 84, in _parse_interval\n    raise ValueError(\"Bad interval specification: {0}\".format(t))\nValueError: Bad interval specification: 30 s\n\nThe intent is that there should be no space between the value and the unit.  The RE enforces that restriction.\n\nIn the original Docker plugin, the healthcheck timeout and interval values are copied (with no validation or other processing) from the blueprint into environment variables that are set into the Docker container environment.  In the Docker environment, registrator uses these to set up a Consul health check.  The syntax is \"30s\". (See http://gliderlabs.github.io/registrator/latest/user/backends/#consul.)\n\nI'm just trying to provide backwards compatibility here, to keep the difference between a Docker blueprint and a k8s blueprint to a minimum.  I'm not trying to define some ideal general syntax for specifying intervals of time.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-08-01 15:44:58.000000000",
+      "in_reply_to": "1a76adc5_bc9ba571",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_475cfe25",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "my mistake - apparently the font on the screen made me to believe that there is a space in-between parens )( - i did not try doing the cursor movement - good catch on your side :-)",
+      "author": {
+        "account_id": 1949,
+        "name": "Alex Shatov",
+        "display_name": null,
+        "email": "ashatov@hotmail.com",
+        "username": "alex_sh"
+      },
+      "updated": "2018-08-01 16:30:46.000000000",
+      "in_reply_to": "1a76adc5_3c7235e6",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_e2409837",
+      "file_path": "k8s/k8sclient/k8sclient.py",
+      "patchset_number": 2,
+      "line": 31,
+      "message": "\"Scariness\" is a subjective term.   I find it scary when people do parsing with ad hoc solutions.  REs--especially simple ones that can be mapped directly into a deterministic FSA--are easy to reason about and lend themselves to clean code. If I have a question about an RE that I see in a piece of code, I can grab it, drop it into a simple program (or just work from an interpreter command line) and execute it against various test strings to answer my question.  \n\nIn the case of REs, I'm not convinced that unit tests help much in preventing bugs in production. Bugs show up when an RE executes against unexpected input.  Unit tests cover the set of inputs that the RE developer comes up with. Although I don't think they're especially useful, I've added some unit tests.",
+      "author": {
+        "account_id": 511,
+        "name": "Jack Lucas",
+        "display_name": null,
+        "email": "jflos@sonoris.net",
+        "username": "jackl"
+      },
+      "updated": "2018-08-01 21:43:28.000000000",
+      "in_reply_to": "1a76adc5_f6ab7ed4",
+      "unresolved": false
+    },
+    {
+      "id": "1a76adc5_a2daa015",
+      "file_path": "k8s/tests/test_k8sclient.py",
+      "patchset_number": 3,
+      "line": 81,
+      "message": "MUCH better\n\nI also got a kick out of 1stanbul, that alone was worth it",
+      "author": {
+        "account_id": 515,
+        "name": "Tommy Carpenter",
+        "display_name": null,
+        "email": null,
+        "username": "tommycarpenter"
+      },
+      "updated": "2018-08-02 01:21:26.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ]
+}

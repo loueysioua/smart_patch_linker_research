@@ -1,0 +1,178 @@
+{
+  "id": "oom%2Foffline-installer~master~I7af4e9998feedd5f8fc3df8215e03c1b0485529c",
+  "change_id": "I7af4e9998feedd5f8fc3df8215e03c1b0485529c",
+  "_number": 88277,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ff695110_7718b2b3",
+      "file_path": "ansible/roles/rancher/tasks/rancher_agent.yml",
+      "patchset_number": 1,
+      "line": 10,
+      "message": "I decided to remove this line.\nReason: the only thing it does is ensuring container being removed on stop, however we don't actually do it anywhere else explicitly, so I don't see it causing problems.\nNamely rancher server itself is not running with --rm. why this one should?\nOf course what caused this line to be removed was the fact that python-docker in the version shipped in rhel does not support auto_remove. It is easier to remove the line if it is not really needed, than\nto upgrade python-docker to newer version, especially that this updating code was removed.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-22 16:04:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9c86f7d1_6346889d",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Verified that this role is not used by anything else.\nIf I am not right, please tell me. In general rke is doing the same and needs to be switched to use this specific role.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-22 16:04:21.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "077ed753_dc7817e0",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "well localhost_ansible_os_family variable is used somewhere (maybe infra-play?) \nBut prob it will re not relevant if this dind thing going to work there also. But currently it can break it.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-22 16:38:37.000000000",
+      "in_reply_to": "9c86f7d1_6346889d",
+      "unresolved": false
+    },
+    {
+      "id": "f0c6e039_415e464f",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "> well localhost_ansible_os_family variable is used somewhere (maybe infra-play?) \n> But prob it will re not relevant if this dind thing going to work there also. But currently it can break it.\n\nReally? so I could just put that cluster_ip thing directly in playbook.yml and revert the prepare-common to original state. For curiosity, what is that weird localhost variable being used for?",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-22 16:41:51.000000000",
+      "in_reply_to": "077ed753_dc7817e0",
+      "unresolved": false
+    },
+    {
+      "id": "d96574d6_d4e29865",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "well maybe this common role is good to keep?\nlocalhost was to skip it in the case molecule docker is used if I remember right.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-22 16:48:43.000000000",
+      "in_reply_to": "f0c6e039_415e464f",
+      "unresolved": false
+    },
+    {
+      "id": "e23cd294_1f87febb",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Could you somehow clarify what was it needed for? just to understand implications. is there any place where we use localhost and depend on distro?",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-24 09:28:22.000000000",
+      "in_reply_to": "d96574d6_d4e29865",
+      "unresolved": false
+    },
+    {
+      "id": "9713962b_4c397c4d",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "https://gerrit.onap.org/r/c/oom/offline-installer/+/85907/13/ansible/test/roles/post-certificates/tasks/main.yml#12",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-05-24 10:01:04.000000000",
+      "in_reply_to": "e23cd294_1f87febb",
+      "unresolved": false
+    },
+    {
+      "id": "c181172c_451f3952",
+      "file_path": "ansible/test/roles/prepare-common/tasks/main.yml",
+      "patchset_number": 1,
+      "line": null,
+      "message": "Like you restart docker when not in molecule container? ok.",
+      "author": {
+        "account_id": 5019,
+        "name": "Michal Zegan",
+        "display_name": null,
+        "email": "m.zegan@samsung.com",
+        "username": "m.zegan"
+      },
+      "updated": "2019-05-24 10:25:59.000000000",
+      "in_reply_to": "9713962b_4c397c4d",
+      "unresolved": false
+    },
+    {
+      "id": "9acdd523_b477d44c",
+      "file_path": "ansible/roles/rancher/molecule/default/cleanup.yml",
+      "patchset_number": 2,
+      "line": 5,
+      "message": "Seams like this \"support\" role will not be used by anything else.",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-29 10:34:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e1b51a86_42865d5f",
+      "file_path": "ansible/roles/rancher/molecule/default/cleanup.yml",
+      "patchset_number": 2,
+      "line": 10,
+      "message": "Seams like this \"support\" role will not be used by anything else.",
+      "author": {
+        "account_id": 5239,
+        "name": "Mateusz Pilat",
+        "display_name": null,
+        "email": "m.pilat@partner.samsung.com",
+        "username": "m.pilat"
+      },
+      "updated": "2019-05-29 10:34:19.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

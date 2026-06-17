@@ -1,0 +1,42 @@
+{
+  "id": "policy%2Fcommon~master~I53b6ffe65f33e5710eba633973e5d23b148f049f",
+  "change_id": "I53b6ffe65f33e5710eba633973e5d23b148f049f",
+  "_number": 124373,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8a36c33b_73a8a70e",
+      "file_path": "utils-test/pom.xml",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "I recall long ago the bouncycastle had security problems and should not be used. Let's just confirm using the CWE profile in policy/parent. Then again, this is test code so maybe add \"test\" to the dependency if it does still have security issues??",
+      "author": {
+        "account_id": 57,
+        "name": "Pamela Dragosh",
+        "display_name": null,
+        "email": "pd1248@att.com",
+        "username": "pdragosh"
+      },
+      "updated": "2021-09-21 13:35:06.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "468885c3_7ee5b73e",
+      "file_path": "utils-test/pom.xml",
+      "patchset_number": 2,
+      "line": 46,
+      "message": "not surprising.  I don't think it's an issue here, as utils-test should not be included in any production code, thus bouncycastle should not be included (as a transitive dependency) in any production code either.  May give a false positive in one of the tools, though.\n\nNonetheless, if you want to stick with keytool and fix the staging job env, that's your call.  I have not found any alternative to keytool, for doing this programmatically, other than bouncycastle.\n\nOne other option would be to manually create a self-signed jks file and include it within this repo.  The SelfSignedKeyStore class could be modified to use that so that other junits continue to work.  You'd still have to update the keystore occasionally, but at least it would only appear within one repo.  In addition, the private key could be given a 10-year life so it doesn't have to be updated very frequently.",
+      "author": {
+        "account_id": 7886,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3.lf@gmail.com",
+        "username": "jrh3.lf"
+      },
+      "updated": "2021-09-21 14:20:39.000000000",
+      "in_reply_to": "8a36c33b_73a8a70e",
+      "unresolved": true
+    }
+  ]
+}

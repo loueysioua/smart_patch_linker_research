@@ -1,0 +1,42 @@
+{
+  "id": "dcaegen2%2Fplatform%2Finventory-api~master~I72e9602018ada44e36339a89034bee56bc9f8e8c",
+  "change_id": "I72e9602018ada44e36339a89034bee56bc9f8e8c",
+  "_number": 101370,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "573c5b0a_125b3ac3",
+      "file_path": "src/main/java/io/swagger/api/impl/DcaeServiceTypesApiServiceImpl.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "Calling resolveTypeName(typeName) here before DcaeServiceTypesQueryStatement.create() will cause typeName wild card match using * to fail. \nFor example when a query against \"/dcae-service-types?typeName=somepartialtypename*\" will not match/work.\nI suggest moving this if (typeName != null) block with resolveTypeName() method to DcaeServiceTypeObjectRepository class right before line: \nifNotNullBind(typeName, it -> query.bind(\"typeName\", it));\n\nSo updated DcaeServiceTypeObjectRepository would look like (1st and last lines are existing/unchanged):\n\nQuery<DCAEServiceTypeObject> query = getQuery(jdbiHandle, queryStatement);\n            \nif (typeName != null){\n   typeName = resolveTypeName(typeName);\n}\n\nifNotNullBind(typeName, it -> query.bind(\"typeName\", it));\n\n\nWill also need to update: DcaeServiceTypesApiServiceImplTests.java to replace:\n\nDcaeServiceTypesApiServiceImpl.resolveTypeName\n\nwith:\n\nDcaeServiceTypeObjectRepository.resolveTypeName",
+      "author": {
+        "account_id": 4015,
+        "name": "Shadi Haidar",
+        "display_name": null,
+        "email": "sh1986@att.com",
+        "username": "sh1986"
+      },
+      "updated": "2020-02-07 16:32:50.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "fc633274_9e8a947e",
+      "file_path": "src/main/java/io/swagger/api/impl/DcaeServiceTypesApiServiceImpl.java",
+      "patchset_number": 1,
+      "line": 90,
+      "message": "but typeName is used in line 122 and 172. When I move this section to DcaeServiceTypeObjectRepository then it will break the logic.\n\nHow this could break functionality? I resolving type name before fetching data from repository only when type name is not null. resolveTypeName changes * to % character. Original behavior of dcaeServiceTypesGet was not changed.\n\n    static String resolveTypeName(String typeName){\n        if (typeName.contains(\"*\")) {\n            return typeName.replaceAll(\"\\\\*\", \"%\");\n        }\n        return typeName;\n    }",
+      "author": {
+        "account_id": 3433,
+        "name": "Bogumil Zebek",
+        "display_name": null,
+        "email": "bogumil.zebek@nokia.com",
+        "username": "bogumil_zebek"
+      },
+      "updated": "2020-02-11 07:43:44.000000000",
+      "in_reply_to": "573c5b0a_125b3ac3",
+      "unresolved": false
+    }
+  ]
+}

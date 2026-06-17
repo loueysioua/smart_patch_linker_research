@@ -1,0 +1,178 @@
+{
+  "id": "policy%2Fmodels~master~I79a6d158addaad31649809006d1e3c1dfdb47a1f",
+  "change_id": "I79a6d158addaad31649809006d1e3c1dfdb47a1f",
+  "_number": 113806,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8d922715_ad5b46a2",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "not exactly sure why another thread was created for this.  Appears that stop() could be modified to invoke server.awaitTermination() and still have the same functionality, with one less thread, unless it's preferred that awaitTermination() be run in the background.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-12 17:13:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "d8f27341_c3629db8",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": 61,
+      "message": "doesn't appear that this field is needed",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-12 17:13:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "52633b6d_8b260689",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": 193,
+      "message": "can use Thread.currentThread()",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-12 17:13:50.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "c86830a4_b4f25d02",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "awaitTermination basically asks the main thread to wait until the server is terminated. Adding awaitTermination to stop() doesn't work because, Main process is terminated and there is no one calling the stop method itself.\n\nI could add awaitTermination to start() after starting the server. But this would end up in making the Main thread work only for the CDS simulators and the other simulators get messed up and wont start (I tested this). Hence, running the gRPC server in a thread. We are running the Rest servers also in separate thread.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-10-13 09:31:57.000000000",
+      "in_reply_to": "8d922715_ad5b46a2",
+      "unresolved": true
+    },
+    {
+      "id": "63bd593d_f2f79ae0",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": 61,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-10-13 09:31:57.000000000",
+      "in_reply_to": "d8f27341_c3629db8",
+      "unresolved": false
+    },
+    {
+      "id": "b660822b_20a79640",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": 193,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-10-13 09:31:57.000000000",
+      "in_reply_to": "52633b6d_8b260689",
+      "unresolved": false
+    },
+    {
+      "id": "7afde403_eeb984d5",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "I'm still not sure what is the purpose of the wrapper thread?  What is the problem it's trying to solve?  The original start() method simply invoked server.start().  Do we not want to wait for that to complete?  For that matter, if it throws an exception, then I would think we'd want the simulators to shut down.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-13 14:02:10.000000000",
+      "in_reply_to": "c86830a4_b4f25d02",
+      "unresolved": true
+    },
+    {
+      "id": "32ad8ef4_700f9490",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "The grpc server uses daemon threads by default. Hence the application will exit as soon the main thread completes. That is why we need awaitTermination to keep the main thread alive until the server is terminated.\n\nWhen awaitTermination is just called without running this as a separate thread, it was messing up other simulators to start up, for example dmaap or aai simulator will not work as the main thread gets kind of stuck waiting for the gRPC server to finish. That is why the gRPC server is run in a separate thread.",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-10-13 14:21:56.000000000",
+      "in_reply_to": "7afde403_eeb984d5",
+      "unresolved": true
+    },
+    {
+      "id": "128eb46e_dd30d452",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Thanks for explaining.  Perhaps add a comment to the start() method indicating that we have to wrap the server in a non-daemon thread to prevent the Main thread from exiting prematurely.\n\nMight also want to have start() invoke server.start() directly, and all that wrapper thread would do then is invoke awaitTermination().  That way, any exceptions from server.start() are propagated out of start().",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2020-10-13 14:29:46.000000000",
+      "in_reply_to": "32ad8ef4_700f9490",
+      "unresolved": true
+    },
+    {
+      "id": "47b275f6_57729123",
+      "file_path": "models-interactions/model-simulators/src/main/java/org/onap/policy/simulators/CdsSimulator.java",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Done",
+      "author": {
+        "account_id": 4903,
+        "name": "Ajith Sreekumar",
+        "display_name": "Ajith Sreekumar",
+        "email": "ajith.sreekumar@bell.ca",
+        "username": "a.sreekumar"
+      },
+      "updated": "2020-10-13 15:10:01.000000000",
+      "in_reply_to": "128eb46e_dd30d452",
+      "unresolved": false
+    }
+  ]
+}

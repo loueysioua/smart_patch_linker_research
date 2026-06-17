@@ -1,0 +1,224 @@
+{
+  "id": "oom~master~I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0",
+  "change_id": "I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0",
+  "_number": 26559,
+  "status": "ABANDONED",
+  "timestamps": {
+    "created": "2017-12-19 14:29:58.000000000",
+    "updated": "2018-01-23 16:12:58.000000000",
+    "submitted": null
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 345,
+      "name": "Yury Novitsky",
+      "display_name": null,
+      "email": "yury.novitsky@amdocs.com",
+      "username": "yuryn"
+    },
+    "submitter": null
+  },
+  "subject": "Fix SDC errors 503/500",
+  "commit_message": "Fix SDC errors 503/500\n\n1. Make sure ES, CS and BE SDC services become available in k8s only\nwhen it performed all the tasks in startup scripts. This mimics the SDC\nOOB script sdc/sdc-os-chef/scripts/docker_run.sh where there is wait for\n\"DOCKER STARTED\" message after running CS and BE containers.\n\n2. Removed dependency of BE in KB container - it can start\nsimultaneously.\n\n3. Use HOST_IP variable inside CS for internal client connection (as k8s\nservice name is not available until k8s service is ready).\n\n4. Sometimes CS chef recipes 04-schemaCreation.rb and\n05-titanSchemaCreation.rb fail because of timeout in Cassandra Java\nclient used in org.openecomp.sdc.asdctool.main.DataSchemaMenu tool.\nThere is an issue opened for this on SDC project:\nhttps://jira.onap.org/browse/SDC-715. To work around the issue, the tool\nis called with retries and if it does not success after retries - the\ncontainer startup script checks now chef exit code and exits with non-0\nexit code thus leaving to k8s to recover the container.\n\nChange-Id: I5cfbdff15882bcc7b8cbaf15eaa4ef92f68729a0\nIssue-ID: SDC-451\nSigned-off-by: yuryn <Yury.Novitsky@Amdocs.com>\n",
+  "change_log": {
+    "entry_count": 14,
+    "entries": [
+      {
+        "id": "9be34315389d2b4a178ce1e2618c2e26edab2b2b",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-19 14:29:58.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "c91c2ead5d4f496b35137cfef47becc9509f894c",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-19 14:30:30.000000000",
+        "message": "Topic set to sdc-error-503-fix",
+        "patchset_number": 1
+      },
+      {
+        "id": "102cc5948e3d0f7670d9d07f10560da5c7dab7ba",
+        "author": {
+          "account_id": 137,
+          "name": "Alexis de Talhouet",
+          "display_name": null,
+          "email": "adetalhouet89@gmail.com",
+          "username": "adetalhouet"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-19 14:42:11.000000000",
+        "message": "Patch Set 1:\n\nHi Yuri, I have observed this behaviour in SDC as well in release-1.1.0\nI believe the fix should go there as well, right?",
+        "patchset_number": 1
+      },
+      {
+        "id": "04ef76de2503edbb9003aa27c2fcc3767d282944",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-19 14:43:19.000000000",
+        "message": "Patch Set 1:\n\n> Hi Yuri, I have observed this behaviour in SDC as well in\n > release-1.1.0\n > I believe the fix should go there as well, right?\n\nYes, will issue review shortly.",
+        "patchset_number": 1
+      },
+      {
+        "id": "5871c260d2521e9449075b7456dea8cbcf60e08c",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-19 14:56:34.000000000",
+        "message": "Patch Set 1:\n\nSDC healthcheck is intermittent - it fails 35% of the time",
+        "patchset_number": 1
+      },
+      {
+        "id": "c2f7c5295309f4ecf20cab193b6d4793aeabad8f",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-19 14:56:38.000000000",
+        "message": "Patch Set 1:\n\nhttps://jira.onap.org/browse/SDC-739",
+        "patchset_number": 1
+      },
+      {
+        "id": "3033a33fc23d87cb6deca729f0c82a533ecca639",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-19 14:56:48.000000000",
+        "message": "Patch Set 1:\n\nhttp://kibana.onap.info:5601/app/kibana#/dashboard/AWAtvpS63NTXK5mX2kuS?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(description:'',filters:!(),options:(darkTheme:!f),panels:!((col:1,id:AWAts77k3NTXK5mX2kuM,panelIndex:1,row:1,size_x:8,size_y:3,type:visualization),(col:9,id:AWAtuTVI3NTXK5mX2kuP,panelIndex:2,row:1,size_x:4,size_y:3,type:visualization),(col:1,id:AWAtuBTY3NTXK5mX2kuO,panelIndex:3,row:7,size_x:6,size_y:3,type:visualization),(col:1,id:AWAttmqB3NTXK5mX2kuN,panelIndex:4,row:4,size_x:6,size_y:3,type:visualization),(col:7,id:AWAtvHtY3NTXK5mX2kuR,panelIndex:6,row:4,size_x:6,size_y:6,type:visualization)),query:(match_all:()),timeRestore:!f,title:CD%2520Health%2520Check,uiState:(),viewMode:view)",
+        "patchset_number": 1
+      },
+      {
+        "id": "068f4484f9edfeec64f6823255ab95ff5e352ba1",
+        "author": {
+          "account_id": 1077,
+          "name": "Michael O'Brien",
+          "display_name": null,
+          "email": "frank.obrien@amdocs.com",
+          "username": "michaelobrien"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-19 14:58:54.000000000",
+        "message": "Patch Set 1:\n\nAdding Michael Lando",
+        "patchset_number": 1
+      },
+      {
+        "id": "c779c02d588c59c5a1f7052605c85adb7d88fa9d",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-19 15:02:57.000000000",
+        "message": "Patch Set 1:\n\n> Adding Michael Lando\n\nI do not think he was added. We were in touch with him about these failures and have an open issue in SDC project: https://jira.onap.org/browse/SDC-715\nWill add link to this review in the jira issue.",
+        "patchset_number": 1
+      },
+      {
+        "id": "be10b6f225da0ef5f1a58cc8f0b2fd4f80738bc7",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-19 15:08:38.000000000",
+        "message": "Patch Set 1:\n\n> SDC healthcheck is intermittent - it fails 35% of the time\n\nBasically, the if the deployment fails - we get error 500 or 503 in the portal when opening SDC tab. So I checked that after the fix the tab opens successfully.",
+        "patchset_number": 1
+      },
+      {
+        "id": "2f26c68a84387ebd75dd6e4002d1fc7033bff90f",
+        "author": {
+          "account_id": 497,
+          "name": "Borislav Glozman",
+          "display_name": null,
+          "email": "borislav.glozman@amdocs.com",
+          "username": "BorislavG"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-20 14:38:49.000000000",
+        "message": "Patch Set 1: Code-Review+1",
+        "patchset_number": 1
+      },
+      {
+        "id": "b0baf6f79e1b18f76b2b2b21ab8d7d7eb21160dc",
+        "author": {
+          "account_id": 69,
+          "name": "Michael Lando",
+          "display_name": null,
+          "email": "michael.lando@intl.att.com",
+          "username": "ml636r"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-12-25 18:41:54.000000000",
+        "message": "Patch Set 1: Code-Review-1\n\ni understand the problem but i have a problem with the solution.\nyou are duplicating the sdc logic across two applications one logic is in the oom this commit, and the other logic is in the sdc. this is impossible to manage.\n\nit is not manageable for sdc we can't have the logic in two places.\n\nthe flow as it is defined by us works successfully in the heat deployment with no issue, based on Yuri's response i see that there are configuration issues as well.\n\nbecause of the way our dockers are dependent on each other we have a specific order to the way they are started es->c*->be->fe with delays in our startup to allow our init functionality to complete.\n\nwe are now in the process of setting up OOM once we complete the work we will be able to provide analyze the deployment flow and provide an internal solution.",
+        "patchset_number": 1
+      },
+      {
+        "id": "505df06ef406ccc2124e34088f3f1f66eac5bb13",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-12-25 21:42:48.000000000",
+        "message": "Patch Set 1:\n\n> i understand the problem but i have a problem with the solution.\n > you are duplicating the sdc logic across two applications one logic\n > is in the oom this commit, and the other logic is in the sdc. this\n > is impossible to manage.\n > \n > it is not manageable for sdc we can't have the logic in two places.\n > \n > the flow as it is defined by us works successfully in the heat\n > deployment with no issue, based on Yuri's response i see that there\n > are configuration issues as well.\n > \n > because of the way our dockers are dependent on each other we have\n > a specific order to the way they are started es->c*->be->fe with\n > delays in our startup to allow our init functionality to complete.\n > \n > we are now in the process of setting up OOM once we complete the\n > work we will be able to provide analyze the deployment flow and\n > provide an internal solution.\n\nWhat is the ETA for the fix?\nPlease take a look at the problem I describe in the jira case - Cassandra client timeout. It's default is 12 seconds and there are queries that sometimes run longer.",
+        "patchset_number": 1
+      },
+      {
+        "id": "aeb8e68611ddbc179acd6f28f08193c7c5f0cb73",
+        "author": {
+          "account_id": 345,
+          "name": "Yury Novitsky",
+          "display_name": null,
+          "email": "yury.novitsky@amdocs.com",
+          "username": "yuryn"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2018-01-23 16:12:58.000000000",
+        "message": "Abandoned\n\nThe fix is partially done by SDC team, will be adopted in separate change.",
+        "patchset_number": 1
+      }
+    ]
+  }
+}

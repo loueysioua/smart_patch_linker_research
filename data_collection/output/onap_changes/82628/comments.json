@@ -1,0 +1,331 @@
+{
+  "id": "oom%2Foffline-installer~master~Ib29773c4d64a0529c71c3f93c2af7265ae94059f",
+  "change_id": "Ib29773c4d64a0529c71c3f93c2af7265ae94059f",
+  "_number": 82628,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "c53ab530_a00792d1",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Almost all of these are defined with same values in ansible/groupvars/all.yml, what would be the reason to put them here?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 11:50:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ffd262ba_c9ee3473",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": 16,
+      "message": "Already commented the matter of custom override file in ansible/roles/application/tasks/install.yml. Use case where a custom override file would be needed would be better addressed by just possibility to define a custom override file IMHO.\n\nAnd BTW this functionality lacks documentation (should be documented in install guide) without which this patch is incomplete to me.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 11:50:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a8cf1edb_323b6a55",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "This is pure overengineering for me - if the only purpose of this change was to allow a user to specify custom override file for helm then let's keep it simple: allow user to define in application_configuration.yml a variable with path to custom override file and in the task below (\"Helm Install application {{ app_name }}\") perform a check like \"if user_defined_template_path var is defined then include it otherwise take default one\".",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 11:50:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "493f6ac4_124da6f0",
+      "file_path": "ansible/roles/application/tasks/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Please \"git mv ansible/roles/application-install/tasks/main.yml ansible/roles/application/tasks/main.yml\", we're loosing history for this file after git rm > git add and possibility to see real improvement in diff.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 11:50:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a927827a_11162a4e",
+      "file_path": "ansible/roles/application/tasks/transfer-helm-charts.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Become not needed anymore within this block?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 11:50:40.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9e1ffac2_8ce7758f",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Well in the start of the project you commented that default values should be in role defaults, and this is one of many corrections to that direction :)\n\nFor now my purpose was really testability as role is easier to test when reasonable defaults are defined instead of the need to define them in caller (in this case molecule.yml).\n\nI'm the anti copy-paste fanatic and admit that my heart is bleeding out to copy same rows here:/ And in case of this role there are many variables.\nSo I'm not sure how to deal with this mentally:)\n\nAs in the other hand group_vars should have most of them for documentation purposes better visible for user.\nApplication role has many variables that user may want to modify.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 12:24:33.000000000",
+      "in_reply_to": "c53ab530_a00792d1",
+      "unresolved": true
+    },
+    {
+      "id": "b429fedc_c9aaff16",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Role in ansible is a natural place for a functionality and calling it is also trivial. I would not say it overengineering as functionality is what we need here, not static file.\nOverride file is generated by code, same way it's possible for user to generate it or download/copy/template it from somewhere. The role can be simple.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 12:24:33.000000000",
+      "in_reply_to": "a8cf1edb_323b6a55",
+      "unresolved": true
+    },
+    {
+      "id": "b60dbda2_c525983f",
+      "file_path": "ansible/roles/application/tasks/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ok I try, is it still possible with subsequent changeset?",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 12:24:33.000000000",
+      "in_reply_to": "493f6ac4_124da6f0",
+      "unresolved": true
+    },
+    {
+      "id": "7833c223_3d5ae7c8",
+      "file_path": "ansible/roles/application/tasks/transfer-helm-charts.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "I did not saw that needed. All steps on nodes we anyway run as root (we do not use become anywere) and the localhost step in this block is reading directories from directory so root access should not be needed.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 12:24:33.000000000",
+      "in_reply_to": "a927827a_11162a4e",
+      "unresolved": true
+    },
+    {
+      "id": "9befdcd5_ddf43325",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "The issue with defining vars in several places is it's error prone - chances are someone changing a var will either change it only in one place and what's even worse - in wrong place.\n\nIf reasoning for putting variables in goup_vars is documenting them then i think we should put them only here and in documentation, not group_vars. In my opinion a user seeks instructions in doc, not in code. At least as long as everything that is user adjustable is documented.\n\nI understand however your concern about group_vars visibility by caller. Can't it somehow use actual group_vars files? https://molecule.readthedocs.io/en/latest/configuration.html mentions symlinking as a possible way to include those (paragraph beginning with \"An alternative to the above is symlinking. Molecule creates (...)\".",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 13:43:35.000000000",
+      "in_reply_to": "9e1ffac2_8ce7758f",
+      "unresolved": true
+    },
+    {
+      "id": "a65fcb1b_eb743bcb",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "What i called 'overengineering' in particular is the need to change as much as three vars in roles/application/defaults/main.yml in order to configure it: app_skip_helm_override to true, app_helm_override_role to some fancy role name, app_helm_override_file to the actual file template. \n\nIf done by just allowing user to provide own template only one var will  have to be setup + actual template.",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 13:43:35.000000000",
+      "in_reply_to": "b429fedc_c9aaff16",
+      "unresolved": true
+    },
+    {
+      "id": "655c9918_33c770d6",
+      "file_path": "ansible/roles/application/tasks/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Did some hacking specially for you:)\n\ngit reset --soft e9fca5ef39ebdc51d4d0f1af175960fb51cd903e\ngit reset HEAD ansible/roles/application/tasks/main.yml ansible/roles/application-install/tasks/main.yml\ngit checkout ansible/roles/application-install/tasks/main.yml\ncp ansible/roles/application/tasks/main.yml /tmp/\ngit mv -f ansible/roles/application-install/tasks/main.yml ansible/roles/application/tasks/main.yml\ncp /tmp/main.yml ansible/roles/application/tasks/main.yml\ngit add ansible/roles/application/tasks/main.yml\ngit commit -a\n\nI bet there's a more git native way to achieve the same. We can commence some contest on this, MichalP will buy beer for the winner :>",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 13:43:35.000000000",
+      "in_reply_to": "b60dbda2_c525983f",
+      "unresolved": true
+    },
+    {
+      "id": "66745332_14a2dc21",
+      "file_path": "ansible/roles/application/tasks/transfer-helm-charts.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "Ack",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 13:43:35.000000000",
+      "in_reply_to": "7833c223_3d5ae7c8",
+      "unresolved": false
+    },
+    {
+      "id": "8da75ea1_83f32f4a",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "yes, I know. Will think about this.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 14:03:45.000000000",
+      "in_reply_to": "9befdcd5_ddf43325",
+      "unresolved": true
+    },
+    {
+      "id": "8e67c720_e6fdbb59",
+      "file_path": "ansible/roles/application/tasks/install.yml",
+      "patchset_number": 2,
+      "line": 44,
+      "message": "app_skip_helm_override is skipping override completely, it should not set to true if one wants to provide one.\n\napp_helm_override_file is not template, it's just path and filename to the final file. That is not needed to be changed if user if fine with default path and default filename.\n\nonly thing is to change app_helm_override_role to own role that can be dead simple to provide own file (if static file) or generate the content with code like in our case we are doing.",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 14:03:45.000000000",
+      "in_reply_to": "a65fcb1b_eb743bcb",
+      "unresolved": true
+    },
+    {
+      "id": "4f7a0192_be3cf491",
+      "file_path": "ansible/roles/application/tasks/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "OMG, cool, thanks!",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-19 14:03:45.000000000",
+      "in_reply_to": "655c9918_33c770d6",
+      "unresolved": true
+    },
+    {
+      "id": "ae5dc99c_52e0043e",
+      "file_path": "ansible/roles/application/tasks/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "16€ or beer",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-19 14:08:07.000000000",
+      "in_reply_to": "4f7a0192_be3cf491",
+      "unresolved": true
+    },
+    {
+      "id": "a7806639_09b20899",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Ok for now I removed all duplication. Thanks for pushing.\n\nTrying to divide variables in the way only meaningful for users are in group_vars and technical variables in role defaults. \n\nAnd btw unfortunately molecule's linking to group_vars doe not work for us as we have many mandatory variables in group_vars without value and molecule cannot combine group_vars from link and group_vars given directly in molecule.yml (they are mutually exclusive).",
+      "author": {
+        "account_id": 3957,
+        "name": "Samuli Silvius",
+        "display_name": null,
+        "email": "s.silvius@partner.samsung.com",
+        "username": "silvius"
+      },
+      "updated": "2019-03-20 08:11:48.000000000",
+      "in_reply_to": "8da75ea1_83f32f4a",
+      "unresolved": true
+    },
+    {
+      "id": "3d2c6c04_0d891e43",
+      "file_path": "ansible/roles/application/defaults/main.yml",
+      "patchset_number": 2,
+      "line": null,
+      "message": "Not sure i'm following: if you symlink group_vars why there would by any need for additional var declarations in molecule.yml? Doesn't native ansible variable scope work with molecule? I mean if a variable is declared empty in group_vars then i guess it has some default value assigned in role's defaults. Why declare it in molecule.yml?",
+      "author": {
+        "account_id": 5097,
+        "name": "Bartek Grzybowski",
+        "display_name": null,
+        "email": "b.grzybowski@partner.samsung.com",
+        "username": "bgrzybowski"
+      },
+      "updated": "2019-03-20 11:26:29.000000000",
+      "in_reply_to": "a7806639_09b20899",
+      "unresolved": true
+    }
+  ]
+}

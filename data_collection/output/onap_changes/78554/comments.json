@@ -1,0 +1,59 @@
+{
+  "id": "appc~master~I35b0c54969d7f518b1bbfd52bcb8a8f298706712",
+  "change_id": "I35b0c54969d7f518b1bbfd52bcb8a8f298706712",
+  "_number": 78554,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "e7146c2c_8f41b7d6",
+      "file_path": "appc-adapters/appc-iaas-adapter/appc-iaas-adapter-bundle/src/main/java/org/onap/appc/adapter/iaas/impl/RequestContext.java",
+      "patchset_number": 1,
+      "line": 123,
+      "message": "one comment: one could argue that this is inappropriate behavior.  An interrupt indicates that the thread should stop running, not continue sleeping",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-02-15 13:38:57.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "4e3df6a8_6792d2fb",
+      "file_path": "appc-adapters/appc-iaas-adapter/appc-iaas-adapter-bundle/src/main/java/org/onap/appc/adapter/iaas/impl/RequestContext.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "What good does it do to call interrupt again here if it has already been called on this thread?\n\nIf this was a normal threaded method, I would say that we should break from the while loop in order to return from the delay method. But, based on the comments in this file, I think it is working as it was designed to right now and probably should not be changed.",
+      "author": {
+        "account_id": 49,
+        "name": "Patrick Brady",
+        "display_name": null,
+        "email": "patrick.brady@att.com",
+        "username": "pb071"
+      },
+      "updated": "2019-02-18 23:05:20.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8ac0ce9e_d3a4d48e",
+      "file_path": "appc-adapters/appc-iaas-adapter/appc-iaas-adapter-bundle/src/main/java/org/onap/appc/adapter/iaas/impl/RequestContext.java",
+      "patchset_number": 1,
+      "line": 128,
+      "message": "According to the javadocs: The interrupted status of the current thread is cleared when this exception is thrown.\n\nTo ensure that the interrupt flag is propagated up the invoker chain, it is good practice to invoke interrupt() after catching this exception; sonar enforces this.\n\nThat being said, I still wonder why this code continues in its loop instead of returning.  The \"interrupt\" is supposed to tell the Thread to shutdown.",
+      "author": {
+        "account_id": 811,
+        "name": "Jim Hahn",
+        "display_name": null,
+        "email": "jrh3@att.com",
+        "username": "jrh3"
+      },
+      "updated": "2019-02-19 14:45:49.000000000",
+      "in_reply_to": "4e3df6a8_6792d2fb",
+      "unresolved": false
+    }
+  ]
+}

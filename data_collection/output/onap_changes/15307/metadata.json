@@ -1,0 +1,392 @@
+{
+  "id": "policy%2Fdrools-pdp~master~Ie3167e5f784f35f98fa08997e624c51f976b6501",
+  "change_id": "Ie3167e5f784f35f98fa08997e624c51f976b6501",
+  "_number": 15307,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2017-09-26 03:11:07.000000000",
+    "updated": "2017-09-26 08:54:31.000000000",
+    "submitted": "2017-09-26 04:00:07.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    },
+    "submitter": {
+      "account_id": 477,
+      "name": "Jorge Hernandez",
+      "display_name": null,
+      "email": "jorge.hernandez-herrero@att.com",
+      "username": "jhh"
+    }
+  },
+  "subject": "junits fixes",
+  "commit_message": "junits fixes\n\nI found multiple issues from latest junit submissions when I built in\nmy local that I tried to fix.\n\n1.  feature-test-transaction - prone to race conditions as we have\n    experienced in some jenkins builds.   There is an assert that checks\n    if the thread is alive that monitors a policy controller kiesession\n    sanity.  The thread is very short-lived as it will exit right away\n    since it detects that the underlying \"drools session\"\n    does not have an attached rules artifact (brainless).\n    Removed that check to fix the race condition.\n\n2.  With the increment of junits in the PolicyEngine.manager for\n    multiple packages, it seems that the static instance is reused\n    across junits (which surprised me), so configuration files that\n    are not supposed to be read in junits for a package are\n    read, and for example the lock state could propagate across junits.\n    I tried to clean all that up to make sure that each junit deals with\n    what is has created and state does not propagate to other junits.\n\n3.  feature-active-standy-management had a missing \"junit\" dependency.\n    I generated the effective pom, and indeed did not show, some junits\n    failed to compile in the test phase.  Adding the test dependency\n    fixed the problem.\n\nAs a note, the feature-active-standy-management junits, take over 20 minutes to run.\nThis time is excessive (see below):\n\nlogs$ head -1 debug.log\n\n2017-09-25 21:24:21.630 [main] DEBUG o.o.p.d.c.t.StandbyStateManagementTest.setUpClass(111) - setUpClass: userDir=/media/sf_jh1730/dev/open/LF/git/master/policy/drools-pdp/feature-active-standby-management\n\nlogs$ tail -1 debug.log\n\n2017-09-25 21:46:29.801 [Timer-46] DEBUG o.o.p.d.a.DroolsPdpsElectionHandler.run(919) - TimerUpdateClass.run.exit\n\nChange-Id: Ie3167e5f784f35f98fa08997e624c51f976b6501\nIssue-ID: POLICY-109\nSigned-off-by: Jorge Hernandez <jh1730@att.com>\n",
+  "change_log": {
+    "entry_count": 26,
+    "entries": [
+      {
+        "id": "812d8870ca63558dd13c81e54eeb919b8ca87c7b",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:11:07.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "d5969397621517e038f471f0ebd29704735a1a59",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:16:13.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "a247f0f72331e5cf150988d7d73df433b3a8ba66",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 03:19:15.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/227/",
+        "patchset_number": 2
+      },
+      {
+        "id": "25194ac9f76450412ea624ea03710985e1d759bb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 03:46:55.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-verify-java/227/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-verify-java/227",
+        "patchset_number": 2
+      },
+      {
+        "id": "4dd2a87bbf1bb32e0fc1c919e2ad8ba50f36768e",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:57:34.000000000",
+        "message": "Patch Set 2:\n\nNote that also urls that contain corporation identifiers have been removed",
+        "patchset_number": 2
+      },
+      {
+        "id": "c7f07b50578bd7ac6fd9ee3fe338cff150a2d72f",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:57:52.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "14b153d6b1bf2a3e59ba3c6bb3a7a8e778938c7a",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:58:26.000000000",
+        "message": "Patch Set 2:\n\nmerging to correct problems present in current load",
+        "patchset_number": 2
+      },
+      {
+        "id": "a2c621c0406bff99845f8cb45a959d6ead86ba55",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 03:59:57.000000000",
+        "message": "Patch Set 2:\n\nTeam will fix tomorrow, any comments.",
+        "patchset_number": 2
+      },
+      {
+        "id": "104c615a1c4c8ba65df89aac055dcad196feaa72",
+        "author": null,
+        "author_role": "UNKNOWN",
+        "timestamp": "2017-09-26 04:00:11.000000000",
+        "message": "Change has been successfully merged by Jorge Hernandez",
+        "patchset_number": 2
+      },
+      {
+        "id": "c3ac34f4b95dd5607469f3abd9f447afb27bb3cb",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 04:04:53.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/114/",
+        "patchset_number": 2
+      },
+      {
+        "id": "a072eb4a9b8fe7d9ccd243a85e7cff2f29f1c564",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 04:16:24.000000000",
+        "message": "Patch Set 2:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/114/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/114/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-java/114",
+        "patchset_number": 2
+      },
+      {
+        "id": "7c59938e6bbc2893e48a1c7c06a4aafb2bc9683b",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 04:26:21.000000000",
+        "message": "Patch Set 2:\n\nremerge",
+        "patchset_number": 2
+      },
+      {
+        "id": "ebd487e28ec5aa46c59cd364e357aedbb62beaa6",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 04:31:43.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/115/",
+        "patchset_number": 2
+      },
+      {
+        "id": "fb68ad27656773e346d4640b428f0692d26312f9",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 04:59:46.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-merge-java/115/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-merge-java/115",
+        "patchset_number": 2
+      },
+      {
+        "id": "dad02acc9501c1ff25763671886dd86f6eb1028e",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 05:00:13.000000000",
+        "message": "Patch Set 2:\n\nplease release",
+        "patchset_number": 2
+      },
+      {
+        "id": "501c0f475cb9a43f8bb1a99f7a1a09d7f9a98549",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 05:04:40.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/241/",
+        "patchset_number": 2
+      },
+      {
+        "id": "8b4614f9cf9ef5caafea43ff177568289fc2e936",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 05:23:55.000000000",
+        "message": "Patch Set 2:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/241/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/241/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-release-version-java-daily/241",
+        "patchset_number": 2
+      },
+      {
+        "id": "f057a23a078bc4061a4b5ffc1dd9ba59a855a9ff",
+        "author": {
+          "account_id": 477,
+          "name": "Jorge Hernandez",
+          "display_name": null,
+          "email": "jorge.hernandez-herrero@att.com",
+          "username": "jhh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2017-09-26 05:26:31.000000000",
+        "message": "Patch Set 2:\n\nplease release",
+        "patchset_number": 2
+      },
+      {
+        "id": "6fef792b9ca25e2d3dc408bb4a7662e6ad5dc1f0",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 05:35:57.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/242/",
+        "patchset_number": 2
+      },
+      {
+        "id": "aa4e7fc597ff055c1ca25a993374547dc0027c6a",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 05:45:46.000000000",
+        "message": "Patch Set 2:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/242/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/242/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-release-version-java-daily/242",
+        "patchset_number": 2
+      },
+      {
+        "id": "5237b0fe624010ab124c982c9cd2bc4cea5b6b88",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 07:48:29.000000000",
+        "message": "Patch Set 2:\n\nplease release",
+        "patchset_number": 2
+      },
+      {
+        "id": "e7a8383626082a68700edef9010c2cffeb6384d8",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 07:54:32.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/243/",
+        "patchset_number": 2
+      },
+      {
+        "id": "1dbbf1f142d75c2f18244df4eefa1dee8f894dd5",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 08:19:57.000000000",
+        "message": "Patch Set 2:\n\nBuild Failed \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/243/ : FAILURE\n\nNo problems were identified. If you know why this problem occurred, please add a suitable Cause for it. ( https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/243/ )\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-release-version-java-daily/243",
+        "patchset_number": 2
+      },
+      {
+        "id": "d27bc2888f8a5eb3eadc7e6007eb5bc7c14ebf45",
+        "author": {
+          "account_id": 57,
+          "name": "Pamela Dragosh",
+          "display_name": null,
+          "email": "pd1248@att.com",
+          "username": "pdragosh"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 08:33:13.000000000",
+        "message": "Patch Set 2:\n\nplease release",
+        "patchset_number": 2
+      },
+      {
+        "id": "ecf88b1a07bfc5f417fa32d51eef9d2f341ba705",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 08:36:39.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/244/",
+        "patchset_number": 2
+      },
+      {
+        "id": "aedd684f2b62252be40a6f9d3052139e13053689",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2017-09-26 08:54:31.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/policy-drools-pdp-master-release-version-java-daily/244/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/policy-drools-pdp-master-release-version-java-daily/244",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

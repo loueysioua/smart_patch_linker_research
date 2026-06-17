@@ -1,0 +1,450 @@
+{
+  "id": "ccsdk%2Ffeatures~master~I33787ccca2a8acd8085db6b2a915e8f2ac2511ec",
+  "change_id": "I33787ccca2a8acd8085db6b2a915e8f2ac2511ec",
+  "_number": 124753,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "38fb0563_7de23553",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/access/binding/GenericTransactionUtils.java",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "This change is breaking the opendaylight cluster scenario. \nReason: The implicite close is not handled correctly by underlaying opendaylight netconf service.",
+      "author": {
+        "account_id": 4931,
+        "name": "Herbert Eiselt",
+        "display_name": null,
+        "email": "herbert.eiselt@highstreet-technologies.com",
+        "username": "highstreetherbert"
+      },
+      "updated": "2021-10-20 14:12:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ebfa72bb_f134873c",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/access/binding/GenericTransactionUtils.java",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "Not sure I understand :) \nThe goald is to close readTransaction at the end. \nThe problem is only with the implicite close ? You mean, I just need to add a line \"readTransaction.close()\" for an explicite close or just we can't close readTransaction ?\n\nI also do the same on ODLEventListenerHandler :(\n\nSonar issue : https://sonarcloud.io/project/issues?id=onap_ccsdk-features&issues=AXIslx6i0PGsbkeF8ODB&open=AXIslx6i0PGsbkeF8ODB",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-20 14:22:59.000000000",
+      "in_reply_to": "38fb0563_7de23553",
+      "unresolved": true
+    },
+    {
+      "id": "e5889cc9_8cfbc69e",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/conf/odlGeo/ClusterRoleInfo.java",
+      "patchset_number": 3,
+      "line": 28,
+      "message": "See at multiple places:\n\n\"*\" needs to be replaced with {0,1024}\nI think 1024 is a valid magnitude for the strings.\nBut the generic assumption for digits to have only 10 is risky .. should be also {0,1024}\n\nUsed Java 7 regex defintion;\nX*\t-> X, zero or more times\nX{n,m}  -> at least n but not more than m times\nhttps://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html",
+      "author": {
+        "account_id": 4931,
+        "name": "Herbert Eiselt",
+        "display_name": null,
+        "email": "herbert.eiselt@highstreet-technologies.com",
+        "username": "highstreetherbert"
+      },
+      "updated": "2021-10-20 14:31:14.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "61c2f67b_58ae22e7",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/conf/odlGeo/ClusterRoleInfo.java",
+      "patchset_number": 3,
+      "line": 28,
+      "message": "Yes, I'm agree X* is zero or more times. \nBut in this case it was maybe a mistake. \nLook at the parsing after : \"Integer.parseInt(matcher.group(2));\"\nThat will return an exception if string is empty... so maybe {1,1024} is more secure no ?\n\nBut ok to change {1,10} with {1,1024}",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-20 14:39:25.000000000",
+      "in_reply_to": "e5889cc9_8cfbc69e",
+      "unresolved": true
+    },
+    {
+      "id": "4679cf69_60e0a72f",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/access/binding/GenericTransactionUtils.java",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "I am refering to this: https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html\n\nThe try(ressources) is always implicitely closing the transaction per java definition. \nBut the \"close\" in opendaylight netconf service is not correctly implemented and will terminate the read immediately. Because of this opendaylight problem this change can not be done. Or in other words the close of the transaction must never be called, because of wrong implementation. \n\nNot all Sonarqube errors or warnings make sense, because sonarqube is not knowing such specifics. Excuse me to say that ;-)",
+      "author": {
+        "account_id": 4931,
+        "name": "Herbert Eiselt",
+        "display_name": null,
+        "email": "herbert.eiselt@highstreet-technologies.com",
+        "username": "highstreetherbert"
+      },
+      "updated": "2021-10-20 14:52:13.000000000",
+      "in_reply_to": "ebfa72bb_f134873c",
+      "unresolved": true
+    },
+    {
+      "id": "9c9f1e89_828c9d4c",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/access/binding/GenericTransactionUtils.java",
+      "patchset_number": 3,
+      "line": 111,
+      "message": "You are totally right :)\nNot all sonar problems have to be solved.\n\nI will rollback all my changes like this one.\n\nBut I found some case where you have already closed the transaction :\nhttps://github.com/onap/ccsdk-features/blob/c8f7e3f376992b202ba26464b9b329d6c4b2821d/sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/impl/DataProviderServiceImpl.java#L430\n\nAt least 4 times (not a lot) Should I also change them ?",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-20 15:05:57.000000000",
+      "in_reply_to": "4679cf69_60e0a72f",
+      "unresolved": true
+    },
+    {
+      "id": "700885e6_1b672df9",
+      "file_path": "sdnr/wt/netconfnode-state-service/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/netconfnodestateservice/impl/conf/odlGeo/ClusterRoleInfo.java",
+      "patchset_number": 3,
+      "line": 28,
+      "message": "I like to describe the problem that I have: You changed a lot of places. The team here that needs to review all of this changes is small and limited. \nIf you do a syntax change that is not changing the meaning of the code I can look to it and say: Ok, this is the same like before and it is Ok. \nBut if you change the code because you think, there may be an error than we have to implicit changes .. and someone has to dive deep into it to confirm your interpretation or to say .. the change is not correct. \nI really appreciate that you care about sonarqube. But to make the review simpler, please split the change into a part that is fixing sonarqube and perhaps a second one that is doing fixes.",
+      "author": {
+        "account_id": 4931,
+        "name": "Herbert Eiselt",
+        "display_name": null,
+        "email": "herbert.eiselt@highstreet-technologies.com",
+        "username": "highstreetherbert"
+      },
+      "updated": "2021-10-20 15:08:46.000000000",
+      "in_reply_to": "61c2f67b_58ae22e7",
+      "unresolved": true
+    },
+    {
+      "id": "30fb3494_1f451826",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPPNFRegVESMsgConsumer.java",
+      "patchset_number": 3,
+      "line": 144,
+      "message": "We should retain the null check",
+      "author": {
+        "account_id": 6215,
+        "name": "Ravi Pendurty",
+        "display_name": null,
+        "email": "ravi.pendurty@highstreet-technologies.com",
+        "username": "pendurty"
+      },
+      "updated": "2021-10-21 06:47:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3b36ae35_92874a37",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPPNFRegVESMsgConsumer.java",
+      "patchset_number": 3,
+      "line": 149,
+      "message": "We should retain the null check",
+      "author": {
+        "account_id": 6215,
+        "name": "Ravi Pendurty",
+        "display_name": null,
+        "email": "ravi.pendurty@highstreet-technologies.com",
+        "username": "pendurty"
+      },
+      "updated": "2021-10-21 06:47:43.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a9316c54_1cafedff",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPPNFRegVESMsgConsumer.java",
+      "patchset_number": 3,
+      "line": 144,
+      "message": "Done",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 07:06:40.000000000",
+      "in_reply_to": "30fb3494_1f451826",
+      "unresolved": false
+    },
+    {
+      "id": "877414e3_abb8d03c",
+      "file_path": "sdnr/wt/mountpoint-registrar/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/mountpointregistrar/impl/DMaaPPNFRegVESMsgConsumer.java",
+      "patchset_number": 3,
+      "line": 149,
+      "message": "Done",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 07:06:40.000000000",
+      "in_reply_to": "3b36ae35_92874a37",
+      "unresolved": false
+    },
+    {
+      "id": "4406a69e_4f5428eb",
+      "file_path": "sdnr/wt/common/src/main/java/org/onap/ccsdk/features/sdnr/wt/common/database/data/IndicesEntry.java",
+      "patchset_number": 4,
+      "line": 137,
+      "message": "not sure why this solution should be better than mine? Mine at least makes sure that numeric parsed values are only containing numbers",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "3ae25128_0ed2e988",
+      "file_path": "sdnr/wt/data-provider/dblib/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/sqldb/data/entity/DatabaseIdGenerator.java",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "that's not the same as the regex. The regex does not end at the line.",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9394a80e_6453ff28",
+      "file_path": "sdnr/wt/data-provider/dblib/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/sqldb/data/entity/DatabaseIdGenerator.java",
+      "patchset_number": 4,
+      "line": 67,
+      "message": "That does not do the same as the regex. The regex has no end flag. So the objectId can contain more \"abcsdk efas [layerProtol=MWPS]\", e.g. \"abcsdk efas [layerProtol=MWPS] wdads\"",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "bed0c8a7_f81bb0c4",
+      "file_path": "sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/elasticsearch/data/entity/FaultEntityManager.java",
+      "patchset_number": 4,
+      "line": 74,
+      "message": "due the fact that this is duplicated, we can replace this with a call of \nDatabaseIdGenerator.getFaultcurrentId(nodeId, objectId, problemName)",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ef0cd0ce_9424024b",
+      "file_path": "sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/http/yangschema/YangFilename.java",
+      "patchset_number": 4,
+      "line": 33,
+      "message": "so you want to limit the path for the filename? okay for me. But 0 doesnt make any sense",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "32656b87_280b6331",
+      "file_path": "sdnr/wt/odlux/core/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/odlux/ResFilesServlet.java",
+      "patchset_number": 4,
+      "line": 64,
+      "message": "with this I think the only effect is that the response will not contain the error. So it will still be a 500. Don't know what is better?",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "b1fef8ec_750759bc",
+      "file_path": "sdnr/wt/odlux/core/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/odlux/ResFilesServlet.java",
+      "patchset_number": 4,
+      "line": 88,
+      "message": "same as above",
+      "author": {
+        "account_id": 5625,
+        "name": "Michael Durre",
+        "display_name": "Michael Dürre",
+        "email": "michael.duerre@highstreet-technologies.com",
+        "username": "metaljackL"
+      },
+      "updated": "2021-10-21 12:21:37.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "03c30837_d0756dda",
+      "file_path": "sdnr/wt/common/src/main/java/org/onap/ccsdk/features/sdnr/wt/common/database/data/IndicesEntry.java",
+      "patchset_number": 4,
+      "line": 137,
+      "message": "This is mainly to remove the regexp :)\nYes you'r check number, but parseInt also do it and I catch the exception.\n\nOne bad point on my solution it's about first field valudation... I don't check if value are in (yellow|red|green)... \n\nAnd about \"why remove regexp\". it's also about sonar 😊https://sonarcloud.io/project/security_hotspots?id=onap_ccsdk-features&hotspots=AXhZlh1XV4OlGYpDeGQ7",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 12:43:29.000000000",
+      "in_reply_to": "4406a69e_4f5428eb",
+      "unresolved": true
+    },
+    {
+      "id": "aff3e01b_61116eb6",
+      "file_path": "sdnr/wt/data-provider/dblib/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/sqldb/data/entity/DatabaseIdGenerator.java",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "yes, I will rollback",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 12:43:29.000000000",
+      "in_reply_to": "3ae25128_0ed2e988",
+      "unresolved": true
+    },
+    {
+      "id": "d4bd418d_8db6bb12",
+      "file_path": "sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/elasticsearch/data/entity/FaultEntityManager.java",
+      "patchset_number": 4,
+      "line": 74,
+      "message": "Yes good point.",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 12:43:29.000000000",
+      "in_reply_to": "bed0c8a7_f81bb0c4",
+      "unresolved": true
+    },
+    {
+      "id": "25e95313_c1a75315",
+      "file_path": "sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/http/yangschema/YangFilename.java",
+      "patchset_number": 4,
+      "line": 33,
+      "message": "Agree about 0. But it was \"*\" into regexp so 0 was possible.\n1024 that's enough?\nI change change with {1,2000}, like you want",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 12:43:29.000000000",
+      "in_reply_to": "ef0cd0ce_9424024b",
+      "unresolved": true
+    },
+    {
+      "id": "e6d338e3_a0eb4cac",
+      "file_path": "sdnr/wt/odlux/core/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/odlux/ResFilesServlet.java",
+      "patchset_number": 4,
+      "line": 64,
+      "message": "It's about this error : https://sonarcloud.io/project/issues?id=onap_ccsdk-features&issues=AXwXbkbQzVeWhq2mfFmV&open=AXwXbkbQzVeWhq2mfFmV\n\nThe explanation :\nFailure to catch exceptions in a servlet could leave a system in a vulnerable state, possibly resulting in denial-of-service attacks, or the exposure of sensitive information because when a servlet throws an exception, the servlet container typically sends debugging information back to the user. And that information could be very valuable to an attacker.\n\nIt's to avoid leak of stacktrace.\nTo be honest, I did not fix all case. It's more an example.",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-21 12:43:29.000000000",
+      "in_reply_to": "32656b87_280b6331",
+      "unresolved": true
+    },
+    {
+      "id": "9f4e72cd_86e9a0e2",
+      "file_path": "sdnr/wt/data-provider/dblib/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/sqldb/data/entity/DatabaseIdGenerator.java",
+      "patchset_number": 3,
+      "line": 66,
+      "message": "Done",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-22 06:08:45.000000000",
+      "in_reply_to": "aff3e01b_61116eb6",
+      "unresolved": false
+    },
+    {
+      "id": "6a154ffb_d4a056bf",
+      "file_path": "sdnr/wt/data-provider/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/dataprovider/database/elasticsearch/data/entity/FaultEntityManager.java",
+      "patchset_number": 4,
+      "line": 74,
+      "message": "Done",
+      "author": {
+        "account_id": 7700,
+        "name": "Samuel Liard",
+        "display_name": null,
+        "email": "samuel.liard@gmail.com",
+        "username": "sliard"
+      },
+      "updated": "2021-10-22 06:08:45.000000000",
+      "in_reply_to": "d4bd418d_8db6bb12",
+      "unresolved": false
+    },
+    {
+      "id": "a986b44b_e227fcc3",
+      "file_path": "sdnr/wt/devicemanager-core/provider/src/main/java/org/onap/ccsdk/features/sdnr/wt/devicemanager/performancemanager/impl/PerformanceManagerTask.java",
+      "patchset_number": 7,
+      "line": 140,
+      "message": "Not taken over: Null pointer because actualNE is nullable.",
+      "author": {
+        "account_id": 4931,
+        "name": "Herbert Eiselt",
+        "display_name": null,
+        "email": "herbert.eiselt@highstreet-technologies.com",
+        "username": "highstreetherbert"
+      },
+      "updated": "2021-11-04 16:11:04.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

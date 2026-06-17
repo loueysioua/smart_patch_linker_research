@@ -1,0 +1,93 @@
+{
+  "id": "sdc~master~Ic75765473ddca16e351f9cde27a5e8d336413325",
+  "change_id": "Ic75765473ddca16e351f9cde27a5e8d336413325",
+  "_number": 128665,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "ef70351b_b6a1fa83",
+      "file_path": "catalog-ui/src/app/ng2/pages/composition/interface-operatons/interface-operations.component.ts",
+      "patchset_number": 4,
+      "line": 279,
+      "message": "it seems you are prematurely closing the modal, this call should be inside the updateComponentInstanceInterfaceOperation subscribe.\nThen, in the UI tests, after clicking to save/update, you need to wait for this spinner to show and then to disappear. You can use org.onap.sdc.frontend.ci.tests.utilities.LoaderHelper#waitForLoader(org.onap.sdc.frontend.ci.tests.utilities.LoaderHelper.XpathSelector, int)",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-25 17:09:20.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "e5090c21_cf20feef",
+      "file_path": "catalog-ui/src/app/ng2/pages/composition/interface-operatons/interface-operations.component.ts",
+      "patchset_number": 4,
+      "line": 279,
+      "message": "Done",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-04-26 16:23:28.000000000",
+      "in_reply_to": "ef70351b_b6a1fa83",
+      "unresolved": false
+    },
+    {
+      "id": "51135ac6_76bf2c63",
+      "file_path": "integration-tests/src/test/java/org/onap/sdc/frontend/ci/tests/pages/component/workspace/InterfaceDefinitionOperationsModal.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "are you certain that the loader class in the modal is \"tlv-loader\"?\nI'm asking because the method you are calling has a sleep for 0.5s which can be enough time for the current operation to complete. If you are checking for the incorrect loader, the time is what working for you, not the loader verification itself.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-26 16:58:32.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "a35d1e98_bb8685c2",
+      "file_path": "integration-tests/src/test/java/org/onap/sdc/frontend/ci/tests/pages/component/workspace/InterfaceDefinitionOperationsModal.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "The class name for the spinner is \"tlv-loader large\". Not sure how relevant the large is but, I set the timeout to 99999999 and the test still pass",
+      "author": {
+        "account_id": 6708,
+        "name": "JEFF VAN DAM",
+        "display_name": "Jeff van Dam",
+        "email": "jeff.van.dam@est.tech",
+        "username": "JvD_Ericsson"
+      },
+      "updated": "2022-04-27 08:13:11.000000000",
+      "in_reply_to": "51135ac6_76bf2c63",
+      "unresolved": false
+    },
+    {
+      "id": "c3085a39_d15778aa",
+      "file_path": "integration-tests/src/test/java/org/onap/sdc/frontend/ci/tests/pages/component/workspace/InterfaceDefinitionOperationsModal.java",
+      "patchset_number": 5,
+      "line": 109,
+      "message": "Ok, so that is correct.\nThe problem of having a sleep time is if your current spinner/task has a different selector and takes less time in the screen than the sleep time.\nLet's say your spinner has another class/selector \"my-spinner-class\", and it takes less than 0.5 seconds in the screen. The current test will wait for 0.5s and then check if an element with the \"tlv-loader\" class is not present, which is true and will pass. But then you are checking for the incorrect spinner class and the test is still passing because of the current sleep time, not because you are checking for a spinner in the screen.\nIf it takes more than 0.5s, it would fail, as the spinner will still be on the screen when the \"tlv-loader\" class check is done (it will not find it and think that the spinner is gone and the task is done).\nWith that, you have an intermittent test.\nThat is why I was asking to check if the class is the one expected.",
+      "author": {
+        "account_id": 5565,
+        "name": "Andr� Schmid",
+        "display_name": "André Schmid",
+        "email": "andre.schmid@est.tech",
+        "username": "andre.schmid"
+      },
+      "updated": "2022-04-27 08:22:43.000000000",
+      "in_reply_to": "a35d1e98_bb8685c2",
+      "unresolved": false
+    }
+  ]
+}

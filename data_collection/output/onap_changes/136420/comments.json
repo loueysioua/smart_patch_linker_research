@@ -1,0 +1,122 @@
+{
+  "id": "cps~master~Ic3f154aca60c3e1244ff4fd9a4c4865964884b31",
+  "change_id": "Ic3f154aca60c3e1244ff4fd9a4c4865964884b31",
+  "_number": 136420,
+  "change_comments": [
+    {
+      "id": "22950fb5_30942775",
+      "patchset_number": 1,
+      "message": "As of now -1 till get confirmation from Toine.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-11-09 13:07:38.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9db8a771_a2186057",
+      "patchset_number": 1,
+      "message": "@Sean, can we have change the name of this method (setTrustLevelPerDmiPlugin) to populateTrustLevelPerDmiPlugin(...) and form up the order of methods mentioned in my comment below? Then, I'll give +1.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-11-09 15:28:33.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "8073c04e_b8e7ae0d",
+      "patchset_number": 2,
+      "message": "looks fine.",
+      "author": {
+        "account_id": 7965,
+        "name": "Priyank Maheshwari",
+        "display_name": null,
+        "email": "priyank.maheshwari@est.tech",
+        "username": "mpriyank"
+      },
+      "updated": "2023-11-14 10:46:13.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    }
+  ],
+  "inline_comments": [
+    {
+      "id": "5209a9d5_3d518d7c",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 133,
+      "message": "I think, populating DMI plugin and cm handle caches have to be done after a successful registration? @Toine, please share your thoughts on this so that we can decide on moving this line to after line 120. Also we should consider moving 'line 118' to after line 120.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-11-09 13:07:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "609c08d9_b2eb6980",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 133,
+      "message": "The DMI (plugin) trustlevel itself can be set at the start ie. we know the DMI is alive!!!!\nbut the CM-Handles trustlevel should be set as we process them. I am not sure if the  method being called here does both... Maybe it needs to be split in that case \n\n\nthink of this scenario: registration can take 20 Minutes!\nAfter 1 minute a few hundred cm handles might be ready and trusted! The user could theoreticaly look for data form them\nbut if we check the TrustLevel and combine it with the DMI (plugin) trustlevel it wil NOT be trusted which doesn't make sense...",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-11-09 14:09:24.000000000",
+      "in_reply_to": "5209a9d5_3d518d7c",
+      "unresolved": true
+    },
+    {
+      "id": "8d33a7df_106033c5",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 1,
+      "line": 120,
+      "message": "I got what you meant. For this patch set lets have the order of populating the caches like this:\n\n   1. setTrustLevelPerDmiPlugin(dmiPluginRegistration);\n   2. dmiPluginRegistrationResponse.setCreatedCmHandles(                parseAndProcessCreatedCmHandlesInRegistration(dmiPluginRegistration));\n   3. populateTrustLevelPerCmHandleCache(dmiPluginRegistration);\n   \n   \nActually, the 3rd one has to be handled in parseAndProcess... method but let's have this commit merge in this way so that later we'll change to populate process of cm handle cache.",
+      "author": {
+        "account_id": 8063,
+        "name": "Halil Cakal",
+        "display_name": null,
+        "email": "halil.cakal@est.tech",
+        "username": "halil.cakal"
+      },
+      "updated": "2023-11-09 15:28:33.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "85865ed7_029d10ab",
+      "file_path": "cps-ncmp-service/src/main/java/org/onap/cps/ncmp/api/impl/NetworkCmProxyDataServiceImpl.java",
+      "patchset_number": 2,
+      "line": 533,
+      "message": "NB: i woulf ahve preferred if you had extracted out something like:\neffectiveServiceName = .... ?  ...  : ...\ntrustLevelPerDmiPLugin.put(effectiveServiceName, TrustLevel.COMPLETE)",
+      "author": {
+        "account_id": 6639,
+        "name": "Toine Siebelink",
+        "display_name": null,
+        "email": "toine.siebelink@est.tech",
+        "username": "ToineSiebelink"
+      },
+      "updated": "2023-11-13 15:58:34.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    }
+  ]
+}

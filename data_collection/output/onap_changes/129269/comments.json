@@ -1,0 +1,195 @@
+{
+  "id": "doc~master~Iaababa9e25e87604b1bc6464f65156ec6e6b2d31",
+  "change_id": "Iaababa9e25e87604b1bc6464f65156ec6e6b2d31",
+  "_number": 129269,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "d25b2dbc_305841ff",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "I am not completely sure this is the right solution\n\nAs fat as I know, \"rsa\" is already the default parameter of openssh (though I am not sure about this for openssh-portable implementation - cf rmark below). And sha1 used to be very popular and enabled by default in the past.\nIf prior version 8.7 only supports rsa SHA1, this might not fix the issue.\nShouldn't it be \"ssh-keygen -t rsa-sha2-256\" rahter ?",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-16 07:42:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "550256db_f0a42c6f",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 94,
+      "message": "I think we must be more precise about the versions and OS affected.\nSHA-1 might be the default behavior for older versions.\n\nI guess these recommendations are indeed for \"portable openSSH\" present by default on Windows systems since Windows 11.\nOther implementations might not be impacted (for example the one shipped with cygwin also intended for Windows)\nMore details about this at  https://www.openssh.com/portable.html",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-16 07:42:47.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "06325a09_c7a30851",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Right, RSA is the default parameter. But since openssh 8.8, it disabled the rsa signature using sha1 for the high cost of hash collision reason. Thank you for your reply. I doubled checked the openssh release notes, for 8.7 and prior version, they won't be affected. Based on the issue, basically there can be two ways. One is to re-enable the rsa-sha1 in ~/.ssh/config file, where openssh offical release notes points it and but didn't suggest. And another way is switching the algorithm to ECDSA or Ed25519, which is suggested by the offical release notes.",
+      "author": {
+        "account_id": 8040,
+        "name": "Shuting Qing",
+        "display_name": null,
+        "email": "qingshuting1@huawei.com",
+        "username": "mirandatsing"
+      },
+      "updated": "2022-05-17 06:49:58.000000000",
+      "in_reply_to": "d25b2dbc_305841ff",
+      "unresolved": true
+    },
+    {
+      "id": "a2883164_449c05e4",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 94,
+      "message": "Sorry for the misunderstanding here. I think it's not the OS reason, it's only the openssh reason. Initially, i pointed it out here because if someone is using win10 and download git,  \"git for windows 2.33.2\" will be matched and installed for user by default. \"Git for windows 2.33.2\" uses openssh 8.8. Openssh 8.8 is the key point leads to the problem here. \n\nGood suggestion. I'll rearrange my words and make it clear what will affects.",
+      "author": {
+        "account_id": 8040,
+        "name": "Shuting Qing",
+        "display_name": null,
+        "email": "qingshuting1@huawei.com",
+        "username": "mirandatsing"
+      },
+      "updated": "2022-05-17 06:49:58.000000000",
+      "in_reply_to": "550256db_f0a42c6f",
+      "unresolved": true
+    },
+    {
+      "id": "301b21a9_1efc41a8",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "https://www.openssh.com/releasenotes.html",
+      "author": {
+        "account_id": 8040,
+        "name": "Shuting Qing",
+        "display_name": null,
+        "email": "qingshuting1@huawei.com",
+        "username": "mirandatsing"
+      },
+      "updated": "2022-05-17 06:53:52.000000000",
+      "in_reply_to": "06325a09_c7a30851",
+      "unresolved": true
+    },
+    {
+      "id": "9f08789d_a64fd909",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "OK I think we must be more clear that sha-1 has security issues in that case.\n\ned25519 is supported supported since OpenSSH 6.5\nAnd with openssh version 8.2 present on most linux distros today like with openssh 8.8, the ssh-keygen default still points to \"rsa\" that points itself to “rsa-sha2-512\" (based on SHA2 and not SHA1). Both are not concerned.\nSo I don't understand the point of the recommendation above.\n\nI guess this issue affects mainly \"Git for windows 2.33.2\" because it still uses an old version of ssh-keygen configuration. But there are probably plenty of similar cases.\n\nTo be more generic, what about simply telling that some implementations such as \"Git for windows 2.33.2\" still uses an old configurtation of ssh-keygen?\nIn that case they generate by default RSA-SHA1 key pairs no more supported and\nwe recommand to use use ecdsa or ed25519 key pairs.",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-17 18:58:17.000000000",
+      "in_reply_to": "301b21a9_1efc41a8",
+      "unresolved": true
+    },
+    {
+      "id": "38f8990c_0b12caa9",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 94,
+      "message": "OK thx for the clarification, it makes more sense to me now.",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-17 18:58:17.000000000",
+      "in_reply_to": "a2883164_449c05e4",
+      "unresolved": false
+    },
+    {
+      "id": "5f090093_1a64d463",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "With ecdsa or ed25519, the public key generated won't be in .ssh/id_rsa.pub => vote -1",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-17 18:58:17.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "00cddf22_07c57bb5",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "more details at https://man.openbsd.org/ssh-keygen.1",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-17 19:04:36.000000000",
+      "in_reply_to": "5f090093_1a64d463",
+      "unresolved": true
+    },
+    {
+      "id": "cd0c8b2e_f126bf56",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 1,
+      "line": 92,
+      "message": "Ack. Thanks for replying. Worth thinking about it. I'll go and verify it on linux.",
+      "author": {
+        "account_id": 8040,
+        "name": "Shuting Qing",
+        "display_name": null,
+        "email": "qingshuting1@huawei.com",
+        "username": "mirandatsing"
+      },
+      "updated": "2022-05-18 03:25:26.000000000",
+      "in_reply_to": "9f08789d_a64fd909",
+      "unresolved": true
+    },
+    {
+      "id": "241b788d_e10ed2b8",
+      "file_path": "docs/guides/onap-developer/how-to-use-docs/setting-up-environment.rst",
+      "patchset_number": 3,
+      "line": 102,
+      "message": "Ack",
+      "author": {
+        "account_id": 3685,
+        "name": "Guillaume Lambert",
+        "display_name": null,
+        "email": "guillaume.lambert@orange.com",
+        "username": "guillaume.lambert"
+      },
+      "updated": "2022-05-18 07:13:02.000000000",
+      "in_reply_to": "00cddf22_07c57bb5",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "ccsdk%2Fsli%2Fplugins~master~Iefd56ca470382be139f185fdf84b6c0de0fa99f6",
+  "change_id": "Iefd56ca470382be139f185fdf84b6c0de0fa99f6",
+  "_number": 13727,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "9a437d4f_a50f9a87",
+      "file_path": "restapi-call-node/provider/src/main/java/org/onap/ccsdk/sli/plugins/restapicall/XmlParser.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "What throws NumberFormatException in this try block?  Note - we had a patch earlier this week that added a specific exception that was not thrown in try block.  Patch verified okay, but then broke the merge - so be careful!",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2017-09-20 19:41:03.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_134d8c9a",
+      "file_path": "restapi-call-node/provider/src/main/java/org/onap/ccsdk/sli/plugins/restapicall/XmlParser.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "It can be caused by Integer.parseInt(s) which will be invoked from startElement() which will be invoked during saxParser.parse().\n\nI have added a testcase to test the same, if we remove the catch for NumberFormatException and run added testcases a NumberFormatException will be thrown with below call stack:\n\njava.lang.Exception: Unexpected exception, expected<org.onap.ccsdk.sli.core.sli.SvcLogicException> but was<java.lang.NumberFormatException>\n\n\tat org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:28)\n\tat \n..................\n\nCaused by: java.lang.NumberFormatException: For input string: \"a\"\n\tat java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)\n\tat java.lang.Integer.parseInt(Integer.java:580)\n\tat java.lang.Integer.parseInt(Integer.java:615)\n\tat org.onap.ccsdk.sli.plugins.restapicall.XmlParser$Handler.getInt(XmlParser.java:154)\n\tat org.onap.ccsdk.sli.plugins.restapicall.XmlParser$Handler.startElement(XmlParser.java:110)\n\tat com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.startElement(AbstractSAXParser.java:509)\n\tat com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanStartElement(XMLDocumentFragmentScannerImpl.java:1359)\n\tat com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2784)\n\tat com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:602)\n\tat com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:505)\n\tat com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:841)\n\tat com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:770)\n\tat com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)\n\tat com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1213)\n\tat com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)\n\tat com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(SAXParserImpl.java:327)\n\tat javax.xml.parsers.SAXParser.parse(SAXParser.java:195)\n\tat org.onap.ccsdk.sli.plugins.restapicall.XmlParser.convertToProperties(XmlParser.java:63)\n\tat jtest.org.onap.ccsdk.sli.plugins.restapicall.TestXmlParser.testInvalidLength(TestXmlParser.java:106)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:19)\n\t... 14 more",
+      "author": {
+        "account_id": 1443,
+        "name": "Gaurav Agrawal",
+        "display_name": null,
+        "email": "gaurav.agrawal@huawei.com",
+        "username": "agrawalgaurav"
+      },
+      "updated": "2017-09-21 05:58:10.000000000",
+      "in_reply_to": "9a437d4f_a50f9a87",
+      "unresolved": false
+    },
+    {
+      "id": "9a437d4f_28349afa",
+      "file_path": "restapi-call-node/provider/src/main/java/org/onap/ccsdk/sli/plugins/restapicall/XmlParser.java",
+      "patchset_number": 1,
+      "line": 64,
+      "message": "Thanks for confirming.",
+      "author": {
+        "account_id": 87,
+        "name": "Dan Timoney",
+        "display_name": null,
+        "email": "dtimoney@att.com",
+        "username": "djtimoney"
+      },
+      "updated": "2017-09-21 14:45:39.000000000",
+      "in_reply_to": "9a437d4f_134d8c9a",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "id": "dcaegen2%2Fplatform%2Fpolicy-handler~master~Iad8eab9e20e615a0e0d2822f4735dc64c50aa55c",
+  "change_id": "Iad8eab9e20e615a0e0d2822f4735dc64c50aa55c",
+  "_number": 102343,
+  "status": "MERGED",
+  "timestamps": {
+    "created": "2020-02-25 20:10:25.000000000",
+    "updated": "2020-03-04 22:25:06.000000000",
+    "submitted": "2020-03-04 22:10:50.000000000"
+  },
+  "accounts": {
+    "owner": {
+      "account_id": 1949,
+      "name": "Alex Shatov",
+      "display_name": null,
+      "email": "ashatov@hotmail.com",
+      "username": "alex_sh"
+    },
+    "submitter": {
+      "account_id": 93,
+      "name": "Vijay Venkatesh Kumar",
+      "display_name": null,
+      "email": "vijayv81@gmail.com",
+      "username": "vv770d"
+    }
+  },
+  "subject": "5.1.0 policy-handler - policy-updates from new PDP",
+  "commit_message": "5.1.0 policy-handler - policy-updates from new PDP\n\nDCAEGEN2-1851:\n- policy-handler now supports the policy-update notification\n  from the new policy-engine thru DMaaP MR\n  = no policy-filters - only policy-id values\n- see README for discoverable config settings of dmaap_mr client\n  = DMaaP MR client has the same flexibility as policy_engine\n  = set the query.timeout to high value like 15000 (default)\n- requests to DMaaP MR go through a single blocking connection\n- first catch-up only after draining the policy-updates from DMaaP MR\n  on the first loop\n- safe parsing of messages from DMaaP MR\n- policy-engine changed the data type for policy-version field\n  from int to string that is expected to have the semver value\n- related change to deployment-handler (DCAEGEN2-2085) has to be\n  deployed to handle the non-numeric policyVersion\n- on new PDP API: http /policy_latest and policy-updates\n  return the new data from the new PDP API with the following fields\n  added/renamed by the policy-handler to keep other policy related parts\n  intact in R4-R6 (see pdp_api/policy_utils.py)\n  * policyName = policy_id + \".\" + policyVersion.replace(\".\",\"-\")\n                                 + \".xml\"\n  * policyVersion = str(metadata[\"policy-version\"])\n  * \"config\" - is the renamed \"properties\" from the new PDP API response\n- enabled the /catch_up and the periodic auto-catch-up for the new PDP\n  API\n- enabled GET /policies_latest - returns the latest policies for the\n  deployed components\n- POST /policies_latest - still disabled since no support for the\n  policy-filters is provided for the new PDP API\n- fixed hiding the Authorization value on comparing the configs\n- logging of secrets is now sha256 to see whether they changed\n- added X-ONAP-RequestID to headers the same way as X-ECOMP-RequestID\n- on policy-update process the removal first, then addition\n- changed the pool_connections=1 (number of pools) on PDP and DH sides\n  == only a single destination is expected for each\n- log the exception as fatal into error.log\n- other minor fixes and refactoring\n- unit-test coverage 74%\n- integration testing is requested\n\nDCAEGEN2-1976:\n- policy-handler is enhanced to get user/password from env vars\n  for PDP and DMaaP MR clients and overwriting the Authorization field\n  in https headers received from the discoverable config\n  = to override the Authorization value on policy_engine,\n    set the environment vars $PDP_USER and $PDP_PWD in policy-handler\n    container\n  = to override the Authorization value on dmaap_mr,\n    if using https and user-password authentication,\n    set the environment vars $DMAAP_MR_USER and $DMAAP_MR_PWD in\n    policy-handler container\n\nChange-Id: Iad8eab9e20e615a0e0d2822f4735dc64c50aa55c\nSigned-off-by: Alex Shatov <alexs@att.com>\nIssue-ID: DCAEGEN2-1851\nIssue-ID: DCAEGEN2-1976\n",
+  "change_log": {
+    "entry_count": 13,
+    "entries": [
+      {
+        "id": "84a3cffdf5838c21d6acdeb8855cc47a3cc43b76",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-25 20:10:25.000000000",
+        "message": "Uploaded patch set 1.",
+        "patchset_number": 1
+      },
+      {
+        "id": "6c55c52018ba53e8704914c39ff8608dab621e28",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-25 20:13:00.000000000",
+        "message": "Patch Set 1:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/90/",
+        "patchset_number": 1
+      },
+      {
+        "id": "fd163bff6933605025b208894f553448e2c3252e",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-25 20:21:51.000000000",
+        "message": "Patch Set 1: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/90/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/90",
+        "patchset_number": 1
+      },
+      {
+        "id": "f2adee337719ee63a8c28db9d770f278c03ac451",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-27 16:02:36.000000000",
+        "message": "Set Work In Progress",
+        "patchset_number": 1
+      },
+      {
+        "id": "969032463bf3078f89892d830b236ff99c86fcd6",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-27 17:46:26.000000000",
+        "message": "Uploaded patch set 2.",
+        "patchset_number": 2
+      },
+      {
+        "id": "8815cac2ae455ad498fc9bcfacdb118a9d8315c2",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-27 17:47:03.000000000",
+        "message": "Description set to \"first catch-up only after draining the policy-updates from DMaaP MR\"",
+        "patchset_number": 2
+      },
+      {
+        "id": "7c2e6c6a1ae2b9de3144a3b9e291d8cb7c65d94f",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-02-27 17:47:36.000000000",
+        "message": "Set Ready For Review",
+        "patchset_number": 2
+      },
+      {
+        "id": "71219cd86e3cb649faf33c376fb0968fe62ed01c",
+        "author": {
+          "account_id": 1949,
+          "name": "Alex Shatov",
+          "display_name": null,
+          "email": "ashatov@hotmail.com",
+          "username": "alex_sh"
+        },
+        "author_role": "OWNER",
+        "timestamp": "2020-02-27 17:47:36.000000000",
+        "message": "Patch Set 2:\n\n- first catch-up only after draining the policy-updates from DMaaP MR\n  on the first loop\n- safe parsing of messages from DMaaP MR",
+        "patchset_number": 2
+      },
+      {
+        "id": "8ed51a9a4f85cbcefbc28fe8f2f9862c43e9f907",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-27 17:48:47.000000000",
+        "message": "Patch Set 2:\n\nBuild Started https://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/91/",
+        "patchset_number": 2
+      },
+      {
+        "id": "49e67b240fed0fb1712903c85769ba7c97bce1dc",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-02-27 17:57:18.000000000",
+        "message": "Patch Set 2: Verified+1\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-verify-java/91/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-verify-java/91",
+        "patchset_number": 2
+      },
+      {
+        "id": "869fa7987a5ab41b322024ff2f0599f601a52c2a",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-04 22:10:47.000000000",
+        "message": "Patch Set 2: Code-Review+2",
+        "patchset_number": 2
+      },
+      {
+        "id": "99db6f4a0885d16fa99e90b6517219df6e6d8f9c",
+        "author": {
+          "account_id": 93,
+          "name": "Vijay Venkatesh Kumar",
+          "display_name": null,
+          "email": "vijayv81@gmail.com",
+          "username": "vv770d"
+        },
+        "author_role": "CI_BOT",
+        "timestamp": "2020-03-04 22:10:50.000000000",
+        "message": "Change has been successfully merged by Vijay Venkatesh Kumar",
+        "patchset_number": 2
+      },
+      {
+        "id": "7a1702d96f0b52deaa034f9edaba8eff9c4b9480",
+        "author": {
+          "account_id": 459,
+          "name": "ONAP Jobbuilder",
+          "display_name": null,
+          "email": "onap-jobbuilder@jenkins.onap.org",
+          "username": "onap-jobbuilder"
+        },
+        "author_role": "REVIEWER",
+        "timestamp": "2020-03-04 22:25:06.000000000",
+        "message": "Patch Set 2:\n\nBuild Successful \n\nhttps://jenkins.onap.org/job/dcaegen2-platform-policy-handler-master-merge-java/57/ : SUCCESS\n\nLogs: https://logs.onap.org/production/vex-yul-ecomp-jenkins-1/dcaegen2-platform-policy-handler-master-merge-java/57",
+        "patchset_number": 2
+      }
+    ]
+  }
+}

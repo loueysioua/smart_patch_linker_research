@@ -1,0 +1,433 @@
+{
+  "id": "dcaegen2%2Fservices%2Fsdk~master~I51e17d64f813e16b81385abb8aa862ee1f927d35",
+  "change_id": "I51e17d64f813e16b81385abb8aa862ee1f927d35",
+  "_number": 90070,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "265371fa_ca9ae835",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 2,
+      "line": 101,
+      "message": "Why not `Flux.fromIterable(getAsJsonObjects(messages))` or something similar?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 11:55:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "daa2e90e_a4eaefeb",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterPublisherIT.java",
+      "patchset_number": 2,
+      "line": 218,
+      "message": "typo",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 11:55:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "872bb2d4_68da8b80",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "Well, what is 'low number of elements' ? Is 10 low? Maybe 1000 is still low?\nIn testcase above we don't have this low part, so I assume that we are sending \"high number\" there, right?\n\nMaybe we could name these testcases like \"onPut_givenJsonMessages_whenTheirAmountIsBelowMaxBatchSize_shouldSendSingleHttpRequest\".\n\nThen in tests you could do: \n```\nfinal List<String> jsonMessages = JSON_MESSAGES.subList(0, MAX_BATCH_SIZE - 1);\n```\n,where JSON_MESSAGES is extraction of this `getAsMRJsonMessages(List.of(\"I\", \"like\", \"cookies\"));` call that is all over tests\nand MAX_BATCH_SIZE is this magic `3` in *cut* constructor.\n\nFor me, this would make the tests less ambiguous and more readable, what do you think?",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 11:55:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "ec7a1f3b_b21021fd",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 114,
+      "message": "```\nfor( i in 0..elements.length) {\n   assertThat(elements[i]).describedAs(\"Http request element at position $i\").isEqualTo(jsonMessages[i]);\n}\n```\nThen you can extract this to `fun assertListsContainSameElements(expected, actual)` and reuse later",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 11:55:22.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "fb72ad97_6454828c",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "You're right, it would be more readable. \nSingle http request is being send when messages.size() <= maxBatchSize, so I should name that function  \n\"onPut_givenJsonMessages_whenTheirAmountIsNotAboveMaxBatchSize_shouldSendSingleHttpRequest\" or something similar ;).\n\nJust to be clear, you suggest extracting that list of messages from test functions? \nIn previous commits those messages where defined as `psf`, but Jaszczur suggested defining it in every single test function to increase readability.",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 12:26:39.000000000",
+      "in_reply_to": "872bb2d4_68da8b80",
+      "unresolved": true
+    },
+    {
+      "id": "a56f53a7_d237fa7f",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 2,
+      "line": 101,
+      "message": "Right, I added `jsonBatch` and `plainBatch` functions long before `getAsJsonObjects`  and have forgotten to refactor that class ;)",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 12:32:58.000000000",
+      "in_reply_to": "265371fa_ca9ae835",
+      "unresolved": true
+    },
+    {
+      "id": "d0388521_91a0c0c4",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "I guess it's matter of preference. \n\nMy reasoning in keeping it as \"psf\" it that for this particular testcase we do not care about content of messages and only about their amount, \nso it's more readable to keep the implementation detail (exact string) hidden and provide some arbitrary getter (e.g. `messagesListOfSize(X)`).\n\nYou can keep it as is, up to you :)\n\nP.S. name it \"..._whenTheirAmountIs BELOW MaxMatchSize...\", or similar :)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 12:34:26.000000000",
+      "in_reply_to": "fb72ad97_6454828c",
+      "unresolved": true
+    },
+    {
+      "id": "da4c6d54_4a72f29d",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "BELOW means `<= `? :D",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 12:36:51.000000000",
+      "in_reply_to": "d0388521_91a0c0c4",
+      "unresolved": true
+    },
+    {
+      "id": "13692dab_82c74c3c",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "Oh true, it should be NotAbove :) Nvm then",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 12:40:31.000000000",
+      "in_reply_to": "da4c6d54_4a72f29d",
+      "unresolved": true
+    },
+    {
+      "id": "059bd66e_def57b6d",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 2,
+      "line": 101,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:16:38.000000000",
+      "in_reply_to": "a56f53a7_d237fa7f",
+      "unresolved": false
+    },
+    {
+      "id": "8664ae7b_407f0c7a",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/api/MessageRouterPublisherIT.java",
+      "patchset_number": 2,
+      "line": 218,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:16:38.000000000",
+      "in_reply_to": "daa2e90e_a4eaefeb",
+      "unresolved": false
+    },
+    {
+      "id": "92e3db6e_f6e0f11f",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 93,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:16:38.000000000",
+      "in_reply_to": "13692dab_82c74c3c",
+      "unresolved": false
+    },
+    {
+      "id": "95dee22c_abd87748",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 2,
+      "line": 114,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:16:38.000000000",
+      "in_reply_to": "ec7a1f3b_b21021fd",
+      "unresolved": false
+    },
+    {
+      "id": "6f8bb746_483ac024",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 3,
+      "line": 448,
+      "message": "`get(0)` ? ;)",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 13:25:15.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "55392dcd_66ff9fa0",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 3,
+      "line": 448,
+      "message": "ups...",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:35:02.000000000",
+      "in_reply_to": "6f8bb746_483ac024",
+      "unresolved": true
+    },
+    {
+      "id": "c8cd2875_da107493",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 3,
+      "line": 448,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-18 13:35:49.000000000",
+      "in_reply_to": "55392dcd_66ff9fa0",
+      "unresolved": false
+    },
+    {
+      "id": "27961912_515295eb",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 3,
+      "line": 448,
+      "message": "<doubt>",
+      "author": {
+        "account_id": 3701,
+        "name": "Filip Krzywka",
+        "display_name": null,
+        "email": "filip.krzywka@nokia.com",
+        "username": "fkrzywka"
+      },
+      "updated": "2019-06-18 13:37:16.000000000",
+      "in_reply_to": "c8cd2875_da107493",
+      "unresolved": true
+    },
+    {
+      "id": "bfd28776_7cd1ea19",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 83,
+      "message": "Rewrite it to following signature:\n```\nprivate @NotNull RequestBody createBody(List<? extends JsonElement> subItems, ContentType contentType)\n```",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-06-19 14:22:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "aea39737_c41d18f4",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "It does what it says?\nMaybe it could be createPublishRequestWithJsonContent?",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-06-19 14:22:02.000000000",
+      "in_reply_to": null,
+      "unresolved": false
+    },
+    {
+      "id": "6775e50b_c84ea7b1",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "`Application/json` is a default value for MR Publisher and that function could look like:\n\n`MessageRouterSink sinkDefinition = ImmutableMessageRouterSink.builder()\n                .name(\"the topic\")\n                .topicUrl(topicUrl)\n                .build();\n\n        return ImmutableMessageRouterPublishRequest.builder()\n                .sinkDefinition(sinkDefinition)\n                .build();\n` - almost the same code as in the function below, but without setting content type. \nBut I didn't want to rewrite the code. \nAs \"application/json\" is default value, is it necessary to put it in the function name?",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-21 05:10:47.000000000",
+      "in_reply_to": "aea39737_c41d18f4",
+      "unresolved": false
+    },
+    {
+      "id": "9f5c04ae_4db8febe",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImplTest.java",
+      "patchset_number": 3,
+      "line": 448,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-21 05:10:47.000000000",
+      "in_reply_to": "27961912_515295eb",
+      "unresolved": false
+    },
+    {
+      "id": "42476e2b_b3ec69e5",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 84,
+      "message": "For now it makes sense to have simple if-else here. But in the future someone may add a new enum value and this logic might be wrong. Maybe write it with if-elseif-else where else throws a RuntimeException (ie. IllegalArgumentException(\"Unsupported content type: \" + req.contentType())).",
+      "author": {
+        "account_id": 2683,
+        "name": "Piotr Jaszczyk",
+        "display_name": null,
+        "email": "piotr.jaszczyk@nokia.com",
+        "username": "jaszczur"
+      },
+      "updated": "2019-06-24 06:20:24.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "12a5c760_13ade1b4",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "ok, leave as it is.",
+      "author": {
+        "account_id": 2837,
+        "name": "Kornel Janiak",
+        "display_name": null,
+        "email": "kornel.janiak@nokia.com",
+        "username": "kjaniak"
+      },
+      "updated": "2019-06-24 12:38:22.000000000",
+      "in_reply_to": "6775e50b_c84ea7b1",
+      "unresolved": false
+    },
+    {
+      "id": "81d02bd2_844217cc",
+      "file_path": "rest-services/dmaap-client/src/main/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/impl/MessageRouterPublisherImpl.java",
+      "patchset_number": 5,
+      "line": 84,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-26 07:25:35.000000000",
+      "in_reply_to": "42476e2b_b3ec69e5",
+      "unresolved": false
+    },
+    {
+      "id": "12c30c1a_4293d30f",
+      "file_path": "rest-services/dmaap-client/src/test/java/org/onap/dcaegen2/services/sdk/rest/services/dmaap/client/MessageRouterTestsUtils.java",
+      "patchset_number": 5,
+      "line": 49,
+      "message": "Done",
+      "author": {
+        "account_id": 3789,
+        "name": "Izabela Zawadzka",
+        "display_name": null,
+        "email": "izabela.zawadzka@nokia.com",
+        "username": "izabelazawadzka"
+      },
+      "updated": "2019-06-26 07:25:35.000000000",
+      "in_reply_to": "12a5c760_13ade1b4",
+      "unresolved": false
+    }
+  ]
+}

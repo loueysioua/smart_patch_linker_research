@@ -1,0 +1,59 @@
+{
+  "id": "dcaegen2%2Fservices%2Fheartbeat~master~I4f9f0a4522badcdef51392f4bbccfd6aa42fd9d0",
+  "change_id": "I4f9f0a4522badcdef51392f4bbccfd6aa42fd9d0",
+  "_number": 125039,
+  "change_comments": [],
+  "inline_comments": [
+    {
+      "id": "8d587054_33bc8564",
+      "file_path": "miss_htbt_service/misshtbtd.py",
+      "patchset_number": 1,
+      "line": 277,
+      "message": "this code in general seems VERY fragile and I think the logic needs to be rethought.\n\nIf os.remove() can fail, so can the cp on the previous line.\n\nWhy not change os.system() to use \"mv\" instead of \"cp\"?\n\nOr better yet, do an os.rename() and capture FileNotFoundError on that?\n\nOr figure out a way to avoid the race condition altoghether.",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2021-10-18 15:40:38.000000000",
+      "in_reply_to": null,
+      "unresolved": true
+    },
+    {
+      "id": "9f117bb1_75d3656a",
+      "file_path": "miss_htbt_service/misshtbtd.py",
+      "patchset_number": 1,
+      "line": 277,
+      "message": "Using the same file 'download.json' in multi processes causes the race condition, so changed to use NamedTemporaryFile instead of that in order to use different temp file for each sub-process.\n\nAlso removed the test code fragment. This function can pass tests without it.",
+      "author": {
+        "account_id": 5233,
+        "name": "Satoshi Fujii",
+        "display_name": null,
+        "email": "fujiisa24@gmail.com",
+        "username": "s4fujii"
+      },
+      "updated": "2021-10-21 15:30:03.000000000",
+      "in_reply_to": "8d587054_33bc8564",
+      "unresolved": false
+    },
+    {
+      "id": "a4292050_5dc5a864",
+      "file_path": "miss_htbt_service/misshtbtd.py",
+      "patchset_number": 1,
+      "line": 277,
+      "message": "+1",
+      "author": {
+        "account_id": 105,
+        "name": "Tony Hansen",
+        "display_name": null,
+        "email": "tony@att.com",
+        "username": "TonyLHansen"
+      },
+      "updated": "2021-10-25 14:02:19.000000000",
+      "in_reply_to": "9f117bb1_75d3656a",
+      "unresolved": false
+    }
+  ]
+}
